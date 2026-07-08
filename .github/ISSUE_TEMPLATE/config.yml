@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & Discussions
+    url: https://github.com/myviliha/vui-starter/discussions
+    about: Ask questions and discuss ideas here.
+  - name: Report a security vulnerability
+    url: https://github.com/myviliha/vui-starter/security/advisories/new
+    about: Please report security issues privately, not as public issues.

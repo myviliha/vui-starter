@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a problem with VUI Starter
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Please fill in the details below.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `pnpm dev`
+        2. Go to '...'
+        3. See error
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+      label: Which app / package?
+      placeholder: apps/web/backoffice, packages/ui, ...
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: |
+        - OS:
+        - Node: (node -v)
+        - pnpm: (pnpm -v)
+        - Commit / version:
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      render: shell
