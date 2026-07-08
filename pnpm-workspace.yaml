@@ -8,3 +8,10 @@ onlyBuiltDependencies:
   - sharp
   - unrs-resolver
   - "@tailwindcss/oxide"
+
+# Supply-chain hardening (pnpm 10.16+; older pnpm ignores unknown keys):
+# wait 7 days before installing newly published versions, block sub-deps from
+# untrusted sources, and never let an update downgrade security settings.
+minimumReleaseAge: 10080
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
