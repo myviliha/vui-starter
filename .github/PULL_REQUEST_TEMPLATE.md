@@ -1,7 +1,5 @@
 ## What & why
 
-<!-- What does this change and why? Link any related issue: Closes #123 -->
-
 ## Checklist
 
 - [ ] Conventional Commit title (`feat:`, `fix:`, `docs:`, `chore:` …)
