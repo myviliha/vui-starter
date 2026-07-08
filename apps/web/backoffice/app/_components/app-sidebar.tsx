@@ -1,0 +1,601 @@
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Briefcase,
+  Building,
+  Building2,
+  ChevronRight,
+  ChevronsUpDown,
+  Coins,
+  Contact,
+  Flag,
+  Globe,
+  Layers,
+  LayoutGrid,
+  type LucideIcon,
+  MapPin,
+  Menu,
+  Network,
+  Home,
+  Landmark,
+  Languages,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Server,
+  Settings,
+  Target,
+  Users,
+  X,
+} from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback } from "@repo/ui/avatar";
+import { Logo } from "./logo";
+import { ThemeToggle } from "./theme-toggle";
+
+type NavLink = { label: string; href: string; icon: LucideIcon };
+/** A collapsible parent with nested links (a "subsection"). */
+type NavGroup = { label: string; icon: LucideIcon; children: NavLink[] };
+type NavEntry = NavLink | NavGroup;
+type NavSection = { title?: string; items: NavEntry[] };
+
+function isGroup(entry: NavEntry): entry is NavGroup {
+  return (entry as NavGroup).children !== undefined;
+}
+
+const NAV: NavSection[] = [
+  {
+    items: [{ label: "Home", href: "/", icon: Home }],
+  },
+  {
+    title: "Records",
+    items: [
+      { label: "Organizations", href: "/organizations", icon: Building2 },
+      { label: "Branches", href: "/branches", icon: Network },
+      { label: "Departments", href: "/departments", icon: LayoutGrid },
+      { label: "Employees", href: "/employees", icon: Users },
+      { label: "Markets", href: "/markets", icon: MapPin },
+      { label: "Businesses", href: "/businesses", icon: Briefcase },
+    ],
+  },
+  {
+    title: "Workspace",
+    items: [
+      {
+        label: "CRM",
+        icon: Layers,
+        children: [
+          { label: "Companies", href: "/crm/companies", icon: Building },
+          { label: "People", href: "/crm/people", icon: Contact },
+          { label: "Opportunities", href: "/crm/opportunities", icon: Target },
+        ],
+      },
+      {
+        label: "System",
+        icon: Server,
+        children: [
+          { label: "Regions", href: "/system/regions", icon: Globe },
+          { label: "Countries", href: "/system/countries", icon: Flag },
+          { label: "Cities", href: "/system/cities", icon: Landmark },
+          { label: "Currencies", href: "/system/currencies", icon: Coins },
+          { label: "Languages", href: "/system/languages", icon: Languages },
+        ],
+      },
+    ],
+  },
+];
+
+function isActive(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** Shared sidebar contents used by both the desktop aside and the mobile drawer. */
+function SidebarBody({
+  onNavigate,
+  collapsed = false,
+  headerAction,
+}: {
+  onNavigate?: () => void;
+  collapsed?: boolean;
+  /** Rendered at the right of the workspace row (e.g. the collapse toggle). */
+  headerAction?: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const [openGroups, setOpenGroups] = React.useState<Set<string>>(() => {
+    const open = new Set<string>();
+    for (const section of NAV) {
+      for (const entry of section.items) {
+        if (
+          isGroup(entry) &&
+          entry.children.some((c) => isActive(pathname, c.href))
+        ) {
+          open.add(entry.label);
+        }
+      }
+    }
+    return open;
+  });
+  const toggleGroup = (label: string) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
+      return next;
+    });
+
+  const renderLink = (item: NavLink, nested = false) => {
+    const active = isActive(pathname, item.href);
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={onNavigate}
+        aria-current={active ? "page" : undefined}
+        title={collapsed ? item.label : undefined}
+        className={cn(
+          "group/nav flex items-center gap-2.5 rounded-md px-2 py-1 text-[12px] transition-colors",
+          collapsed && "justify-center px-0",
+          nested && !collapsed && "gap-2 py-1",
+          active
+            ? "bg-primary/10 font-medium text-primary"
+            : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-primary",
+        )}
+      >
+        <item.icon
+          className={cn(
+            "size-4 shrink-0 transition-colors",
+            active ? "text-primary" : "text-muted-foreground group-hover/nav:text-primary",
+          )}
+          aria-hidden="true"
+        />
+        {!collapsed && <span className="truncate">{item.label}</span>}
+      </Link>
+    );
+  };
+
+  const renderEntry = (entry: NavEntry) => {
+    if (!isGroup(entry)) return renderLink(entry);
+
+    // Collapsed rail: flatten the subsection to icon-only links.
+    if (collapsed) return entry.children.map((child) => renderLink(child));
+
+    const open = openGroups.has(entry.label);
+    const anyActive = entry.children.some((c) => isActive(pathname, c.href));
+    const GroupIcon = entry.icon;
+    return (
+      <div key={entry.label} className="space-y-1">
+        <button
+          type="button"
+          onClick={() => toggleGroup(entry.label)}
+          aria-expanded={open}
+          className={cn(
+            "group/nav flex w-full items-center gap-2.5 rounded-md px-2 py-1 text-[12px] transition-colors",
+            anyActive
+              ? "font-medium text-primary"
+              : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-primary",
+          )}
+        >
+          <GroupIcon
+            className={cn(
+              "size-4 shrink-0 transition-colors",
+              anyActive
+                ? "text-primary"
+                : "text-muted-foreground group-hover/nav:text-primary",
+            )}
+            aria-hidden="true"
+          />
+          <span className="flex-1 truncate text-left">{entry.label}</span>
+          <ChevronRight
+            className={cn(
+              "size-3.5 shrink-0 text-muted-foreground transition-transform",
+              open && "rotate-90",
+            )}
+            aria-hidden="true"
+          />
+        </button>
+        {open && (
+          <div className="ml-[1.15rem] space-y-1 border-l border-sidebar-border pl-2">
+            {entry.children.map((child) => renderLink(child, true))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {/* Workspace switcher + collapse toggle (same row) */}
+      <div className="flex items-center gap-1 px-3 py-3">
+        <button
+          type="button"
+          className={cn(
+            "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-sidebar-accent",
+            collapsed && "justify-center px-0",
+          )}
+          aria-label="Switch workspace"
+          title={collapsed ? "VUI Starter" : undefined}
+        >
+          <Logo variant="mark" className="h-6 w-6 shrink-0" />
+          {!collapsed && (
+            <>
+              <span className="min-w-0 flex-1 truncate bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-[12px] font-bold tracking-tight text-transparent">
+                VUI Starter
+              </span>
+              <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
+            </>
+          )}
+        </button>
+        {!collapsed && headerAction}
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-2">
+        {NAV.map((section, index) => (
+          <div key={section.title ?? `section-${index}`} className="space-y-1">
+            {section.title && !collapsed && (
+              <p className="px-2 pb-1 text-[12px] font-semibold uppercase tracking-wide text-primary/70">
+                {section.title}
+              </p>
+            )}
+            {section.title && collapsed && index > 0 && (
+              <div className="mx-2 my-2 border-t border-sidebar-border" />
+            )}
+            {section.items.map(renderEntry)}
+          </div>
+        ))}
+      </nav>
+
+      {/* Footer: settings + user */}
+      <div className="space-y-1 border-t border-sidebar-border px-3 py-3">
+        <Link
+          href="/settings"
+          onClick={onNavigate}
+          title={collapsed ? "Settings" : undefined}
+          className={cn(
+            "group/nav flex items-center gap-2.5 rounded-md px-2 py-1 text-[12px] transition-colors",
+            collapsed && "justify-center px-0",
+            isActive(pathname, "/settings")
+              ? "bg-primary/10 font-medium text-primary"
+              : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-primary",
+          )}
+        >
+          <Settings
+            className={cn(
+              "size-4 shrink-0 transition-colors",
+              isActive(pathname, "/settings")
+                ? "text-primary"
+                : "text-muted-foreground group-hover/nav:text-primary",
+            )}
+            aria-hidden="true"
+          />
+          {!collapsed && <span>Settings</span>}
+        </Link>
+        <div
+          className={cn(
+            "flex items-center gap-2 rounded-md px-2 py-1.5",
+            collapsed && "justify-center px-0",
+          )}
+        >
+          <Avatar className="size-7">
+            <AvatarFallback>AU</AvatarFallback>
+          </Avatar>
+          {!collapsed && (
+            <>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[12px] font-medium text-sidebar-foreground">
+                  Admin User
+                </p>
+                <p className="truncate text-[12px] text-muted-foreground">
+                  Administrator
+                </p>
+              </div>
+              <ThemeToggle />
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+const SIDEBAR_MIN_W = 200;
+const SIDEBAR_MAX_W = 420;
+const SIDEBAR_DEFAULT_W = 240;
+const SIDEBAR_COLLAPSED_W = 60;
+const SIDEBAR_WIDTH_KEY = "sidebar:width";
+const SIDEBAR_COLLAPSED_KEY = "sidebar:collapsed";
+
+type SidebarContextValue = {
+  collapsed: boolean;
+  width: number;
+  resizing: boolean;
+  toggleCollapsed: () => void;
+  setWidth: React.Dispatch<React.SetStateAction<number>>;
+  setResizing: React.Dispatch<React.SetStateAction<boolean>>;
+  persist: (w: number, c: boolean) => void;
+};
+
+const SidebarContext = React.createContext<SidebarContextValue | null>(null);
+
+function useSidebar(): SidebarContextValue {
+  const ctx = React.useContext(SidebarContext);
+  if (!ctx) throw new Error("useSidebar must be used within <SidebarProvider>");
+  return ctx;
+}
+
+/**
+ * Shares the sidebar's collapsed/width state so both the sidebar and the page
+ * header can read + toggle it (ui-system puts the expand toggle in the page
+ * header once the rail is collapsed). Persists to localStorage.
+ */
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
+  const [width, setWidth] = React.useState(SIDEBAR_DEFAULT_W);
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [resizing, setResizing] = React.useState(false);
+
+  React.useEffect(() => {
+    const savedWidth = Number(localStorage.getItem(SIDEBAR_WIDTH_KEY));
+    if (savedWidth >= SIDEBAR_MIN_W && savedWidth <= SIDEBAR_MAX_W) {
+      setWidth(savedWidth);
+    }
+    setCollapsed(localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "true");
+  }, []);
+
+  const persist = React.useCallback((w: number, c: boolean) => {
+    try {
+      localStorage.setItem(SIDEBAR_WIDTH_KEY, String(w));
+      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(c));
+    } catch {
+      // storage unavailable — non-fatal
+    }
+  }, []);
+
+  const toggleCollapsed = () => {
+    const next = !collapsed;
+    setCollapsed(next);
+    persist(width, next);
+  };
+
+  return (
+    <SidebarContext.Provider
+      value={{
+        collapsed,
+        width,
+        resizing,
+        toggleCollapsed,
+        setWidth,
+        setResizing,
+        persist,
+      }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
+}
+
+/**
+ * Desktop-only (≥ md) left sidebar, matching ui-system: the collapse toggle sits
+ * inline with the workspace title; drag the right edge to resize its width.
+ */
+export function AppSidebar() {
+  const { collapsed, width, resizing, toggleCollapsed, setWidth, setResizing, persist } =
+    useSidebar();
+
+  function startResize(e: React.MouseEvent) {
+    if (collapsed) return;
+    e.preventDefault();
+    setResizing(true);
+    const startX = e.clientX;
+    const startW = width;
+    const clamp = (dx: number) =>
+      Math.min(SIDEBAR_MAX_W, Math.max(SIDEBAR_MIN_W, startW + dx));
+    const onMove = (ev: MouseEvent) => setWidth(clamp(ev.clientX - startX));
+    const onUp = (ev: MouseEvent) => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+      setResizing(false);
+      persist(clamp(ev.clientX - startX), collapsed);
+    };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
+  }
+
+  const collapseButton = (
+    <button
+      type="button"
+      onClick={toggleCollapsed}
+      aria-label="Collapse sidebar"
+      aria-expanded
+      title="Collapse sidebar"
+      className="grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-primary"
+    >
+      <PanelLeftClose className="size-4" aria-hidden="true" />
+    </button>
+  );
+
+  return (
+    <aside
+      style={{ width: collapsed ? SIDEBAR_COLLAPSED_W : width }}
+      className={cn(
+        "relative hidden shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex",
+        !resizing && "transition-[width] duration-200 ease-out",
+      )}
+    >
+      <SidebarBody collapsed={collapsed} headerAction={collapseButton} />
+
+      {/* Resize handle (right edge) */}
+      {!collapsed && (
+        <button
+          type="button"
+          aria-label="Resize sidebar"
+          title="Drag to resize"
+          onMouseDown={startResize}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft") {
+              e.preventDefault();
+              setWidth((w) => {
+                const n = Math.max(SIDEBAR_MIN_W, w - 16);
+                persist(n, collapsed);
+                return n;
+              });
+            }
+            if (e.key === "ArrowRight") {
+              e.preventDefault();
+              setWidth((w) => {
+                const n = Math.min(SIDEBAR_MAX_W, w + 16);
+                persist(n, collapsed);
+                return n;
+              });
+            }
+          }}
+          className={cn(
+            "absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize touch-none bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none",
+            resizing && "bg-primary/50",
+          )}
+        />
+      )}
+    </aside>
+  );
+}
+
+/**
+ * Expand toggle for a collapsed sidebar. Renders inline (before the page title)
+ * only on desktop when collapsed; nothing when expanded. Place it in a page
+ * header's title row (RecordView receives it via PageChromeProvider).
+ */
+export function SidebarExpandButton() {
+  const { collapsed, toggleCollapsed } = useSidebar();
+  if (!collapsed) return null;
+  return (
+    <button
+      type="button"
+      onClick={toggleCollapsed}
+      aria-label="Expand sidebar"
+      aria-expanded={false}
+      title="Expand sidebar"
+      className="-ml-1.5 hidden size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-primary md:grid"
+    >
+      <PanelLeftOpen className="size-4" aria-hidden="true" />
+    </button>
+  );
+}
+
+const BOTTOM_BAR_ITEMS: NavLink[] = [
+  { label: "Home", href: "/", icon: Home },
+  { label: "Settings", href: "/settings", icon: Settings },
+];
+
+/**
+ * Mobile navigation (< md), matching ui-system: a fixed bottom bar whose
+ * "Menu" button toggles a full-width (100vw) slide-in drawer. Drawer closes on
+ * navigation, the Menu toggle, Escape, or the in-drawer close button.
+ */
+export function MobileNav() {
+  const [open, setOpen] = React.useState(false);
+  const pathname = usePathname();
+  const close = React.useCallback(() => setOpen(false), []);
+
+  // Close the drawer whenever the route changes.
+  React.useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll + Escape-to-close while the drawer is open.
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
+  return (
+    <>
+      {/* Full-width slide-in drawer */}
+      <div
+        id="mobile-nav-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation"
+        aria-hidden={!open}
+        className={cn(
+          "fixed inset-0 z-40 flex w-full flex-col bg-sidebar pb-14 transition-transform duration-200 ease-out md:hidden",
+          open ? "translate-x-0" : "pointer-events-none -translate-x-full",
+        )}
+      >
+        <div className="flex items-center justify-between px-3 pt-3">
+          <div className="flex items-center gap-2">
+            <Logo variant="mark" className="h-6 w-6" />
+            <span className="text-[12px] font-semibold">VUI Starter</span>
+          </div>
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Close navigation"
+            className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-sidebar-accent"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+        <SidebarBody onNavigate={close} />
+      </div>
+
+      {/* Fixed bottom navigation bar */}
+      <nav
+        aria-label="Primary"
+        className="fixed inset-x-0 bottom-0 z-50 flex items-stretch border-t border-sidebar-border bg-sidebar md:hidden"
+      >
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-controls="mobile-nav-drawer"
+          aria-label="Menu"
+          className={cn(
+            "flex flex-1 flex-col items-center gap-0.5 py-2 text-[12px] transition-colors",
+            open
+              ? "text-sidebar-accent-foreground"
+              : "text-muted-foreground hover:text-sidebar-accent-foreground",
+          )}
+        >
+          <Menu className="size-5" aria-hidden="true" />
+          Menu
+        </button>
+        {BOTTOM_BAR_ITEMS.map((item) => {
+          const active = !open && isActive(pathname, item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={close}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "flex flex-1 flex-col items-center gap-0.5 py-2 text-[12px] transition-colors",
+                active
+                  ? "text-sidebar-accent-foreground"
+                  : "text-muted-foreground hover:text-sidebar-accent-foreground",
+              )}
+            >
+              <item.icon className="size-5 shrink-0" aria-hidden="true" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </>
+  );
+}

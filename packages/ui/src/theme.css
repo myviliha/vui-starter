@@ -1,0 +1,90 @@
+/**
+ * VUI Starter design tokens — shared across web apps.
+ *
+ * Original token set: a dense, neutral admin surface (light grays, subtle
+ * borders, small radii) accented with the PULSE brand palette from the Figma
+ * design system (Indigo / Violet / Coral / Mint). Consumed by each app's
+ * globals.css, which maps these custom properties onto Tailwind via `@theme`.
+ */
+
+:root {
+  /* Corner radius — small, for a compact admin feel */
+  --radius: 6px;
+
+  /* Surfaces */
+  --background: #ffffff;
+  --foreground: #16151a;
+  --card: #ffffff;
+  --card-foreground: #16151a;
+  --popover: #ffffff;
+  --popover-foreground: #16151a;
+
+  /* Primary = sharp trust blue (Meta) */
+  --primary: #0866ff;
+  --primary-foreground: #ffffff;
+
+  /* Neutral fills */
+  --secondary: #f4f4f6;
+  --secondary-foreground: #16151a;
+  --muted: #f6f6f8;
+  --muted-foreground: #78767f;
+  --accent: #f1f0f5;
+  --accent-foreground: #16151a;
+
+  /* Feedback */
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+
+  /* Lines & focus */
+  --border: #ecebf0;
+  --input: #e2e0e8;
+  --ring: #0866ff;
+
+  /* Brand palette (sharp trust-blue vibe) */
+  --brand-indigo: #0866ff;
+  --brand-violet: #3b82f6;
+  --brand-coral: #ff5c40;
+  --brand-mint: #4fe3c1;
+  --brand-ink: #060914;
+  --brand-mist: #eef1fb;
+
+  /* Sidebar surface */
+  --sidebar: #fbfbfc;
+  --sidebar-foreground: #16151a;
+  --sidebar-accent: #f1f0f5;
+  --sidebar-accent-foreground: #16151a;
+  --sidebar-border: #ecebf0;
+}
+
+.dark {
+  --background: #0c0b10;
+  --foreground: #f3f2f7;
+  --card: #151419;
+  --card-foreground: #f3f2f7;
+  --popover: #151419;
+  --popover-foreground: #f3f2f7;
+
+  /* Vivid blue reads better on dark */
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+
+  --secondary: #1d1c22;
+  --secondary-foreground: #f3f2f7;
+  --muted: #1a191f;
+  --muted-foreground: #a19fab;
+  --accent: #222128;
+  --accent-foreground: #f3f2f7;
+
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+
+  --border: #262530;
+  --input: #2b2a34;
+  --ring: #3b82f6;
+
+  --sidebar: #0e0d12;
+  --sidebar-foreground: #f3f2f7;
+  --sidebar-accent: #1d1c22;
+  --sidebar-accent-foreground: #f3f2f7;
+  --sidebar-border: #201f28;
+}
