@@ -22,6 +22,7 @@ import {
   Home,
   Landmark,
   Languages,
+  LogOut,
   PanelLeftClose,
   PanelLeftOpen,
   Server,
@@ -294,6 +295,15 @@ function SidebarBody({
                 </p>
               </div>
               <ThemeToggle />
+              <Link
+                href="/signin"
+                onClick={onNavigate}
+                aria-label="Sign out"
+                title="Sign out"
+                className="grid size-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-primary"
+              >
+                <LogOut className="size-4" />
+              </Link>
             </>
           )}
         </div>

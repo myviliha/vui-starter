@@ -18,8 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/table";
-import { SidebarExpandButton } from "./_components/app-sidebar";
-import { StatCard } from "./_components/stat-card";
+import { SidebarExpandButton } from "@/app/_components/app-sidebar";
+import { StatCard } from "@/app/_components/stat-card";
 import {
   employees,
   organizations,
