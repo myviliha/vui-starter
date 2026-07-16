@@ -77,6 +77,23 @@ pnpm dev          # starts both apps (admin, docs)
 
 Run a single app: `pnpm --filter backoffice dev`.
 
+### Scaffold your own project from this template
+
+Grab a fresh copy (no git history) and start building:
+
+```bash
+npx degit myviliha/vui-starter my-app
+cd my-app
+pnpm install
+pnpm dev
+```
+
+Or click **“Use this template”** on the GitHub repo to create your own copy.
+
+> Just want the component library in an existing app? Install it from npm
+> instead — `npm install @myviliha/vui-ui` — see
+> [Use the library in your project](#use-the-library-in-your-project).
+
 ---
 
 ## Use the library in your project
