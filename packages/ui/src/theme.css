@@ -1,90 +1,209 @@
 /**
- * VUI Starter design tokens — shared across web apps.
+ * VUI Starter design system — single source of truth, shared across web apps.
  *
- * Original token set: a dense, neutral admin surface (light grays, subtle
- * borders, small radii) accented with the PULSE brand palette from the Figma
- * design system (Indigo / Violet / Coral / Mint). Consumed by each app's
- * globals.css, which maps these custom properties onto Tailwind via `@theme`.
+ * Neutral shadcn/ui token set (oklch) plus the PULSE brand palette kept for the
+ * gradient wordmark. Each app's globals.css just `@import`s this file after
+ * Tailwind; the token→utility mapping (`@theme inline`), the base reset, and the
+ * component-scan (`@source`) all live here so nothing is duplicated per app.
  */
 
+/* Scan this package's components from any consuming app. */
+@source "../";
+
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  /* Corner radius — small, for a compact admin feel */
-  --radius: 6px;
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.177 0 0); /* #101112 — global text color (Attio) */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  /* Text highlight (::selection) */
+  --selection: #266df0;
+  --selection-foreground: #ffffff;
+  /* Attio-style primary action button */
+  --button-primary: #266df0;
+  --button-primary-hover: #215bc4;
+  --button-primary-foreground: #ffffff;
+  --button-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+    0px 2px 4px -2px rgba(38, 109, 240, 0.12),
+    0px 3px 6px -2px rgba(38, 109, 240, 0.08);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 
-  /* Surfaces */
-  --background: #ffffff;
-  --foreground: #16151a;
-  --card: #ffffff;
-  --card-foreground: #16151a;
-  --popover: #ffffff;
-  --popover-foreground: #16151a;
-
-  /* Primary = sharp trust blue (Meta) */
-  --primary: #0866ff;
-  --primary-foreground: #ffffff;
-
-  /* Neutral fills */
-  --secondary: #f4f4f6;
-  --secondary-foreground: #16151a;
-  --muted: #f6f6f8;
-  --muted-foreground: #78767f;
-  --accent: #f1f0f5;
-  --accent-foreground: #16151a;
-
-  /* Feedback */
-  --destructive: #e5484d;
-  --destructive-foreground: #ffffff;
-
-  /* Lines & focus */
-  --border: #ecebf0;
-  --input: #e2e0e8;
-  --ring: #0866ff;
-
-  /* Brand palette (sharp trust-blue vibe) */
+  /* Brand palette — used by the gradient wordmark (from-brand-indigo …). */
   --brand-indigo: #0866ff;
   --brand-violet: #3b82f6;
   --brand-coral: #ff5c40;
   --brand-mint: #4fe3c1;
   --brand-ink: #060914;
   --brand-mist: #eef1fb;
-
-  /* Sidebar surface */
-  --sidebar: #fbfbfc;
-  --sidebar-foreground: #16151a;
-  --sidebar-accent: #f1f0f5;
-  --sidebar-accent-foreground: #16151a;
-  --sidebar-border: #ecebf0;
 }
 
 .dark {
-  --background: #0c0b10;
-  --foreground: #f3f2f7;
-  --card: #151419;
-  --card-foreground: #f3f2f7;
-  --popover: #151419;
-  --popover-foreground: #f3f2f7;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  /* --sidebar-foreground inherits var(--foreground) from :root */
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
 
-  /* Vivid blue reads better on dark */
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
 
-  --secondary: #1d1c22;
-  --secondary-foreground: #f3f2f7;
-  --muted: #1a191f;
-  --muted-foreground: #a19fab;
-  --accent: #222128;
-  --accent-foreground: #f3f2f7;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 
-  --destructive: #e5484d;
-  --destructive-foreground: #ffffff;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-selection: var(--selection);
+  --color-selection-foreground: var(--selection-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
-  --border: #262530;
-  --input: #2b2a34;
-  --ring: #3b82f6;
+  --color-brand-indigo: var(--brand-indigo);
+  --color-brand-violet: var(--brand-violet);
+  --color-brand-coral: var(--brand-coral);
+  --color-brand-mint: var(--brand-mint);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-mist: var(--brand-mist);
+}
 
-  --sidebar: #0e0d12;
-  --sidebar-foreground: #f3f2f7;
-  --sidebar-accent: #1d1c22;
-  --sidebar-accent-foreground: #f3f2f7;
-  --sidebar-border: #201f28;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    overscroll-behavior: none;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    min-height: 100vh;
+    /* Global type baseline (Attio): Inter 14px / medium, with ligatures. */
+    font-size: 14px;
+    font-weight: 500;
+    font-feature-settings: "calt", "liga";
+  }
+  ::selection {
+    background-color: var(--selection);
+    color: var(--selection-foreground);
+  }
+  /* Every clickable element shows the hand cursor (global — no inline needed). */
+  button:not(:disabled),
+  [role="button"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="tab"],
+  summary,
+  label[for],
+  a[href] {
+    cursor: pointer;
+  }
+  /* Every icon is a bordered chip. Radix icons render `<svg width="15">`, so we
+     target that (custom SVGs like the logo use viewBox only and are exempt). The
+     Tailwind size utility (e.g. size-4) sets the glyph box, and content-box adds
+     the border + padding outside it so the glyph stays crisp. Active/emphasis
+     states just flip bg/border/color via utilities (they win in the later layer). */
+  svg[width="15"] {
+    box-sizing: content-box;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) - 4px);
+  }
+  /* ponytail: rest of the paste's reset is already covered by Tailwind preflight. */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }

@@ -1,6 +1,11 @@
 "use client";
 
-import { Building, Compass, MapPin, Ruler } from "lucide-react";
+import {
+  CubeIcon as Building,
+  GlobeIcon as Compass,
+  RulerHorizontalIcon as Ruler,
+  SewingPinFilledIcon as MapPin,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { markets, type Market } from "@/lib/mock-data";
@@ -13,7 +18,7 @@ function formatCenter(market: Market): string {
 }
 
 const fields: RecordField<Market>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "organization", label: "Organization", icon: Building, editable: true, width: 200, group: "General" },
   {
     key: "centerLatitude",
@@ -22,7 +27,7 @@ const fields: RecordField<Market>[] = [
     width: 180,
     group: "System",
     render: (row) => (
-      <span className="font-mono text-[12px] text-muted-foreground">
+      <span className="font-mono text-muted-foreground">
         {formatCenter(row)}
       </span>
     ),

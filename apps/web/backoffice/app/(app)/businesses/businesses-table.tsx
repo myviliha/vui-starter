@@ -1,12 +1,16 @@
 "use client";
 
-import { AlignLeft, Briefcase, Hash } from "lucide-react";
+import {
+  BackpackIcon as Briefcase,
+  CodeIcon as Hash,
+  TextAlignLeftIcon as AlignLeft,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { businesses, type Business } from "@/lib/mock-data";
 
 const fields: RecordField<Business>[] = [
-  { key: "title", label: "Title", editable: true, group: "General", hideInTable: true },
+  { key: "title", label: "Title", editable: true, required: true, group: "General", hideInTable: true },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
   { key: "description", label: "Description", icon: AlignLeft, editable: true, width: 360, group: "General" },
 ];

@@ -1,7 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronDown } from "lucide-react";
+import {
+  CheckIcon as Check,
+  ChevronDownIcon as ChevronDown,
+} from "@radix-ui/react-icons";
 
 import { cn } from "./utils";
 
@@ -66,7 +69,7 @@ export function Select({
         aria-label={ariaLabel}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-2.5 text-[12px] transition-colors",
+          "flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-2.5 transition-colors",
           "hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         )}
       >
@@ -101,7 +104,7 @@ export function Select({
                   setOpen(false);
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-left text-[12px] hover:bg-accent hover:text-accent-foreground",
+                  "flex w-full items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground",
                   active && "bg-accent/60",
                 )}
               >

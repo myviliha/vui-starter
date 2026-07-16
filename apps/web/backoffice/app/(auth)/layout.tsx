@@ -22,7 +22,7 @@ export default function AuthLayout({
             aria-label="VUI Starter"
           >
             <Logo className="h-8 w-8" />
-            <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-[15px] font-bold tracking-tight text-transparent">
+            <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-base font-bold tracking-tight text-transparent">
               VUI Starter
             </span>
           </Link>
@@ -30,7 +30,7 @@ export default function AuthLayout({
         </div>
       </div>
 
-      <footer className="pb-6 text-center text-[12px] text-muted-foreground">
+      <footer className="pb-6 text-center text-muted-foreground">
         <div className="space-x-2">
           <Link href="#" className="hover:text-foreground">
             Terms of Service

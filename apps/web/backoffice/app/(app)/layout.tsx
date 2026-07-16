@@ -21,7 +21,7 @@ export default function AppLayout({
               {children}
             </PageChromeProvider>
           </div>
-          <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-2 text-center text-[12px] text-muted-foreground md:block">
+          <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-2 text-center text-muted-foreground md:block">
             © 2026 VILIHA PTE. LTD. · MIT Licensed
           </footer>
         </div>

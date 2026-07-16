@@ -4,12 +4,12 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  ArrowLeft,
-  Fingerprint,
-  KeyRound,
-  Mail,
-  ShieldCheck,
-} from "lucide-react";
+  ArrowLeftIcon as ArrowLeft,
+  CheckCircledIcon as ShieldCheck,
+  EnvelopeClosedIcon as Mail,
+  LockClosedIcon as Fingerprint,
+  LockClosedIcon as KeyRound,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
@@ -50,10 +50,10 @@ export default function SignInPage() {
         <IconBadge>
           <Mail className="size-6" />
         </IconBadge>
-        <h1 className="mt-4 text-center text-[15px] font-semibold">
+        <h1 className="mt-4 text-center text-base font-semibold">
           Check your email
         </h1>
-        <p className="mt-1 text-center text-[12px] text-muted-foreground">
+        <p className="mt-1 text-center text-muted-foreground">
           Sign-in link sent to{" "}
           <span className="font-medium text-foreground">{email}</span>
         </p>
@@ -77,7 +77,7 @@ export default function SignInPage() {
     return (
       <Panel>
         <BackButton onClick={() => setView("main")} />
-        <h1 className="text-center text-[15px] font-semibold">
+        <h1 className="text-center text-base font-semibold">
           Single sign-on
         </h1>
         <form
@@ -112,10 +112,10 @@ export default function SignInPage() {
         <IconBadge>
           <ShieldCheck className="size-6" />
         </IconBadge>
-        <h1 className="mt-4 text-center text-[15px] font-semibold">
+        <h1 className="mt-4 text-center text-base font-semibold">
           Two-factor authentication
         </h1>
-        <p className="mt-1 text-center text-[12px] text-muted-foreground">
+        <p className="mt-1 text-center text-muted-foreground">
           Enter your 6-digit code
         </p>
         <form
@@ -145,7 +145,7 @@ export default function SignInPage() {
           <button
             type="button"
             onClick={finish}
-            className="mx-auto block text-[12px] text-primary hover:underline"
+            className="mx-auto block text-primary hover:underline"
           >
             Use a passkey instead
           </button>
@@ -157,7 +157,7 @@ export default function SignInPage() {
   // main
   return (
     <Panel>
-      <h1 className="text-center text-[15px] font-semibold">
+      <h1 className="text-center text-base font-semibold">
         Sign in to your account
       </h1>
 
@@ -199,7 +199,7 @@ export default function SignInPage() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-[12px] text-muted-foreground">
+      <p className="mt-5 text-center text-muted-foreground">
         New to VUI Starter?{" "}
         <Link href="/signup" className="font-medium text-primary hover:underline">
           Create an account
@@ -223,7 +223,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
       type="button"
       onClick={onClick}
       className={cn(
-        "mb-2 inline-flex items-center gap-1 text-[12px] text-muted-foreground hover:text-foreground",
+        "mb-2 inline-flex items-center gap-1 text-muted-foreground hover:text-foreground",
       )}
     >
       <ArrowLeft className="size-3.5" />

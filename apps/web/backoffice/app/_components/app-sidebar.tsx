@@ -4,42 +4,48 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Briefcase,
-  Building,
-  Building2,
-  ChevronRight,
-  ChevronsUpDown,
-  Coins,
-  Contact,
-  Flag,
-  Globe,
-  Layers,
-  LayoutGrid,
-  type LucideIcon,
-  MapPin,
-  Menu,
-  Network,
-  Home,
-  Landmark,
-  Languages,
-  LogOut,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Server,
-  Settings,
-  Target,
-  Users,
-  X,
-} from "lucide-react";
+  BackpackIcon as Briefcase,
+  BookmarkIcon as Flag,
+  CaretSortIcon as ChevronsUpDown,
+  ChevronRightIcon as ChevronRight,
+  Cross2Icon as X,
+  CubeIcon as Building,
+  CubeIcon as Building2,
+  DashboardIcon as LayoutGrid,
+  ExitIcon as LogOut,
+  GearIcon as Settings,
+  GlobeIcon as Globe,
+  HamburgerMenuIcon as Menu,
+  HomeIcon as Home,
+  HomeIcon as Landmark,
+  IdCardIcon as Contact,
+  LayersIcon as Layers,
+  PersonIcon as Users,
+  PinLeftIcon as PanelLeftClose,
+  PinRightIcon as PanelLeftOpen,
+  SewingPinFilledIcon as MapPin,
+  Share2Icon as Network,
+  StackIcon as Server,
+  TargetIcon as Target,
+  TextIcon as Languages,
+  TokensIcon as Coins,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@repo/ui/avatar";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 
-type NavLink = { label: string; href: string; icon: LucideIcon };
+/** Shared icon component type (all Radix icons share this shape). */
+type IconType = typeof Home;
+type NavLink = { label: string; href: string; icon: IconType; color?: string };
 /** A collapsible parent with nested links (a "subsection"). */
-type NavGroup = { label: string; icon: LucideIcon; children: NavLink[] };
+type NavGroup = {
+  label: string;
+  icon: IconType;
+  color?: string;
+  children: NavLink[];
+};
 type NavEntry = NavLink | NavGroup;
 type NavSection = { title?: string; items: NavEntry[] };
 
@@ -49,17 +55,17 @@ function isGroup(entry: NavEntry): entry is NavGroup {
 
 const NAV: NavSection[] = [
   {
-    items: [{ label: "Home", href: "/", icon: Home }],
+    items: [{ label: "Home", href: "/", icon: Home, color: "text-blue-500" }],
   },
   {
     title: "Records",
     items: [
-      { label: "Organizations", href: "/organizations", icon: Building2 },
-      { label: "Branches", href: "/branches", icon: Network },
-      { label: "Departments", href: "/departments", icon: LayoutGrid },
-      { label: "Employees", href: "/employees", icon: Users },
-      { label: "Markets", href: "/markets", icon: MapPin },
-      { label: "Businesses", href: "/businesses", icon: Briefcase },
+      { label: "Organizations", href: "/organizations", icon: Building2, color: "text-blue-500" },
+      { label: "Branches", href: "/branches", icon: Network, color: "text-violet-500" },
+      { label: "Departments", href: "/departments", icon: LayoutGrid, color: "text-amber-500" },
+      { label: "Employees", href: "/employees", icon: Users, color: "text-cyan-500" },
+      { label: "Markets", href: "/markets", icon: MapPin, color: "text-rose-500" },
+      { label: "Businesses", href: "/businesses", icon: Briefcase, color: "text-emerald-500" },
     ],
   },
   {
@@ -68,21 +74,23 @@ const NAV: NavSection[] = [
       {
         label: "CRM",
         icon: Layers,
+        color: "text-indigo-500",
         children: [
-          { label: "Companies", href: "/crm/companies", icon: Building },
-          { label: "People", href: "/crm/people", icon: Contact },
-          { label: "Opportunities", href: "/crm/opportunities", icon: Target },
+          { label: "Companies", href: "/crm/companies", icon: Building, color: "text-blue-500" },
+          { label: "People", href: "/crm/people", icon: Contact, color: "text-sky-500" },
+          { label: "Opportunities", href: "/crm/opportunities", icon: Target, color: "text-orange-500" },
         ],
       },
       {
         label: "System",
         icon: Server,
+        color: "text-slate-500",
         children: [
-          { label: "Regions", href: "/system/regions", icon: Globe },
-          { label: "Countries", href: "/system/countries", icon: Flag },
-          { label: "Cities", href: "/system/cities", icon: Landmark },
-          { label: "Currencies", href: "/system/currencies", icon: Coins },
-          { label: "Languages", href: "/system/languages", icon: Languages },
+          { label: "Regions", href: "/system/regions", icon: Globe, color: "text-teal-500" },
+          { label: "Countries", href: "/system/countries", icon: Flag, color: "text-red-500" },
+          { label: "Cities", href: "/system/cities", icon: Landmark, color: "text-amber-500" },
+          { label: "Currencies", href: "/system/currencies", icon: Coins, color: "text-green-500" },
+          { label: "Languages", href: "/system/languages", icon: Languages, color: "text-purple-500" },
         ],
       },
     ],
@@ -92,6 +100,34 @@ const NAV: NavSection[] = [
 function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** Nav glyph. Border/padding come from the global icon chip rule. Inactive icons
+    keep their brand color; active inverts (dark fill, light glyph); nested
+    (sub-menu) icons are smaller so the hierarchy reads even when collapsed. */
+function NavIcon({
+  icon: Icon,
+  active,
+  color,
+  nested,
+}: {
+  icon: IconType;
+  active: boolean;
+  color?: string;
+  nested?: boolean;
+}) {
+  return (
+    <Icon
+      className={cn(
+        "shrink-0 transition-colors",
+        nested ? "size-4" : "size-[18px]",
+        active
+          ? "border-sidebar-foreground bg-sidebar-foreground text-background"
+          : cn("bg-background", color ?? "text-muted-foreground"),
+      )}
+      aria-hidden="true"
+    />
+  );
 }
 
 /** Shared sidebar contents used by both the desktop aside and the mobile drawer. */
@@ -138,20 +174,19 @@ function SidebarBody({
         aria-current={active ? "page" : undefined}
         title={collapsed ? item.label : undefined}
         className={cn(
-          "group/nav flex items-center gap-2.5 rounded-md px-2 py-1 text-[12px] transition-colors",
+          "group/nav flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
           collapsed && "justify-center px-0",
-          nested && !collapsed && "gap-2 py-1",
+          nested && !collapsed && "gap-2.5 py-1.5",
           active
-            ? "bg-primary/10 font-medium text-primary"
-            : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-primary",
+            ? "bg-sidebar-accent text-sidebar-foreground"
+            : "text-sidebar-foreground hover:bg-sidebar-accent",
         )}
       >
-        <item.icon
-          className={cn(
-            "size-4 shrink-0 transition-colors",
-            active ? "text-primary" : "text-muted-foreground group-hover/nav:text-primary",
-          )}
-          aria-hidden="true"
+        <NavIcon
+          icon={item.icon}
+          active={active}
+          color={item.color}
+          nested={nested}
         />
         {!collapsed && <span className="truncate">{item.label}</span>}
       </Link>
@@ -161,12 +196,44 @@ function SidebarBody({
   const renderEntry = (entry: NavEntry) => {
     if (!isGroup(entry)) return renderLink(entry);
 
-    // Collapsed rail: flatten the subsection to icon-only links.
-    if (collapsed) return entry.children.map((child) => renderLink(child));
-
     const open = openGroups.has(entry.label);
     const anyActive = entry.children.some((c) => isActive(pathname, c.href));
     const GroupIcon = entry.icon;
+
+    // Collapsed rail: show the PARENT icon with an expand chevron beside it;
+    // its children reveal inline (indented, smaller) when toggled open.
+    if (collapsed)
+      return (
+        <div key={entry.label} className="space-y-1">
+          <button
+            type="button"
+            onClick={() => toggleGroup(entry.label)}
+            aria-expanded={open}
+            title={entry.label}
+            className={cn(
+              "group/nav flex w-full items-center justify-center gap-0.5 rounded-md py-1.5 transition-colors",
+              anyActive
+                ? "text-sidebar-foreground"
+                : "hover:bg-sidebar-accent",
+            )}
+          >
+            <NavIcon icon={GroupIcon} active={anyActive} color={entry.color} />
+            <ChevronRight
+              className={cn(
+                "size-3 shrink-0 text-muted-foreground transition-transform",
+                open && "rotate-90",
+              )}
+              aria-hidden="true"
+            />
+          </button>
+          {open && (
+            <div className="ml-3 space-y-1 border-l border-sidebar-border pl-1">
+              {entry.children.map((child) => renderLink(child, true))}
+            </div>
+          )}
+        </div>
+      );
+
     return (
       <div key={entry.label} className="space-y-1">
         <button
@@ -174,21 +241,13 @@ function SidebarBody({
           onClick={() => toggleGroup(entry.label)}
           aria-expanded={open}
           className={cn(
-            "group/nav flex w-full items-center gap-2.5 rounded-md px-2 py-1 text-[12px] transition-colors",
+            "group/nav flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
             anyActive
-              ? "font-medium text-primary"
-              : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-primary",
+              ? "text-sidebar-foreground"
+              : "text-sidebar-foreground hover:bg-sidebar-accent",
           )}
         >
-          <GroupIcon
-            className={cn(
-              "size-4 shrink-0 transition-colors",
-              anyActive
-                ? "text-primary"
-                : "text-muted-foreground group-hover/nav:text-primary",
-            )}
-            aria-hidden="true"
-          />
+          <NavIcon icon={GroupIcon} active={anyActive} color={entry.color} />
           <span className="flex-1 truncate text-left">{entry.label}</span>
           <ChevronRight
             className={cn(
@@ -209,8 +268,8 @@ function SidebarBody({
 
   return (
     <>
-      {/* Workspace switcher + collapse toggle (same row) */}
-      <div className="flex items-center gap-1 px-3 py-3">
+      {/* Workspace switcher + collapse toggle (same row) — header */}
+      <div className="flex h-12 items-center gap-1 border-b border-sidebar-border bg-background px-3">
         <button
           type="button"
           className={cn(
@@ -218,13 +277,13 @@ function SidebarBody({
             collapsed && "justify-center px-0",
           )}
           aria-label="Switch workspace"
-          title={collapsed ? "VUI Starter" : undefined}
+          title={collapsed ? "Vui Starter" : undefined}
         >
           <Logo variant="mark" className="h-6 w-6 shrink-0" />
           {!collapsed && (
             <>
-              <span className="min-w-0 flex-1 truncate bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-[12px] font-bold tracking-tight text-transparent">
-                VUI Starter
+              <span className="min-w-0 flex-1 truncate text-lg font-bold tracking-tight text-foreground">
+                Vui Starter
               </span>
               <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
             </>
@@ -238,7 +297,7 @@ function SidebarBody({
         {NAV.map((section, index) => (
           <div key={section.title ?? `section-${index}`} className="space-y-1">
             {section.title && !collapsed && (
-              <p className="px-2 pb-1 text-[12px] font-semibold uppercase tracking-wide text-primary/70">
+              <p className="px-2 pb-1 text-sm font-medium text-muted-foreground">
                 {section.title}
               </p>
             )}
@@ -257,27 +316,19 @@ function SidebarBody({
           onClick={onNavigate}
           title={collapsed ? "Settings" : undefined}
           className={cn(
-            "group/nav flex items-center gap-2.5 rounded-md px-2 py-1 text-[12px] transition-colors",
+            "group/nav flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
             collapsed && "justify-center px-0",
             isActive(pathname, "/settings")
-              ? "bg-primary/10 font-medium text-primary"
-              : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-primary",
+              ? "bg-sidebar-accent text-sidebar-foreground"
+              : "text-sidebar-foreground hover:bg-sidebar-accent",
           )}
         >
-          <Settings
-            className={cn(
-              "size-4 shrink-0 transition-colors",
-              isActive(pathname, "/settings")
-                ? "text-primary"
-                : "text-muted-foreground group-hover/nav:text-primary",
-            )}
-            aria-hidden="true"
-          />
+          <NavIcon icon={Settings} active={isActive(pathname, "/settings")} />
           {!collapsed && <span>Settings</span>}
         </Link>
         <div
           className={cn(
-            "flex items-center gap-2 rounded-md px-2 py-1.5",
+            "-mx-3 mt-2 flex items-center gap-2 border-t border-sidebar-border px-5 pb-1 pt-3",
             collapsed && "justify-center px-0",
           )}
         >
@@ -287,10 +338,10 @@ function SidebarBody({
           {!collapsed && (
             <>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[12px] font-medium text-sidebar-foreground">
+                <p className="truncate font-medium text-sidebar-foreground">
                   Admin User
                 </p>
-                <p className="truncate text-[12px] text-muted-foreground">
+                <p className="truncate text-muted-foreground">
                   Administrator
                 </p>
               </div>
@@ -550,7 +601,9 @@ export function MobileNav() {
         <div className="flex items-center justify-between px-3 pt-3">
           <div className="flex items-center gap-2">
             <Logo variant="mark" className="h-6 w-6" />
-            <span className="text-[12px] font-semibold">VUI Starter</span>
+            <span className="text-lg font-bold tracking-tight text-foreground">
+              Vui Starter
+            </span>
           </div>
           <button
             type="button"
@@ -576,7 +629,7 @@ export function MobileNav() {
           aria-controls="mobile-nav-drawer"
           aria-label="Menu"
           className={cn(
-            "flex flex-1 flex-col items-center gap-0.5 py-2 text-[12px] transition-colors",
+            "flex flex-1 flex-col items-center gap-0.5 py-2 transition-colors",
             open
               ? "text-sidebar-accent-foreground"
               : "text-muted-foreground hover:text-sidebar-accent-foreground",
@@ -594,7 +647,7 @@ export function MobileNav() {
               onClick={close}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 py-2 text-[12px] transition-colors",
+                "flex flex-1 flex-col items-center gap-0.5 py-2 transition-colors",
                 active
                   ? "text-sidebar-accent-foreground"
                   : "text-muted-foreground hover:text-sidebar-accent-foreground",

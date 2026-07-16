@@ -3,17 +3,17 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
-  ArrowLeft,
-  Building2,
-  Check,
-  Copy,
-  KeyRound,
-  Plus,
-  Trash2,
-  Upload,
-  UserRound,
-  Users,
-} from "lucide-react";
+  ArrowLeftIcon as ArrowLeft,
+  CheckIcon as Check,
+  CopyIcon as Copy,
+  CubeIcon as Building2,
+  LockClosedIcon as KeyRound,
+  PersonIcon as UserRound,
+  PersonIcon as Users,
+  PlusIcon as Plus,
+  TrashIcon as Trash2,
+  UploadIcon as Upload,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@repo/ui/badge";
@@ -139,10 +139,10 @@ export default function OnboardingPage() {
               />
             </Field>
             <div className="space-y-1">
-              <span className="text-[12px] font-medium">Logo</span>
+              <span className="font-medium">Logo</span>
               <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-md border border-dashed border-input px-3 py-2.5 text-left text-[12px] text-muted-foreground hover:bg-muted/50"
+                className="flex w-full items-center gap-3 rounded-md border border-dashed border-input px-3 py-2.5 text-left text-muted-foreground hover:bg-muted/50"
               >
                 <span className="grid size-8 place-items-center rounded-md bg-muted">
                   <Upload className="size-4" />
@@ -169,7 +169,7 @@ export default function OnboardingPage() {
             <div className="rounded-md border border-border p-3">
               {!token ? (
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-[12px] font-medium">API token</span>
+                  <span className="font-medium">API token</span>
                   <Button size="sm" variant="outline" onClick={generateToken}>
                     <KeyRound className="size-3.5" />
                     Generate
@@ -177,7 +177,7 @@ export default function OnboardingPage() {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 font-mono text-[12px]">
+                  <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 font-mono">
                     {token}
                   </code>
                   <button
@@ -220,14 +220,14 @@ export default function OnboardingPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-[13px] font-semibold">
+                        <span className="text-sm font-semibold">
                           {p.name}
                         </span>
                         {p.popular && (
                           <Badge variant="default">Most popular</Badge>
                         )}
                       </div>
-                      <span className="text-[12px] text-muted-foreground">
+                      <span className="text-muted-foreground">
                         <span className="font-semibold text-foreground">
                           {p.price}
                         </span>{" "}
@@ -238,7 +238,7 @@ export default function OnboardingPage() {
                       {p.features.map((f) => (
                         <li
                           key={f}
-                          className="flex items-center gap-1 text-[12px] text-muted-foreground"
+                          className="flex items-center gap-1 text-muted-foreground"
                         >
                           <Check className="size-3.5 text-primary" />
                           {f}
@@ -304,7 +304,7 @@ export default function OnboardingPage() {
               onClick={() =>
                 setInvites((rows) => [...rows, { email: "", role: "Member" }])
               }
-              className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-medium text-primary hover:underline"
+              className="mt-2 inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
             >
               <Plus className="size-3.5" />
               Add another
@@ -351,7 +351,7 @@ function Stepper({ current }: { current: number }) {
             <div className="flex flex-col items-center gap-1">
               <span
                 className={cn(
-                  "grid size-7 place-items-center rounded-full border text-[12px] transition-colors",
+                  "grid size-7 place-items-center rounded-full border transition-colors",
                   done && "border-primary bg-primary text-primary-foreground",
                   active && "border-primary text-primary",
                   !done && !active && "border-border text-muted-foreground",
@@ -361,7 +361,7 @@ function Stepper({ current }: { current: number }) {
               </span>
               <span
                 className={cn(
-                  "hidden text-[12px] sm:block",
+                  "hidden sm:block",
                   active ? "font-medium text-foreground" : "text-muted-foreground",
                 )}
               >
@@ -392,7 +392,7 @@ function Step({
 }) {
   return (
     <div>
-      <h1 className="text-[15px] font-semibold tracking-tight">{title}</h1>
+      <h1 className="text-base font-semibold tracking-tight">{title}</h1>
       <div className="mt-4 space-y-3">{children}</div>
     </div>
   );

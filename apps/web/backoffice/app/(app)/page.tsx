@@ -1,15 +1,11 @@
-import { Building2 } from "lucide-react";
+import {
+  CubeIcon as Building2,
+  HomeIcon as Home,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@repo/ui/avatar";
 import { Badge } from "@repo/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
 import {
   Table,
   TableBody,
@@ -51,44 +47,49 @@ export default function HomePage() {
   );
 
   return (
-    <main className="mx-auto max-w-7xl space-y-6 p-4 md:p-6 lg:p-8">
-      {/* Page header */}
-      <div>
-        <div className="flex items-center gap-2">
-          <SidebarExpandButton />
-          <h1 className="text-[12px] font-semibold tracking-tight">Home</h1>
-        </div>
-        <p className="text-[12px] text-muted-foreground">
-          Overview of organizations, teams, and markets across the platform.
-        </p>
+    <div className="flex h-full flex-col">
+      {/* Header — same height + border as the datatable page header */}
+      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
+        <SidebarExpandButton />
+        <Home className="size-4 text-muted-foreground" aria-hidden="true" />
+        <h1 className="font-semibold tracking-tight">Home</h1>
       </div>
 
-      {/* Stats */}
-      <section
-        aria-label="Key metrics"
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-      >
-        {statCards.map((stat) => (
-          <StatCard
-            key={stat.label}
-            label={stat.label}
-            value={stat.value}
-            delta={stat.delta}
-            trend={stat.trend}
-          />
-        ))}
-      </section>
+      {/* Sub-toolbar — mirrors the datatable's secondary bar */}
+      <div className="flex shrink-0 items-center border-b border-border px-4 py-1.5 text-muted-foreground">
+        Overview of organizations, teams, and markets across the platform.
+      </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Recent organizations */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Recent organizations</CardTitle>
-            <CardDescription>
-              The latest tenants added or updated on the platform.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+      {/* Scrollable content — full-bleed, borders separate sections (no gaps/padding) */}
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {/* Stats — bordered cells, flush to the edges */}
+        <section
+          aria-label="Key metrics"
+          className="grid grid-cols-2 border-b border-border lg:grid-cols-4"
+        >
+          {statCards.map((stat, i) => (
+            <StatCard
+              key={stat.label}
+              label={stat.label}
+              value={stat.value}
+              delta={stat.delta}
+              trend={stat.trend}
+              className={cn(
+                "border-border",
+                // vertical dividers between columns
+                i % 2 === 0 && "border-r",
+                "lg:border-r lg:last:border-r-0",
+                // horizontal divider for the second row on the 2-col layout
+                i < 2 && "border-b lg:border-b-0",
+              )}
+            />
+          ))}
+        </section>
+
+        {/* Content boxes — small 5px gutter; each is its own bordered box */}
+        <div className="grid grid-cols-1 gap-[5px] p-[5px] lg:grid-cols-3">
+          <section className="overflow-hidden rounded-lg border border-border bg-card lg:col-span-2">
+            <SectionHeader>Recent organizations</SectionHeader>
             {organizations.length === 0 ? (
               <EmptyState />
             ) : (
@@ -115,10 +116,8 @@ export default function HomePage() {
                                 <AvatarFallback>{org.initials}</AvatarFallback>
                               </Avatar>
                               <div className="min-w-0">
-                                <p className="truncate font-medium">
-                                  {org.name}
-                                </p>
-                                <p className="truncate text-[12px] text-muted-foreground">
+                                <p className="truncate">{org.name}</p>
+                                <p className="truncate text-muted-foreground">
                                   {org.url}
                                 </p>
                               </div>
@@ -148,76 +147,84 @@ export default function HomePage() {
                 </Table>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </section>
 
-        {/* Side column */}
-        <div className="space-y-6">
-          {/* Region breakdown */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Organizations by region</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {regionBreakdown.map((entry) => (
-                <div key={entry.region} className="space-y-1">
-                  <div className="flex items-center justify-between text-[12px]">
-                    <span>{entry.region}</span>
-                    <span className="tabular-nums text-muted-foreground">
-                      {entry.organizations}
-                    </span>
+          {/* Side column — separate boxes */}
+          <aside className="grid grid-cols-1 content-start gap-[5px]">
+            {/* Region breakdown */}
+            <section className="overflow-hidden rounded-lg border border-border bg-card">
+              <SectionHeader>Organizations by region</SectionHeader>
+              <div className="space-y-3 p-4">
+                {regionBreakdown.map((entry) => (
+                  <div key={entry.region} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span>{entry.region}</span>
+                      <span className="tabular-nums text-muted-foreground">
+                        {entry.organizations}
+                      </span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{
+                          width: `${(entry.organizations / maxRegion) * 100}%`,
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{
-                        width: `${(entry.organizations / maxRegion) * 100}%`,
-                      }}
+                ))}
+              </div>
+            </section>
+
+            {/* Recently added employees */}
+            <section className="overflow-hidden rounded-lg border border-border bg-card">
+              <SectionHeader>New team members</SectionHeader>
+              <div className="divide-y divide-border">
+                {employees.slice(0, 5).map((person) => (
+                  <div
+                    key={person.id}
+                    className="flex items-center gap-3 px-4 py-3"
+                  >
+                    <Avatar className="size-8">
+                      <AvatarFallback>
+                        {person.firstName[0]}
+                        {person.lastName[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate">
+                        {person.firstName} {person.lastName}
+                      </p>
+                      <p className="truncate text-muted-foreground">
+                        {person.department} · {person.organization}
+                      </p>
+                    </div>
+                    <span
+                      className={cn(
+                        "size-2 shrink-0 rounded-full",
+                        person.isActive
+                          ? "bg-emerald-500"
+                          : "bg-muted-foreground/40",
+                      )}
+                      aria-label={person.isActive ? "Active" : "Inactive"}
                     />
                   </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Recently added employees */}
-          <Card>
-            <CardHeader>
-              <CardTitle>New team members</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {employees.slice(0, 5).map((person) => (
-                <div key={person.id} className="flex items-center gap-3">
-                  <Avatar className="size-8">
-                    <AvatarFallback>
-                      {person.firstName[0]}
-                      {person.lastName[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[12px] font-medium">
-                      {person.firstName} {person.lastName}
-                    </p>
-                    <p className="truncate text-[12px] text-muted-foreground">
-                      {person.department} · {person.organization}
-                    </p>
-                  </div>
-                  <span
-                    className={cn(
-                      "size-2 shrink-0 rounded-full",
-                      person.isActive
-                        ? "bg-emerald-500"
-                        : "bg-muted-foreground/40",
-                    )}
-                    aria-label={person.isActive ? "Active" : "Inactive"}
-                  />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+                ))}
+              </div>
+            </section>
+          </aside>
         </div>
       </div>
-    </main>
+    </div>
+  );
+}
+
+/** Section header bar — same treatment as the datatable sub-toolbar. */
+function SectionHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="border-b border-border bg-muted/40 px-4 py-2 font-medium">
+      {children}
+    </div>
   );
 }
 
@@ -227,8 +234,8 @@ function EmptyState() {
       <div className="flex size-10 items-center justify-center rounded-full bg-muted">
         <Building2 className="size-5 text-muted-foreground" aria-hidden="true" />
       </div>
-      <p className="text-[12px] font-medium">No organizations yet</p>
-      <p className="text-[12px] text-muted-foreground">
+      <p className="font-medium">No organizations yet</p>
+      <p className="text-muted-foreground">
         New tenants will appear here once they are onboarded.
       </p>
     </div>

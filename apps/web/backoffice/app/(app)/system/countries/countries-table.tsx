@@ -1,12 +1,16 @@
 "use client";
 
-import { Flag, Globe, Hash } from "lucide-react";
+import {
+  BookmarkIcon as Flag,
+  CodeIcon as Hash,
+  GlobeIcon as Globe,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { countries, type Country } from "@/lib/mock-data";
 
 const fields: RecordField<Country>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
   { key: "region", label: "Region", icon: Globe, editable: true, width: 220, group: "General" },
 ];

@@ -1,6 +1,12 @@
 "use client";
 
-import { Banknote, CircleDot, CreditCard, Hash, Mail } from "lucide-react";
+import {
+  CardStackIcon as CreditCard,
+  CodeIcon as Hash,
+  DotFilledIcon as CircleDot,
+  EnvelopeClosedIcon as Mail,
+  TokensIcon as Banknote,
+} from "@radix-ui/react-icons";
 
 import { Badge } from "@repo/ui/badge";
 import { RecordView, type RecordField } from "@repo/ui/record-view";
@@ -31,13 +37,13 @@ const statusVariant: Record<
 };
 
 const fields: RecordField<Payment>[] = [
-  { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 240, group: "General", hideInTable: true },
+  { key: "email", label: "Email", icon: Mail, editable: true, required: true, copyable: true, width: 240, group: "General", hideInTable: true },
   {
     key: "id",
     label: "Payment ID",
     icon: Hash,
     group: "General",
-    render: (row) => <span className="font-mono text-[12px]">{row.id}</span>,
+    render: (row) => <span className="font-mono">{row.id}</span>,
   },
   {
     key: "status",
@@ -57,7 +63,7 @@ const fields: RecordField<Payment>[] = [
     align: "right",
     group: "System",
     render: (row) => (
-      <span className="font-medium tabular-nums">
+      <span className="tabular-nums">
         {new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",

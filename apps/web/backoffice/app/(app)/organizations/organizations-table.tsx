@@ -1,6 +1,14 @@
 "use client";
 
-import { Building2, CircleDot, Globe, Mail, MapPin, Network, Users } from "lucide-react";
+import {
+  CubeIcon as Building2,
+  DotFilledIcon as CircleDot,
+  EnvelopeClosedIcon as Mail,
+  GlobeIcon as Globe,
+  PersonIcon as Users,
+  SewingPinFilledIcon as MapPin,
+  Share2Icon as Network,
+} from "@radix-ui/react-icons";
 
 import { Badge } from "@repo/ui/badge";
 import { RecordView, type RecordField } from "@repo/ui/record-view";
@@ -20,9 +28,9 @@ const statusBadge: Record<
 };
 
 const fields: RecordField<DemoOrganization>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "url", label: "Domain", icon: Globe, editable: true, copyable: true, width: 200, group: "General" },
-  { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 220, group: "General" },
+  { key: "email", label: "Email", icon: Mail, editable: true, required: true, copyable: true, width: 220, group: "General" },
   { key: "country", label: "Country", icon: MapPin, editable: true, group: "General" },
   {
     key: "branches",

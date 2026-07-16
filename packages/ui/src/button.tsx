@@ -4,6 +4,7 @@ import { cn } from "./utils";
 
 type ButtonVariant =
   | "default"
+  | "primary"
   | "secondary"
   | "outline"
   | "ghost"
@@ -12,13 +13,19 @@ type ButtonVariant =
 type ButtonSize = "default" | "sm" | "lg" | "icon";
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-[12px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0";
+  "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0";
+
+// Standard button: white background + border; on hover only the icon activates
+// (muted → foreground). Shared by default/secondary/outline for one consistent look.
+const NEUTRAL =
+  "border border-border bg-background text-foreground [&_svg]:text-muted-foreground hover:[&_svg]:text-foreground";
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  default: "bg-primary text-primary-foreground hover:bg-primary/90",
-  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/70",
-  outline:
-    "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+  default: NEUTRAL,
+  primary:
+    "border border-transparent bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)] [&_svg]:border-white/30",
+  secondary: NEUTRAL,
+  outline: NEUTRAL,
   ghost: "hover:bg-accent hover:text-accent-foreground",
   link: "text-primary underline-offset-4 hover:underline",
   destructive:
@@ -27,7 +34,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
 
 const SIZES: Record<ButtonSize, string> = {
   default: "h-8 px-3",
-  sm: "h-7 rounded-sm px-2.5 text-[12px]",
+  sm: "h-7 rounded-sm px-2.5",
   lg: "h-9 px-4",
   icon: "size-8",
 };

@@ -1,12 +1,16 @@
 "use client";
 
-import { Banknote, Coins, Hash } from "lucide-react";
+import {
+  CodeIcon as Hash,
+  TokensIcon as Banknote,
+  TokensIcon as Coins,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { currencies, type Currency } from "@/lib/mock-data";
 
 const fields: RecordField<Currency>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
   { key: "symbol", label: "Symbol", icon: Banknote, editable: true, group: "General" },
 ];

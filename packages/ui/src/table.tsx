@@ -8,7 +8,7 @@ export const Table = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <table
     ref={ref}
-    className={cn("w-full caption-bottom text-[12px]", className)}
+    className={cn("w-full caption-bottom text-sm font-normal", className)}
     {...props}
   />
 ));
@@ -68,7 +68,7 @@ export const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-8 border-r border-border px-3 text-left align-middle text-[12px] font-medium text-muted-foreground last:border-r-0 [&:has([role=checkbox])]:pr-0",
+      "h-8 border-r border-border px-3 text-left align-middle font-medium text-muted-foreground last:border-r-0 [&:has([role=checkbox])]:pr-0",
       className,
     )}
     {...props}
@@ -97,7 +97,7 @@ export const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-[12px] text-muted-foreground", className)}
+    className={cn("mt-4 text-muted-foreground", className)}
     {...props}
   />
 ));

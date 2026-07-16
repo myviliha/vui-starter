@@ -1,12 +1,18 @@
 "use client";
 
-import { Building, Factory, Globe, MapPin, Users } from "lucide-react";
+import {
+  ArchiveIcon as Factory,
+  CubeIcon as Building,
+  GlobeIcon as Globe,
+  PersonIcon as Users,
+  SewingPinFilledIcon as MapPin,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { companies, type Company } from "@/lib/crm-data";
 
 const fields: RecordField<Company>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "domain", label: "Domain", icon: Globe, editable: true, copyable: true, width: 210, group: "General" },
   { key: "industry", label: "Industry", icon: Factory, editable: true, group: "General" },
   { key: "city", label: "City", icon: MapPin, editable: true, group: "General" },

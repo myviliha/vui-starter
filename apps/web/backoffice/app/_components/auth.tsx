@@ -29,7 +29,7 @@ export function GoogleIcon({ className }: { className?: string }) {
 /** "or" separator between provider buttons and the email form. */
 export function OrDivider({ label = "or" }: { label?: string }) {
   return (
-    <div className="flex items-center gap-3 py-1 text-[12px] text-muted-foreground">
+    <div className="flex items-center gap-3 py-1 text-muted-foreground">
       <span className="h-px flex-1 bg-border" />
       <span>{label}</span>
       <span className="h-px flex-1 bg-border" />
@@ -53,14 +53,14 @@ export function Field({
 }) {
   return (
     <div className="space-y-1">
-      <label htmlFor={htmlFor} className="text-[12px] font-medium">
+      <label htmlFor={htmlFor} className="font-medium">
         {label}
       </label>
       {children}
       {error ? (
-        <p className="text-[12px] text-destructive">{error}</p>
+        <p className="text-destructive">{error}</p>
       ) : hint ? (
-        <p className="text-[12px] text-muted-foreground">{hint}</p>
+        <p className="text-muted-foreground">{hint}</p>
       ) : null}
     </div>
   );

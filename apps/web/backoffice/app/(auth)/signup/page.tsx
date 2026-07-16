@@ -3,7 +3,11 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, MailCheck, ShieldQuestion } from "lucide-react";
+import {
+  CheckIcon as Check,
+  EnvelopeOpenIcon as MailCheck,
+  QuestionMarkCircledIcon as ShieldQuestion,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@repo/ui/button";
@@ -43,10 +47,10 @@ export default function SignUpPage() {
         <IconBadge>
           <MailCheck className="size-6" />
         </IconBadge>
-        <h1 className="mt-4 text-center text-[15px] font-semibold">
+        <h1 className="mt-4 text-center text-base font-semibold">
           Verify your email
         </h1>
-        <p className="mt-1 text-center text-[12px] text-muted-foreground">
+        <p className="mt-1 text-center text-muted-foreground">
           Verification link sent to{" "}
           <span className="font-medium text-foreground">{email}</span>
         </p>
@@ -69,7 +73,7 @@ export default function SignUpPage() {
 
   return (
     <Panel>
-      <h1 className="text-center text-[15px] font-semibold">
+      <h1 className="text-center text-base font-semibold">
         Create your account
       </h1>
 
@@ -105,7 +109,7 @@ export default function SignUpPage() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-[12px] text-muted-foreground">
+      <p className="mt-5 text-center text-muted-foreground">
         Already have an account?{" "}
         <Link href="/signin" className="font-medium text-primary hover:underline">
           Sign in
@@ -125,7 +129,7 @@ function RecaptchaMock({
 }) {
   return (
     <div className="flex items-center justify-between rounded-md border border-input bg-background px-3 py-2.5">
-      <div className="flex items-center gap-2.5 text-[12px]">
+      <div className="flex items-center gap-2.5">
         <button
           type="button"
           role="checkbox"
@@ -145,7 +149,7 @@ function RecaptchaMock({
       </div>
       <div className="flex flex-col items-center text-muted-foreground">
         <ShieldQuestion className="size-5" aria-hidden="true" />
-        <span className="text-[9px] leading-tight">reCAPTCHA</span>
+        <span className="text-xs leading-tight">reCAPTCHA</span>
       </div>
     </div>
   );

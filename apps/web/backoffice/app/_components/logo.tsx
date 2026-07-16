@@ -18,7 +18,7 @@ export function Logo({ className }: LogoProps) {
       aria-label="VUI Starter"
       className={cn("h-6 w-6", className)}
     >
-      <rect width="24" height="24" rx="6" fill="#0866ff" />
+      <rect width="24" height="24" rx="6" fill="var(--brand-indigo)" />
       <path
         d="M6.5 7.25 L12 16.75 L17.5 7.25"
         fill="none"

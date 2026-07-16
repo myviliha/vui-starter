@@ -2,28 +2,34 @@
 
 import * as React from "react";
 import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  ArrowUpRight,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Circle,
-  Copy,
-  CopyPlus,
-  GripVertical,
-  ListFilter,
-  type LucideIcon,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Rows3,
-  Search,
-  SlidersHorizontal,
-  Trash2,
-  X,
-} from "lucide-react";
+  CodeIcon as Code,
+  DownloadIcon as Download,
+  FileTextIcon as FileText,
+  ReaderIcon as Reader,
+  TableIcon as SheetIcon,
+  UploadIcon as Upload,
+  ArrowDownIcon as ArrowDown,
+  ArrowTopRightIcon as ArrowUpRight,
+  ArrowUpIcon as ArrowUp,
+  CaretSortIcon as ArrowUpDown,
+  CheckIcon as Check,
+  ChevronLeftIcon as ChevronLeft,
+  ChevronRightIcon as ChevronRight,
+  CircleIcon as Circle,
+  CopyIcon as Copy,
+  CopyIcon as CopyPlus,
+  Cross2Icon as X,
+  DotsHorizontalIcon as MoreHorizontal,
+  DragHandleDots2Icon as GripVertical,
+  EyeOpenIcon as Eye,
+  MagnifyingGlassIcon as Search,
+  MixerHorizontalIcon as ListFilter,
+  MixerHorizontalIcon as SlidersHorizontal,
+  Pencil1Icon as Pencil,
+  PlusIcon as Plus,
+  RowsIcon as Rows3,
+  TrashIcon as Trash2,
+} from "@radix-ui/react-icons";
 
 import { cn } from "./utils";
 import { Button } from "./button";
@@ -38,6 +44,14 @@ import {
   TableRow,
 } from "./table";
 import { Dropdown, DropdownItem, DropdownLabel } from "./dropdown-menu";
+import {
+  downloadFile,
+  parseCSV,
+  printTable,
+  rowsToCSV,
+  rowsToTableHTML,
+  type IoColumn,
+} from "./table-io";
 
 type RowId = string | number;
 type FieldGroup = "General" | "Work" | "Social" | "System";
@@ -45,7 +59,7 @@ const GROUP_ORDER: FieldGroup[] = ["General", "Work", "Social", "System"];
 
 /** Fixed (non-resizable) leading/trailing column widths, in px. */
 const CHECKBOX_W = 44;
-const ACTIONS_W = 80;
+const ACTIONS_W = 120;
 const NAME_COL = "__name";
 const NAME_DEFAULT_W = 190;
 const MIN_COL_W = 80;
@@ -55,6 +69,29 @@ const DEFAULT_FIELD_ICON = Circle;
 
 function fieldDefaultWidth<T>(field: RecordField<T>): number {
   return field.width ?? (field.align === "right" ? 110 : 160);
+}
+
+/** Shared icon component type (all Radix icons share this shape). */
+type IconType = typeof Circle;
+
+/** Mandatory-field marker — an asterisk icon (Radix has no asterisk glyph, so
+    it's an inline SVG) sized to the label text; no border chip (no width="15"). */
+function RequiredMark() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      className="size-3.5 shrink-0 self-center text-destructive"
+      aria-label="required"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5.5" y1="8.5" x2="18.5" y2="15.5" />
+      <line x1="18.5" y1="8.5" x2="5.5" y2="15.5" />
+    </svg>
+  );
 }
 
 const PageChromeContext = React.createContext<{
@@ -82,8 +119,10 @@ export function PageChromeProvider({
 export interface RecordField<T> {
   key: Extract<keyof T, string>;
   label: string;
-  icon?: LucideIcon;
+  icon?: IconType;
   editable?: boolean;
+  /** Mark the field mandatory — shows a `*` next to its label. */
+  required?: boolean;
   align?: "left" | "right";
   group?: FieldGroup;
   /** Initial column width in px (user-resizable via the header handle). */
@@ -99,7 +138,7 @@ export interface RecordField<T> {
 interface RecordViewProps<T extends { id: RowId }> {
   title: string;
   singular: string;
-  icon?: LucideIcon;
+  icon?: IconType;
   fields: RecordField<T>[];
   initialData: T[];
   makeEmptyRow: () => T;
@@ -134,6 +173,8 @@ export function RecordView<T extends { id: RowId }>({
   } | null>(null);
   const [draft, setDraft] = React.useState("");
   const [activeId, setActiveId] = React.useState<RowId | null>(null);
+  // A row created via "add" but not yet saved — Cancel/close removes it.
+  const [newRowId, setNewRowId] = React.useState<RowId | null>(null);
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState<number>(25);
   const [flashId, setFlashId] = React.useState<RowId | null>(null);
@@ -145,15 +186,9 @@ export function RecordView<T extends { id: RowId }>({
     x: number;
     y: number;
   } | null>(null);
-  const [colWidths, setColWidths] = React.useState<Record<string, number>>(
-    () => {
-      const initial: Record<string, number> = { [NAME_COL]: NAME_DEFAULT_W };
-      for (const f of fields) {
-        if (!f.hideInTable) initial[f.key] = fieldDefaultWidth(f);
-      }
-      return initial;
-    },
-  );
+  // Empty by default: columns auto-size to their header text via CSS (`w-max`).
+  // A key is only set once the user drags a column's resize handle.
+  const [colWidths, setColWidths] = React.useState<Record<string, number>>({});
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const nextId = React.useRef(1_000_000);
@@ -338,15 +373,78 @@ export function RecordView<T extends { id: RowId }>({
     setRows((prev) => [row, ...prev]);
     setPage(1);
     setActiveId(row.id);
-    // …and flash it briefly so the create action is unmistakable.
-    setFlashId(row.id);
+    setNewRowId(row.id);
+  }
+  /** Commit the form's buffered draft back into the table. */
+  function saveForm(updated: T) {
+    setRows((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+    // Flash the saved row so the change is unmistakable.
+    setFlashId(updated.id);
     window.setTimeout(() => {
-      setFlashId((current) => (current === row.id ? null : current));
+      setFlashId((current) => (current === updated.id ? null : current));
     }, 1600);
-    const firstEditable = fields.find((f) => f.editable);
-    if (firstEditable) {
-      setEditing({ id: row.id, key: firstEditable.key });
-      setDraft("");
+    setNewRowId(null);
+    setActiveId(null);
+  }
+  /** Discard the form; drop the row entirely if it was never saved. */
+  function cancelForm() {
+    if (activeId != null && activeId === newRowId) {
+      setRows((prev) => prev.filter((r) => r.id !== activeId));
+    }
+    setNewRowId(null);
+    setActiveId(null);
+  }
+
+  const importRef = React.useRef<HTMLInputElement>(null);
+  const ioColumns: IoColumn[] = fields.map((f) => ({
+    key: f.key,
+    label: f.label,
+  }));
+  /** Export the currently filtered/sorted rows in the chosen format. */
+  function exportData(format: "csv" | "excel" | "json" | "pdf") {
+    const data = processed as Record<string, unknown>[];
+    const base = title.toLowerCase().replace(/\s+/g, "-") || "export";
+    if (format === "csv")
+      downloadFile(`${base}.csv`, rowsToCSV(ioColumns, data), "text/csv;charset=utf-8");
+    else if (format === "json")
+      downloadFile(`${base}.json`, JSON.stringify(data, null, 2), "application/json");
+    else if (format === "excel")
+      downloadFile(`${base}.xls`, rowsToTableHTML(ioColumns, data), "application/vnd.ms-excel");
+    else printTable(title, rowsToTableHTML(ioColumns, data));
+  }
+  /** Parse an imported CSV/JSON file and prepend the rows to the table. */
+  async function onImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const text = await file.text();
+    let records: Record<string, unknown>[] = [];
+    try {
+      if (file.name.toLowerCase().endsWith(".json")) {
+        const parsed: unknown = JSON.parse(text);
+        records = Array.isArray(parsed) ? (parsed as Record<string, unknown>[]) : [];
+      } else {
+        records = parseCSV(text);
+      }
+    } catch {
+      return;
+    }
+    const byKey = new Map(fields.map((f) => [f.key.toLowerCase(), f.key]));
+    const byLabel = new Map(fields.map((f) => [f.label.toLowerCase(), f.key]));
+    const imported = records.map((rec) => {
+      const row = { ...makeEmptyRow(), id: nextId.current++ } as Record<
+        string,
+        unknown
+      >;
+      for (const [k, v] of Object.entries(rec)) {
+        const key = byKey.get(k.toLowerCase()) ?? byLabel.get(k.toLowerCase());
+        if (key) row[key] = v;
+      }
+      return row as T;
+    });
+    if (imported.length) {
+      setRows((prev) => [...imported, ...prev]);
+      setPage(1);
     }
   }
   function deleteRow(id: RowId) {
@@ -421,7 +519,7 @@ export function RecordView<T extends { id: RowId }>({
           }}
           aria-label={`Edit ${field.label}`}
           className={cn(
-            "h-8 w-full bg-background px-3 text-[12px] outline-none ring-2 ring-inset ring-ring",
+            "h-8 w-full bg-background px-3 outline-none ring-2 ring-inset ring-ring",
             field.align === "right" && "text-right",
           )}
         />
@@ -502,17 +600,82 @@ export function RecordView<T extends { id: RowId }>({
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+      <div className="flex h-12 items-center justify-between border-b border-border px-4">
         <div className="flex items-center gap-2">
           {titleLeading}
           {TitleIcon && <TitleIcon className="size-4 text-muted-foreground" />}
-          <h1 className="text-[12px] font-semibold tracking-tight">{title}</h1>
+          <h1 className="font-semibold tracking-tight">{title}</h1>
         </div>
         <div className="flex items-center gap-1.5">
-          <Button size="sm" onClick={addRow}>
+          <Button
+            variant="link"
+            size="sm"
+            onClick={addRow}
+            className="px-1 no-underline hover:no-underline"
+          >
             <Plus className="size-4" />
-            <span className="hidden sm:inline">New {singular}</span>
+            <span>{singular}</span>
           </Button>
+
+          <input
+            ref={importRef}
+            type="file"
+            accept=".csv,.json"
+            onChange={onImportFile}
+            className="hidden"
+            aria-hidden="true"
+          />
+          <Dropdown
+            label="Import"
+            icon={<Upload className="size-3.5" />}
+            align="end"
+          >
+            <DropdownLabel>Import from</DropdownLabel>
+            <DropdownItem onSelect={() => importRef.current?.click()}>
+              <span className="flex items-center gap-2">
+                <FileText className="size-3.5" /> CSV
+              </span>
+            </DropdownItem>
+            <DropdownItem onSelect={() => importRef.current?.click()}>
+              <span className="flex items-center gap-2">
+                <Code className="size-3.5" /> JSON
+              </span>
+            </DropdownItem>
+            <DropdownItem onSelect={() => importRef.current?.click()}>
+              <span className="flex items-center gap-2">
+                <SheetIcon className="size-3.5" /> Excel
+              </span>
+            </DropdownItem>
+          </Dropdown>
+
+          <Dropdown
+            label="Export"
+            icon={<Download className="size-3.5" />}
+            align="end"
+          >
+            <DropdownLabel>Export as</DropdownLabel>
+            <DropdownItem onSelect={() => exportData("csv")}>
+              <span className="flex items-center gap-2">
+                <FileText className="size-3.5" /> CSV
+              </span>
+            </DropdownItem>
+            <DropdownItem onSelect={() => exportData("excel")}>
+              <span className="flex items-center gap-2">
+                <SheetIcon className="size-3.5" /> Excel
+              </span>
+            </DropdownItem>
+            <DropdownItem onSelect={() => exportData("json")}>
+              <span className="flex items-center gap-2">
+                <Code className="size-3.5" /> JSON
+              </span>
+            </DropdownItem>
+            <DropdownItem onSelect={() => exportData("pdf")}>
+              <span className="flex items-center gap-2">
+                <Reader className="size-3.5" /> PDF
+              </span>
+            </DropdownItem>
+          </Dropdown>
+
           <Dropdown
             label=""
             ariaLabel="More actions"
@@ -531,7 +694,7 @@ export function RecordView<T extends { id: RowId }>({
 
       {/* Sub-toolbar */}
       <div className="flex items-center justify-between border-b border-border px-4 py-1.5">
-        <div className="flex items-center gap-2 text-[12px]">
+        <div className="flex items-center gap-2">
           <ListFilter className="size-4 text-muted-foreground" />
           <span className="font-medium">All {title}</span>
           <span className="text-muted-foreground">· {processed.length}</span>
@@ -539,15 +702,15 @@ export function RecordView<T extends { id: RowId }>({
         <div className="flex items-center gap-0.5">
           <Dropdown label="Filter" icon={<ListFilter className="size-3.5" />}>
             <DropdownLabel>Filter by keyword</DropdownLabel>
-            <div className="p-1">
+            <div className="p-3">
               <div className="relative">
-                <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   placeholder="Contains…"
                   aria-label="Filter"
-                  className="h-7 pl-7 text-[12px]"
+                  className="h-8 pl-9"
                 />
               </div>
             </div>
@@ -566,9 +729,7 @@ export function RecordView<T extends { id: RowId }>({
                     ) : (
                       <ArrowDown className="size-3.5" />
                     )
-                  ) : (
-                    <span className="size-3.5" />
-                  )
+                  ) : undefined
                 }
               >
                 {f.label}
@@ -599,7 +760,7 @@ export function RecordView<T extends { id: RowId }>({
           </Dropdown>
 
           {/* Pagination */}
-          <div className="ml-1 flex items-center gap-1 border-l border-border pl-2 text-[12px] text-muted-foreground">
+          <div className="ml-1 flex items-center gap-1 border-l border-border pl-2 text-muted-foreground">
             <Dropdown
               label={`${pageSize} / page`}
               icon={<Rows3 className="size-3.5" />}
@@ -644,10 +805,10 @@ export function RecordView<T extends { id: RowId }>({
       {/* Table */}
       <div className="min-h-0 flex-1 overflow-auto">
         <Table
-          style={{ minWidth: totalWidth, tableLayout: "fixed" }}
+          style={{ minWidth: totalWidth, tableLayout: "auto" }}
           className="w-full"
         >
-          <TableHeader className="sticky top-0 z-10 bg-background">
+          <TableHeader className="sticky top-0 z-20 bg-background [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:bg-background">
             <TableRow className="hover:bg-transparent">
               <TableHead style={{ width: CHECKBOX_W }} className="p-0">
                 <div className="flex h-8 items-center pl-4">
@@ -658,8 +819,8 @@ export function RecordView<T extends { id: RowId }>({
                   />
                 </div>
               </TableHead>
-              <TableHead className="relative" style={{ width: nameWidth }}>
-                <span className="flex h-8 items-center gap-1.5">
+              <TableHead className="relative w-max" style={{ width: colWidths[NAME_COL] }}>
+                <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
                   {TitleIcon ? (
                     <TitleIcon className="size-3.5 shrink-0" />
                   ) : (
@@ -674,16 +835,19 @@ export function RecordView<T extends { id: RowId }>({
                 return (
                   <TableHead
                     key={f.key}
-                    className="relative"
-                    style={{ width: colWidths[f.key] ?? fieldDefaultWidth(f) }}
+                    className="relative w-max"
+                    style={{ width: colWidths[f.key] }}
                   >
                     <button
                       type="button"
                       onClick={() => toggleSort(f.key)}
-                      className="flex h-8 max-w-full items-center gap-1.5 truncate hover:text-foreground"
+                      className="flex h-8 items-center gap-1.5 whitespace-nowrap hover:text-foreground"
                     >
                       <HeadIcon className="size-3.5 shrink-0" />
-                      <span className="truncate">{f.label}</span>
+                      <span className="flex items-center gap-1 whitespace-nowrap">
+                        {f.label}
+                        {f.required && <RequiredMark />}
+                      </span>
                       {sort?.key === f.key &&
                         (sort.dir === "asc" ? (
                           <ArrowUp className="size-3 shrink-0" />
@@ -699,7 +863,9 @@ export function RecordView<T extends { id: RowId }>({
                 style={{ width: ACTIONS_W }}
                 className="border-r-0 text-right"
               >
-                <span className="sr-only">Actions</span>
+                <span className="flex h-8 items-center justify-end whitespace-nowrap pr-2">
+                  Actions
+                </span>
               </TableHead>
               {/* Filler so row borders reach the right edge of the page. */}
               <TableHead aria-hidden="true" />
@@ -762,42 +928,61 @@ export function RecordView<T extends { id: RowId }>({
                         />
                       </div>
                     </TableCell>
-                    <TableCell className="p-0">
+                    <TableCell
+                      className="p-0"
+                      style={{ maxWidth: colWidths[NAME_COL] ?? NAME_DEFAULT_W }}
+                    >
                       <button
                         type="button"
                         onClick={() => setActiveId(row.id)}
                         className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60"
                       >
-                        <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted text-[12px] font-medium text-muted-foreground">
+                        <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
                           {primary.initials}
                         </span>
-                        <span className="truncate font-medium">
+                        <span className="truncate">
                           {primary.title || "—"}
                         </span>
                       </button>
                     </TableCell>
                     {visibleFields.map((f) => (
-                      <TableCell key={f.key} className="p-0">
+                      <TableCell
+                        key={f.key}
+                        className="p-0"
+                        style={{ maxWidth: colWidths[f.key] ?? fieldDefaultWidth(f) }}
+                      >
                         {renderCellValue(row, f)}
                       </TableCell>
                     ))}
-                    <TableCell className="w-20 border-r-0 p-0">
-                      <div className="flex items-center justify-end gap-0.5 pr-2 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 group-data-[active=true]:opacity-100">
+                    <TableCell
+                      className="border-r-0 p-0"
+                      style={{ width: ACTIONS_W }}
+                    >
+                      <div className="flex items-center justify-end gap-0.5 pr-2">
                         <button
                           type="button"
                           onClick={() => setActiveId(row.id)}
-                          aria-label={`Open ${primary.title || singular}`}
-                          title="Open record"
-                          className="grid size-7 place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                          aria-label={`View ${primary.title || singular}`}
+                          title="View"
+                          className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                         >
-                          <ArrowUpRight className="size-4" />
+                          <Eye className="size-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setActiveId(row.id)}
+                          aria-label={`Edit ${primary.title || singular}`}
+                          title="Edit"
+                          className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                        >
+                          <Pencil className="size-4" />
                         </button>
                         <button
                           type="button"
                           onClick={() => deleteRow(row.id)}
                           aria-label={`Delete ${primary.title || singular}`}
-                          title="Delete record"
-                          className="grid size-7 place-items-center rounded-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                          title="Delete"
+                          className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                         >
                           <Trash2 className="size-4" />
                         </button>
@@ -811,25 +996,12 @@ export function RecordView<T extends { id: RowId }>({
               <TableRow className="hover:bg-transparent">
                 <TableCell
                   colSpan={visibleFields.length + 4}
-                  className="h-32 text-center text-[12px] text-muted-foreground"
+                  className="h-32 text-center text-muted-foreground"
                 >
                   {filter ? `No results for “${filter}”.` : "No records yet."}
                 </TableCell>
               </TableRow>
             )}
-            {/* Add new row */}
-            <TableRow className="hover:bg-transparent">
-              <TableCell colSpan={visibleFields.length + 4} className="p-0">
-                <button
-                  type="button"
-                  onClick={addRow}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-[12px] text-muted-foreground hover:bg-muted/50"
-                >
-                  <Plus className="size-4" />
-                  Add {singular}
-                </button>
-              </TableCell>
-            </TableRow>
           </TableBody>
         </Table>
       </div>
@@ -839,15 +1011,11 @@ export function RecordView<T extends { id: RowId }>({
         <RecordDetailPanel
           fields={fields}
           row={activeRow}
-          primary={getPrimary(activeRow)}
-          editing={editing}
-          draft={draft}
-          onEditStart={startEdit}
-          onDraftChange={setDraft}
-          onCommit={commit}
-          onCancel={() => setEditing(null)}
-          onClose={() => setActiveId(null)}
-          inputRef={inputRef}
+          singular={singular}
+          icon={TitleIcon}
+          getPrimary={getPrimary}
+          onSave={saveForm}
+          onCancel={cancelForm}
         />
       )}
 
@@ -870,7 +1038,7 @@ export function RecordView<T extends { id: RowId }>({
               setActiveId(menu.id);
               setMenu(null);
             }}
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-[12px] hover:bg-accent hover:text-accent-foreground"
+            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground"
           >
             <ArrowUpRight className="size-3.5" />
             Open record
@@ -882,7 +1050,7 @@ export function RecordView<T extends { id: RowId }>({
               duplicateRow(menu.id);
               setMenu(null);
             }}
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-[12px] hover:bg-accent hover:text-accent-foreground"
+            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground"
           >
             <CopyPlus className="size-3.5" />
             Duplicate
@@ -895,7 +1063,7 @@ export function RecordView<T extends { id: RowId }>({
               deleteRow(menu.id);
               setMenu(null);
             }}
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-[12px] text-destructive hover:bg-destructive/10"
+            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-destructive hover:bg-destructive/10"
           >
             <Trash2 className="size-3.5" />
             Delete
@@ -908,47 +1076,60 @@ export function RecordView<T extends { id: RowId }>({
 
 interface DetailPanelProps<T extends { id: RowId }> {
   fields: RecordField<T>[];
+  /** Initial values; the panel edits a local buffered copy until Save. */
   row: T;
-  primary: { title: string; initials: string; subtitle?: string };
-  editing: { id: RowId; key: string } | null;
-  draft: string;
-  onEditStart: (row: T, key: string) => void;
-  onDraftChange: (value: string) => void;
-  onCommit: () => void;
+  singular: string;
+  icon?: IconType;
+  getPrimary: (row: T) => { title: string; initials: string; subtitle?: string };
+  /** Commit the buffered draft to the table. */
+  onSave: (row: T) => void;
+  /** Discard the draft (and drop the row if it was never saved). */
   onCancel: () => void;
-  onClose: () => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 function RecordDetailPanel<T extends { id: RowId }>({
   fields,
   row,
-  primary,
-  editing,
-  draft,
-  onEditStart,
-  onDraftChange,
-  onCommit,
+  singular,
+  icon: TitleIcon,
+  getPrimary,
+  onSave,
   onCancel,
-  onClose,
-  inputRef,
 }: DetailPanelProps<T>) {
+  const [draft, setDraft] = React.useState<T>(row);
+  // Reset the buffered form when a different record is opened.
+  React.useEffect(() => {
+    setDraft(row);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row.id]);
+
+  const primary = getPrimary(draft);
+  const HeaderIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
+  const setField = (key: keyof T, value: string) =>
+    setDraft((d) => ({ ...d, [key]: value }));
+
   return (
     <aside
-      aria-label="Record details"
+      aria-label={`${singular} form`}
       className="fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]"
     >
-      <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
-        <span className="flex size-6 shrink-0 items-center justify-center rounded bg-muted text-[12px] font-medium text-muted-foreground">
-          {primary.initials}
+      {/* Header — icon + title (placeholder when new); matches the page header. */}
+      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
+        <span className="flex size-6 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
+          <HeaderIcon className="size-3.5" />
         </span>
-        <span className="truncate text-[12px] font-semibold">
-          {primary.title || "Untitled"}
+        <span
+          className={cn(
+            "truncate font-semibold",
+            !primary.title && "text-muted-foreground",
+          )}
+        >
+          {primary.title || `New ${singular}`}
         </span>
         <Button
           variant="ghost"
           size="icon"
-          onClick={onClose}
+          onClick={onCancel}
           aria-label="Close"
           className="ml-auto"
         >
@@ -956,76 +1137,71 @@ function RecordDetailPanel<T extends { id: RowId }>({
         </Button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-4">
-        <p className="mb-2 text-[12px] font-medium uppercase tracking-wide text-muted-foreground">
-          Fields
-        </p>
+      {/* Body — one bordered section per field group. */}
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
         {GROUP_ORDER.map((group) => {
           const groupFields = fields.filter(
             (f) => (f.group ?? "General") === group,
           );
           if (groupFields.length === 0) return null;
           return (
-            <div key={group} className="mb-4">
-              <p className="mb-1 text-[12px] font-medium text-muted-foreground">
+            <section
+              key={group}
+              className="overflow-hidden rounded-lg border border-border"
+            >
+              <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-medium text-muted-foreground">
                 {group}
-              </p>
-              <dl className="space-y-0.5">
-                {groupFields.map((f) => {
-                  const isEditing =
-                    editing?.id === row.id && editing.key === f.key;
-                  return (
-                    <div
-                      key={f.key}
-                      className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-muted/50"
-                    >
-                      <dt className="flex w-28 shrink-0 items-center gap-1.5 text-[12px] text-muted-foreground">
-                        {f.icon && <f.icon className="size-3.5" />}
-                        {f.label}
-                      </dt>
-                      <dd className="min-w-0 flex-1 text-[12px]">
-                        {f.render ? (
-                          f.render(row)
-                        ) : isEditing ? (
-                          <input
-                            ref={inputRef}
-                            value={draft}
-                            onChange={(e) => onDraftChange(e.target.value)}
-                            onBlur={onCommit}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") onCommit();
-                              if (e.key === "Escape") onCancel();
-                            }}
-                            aria-label={`Edit ${f.label}`}
-                            className="h-7 w-full rounded-sm bg-background px-2 outline-none ring-2 ring-inset ring-ring"
-                          />
-                        ) : f.editable ? (
-                          <button
-                            type="button"
-                            onClick={() => onEditStart(row, f.key)}
-                            className="w-full truncate rounded-sm px-2 py-0.5 text-left hover:bg-muted"
-                          >
-                            {String(row[f.key as keyof T] ?? "") || (
-                              <span className="text-muted-foreground">
-                                Empty
-                              </span>
-                            )}
-                          </button>
-                        ) : (
-                          <span className="px-2">
-                            {String(row[f.key as keyof T] ?? "") || (
-                              <span className="text-muted-foreground">—</span>
-                            )}
-                          </span>
-                        )}
-                      </dd>
-                    </div>
-                  );
-                })}
+              </h3>
+              <dl className="divide-y divide-border">
+                {groupFields.map((f) => (
+                  <div
+                    key={f.key}
+                    className="flex items-center gap-3 px-3 py-3 leading-relaxed"
+                  >
+                    <dt className="flex w-28 shrink-0 items-center gap-1.5 text-muted-foreground">
+                      {f.icon && <f.icon className="size-3.5" />}
+                      {f.label}
+                      {f.required && <RequiredMark />}
+                    </dt>
+                    <dd className="min-w-0 flex-1">
+                      {f.render ? (
+                        f.render(draft)
+                      ) : f.editable ? (
+                        <input
+                          value={String(draft[f.key as keyof T] ?? "")}
+                          onChange={(e) =>
+                            setField(f.key as keyof T, e.target.value)
+                          }
+                          aria-label={f.label}
+                          placeholder={`Add ${f.label.toLowerCase()}`}
+                          className="h-8 w-full rounded-sm border border-input bg-background px-2 outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                        />
+                      ) : (
+                        <span className="px-2">
+                          {String(draft[f.key as keyof T] ?? "") || (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                ))}
               </dl>
-            </div>
+            </section>
           );
         })}
+      </div>
+
+      {/* Footer — reusable Add-form actions; border + padding match the app footer. */}
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-4 py-3">
+        <Button onClick={onCancel}>
+          <X className="size-4" />
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={() => onSave(draft)}>
+          <Check className="size-4" />
+          Save
+        </Button>
       </div>
     </aside>
   );

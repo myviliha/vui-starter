@@ -11,11 +11,11 @@ export default function OnboardingLayout({
       <header className="flex items-center justify-between border-b border-border bg-background px-4 py-2.5">
         <div className="flex items-center gap-2">
           <Logo className="h-7 w-7" />
-          <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-[13px] font-bold tracking-tight text-transparent">
+          <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-sm font-bold tracking-tight text-transparent">
             VUI Starter
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[12px] text-muted-foreground">
+        <div className="flex items-center gap-3 text-muted-foreground">
           <span>Set up your workspace</span>
           <ThemeToggle />
         </div>

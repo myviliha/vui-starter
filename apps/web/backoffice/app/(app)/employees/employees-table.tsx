@@ -1,14 +1,21 @@
 "use client";
 
-import { Building, CircleDot, Hash, Mail, Network, Users } from "lucide-react";
+import {
+  CodeIcon as Hash,
+  CubeIcon as Building,
+  DotFilledIcon as CircleDot,
+  EnvelopeClosedIcon as Mail,
+  PersonIcon as Users,
+  Share2Icon as Network,
+} from "@radix-ui/react-icons";
 
 import { Badge } from "@repo/ui/badge";
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { employees, type DemoEmployee } from "@/lib/demo-data";
 
 const fields: RecordField<DemoEmployee>[] = [
-  { key: "firstName", label: "First name", editable: true, group: "General", hideInTable: true },
-  { key: "lastName", label: "Last name", editable: true, group: "General", hideInTable: true },
+  { key: "firstName", label: "First name", editable: true, required: true, group: "General", hideInTable: true },
+  { key: "lastName", label: "Last name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 240, group: "General" },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "Work" },
   { key: "department", label: "Department", editable: true, group: "Work" },

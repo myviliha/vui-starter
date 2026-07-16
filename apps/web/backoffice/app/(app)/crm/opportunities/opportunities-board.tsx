@@ -2,18 +2,18 @@
 
 import * as React from "react";
 import {
-  Building2,
-  CalendarDays,
-  Coins,
-  GripVertical,
-  ListFilter,
-  Plus,
-  Search,
-  Target,
-  Trash2,
-  User,
-  X,
-} from "lucide-react";
+  CalendarIcon as CalendarDays,
+  Cross2Icon as X,
+  CubeIcon as Building2,
+  DragHandleDots2Icon as GripVertical,
+  MagnifyingGlassIcon as Search,
+  MixerHorizontalIcon as ListFilter,
+  PersonIcon as User,
+  PlusIcon as Plus,
+  TargetIcon as Target,
+  TokensIcon as Coins,
+  TrashIcon as Trash2,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@repo/ui/badge";
@@ -102,21 +102,15 @@ export function OpportunitiesBoard() {
   }
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+    <div className="flex h-full flex-col">
+      {/* Header — h-12, matches the datatable page header */}
+      <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border px-4">
+        <div className="flex min-w-0 items-center gap-2">
           <SidebarExpandButton />
-          <Target className="size-5 text-muted-foreground" />
-          <h1 className="text-[12px] font-semibold tracking-tight">Opportunities</h1>
-          <span className="rounded-full bg-muted px-2 py-0.5 text-[12px] font-medium tabular-nums text-muted-foreground">
-            {visible.length}
-          </span>
-          <span className="text-[12px] tabular-nums text-muted-foreground">
-            · {formatCurrency(totalValue)} pipeline
-          </span>
+          <Target className="size-4 shrink-0 text-muted-foreground" />
+          <h1 className="truncate font-semibold tracking-tight">Opportunities</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <div className="relative">
             <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -124,18 +118,27 @@ export function OpportunitiesBoard() {
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Search…"
               aria-label="Search opportunities"
-              className="h-8 w-40 pl-7 text-[12px] sm:w-56"
+              className="h-7 w-40 pl-7 sm:w-56"
             />
           </div>
           <Button size="sm" onClick={() => createInStage(OPPORTUNITY_STAGES[0])}>
             <Plus className="size-4" />
-            <span className="hidden sm:inline">New opportunity</span>
+            <span className="hidden sm:inline">Opportunity</span>
           </Button>
         </div>
       </div>
 
-      {/* Board */}
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      {/* Sub-toolbar — mirrors the datatable secondary bar */}
+      <div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-1.5 text-muted-foreground">
+        <ListFilter className="size-4" />
+        <span className="font-medium text-foreground">All opportunities</span>
+        <span className="tabular-nums">· {visible.length}</span>
+        <span className="tabular-nums">· {formatCurrency(totalValue)} pipeline</span>
+      </div>
+
+      {/* Board — full-bleed with a 5px gutter */}
+      <div className="min-h-0 flex-1 overflow-x-auto p-[5px]">
+        <div className="flex h-full gap-[5px]">
         {OPPORTUNITY_STAGES.map((stage) => {
           const stageItems = byStage(stage);
           const total = stageItems.reduce((sum, item) => sum + item.amount, 0);
@@ -143,17 +146,17 @@ export function OpportunitiesBoard() {
           return (
             <section
               key={stage}
-              className="flex w-72 shrink-0 flex-col gap-3"
+              className="flex h-full w-72 shrink-0 flex-col gap-3"
               aria-label={stage}
             >
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                   <Badge variant={STAGE_BADGE[stage]}>{stage}</Badge>
-                  <span className="rounded-full bg-muted px-1.5 py-0.5 text-[12px] tabular-nums text-muted-foreground">
+                  <span className="rounded-full bg-muted px-1.5 py-0.5 tabular-nums text-muted-foreground">
                     {stageItems.length}
                   </span>
                 </div>
-                <span className="text-[12px] tabular-nums text-muted-foreground">
+                <span className="tabular-nums text-muted-foreground">
                   {formatCurrency(total)}
                 </span>
               </div>
@@ -176,7 +179,7 @@ export function OpportunitiesBoard() {
                   setDropStage(null);
                 }}
                 className={cn(
-                  "flex min-h-32 flex-col gap-2 rounded-lg border border-dashed border-border bg-muted/30 p-2 transition-colors",
+                  "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto rounded-lg border border-dashed border-border bg-muted/30 p-2 transition-colors",
                   isDropTarget && "border-ring/60 bg-accent/50",
                 )}
               >
@@ -195,14 +198,14 @@ export function OpportunitiesBoard() {
                     />
                   ))
                 ) : (
-                  <p className="px-2 py-6 text-center text-[12px] text-muted-foreground">
+                  <p className="px-2 py-6 text-center text-muted-foreground">
                     No opportunities
                   </p>
                 )}
                 <button
                   type="button"
                   onClick={() => createInStage(stage)}
-                  className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-left text-[12px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-left text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   <Plus className="size-3.5" />
                   Add opportunity
@@ -211,6 +214,7 @@ export function OpportunitiesBoard() {
             </section>
           );
         })}
+        </div>
       </div>
 
       {activeItem && (
@@ -259,19 +263,19 @@ function OpportunityCard({
           onClick={onOpen}
           className="min-w-0 flex-1 text-left focus-visible:outline-none"
         >
-          <p className="truncate text-[12px] font-medium hover:underline">
+          <p className="truncate font-medium hover:underline">
             {item.name || "Untitled opportunity"}
           </p>
-          <p className="truncate text-[12px] text-muted-foreground">
+          <p className="truncate text-muted-foreground">
             {item.company || "No company"}
           </p>
         </button>
       </div>
       <div className="mt-2 flex items-center justify-between pl-5">
-        <span className="text-[12px] font-semibold tabular-nums">
+        <span className="font-semibold tabular-nums">
           {formatCurrency(item.amount)}
         </span>
-        <span className="truncate text-[12px] text-muted-foreground">
+        <span className="truncate text-muted-foreground">
           {item.owner || "Unassigned"}
         </span>
       </div>
@@ -297,9 +301,9 @@ function OpportunityDetailPanel({
       aria-label="Opportunity details"
       className="fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]"
     >
-      <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
+      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
         <Target className="size-4 shrink-0 text-muted-foreground" />
-        <span className="truncate text-[12px] font-semibold">
+        <span className="truncate font-semibold">
           {item.name || "Untitled opportunity"}
         </span>
         <Button
@@ -315,7 +319,7 @@ function OpportunityDetailPanel({
 
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
         <div className="space-y-3">
-          <p className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="font-medium uppercase tracking-wide text-muted-foreground">
             Fields
           </p>
 
@@ -324,7 +328,7 @@ function OpportunityDetailPanel({
               value={item.name}
               onChange={(e) => onChange({ name: e.target.value })}
               aria-label="Name"
-              className="h-8 text-[12px]"
+              className="h-8"
             />
           </Field>
 
@@ -333,7 +337,7 @@ function OpportunityDetailPanel({
               value={item.company}
               onChange={(e) => onChange({ company: e.target.value })}
               aria-label="Company"
-              className="h-8 text-[12px]"
+              className="h-8"
             />
           </Field>
 
@@ -344,7 +348,7 @@ function OpportunityDetailPanel({
               value={item.amount}
               onChange={(e) => onChange({ amount: Number(e.target.value) || 0 })}
               aria-label="Amount"
-              className="h-8 text-[12px] tabular-nums"
+              className="h-8 tabular-nums"
             />
           </Field>
 
@@ -368,7 +372,7 @@ function OpportunityDetailPanel({
               value={item.owner}
               onChange={(e) => onChange({ owner: e.target.value })}
               aria-label="Owner"
-              className="h-8 text-[12px]"
+              className="h-8"
             />
           </Field>
 
@@ -378,7 +382,7 @@ function OpportunityDetailPanel({
               value={item.closeDate}
               onChange={(e) => onChange({ closeDate: e.target.value })}
               aria-label="Close date"
-              className="h-8 text-[12px]"
+              className="h-8"
             />
           </Field>
         </div>
@@ -410,7 +414,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1">
-      <span className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+      <span className="flex items-center gap-1.5 text-muted-foreground">
         {Icon && <Icon className="size-3.5" />}
         {label}
       </span>

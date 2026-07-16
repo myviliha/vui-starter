@@ -1,12 +1,17 @@
 "use client";
 
-import { Building, Hash, LayoutGrid, Users } from "lucide-react";
+import {
+  CodeIcon as Hash,
+  CubeIcon as Building,
+  DashboardIcon as LayoutGrid,
+  PersonIcon as Users,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { departments, type Department } from "@/lib/mock-data";
 
 const fields: RecordField<Department>[] = [
-  { key: "title", label: "Title", editable: true, group: "General", hideInTable: true },
+  { key: "title", label: "Title", editable: true, required: true, group: "General", hideInTable: true },
   { key: "organization", label: "Organization", icon: Building, editable: true, width: 200, group: "General" },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
   {

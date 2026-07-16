@@ -1,13 +1,21 @@
 "use client";
 
-import { Building, CircleDot, Hash, Mail, MapPin, Network, Phone } from "lucide-react";
+import {
+  CodeIcon as Hash,
+  CubeIcon as Building,
+  DotFilledIcon as CircleDot,
+  EnvelopeClosedIcon as Mail,
+  MobileIcon as Phone,
+  SewingPinFilledIcon as MapPin,
+  Share2Icon as Network,
+} from "@radix-ui/react-icons";
 
 import { Badge } from "@repo/ui/badge";
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { branches, type Branch } from "@/lib/mock-data";
 
 const fields: RecordField<Branch>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "organization", label: "Organization", icon: Building, editable: true, width: 180, group: "General" },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
   { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 220, group: "General" },

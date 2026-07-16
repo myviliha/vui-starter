@@ -1,12 +1,15 @@
 "use client";
 
-import { Hash, Languages as LanguagesIcon } from "lucide-react";
+import {
+  CodeIcon as Hash,
+  TextIcon as LanguagesIcon,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { languages, type Language } from "@/lib/mock-data";
 
 const fields: RecordField<Language>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
 ];
 

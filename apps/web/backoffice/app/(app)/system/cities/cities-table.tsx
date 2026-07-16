@@ -1,12 +1,16 @@
 "use client";
 
-import { Flag, Landmark, MapPin } from "lucide-react";
+import {
+  BookmarkIcon as Flag,
+  HomeIcon as Landmark,
+  SewingPinFilledIcon as MapPin,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { cities, type City } from "@/lib/mock-data";
 
 const fields: RecordField<City>[] = [
-  { key: "name", label: "Name", editable: true, group: "General", hideInTable: true },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "state", label: "State", icon: MapPin, editable: true, group: "General" },
   { key: "country", label: "Country", icon: Flag, editable: true, group: "General" },
 ];

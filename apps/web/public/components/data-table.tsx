@@ -9,7 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { CaretSortIcon as ArrowUpDown } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
 import {

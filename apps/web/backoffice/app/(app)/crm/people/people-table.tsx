@@ -1,13 +1,20 @@
 "use client";
 
-import { Briefcase, Building2, Contact, Mail, MapPin, Phone } from "lucide-react";
+import {
+  BackpackIcon as Briefcase,
+  CubeIcon as Building2,
+  EnvelopeClosedIcon as Mail,
+  IdCardIcon as Contact,
+  MobileIcon as Phone,
+  SewingPinFilledIcon as MapPin,
+} from "@radix-ui/react-icons";
 
 import { RecordView, type RecordField } from "@repo/ui/record-view";
 import { people, type Person } from "@/lib/crm-data";
 
 const fields: RecordField<Person>[] = [
-  { key: "firstName", label: "First name", editable: true, group: "General", hideInTable: true },
-  { key: "lastName", label: "Last name", editable: true, group: "General", hideInTable: true },
+  { key: "firstName", label: "First name", editable: true, required: true, group: "General", hideInTable: true },
+  { key: "lastName", label: "Last name", editable: true, required: true, group: "General", hideInTable: true },
   { key: "email", label: "Emails", icon: Mail, editable: true, copyable: true, width: 240, group: "General" },
   { key: "phone", label: "Phones", icon: Phone, editable: true, copyable: true, width: 160, group: "General" },
   { key: "city", label: "City", icon: MapPin, editable: true, group: "General" },
