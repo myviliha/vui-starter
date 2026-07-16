@@ -111,17 +111,25 @@ export default function MyPage() {
       <P>
         Any component that renders a list of records — dropdown menus, selects,
         the account menu, searchable comboboxes — uses{" "}
-        <strong>bottom-border dividers between items</strong> by default. This is
-        the theme standard; new list components should match it so they look
-        native without extra styling.
+        <strong>bottom-border dividers between items</strong> by default. Rather
+        than remember the classes, build lists from the <code>Menu</code>{" "}
+        primitive: the divider, hover and last-row handling come baked in, so a
+        hand-rolled list can&apos;t miss the border.
       </P>
-      <CodeBlock title="menu-item.tsx">{`// Each row: full width, divider below, none on the last row.
-<button className="flex w-full items-center gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent">
-  {children}
-</button>`}</CodeBlock>
+      <CodeBlock title="account-menu.tsx">{`import { Menu, MenuItem, MenuLabel } from "@myviliha/vui-ui/menu";
+
+<Menu className="w-56">
+  <MenuLabel>Account</MenuLabel>
+  <MenuItem onClick={editProfile}>Profile</MenuItem>
+  {/* render a link instead of a button with \`as\` */}
+  <MenuItem as={Link} href="/settings">Settings</MenuItem>
+  <MenuItem onClick={signOut}>Sign out</MenuItem>
+</Menu>`}</CodeBlock>
       <P>
-        The shipped <code>Dropdown</code>, <code>Select</code> and account menu
-        already apply this — you get it for free when you use them.
+        The shipped <code>Dropdown</code>, <code>Select</code> and the account
+        menu already follow this — you get it for free when you use them. Need
+        the raw class for a bespoke element? Import{" "}
+        <code>menuItemClass</code> from <code>@myviliha/vui-ui/menu</code>.
       </P>
 
       <H2>Dialogs</H2>

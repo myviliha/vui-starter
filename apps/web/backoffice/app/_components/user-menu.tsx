@@ -9,8 +9,8 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
+import { MenuItem } from "@myviliha/vui-ui/menu";
 import { ThemeToggle } from "./theme-toggle";
 
 // ponytail: no auth in the demo — mock the signed-in user. Swap for the real
@@ -42,11 +42,6 @@ export function UserMenu() {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-
-  // Standard menu-item row: full-width with a bottom divider (matches the
-  // Dropdown/Select components). `last:border-b-0` closes the final row.
-  const itemCls =
-    "flex items-center gap-2.5 border-b border-border px-3 py-2 text-left transition-colors last:border-b-0 hover:bg-accent";
 
   return (
     <div className="relative" ref={ref}>
@@ -82,34 +77,34 @@ export function UserMenu() {
             </div>
           </div>
 
-          {/* Menu items — each is a bordered row (theme standard) */}
-          <Link href="/settings" role="menuitem" onClick={() => setOpen(false)} className={itemCls}>
+          {/* Menu items — MenuItem bakes in the bordered-row standard */}
+          <MenuItem as={Link} href="/settings" onClick={() => setOpen(false)}>
             <PersonIcon className="size-4 text-sky-500" />
             Profile
-          </Link>
-          <Link href="/settings" role="menuitem" onClick={() => setOpen(false)} className={itemCls}>
+          </MenuItem>
+          <MenuItem as={Link} href="/settings" onClick={() => setOpen(false)}>
             <GearIcon className="size-4 text-slate-500" />
             Settings
-          </Link>
+          </MenuItem>
           {isAdmin && (
-            <Link
+            <MenuItem
+              as={Link}
               href="/system/regions"
-              role="menuitem"
               onClick={() => setOpen(false)}
-              className={cn(itemCls, "font-medium")}
+              className="font-medium"
             >
               <LockClosedIcon className="size-4 text-amber-500" />
               Admin area
-            </Link>
+            </MenuItem>
           )}
           <div className="flex items-center justify-between border-b border-border px-3 py-1.5">
             <span className="text-muted-foreground">Appearance</span>
             <ThemeToggle />
           </div>
-          <Link href="/signin" role="menuitem" onClick={() => setOpen(false)} className={itemCls}>
+          <MenuItem as={Link} href="/signin" onClick={() => setOpen(false)}>
             <ExitIcon className="size-4 text-rose-500" />
             Sign out
-          </Link>
+          </MenuItem>
         </div>
       )}
     </div>
