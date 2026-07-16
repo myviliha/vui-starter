@@ -101,7 +101,7 @@ export function UserMenu() {
             <span className="text-muted-foreground">Appearance</span>
             <ThemeToggle />
           </div>
-          <MenuItem as={Link} href="/signin" onClick={() => setOpen(false)}>
+          <MenuItem as={Link} href="/auth/signin" onClick={() => setOpen(false)}>
             <ExitIcon className="size-4 text-rose-500" />
             Sign out
           </MenuItem>

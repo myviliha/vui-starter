@@ -17,7 +17,7 @@ export default function AuthLayout({
       <div className="flex flex-1 flex-col items-center justify-center px-4 py-12">
         <div className="w-full max-w-[400px]">
           <Link
-            href="/signin"
+            href="/auth/signin"
             className="mb-8 flex items-center justify-center gap-2"
             aria-label="Vui Starter"
           >

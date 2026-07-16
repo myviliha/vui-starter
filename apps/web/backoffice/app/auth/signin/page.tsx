@@ -201,7 +201,7 @@ export default function SignInPage() {
 
       <p className="mt-5 text-center text-muted-foreground">
         New to Vui Starter?{" "}
-        <Link href="/signup" className="font-medium text-primary hover:underline">
+        <Link href="/auth/signup" className="font-medium text-primary hover:underline">
           Create an account
         </Link>
       </p>

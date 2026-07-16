@@ -67,14 +67,13 @@ Requires **Node 18+** and **pnpm 9+**.
 git clone https://github.com/myviliha/vui-starter.git
 cd vui-starter
 pnpm install
-pnpm dev          # starts all apps (backoffice, public, docs)
+pnpm dev          # starts both apps (admin, docs)
 ```
 
-| App        | Path                          | Dev URL                 |
-| ---------- | ----------------------------- | ----------------------- |
-| Backoffice | `apps/web/backoffice`         | http://localhost:3001   |
-| Public     | `apps/web/public`             | http://localhost:3000   |
-| Docs       | `apps/docs/documentation`     | http://localhost:3002   |
+| App   | Path                        | Dev URL                 |
+| ----- | --------------------------- | ----------------------- |
+| Admin | `apps/web/backoffice`       | http://localhost:3000   |
+| Docs  | `apps/docs/documentation`   | http://localhost:3001   |
 
 Run a single app: `pnpm --filter backoffice dev`.
 
@@ -254,10 +253,9 @@ datatable) · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 ```
 apps/
   web/
-    backoffice/        # Admin demo — the design system in a real app (:3001)
-    public/            # Public/marketing demo (:3000)
+    backoffice/        # Admin app — the design system in a real app (:3000)
   docs/
-    documentation/     # Docs app (:3002)
+    documentation/     # Docs app (:3001)
 packages/
   ui/                  # @myviliha/vui-ui — the published component library
   eslint-config/       # Shared ESLint config
