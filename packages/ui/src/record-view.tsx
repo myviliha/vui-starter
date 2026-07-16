@@ -156,6 +156,9 @@ export interface RecordField<T> {
   hideInTable?: boolean;
   /** Custom, non-editable cell/value renderer. */
   render?: (row: T) => React.ReactNode;
+  /** If set, the field becomes a choice field: the selection toolbar offers a
+   *  "Set {label}" bulk action listing these values. */
+  options?: { value: string; label: string }[];
 }
 
 interface RecordViewProps<T extends { id: RowId }> {
@@ -202,6 +205,7 @@ export function RecordView<T extends { id: RowId }>({
   const [newRowId, setNewRowId] = React.useState<RowId | null>(null);
   // Row pending delete confirmation.
   const [confirmDeleteId, setConfirmDeleteId] = React.useState<RowId | null>(null);
+  const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
   // Whether the detail panel opened read-only (View) or editable (Edit / Add).
   const [panelReadOnly, setPanelReadOnly] = React.useState(false);
   const [page, setPage] = React.useState(1);
@@ -400,6 +404,19 @@ export function RecordView<T extends { id: RowId }>({
         : new Set(processed.map((r) => r.id)),
     );
   }
+  /** Bulk-set a choice field on every selected row (keeps the selection). */
+  function bulkSetField(key: keyof T, value: string) {
+    setRows((prev) =>
+      prev.map((r) => (selected.has(r.id) ? ({ ...r, [key]: value } as T) : r)),
+    );
+  }
+  /** Delete every selected row, then clear the selection. */
+  function bulkDelete() {
+    setRows((prev) => prev.filter((r) => !selected.has(r.id)));
+    if (activeId != null && selected.has(activeId)) setActiveId(null);
+    setSelected(new Set());
+    setBulkDeleteOpen(false);
+  }
   function addRow() {
     const row = { ...makeEmptyRow(), id: nextId.current++ };
     // Prepend so the new record is immediately visible at the top…
@@ -544,6 +561,8 @@ export function RecordView<T extends { id: RowId }>({
 
   const allSelected =
     processed.length > 0 && selected.size === processed.length;
+  // Choice fields (with `options`) power the "Set …" bulk actions.
+  const bulkFields = fields.filter((f) => f.options && f.options.length > 0);
 
   function renderCellValue(row: T, field: RecordField<T>) {
     const isEditing = editing?.id === row.id && editing.key === field.key;
@@ -740,9 +759,49 @@ export function RecordView<T extends { id: RowId }>({
       <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-1.5">
         <div className="flex items-center gap-2">
           <ListFilter className="size-4 text-muted-foreground" />
-          <span className="font-medium">All {title}</span>
+          {selected.size > 0 ? (
+            <span className="flex items-center gap-2">
+              <span className="font-medium">{selected.size} selected</span>
+              <button
+                type="button"
+                onClick={() => setSelected(new Set())}
+                className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+              >
+                Clear
+              </button>
+            </span>
+          ) : (
+            <span className="font-medium">All {title}</span>
+          )}
         </div>
         <div className="flex items-center gap-0.5">
+          {/* Bulk actions — mirror the Options dropdown; shown only with a selection. */}
+          {selected.size > 0 && (
+            <Dropdown
+              label="Actions"
+              icon={<MoreHorizontal className="size-3.5 text-violet-500" />}
+            >
+              <DropdownLabel>{selected.size} selected</DropdownLabel>
+              {bulkFields.map((f) => (
+                <React.Fragment key={f.key}>
+                  <DropdownLabel>Set {f.label}</DropdownLabel>
+                  {f.options?.map((o) => (
+                    <DropdownItem
+                      key={o.value}
+                      onSelect={() => bulkSetField(f.key, o.value)}
+                    >
+                      {o.label}
+                    </DropdownItem>
+                  ))}
+                </React.Fragment>
+              ))}
+              <DropdownItem onSelect={() => setBulkDeleteOpen(true)}>
+                <span className="flex items-center gap-2 text-destructive">
+                  <Trash2 className="size-3.5" /> Delete {selected.size} selected
+                </span>
+              </DropdownItem>
+            </Dropdown>
+          )}
           <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
             <DropdownLabel>Filter by keyword</DropdownLabel>
             <div className="p-3">
@@ -1137,6 +1196,26 @@ export function RecordView<T extends { id: RowId }>({
           setConfirmDeleteId(null);
         }}
         onCancel={() => setConfirmDeleteId(null)}
+      />
+
+      <ConfirmDialog
+        open={bulkDeleteOpen}
+        title={`Delete ${selected.size} ${
+          selected.size === 1 ? singular.toLowerCase() : `${title.toLowerCase()}`
+        }?`}
+        description={
+          <>
+            This permanently removes the{" "}
+            <span className="font-medium text-foreground">
+              {selected.size} selected
+            </span>{" "}
+            record{selected.size === 1 ? "" : "s"}. This can’t be undone.
+          </>
+        }
+        destructive
+        confirmLabel="Delete"
+        onConfirm={bulkDelete}
+        onCancel={() => setBulkDeleteOpen(false)}
       />
     </div>
   );

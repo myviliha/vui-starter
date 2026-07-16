@@ -55,6 +55,11 @@ const fields: RecordField<DemoOrganization>[] = [
     label: "Status",
     icon: CircleDot,
     group: "System",
+    options: [
+      { value: "active", label: "Active" },
+      { value: "trial", label: "Trial" },
+      { value: "suspended", label: "Suspended" },
+    ],
     render: (row) => {
       const status = statusBadge[row.status];
       return <Badge variant={status.variant}>{status.label}</Badge>;
