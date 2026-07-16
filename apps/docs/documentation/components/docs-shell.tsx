@@ -21,7 +21,10 @@ const NAV: NavGroup[] = [
   },
   {
     title: "Customization",
-    items: [{ label: "Theming", href: "/theming" }],
+    items: [
+      { label: "Theming", href: "/theming" },
+      { label: "Layout & patterns", href: "/layout" },
+    ],
   },
   {
     title: "Guides",

@@ -8,6 +8,36 @@ export const metadata: Metadata = {
     "Customize Vui Starter with CSS-variable design tokens — colors, radius, dark mode and typography — all from one theme.css.",
 };
 
+/** Semantic colors of the theme — the ones you reach for most. */
+const COLORS: {
+  name: string;
+  token: string;
+  value: string;
+  usage: string;
+}[] = [
+  { name: "Primary (action)", token: "--button-primary", value: "#266DF0", usage: "Primary buttons, active states, links" },
+  { name: "Primary hover", token: "--button-primary-hover", value: "#215BC4", usage: "Hover state of the primary action" },
+  { name: "Foreground", token: "--foreground", value: "#101112", usage: "Default text color" },
+  { name: "Primary (neutral)", token: "--primary", value: "oklch(0.205 0 0)", usage: "Neutral solid button / emphasis" },
+  { name: "Secondary", token: "--secondary", value: "oklch(0.97 0 0)", usage: "Secondary button / subtle fills" },
+  { name: "Hover surface", token: "--accent", value: "oklch(0.97 0 0)", usage: "Hover background on rows, items, ghost buttons" },
+  { name: "Muted", token: "--muted", value: "oklch(0.97 0 0)", usage: "Section header bg, muted text on -foreground" },
+  { name: "Destructive", token: "--destructive", value: "oklch(0.577 0.245 27)", usage: "Delete / error states" },
+  { name: "Border", token: "--border", value: "oklch(0.922 0 0)", usage: "All borders and dividers" },
+  { name: "Ring", token: "--ring", value: "oklch(0.708 0 0)", usage: "Focus ring" },
+  { name: "Selection", token: "--selection", value: "#266DF0", usage: "Text selection highlight" },
+];
+
+function Swatch({ token }: { token: string }) {
+  return (
+    <span
+      className="inline-block size-4 shrink-0 rounded border border-border align-middle"
+      style={{ background: `var(${token})` }}
+      aria-hidden="true"
+    />
+  );
+}
+
 export default function ThemingPage() {
   return (
     <article>
@@ -40,6 +70,53 @@ export default function ThemingPage() {
           <code>--radius</code>, <code>--selection</code>.
         </li>
       </Ul>
+
+      <H2>Color system</H2>
+      <P>
+        The semantic colors you reach for most. Every component reads these, so
+        changing one token restyles the whole system. Each has a matching{" "}
+        <code>-foreground</code> where text sits on top.
+      </P>
+      <div className="mb-5 overflow-x-auto rounded-lg border border-border">
+        <table className="w-full text-left text-sm">
+          <thead className="border-b border-border bg-muted/40 text-muted-foreground">
+            <tr>
+              <th className="px-3 py-2 font-medium">Color</th>
+              <th className="px-3 py-2 font-medium">Token</th>
+              <th className="px-3 py-2 font-medium">Value</th>
+              <th className="hidden px-3 py-2 font-medium sm:table-cell">Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {COLORS.map((c) => (
+              <tr key={c.token} className="border-b border-border last:border-b-0">
+                <td className="px-3 py-2">
+                  <span className="flex items-center gap-2">
+                    <Swatch token={c.token} />
+                    {c.name}
+                  </span>
+                </td>
+                <td className="px-3 py-2 font-mono text-[12.5px]">{c.token}</td>
+                <td className="px-3 py-2 font-mono text-[12.5px] text-muted-foreground">
+                  {c.value}
+                </td>
+                <td className="hidden px-3 py-2 text-muted-foreground sm:table-cell">
+                  {c.usage}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Note title="Primary: neutral vs. action">
+        shadcn&apos;s <code>--primary</code> is the neutral (near-black) solid
+        used by the default button. The brand action color is{" "}
+        <code>--button-primary</code> (<code>#266DF0</code>) with{" "}
+        <code>--button-primary-hover</code> for its hover — used by{" "}
+        <code>&lt;Button variant=&quot;primary&quot;&gt;</code>, checkboxes, and
+        active states. Hover surfaces (rows, items, ghost buttons) use{" "}
+        <code>--accent</code>.
+      </Note>
 
       <H2>Default tokens</H2>
       <CodeBlock title="theme.css (excerpt)">{`:root {
@@ -78,7 +155,7 @@ export default function ThemingPage() {
 
       <DocPager
         prev={{ label: "Installation", href: "/installation" }}
-        next={{ label: "Components", href: "/components" }}
+        next={{ label: "Layout & patterns", href: "/layout" }}
       />
     </article>
   );

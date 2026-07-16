@@ -171,7 +171,7 @@ export function SignupForm() {
       </Ul>
 
       <DocPager
-        prev={{ label: "Theming", href: "/theming" }}
+        prev={{ label: "Layout & patterns", href: "/layout" }}
         next={{ label: "Components", href: "/components" }}
       />
     </article>

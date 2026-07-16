@@ -111,7 +111,7 @@ export default function FormsPage() {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="max-w-2xl space-y-6"
+                className="grid w-full grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2"
               >
                 <FormField
                   control={form.control}
@@ -146,7 +146,7 @@ export default function FormsPage() {
                   control={form.control}
                   name="bio"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="sm:col-span-2">
                       <FormLabel>Bio</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Tell us about yourself" {...field} />
@@ -305,7 +305,7 @@ export default function FormsPage() {
                   control={form.control}
                   name="volume"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="sm:col-span-2">
                       <FormLabel>Volume — {field.value}</FormLabel>
                       <FormControl>
                         <Slider
@@ -324,7 +324,7 @@ export default function FormsPage() {
                   control={form.control}
                   name="pin"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="sm:col-span-2">
                       <FormLabel>Verification code</FormLabel>
                       <FormControl>
                         <InputOTP maxLength={6} value={field.value} onChange={field.onChange}>
@@ -344,7 +344,7 @@ export default function FormsPage() {
                   control={form.control}
                   name="marketing"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-lg border border-border p-3">
+                    <FormItem className="flex items-center justify-between rounded-lg border border-border p-3 sm:col-span-2">
                       <div className="space-y-0.5">
                         <FormLabel>Marketing emails</FormLabel>
                         <FormDescription>Product news and offers.</FormDescription>
@@ -360,7 +360,7 @@ export default function FormsPage() {
                   control={form.control}
                   name="terms"
                   render={({ field }) => (
-                    <FormItem className="flex items-start gap-2">
+                    <FormItem className="flex items-start gap-2 sm:col-span-2">
                       <FormControl>
                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -372,7 +372,7 @@ export default function FormsPage() {
                   )}
                 />
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 sm:col-span-2">
                   <Button type="submit">Submit</Button>
                   <Button type="button" variant="outline" onClick={() => form.reset()}>
                     Reset

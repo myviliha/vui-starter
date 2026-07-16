@@ -1,9 +1,14 @@
 "use client";
 
-import * as React from "react";
-
 import { cn } from "./utils";
 import { Button } from "./button";
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./dialog";
 
 export interface ConfirmDialogProps {
   open: boolean;
@@ -29,52 +34,26 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
-  React.useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, onCancel]);
-
-  if (!open) return null;
-
+  // Built on the shared Dialog primitive so it stays in lockstep with the
+  // header / body / footer standard.
   return (
-    <div
-      className="vui-overlay-in fixed inset-0 z-[70] flex items-center justify-center bg-foreground/25 p-4"
-      onClick={onCancel}
-    >
-      <div
-        role="alertdialog"
-        aria-modal="true"
-        aria-label={title}
-        onClick={(e) => e.stopPropagation()}
-        style={{ ["--vui-pop-origin" as string]: "center" }}
-        className="vui-pop-in w-full max-w-sm overflow-hidden rounded-lg border border-border bg-background shadow-xl"
-      >
-        {/* Header */}
-        <div className="border-b border-border px-5 py-3">
-          <h2 className="text-base font-semibold tracking-tight">{title}</h2>
-        </div>
-        {/* Content */}
-        {description && (
-          <div className="px-5 py-4 text-sm leading-relaxed text-muted-foreground">
-            {description}
-          </div>
-        )}
-        {/* Actions */}
-        <div className="flex items-center justify-end gap-2 border-t border-border px-5 py-3">
-          <Button onClick={onCancel}>{cancelLabel}</Button>
-          <Button
-            variant={destructive ? "destructive" : "primary"}
-            onClick={onConfirm}
-            className={cn(destructive && "[&_svg]:border-white/30")}
-          >
-            {confirmLabel}
-          </Button>
-        </div>
-      </div>
-    </div>
+    <Dialog open={open} onClose={onCancel} label={title} className="max-w-sm">
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+      </DialogHeader>
+      {description && (
+        <DialogBody className="text-muted-foreground">{description}</DialogBody>
+      )}
+      <DialogFooter>
+        <Button onClick={onCancel}>{cancelLabel}</Button>
+        <Button
+          variant={destructive ? "destructive" : "primary"}
+          onClick={onConfirm}
+          className={cn(destructive && "[&_svg]:border-white/30")}
+        >
+          {confirmLabel}
+        </Button>
+      </DialogFooter>
+    </Dialog>
   );
 }
