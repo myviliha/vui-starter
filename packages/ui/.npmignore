@@ -1,4 +1,0 @@
-# Keep tests + tooling out of the published package (source is shipped from src/).
-*.test.ts
-*.test.tsx
-vitest.config.ts

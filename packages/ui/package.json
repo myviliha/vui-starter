@@ -30,7 +30,9 @@
     "**/*.css"
   ],
   "files": [
-    "src"
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx"
   ],
   "exports": {
     "./theme.css": "./src/theme.css",
