@@ -89,7 +89,7 @@ export function Select({
           role="listbox"
           aria-label={ariaLabel}
           tabIndex={-1}
-          className="absolute z-50 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+          className="absolute z-50 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md"
         >
           {options.map((o) => {
             const active = o.value === value;
@@ -104,7 +104,7 @@ export function Select({
                   setOpen(false);
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground",
+                  "flex w-full items-center justify-between gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground",
                   active && "bg-accent/60",
                 )}
               >

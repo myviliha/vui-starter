@@ -53,11 +53,11 @@ function Section({
   return (
     <section
       className={cn(
-        "overflow-hidden rounded-lg border border-border bg-card",
+        "rounded-lg border border-border bg-card",
         className,
       )}
     >
-      <div className="border-b border-border bg-muted/40 px-4 py-3">
+      <div className="rounded-t-lg border-b border-border bg-muted/40 px-4 py-3">
         <h2 className="font-medium">{title}</h2>
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>
@@ -130,9 +130,10 @@ export default function SettingsPage() {
         Manage your profile, appearance, and notification preferences.
       </div>
 
-      {/* Content — full-bleed, 5px gutter, boxed sections (like the board) */}
+      {/* Content — uniform spacing between sections and the save bar */}
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="grid gap-[5px] p-[5px] lg:grid-cols-2">
+        <div className="flex flex-col gap-4 p-4">
+          <div className="grid gap-4 lg:grid-cols-2">
           <Section
             title="Profile"
             description="Your personal information."
@@ -234,14 +235,15 @@ export default function SettingsPage() {
             </div>
           </Section>
 
-        </div>
-        <div className="flex items-center justify-end gap-2 px-[5px] pb-6 pt-5">
-          {saved && (
-            <span className="text-sm text-muted-foreground">Saved ✓</span>
-          )}
-          <Button variant="primary" onClick={save}>
-            Save changes
-          </Button>
+          </div>
+          <div className="flex items-center justify-end gap-2">
+            {saved && (
+              <span className="text-sm text-muted-foreground">Saved ✓</span>
+            )}
+            <Button variant="primary" onClick={save}>
+              Save changes
+            </Button>
+          </div>
         </div>
       </div>
     </div>
