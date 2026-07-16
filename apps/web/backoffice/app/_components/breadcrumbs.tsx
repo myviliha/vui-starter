@@ -26,8 +26,8 @@ export function Breadcrumbs() {
         <ArrowLeftIcon className="size-3.5" />
       </button>
       <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1">
-        {crumbs.map((c) => (
-          <span key={c.href} className="flex min-w-0 items-center gap-1">
+        {crumbs.map((c, i) => (
+          <span key={i} className="flex min-w-0 items-center gap-1">
             {c.isLast ? (
               <span className="truncate font-medium text-foreground">
                 {c.label}

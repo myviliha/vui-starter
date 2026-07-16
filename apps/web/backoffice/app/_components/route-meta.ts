@@ -72,6 +72,14 @@ export const ROUTE_ACCENT: Record<string, string> = {
   "/settings": "#64748b",
 };
 
+/** Group parents that have no index page of their own — a breadcrumb for one
+ * of these links to its first child (mirroring the sidebar) instead of a dead
+ * URL that would 404. */
+export const SECTION_INDEX: Record<string, string> = {
+  "/crm": "/crm/companies",
+  "/system": "/system/regions",
+};
+
 export function accentFor(pathname: string): string {
   return ROUTE_ACCENT[pathname] ?? "";
 }
@@ -96,7 +104,9 @@ export function crumbsFor(pathname: string): Crumb[] {
   let acc = "";
   parts.forEach((seg, i) => {
     acc += `/${seg}`;
-    crumbs.push({ label: labelFor(seg), href: acc, isLast: i === parts.length - 1 });
+    // Group parents (no index page) redirect to their first child.
+    const href = SECTION_INDEX[acc] ?? acc;
+    crumbs.push({ label: labelFor(seg), href, isLast: i === parts.length - 1 });
   });
   return crumbs;
 }
