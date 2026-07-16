@@ -135,8 +135,8 @@ export function OpportunitiesBoard() {
       </div>
 
       {/* Board — full-bleed with a 5px gutter */}
-      <div className="min-h-0 flex-1 overflow-x-auto p-[5px]">
-        <div className="flex h-full gap-[5px]">
+      <div className="min-h-0 flex-1 overflow-x-auto p-4">
+        <div className="flex h-full gap-4">
         {OPPORTUNITY_STAGES.map((stage) => {
           const stageItems = byStage(stage);
           const total = stageItems.reduce((sum, item) => sum + item.amount, 0);
