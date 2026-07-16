@@ -47,7 +47,7 @@ export default function Error({
           <Reload className="size-4" />
           Try again
         </Button>
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="outline">Back to Home</Button>
         </Link>
       </div>

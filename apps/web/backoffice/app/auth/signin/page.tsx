@@ -41,7 +41,7 @@ export default function SignInPage() {
 
   function finish() {
     setBusy(true);
-    router.push("/");
+    router.push("/dashboard");
   }
 
   if (view === "magic-sent") {

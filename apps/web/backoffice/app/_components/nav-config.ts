@@ -2,17 +2,21 @@ import {
   BackpackIcon as Briefcase,
   BarChartIcon as BarChart3,
   BookmarkIcon as Flag,
+  CheckCircledIcon as BadgeCheck,
   CubeIcon as Building,
   CubeIcon as Building2,
   DashboardIcon as LayoutGrid,
+  EnterIcon as LogIn,
   GlobeIcon as Globe,
   HomeIcon as Home,
   HomeIcon as Landmark,
   IdCardIcon as Contact,
   LayersIcon as Layers,
+  LockClosedIcon as Lock,
   MixIcon as Blocks,
   Pencil2Icon as FormInput,
   PersonIcon as Users,
+  QuestionMarkCircledIcon as HelpCircle,
   SewingPinFilledIcon as MapPin,
   Share2Icon as Network,
   StackIcon as Server,
@@ -45,8 +49,20 @@ export function isGroup(entry: NavEntry): entry is NavGroup {
 export const NAV: NavSection[] = [
   {
     items: [
-      { label: "Home", href: "/", icon: Home, color: "text-blue-500" },
+      { label: "Home", href: "/dashboard", icon: Home, color: "text-blue-500" },
       { label: "Charts", href: "/charts", icon: BarChart3, color: "text-fuchsia-500" },
+      {
+        label: "Auth",
+        icon: Lock,
+        color: "text-rose-500",
+        children: [
+          { label: "Sign in", href: "/auth/signin", icon: LogIn, color: "text-blue-500" },
+          { label: "Sign up", href: "/auth/signup", icon: Users, color: "text-emerald-500" },
+          { label: "Forgot password", href: "/auth/forgot-password", icon: HelpCircle, color: "text-amber-500" },
+          { label: "Reset password", href: "/auth/reset-password", icon: Lock, color: "text-violet-500" },
+          { label: "Verify code", href: "/auth/verify", icon: BadgeCheck, color: "text-teal-500" },
+        ],
+      },
     ],
   },
   {

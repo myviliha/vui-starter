@@ -3,6 +3,7 @@
 
 export const SEGMENT_LABELS: Record<string, string> = {
   "": "Home",
+  dashboard: "Home",
   charts: "Charts",
   components: "Components",
   forms: "Forms",
@@ -28,6 +29,7 @@ export const SEGMENT_LABELS: Record<string, string> = {
 /** Full pathname → icon color (Tailwind text-* class). */
 export const ROUTE_COLORS: Record<string, string> = {
   "/": "text-blue-500",
+  "/dashboard": "text-blue-500",
   "/charts": "text-fuchsia-500",
   "/components": "text-indigo-500",
   "/forms": "text-teal-500",
@@ -52,6 +54,7 @@ export const ROUTE_COLORS: Record<string, string> = {
  * shared components like tables can tint their icons per module). */
 export const ROUTE_ACCENT: Record<string, string> = {
   "/": "#3b82f6",
+  "/dashboard": "#3b82f6",
   "/charts": "#d946ef",
   "/components": "#6366f1",
   "/forms": "#14b8a6",
@@ -97,9 +100,22 @@ export type Crumb = { label: string; href: string; isLast: boolean };
 /** Build a breadcrumb trail (always rooted at Home) from a pathname. */
 export function crumbsFor(pathname: string): Crumb[] {
   const parts = pathname.split("/").filter(Boolean);
-  const crumbs: Crumb[] = [{ label: "Home", href: "/", isLast: parts.length === 0 }];
+  // The dashboard IS Home (it lives at /dashboard), so the trail always roots
+  // there and the "dashboard" segment isn't repeated as its own crumb.
+  const isDash = parts[0] === "dashboard";
+  const crumbs: Crumb[] = [
+    {
+      label: "Home",
+      href: "/dashboard",
+      isLast: parts.length === 0 || (isDash && parts.length === 1),
+    },
+  ];
   let acc = "";
   parts.forEach((seg, i) => {
+    if (i === 0 && seg === "dashboard") {
+      acc = "/dashboard";
+      return;
+    }
     acc += `/${seg}`;
     // Group parents (no index page) redirect to their first child.
     const href = SECTION_INDEX[acc] ?? acc;

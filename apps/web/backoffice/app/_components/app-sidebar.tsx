@@ -415,7 +415,7 @@ export function SidebarExpandButton() {
 }
 
 const BOTTOM_BAR_ITEMS: NavLink[] = [
-  { label: "Home", href: "/", icon: Home },
+  { label: "Home", href: "/dashboard", icon: Home },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 

@@ -17,7 +17,7 @@ export default function NotFound() {
         The page you’re looking for doesn’t exist or may have moved.
       </p>
       <div className="flex items-center gap-2">
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="primary">Back to Home</Button>
         </Link>
         <Link href="/auth/signin">

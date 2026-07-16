@@ -52,7 +52,7 @@ export default function OnboardingPage() {
   const next = () => (step === last ? finish() : setStep((s) => s + 1));
   const back = () => setStep((s) => Math.max(0, s - 1));
   function finish() {
-    router.push("/");
+    router.push("/dashboard");
   }
 
   function generateToken() {
