@@ -64,7 +64,7 @@ export const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-8 border-r border-border px-3 text-left align-middle font-medium text-muted-foreground last:border-r-0 [&:has([role=checkbox])]:pr-0",
+      "h-8 border-r border-border px-3 text-left align-middle font-semibold text-foreground last:border-r-0 [&:has([role=checkbox])]:pr-0",
       className,
     )}
     {...props}
