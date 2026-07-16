@@ -1,4 +1,4 @@
-import { PageChromeProvider } from "@repo/ui/record-view";
+import { PageChromeProvider } from "@myviliha/vui-ui/record-view";
 import {
   AppSidebar,
   MobileNav,

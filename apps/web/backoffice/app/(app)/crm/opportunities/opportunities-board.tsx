@@ -16,16 +16,16 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
+import { Badge } from "@myviliha/vui-ui/badge";
+import { Button } from "@myviliha/vui-ui/button";
+import { Input } from "@myviliha/vui-ui/input";
 import {
   OPPORTUNITY_STAGES,
   opportunities as initialOpportunities,
   type Opportunity,
   type OpportunityStage,
 } from "@/lib/crm-data";
-import { Dropdown, DropdownItem, DropdownLabel } from "@repo/ui/dropdown-menu";
+import { Dropdown, DropdownItem, DropdownLabel } from "@myviliha/vui-ui/dropdown-menu";
 import { SidebarExpandButton } from "@/app/_components/app-sidebar";
 
 function formatCurrency(amount: number): string {

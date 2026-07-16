@@ -15,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Public App",
-  description: "Rainbow monorepo public web app",
+  description: "Vui Starter public web app",
 };
 
 export default function RootLayout({

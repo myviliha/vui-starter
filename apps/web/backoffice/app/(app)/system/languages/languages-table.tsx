@@ -5,7 +5,7 @@ import {
   TextIcon as LanguagesIcon,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@repo/ui/record-view";
+import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
 import { languages, type Language } from "@/lib/mock-data";
 
 const fields: RecordField<Language>[] = [

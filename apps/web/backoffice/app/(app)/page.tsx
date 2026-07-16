@@ -4,8 +4,8 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@repo/ui/avatar";
-import { Badge } from "@repo/ui/badge";
+import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
+import { Badge } from "@myviliha/vui-ui/badge";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/table";
+} from "@myviliha/vui-ui/table";
 import { SidebarExpandButton } from "@/app/_components/app-sidebar";
 import { StatCard } from "@/app/_components/stat-card";
 import {

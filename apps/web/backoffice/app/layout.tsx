@@ -15,8 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VUI Starter",
-  description: "VUI Starter admin",
+  title: "Vui Starter",
+  description: "Vui Starter admin",
 };
 
 export default function RootLayout({

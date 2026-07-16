@@ -9,8 +9,8 @@ import {
   Share2Icon as Network,
 } from "@radix-ui/react-icons";
 
-import { Badge } from "@repo/ui/badge";
-import { RecordView, type RecordField } from "@repo/ui/record-view";
+import { Badge } from "@myviliha/vui-ui/badge";
+import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
 import { employees, type DemoEmployee } from "@/lib/demo-data";
 
 const fields: RecordField<DemoEmployee>[] = [

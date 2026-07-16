@@ -14,8 +14,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Documentation",
-  description: "Rainbow monorepo documentation",
+  title: {
+    default: "Vui Starter — Docs",
+    template: "%s · Vui Starter",
+  },
+  description:
+    "Documentation for Vui Starter and @myviliha/vui-ui — a token-driven React admin/CRM design system on Tailwind CSS v4.",
 };
 
 export default function RootLayout({

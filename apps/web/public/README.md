@@ -1,6 +1,6 @@
 # Public
 
-Public-facing Next.js app for the Rainbow monorepo. Runs on port 3001.
+Public-facing Next.js app for Vui Starter. Runs on port 3000.
 
 ## Stack
 
@@ -14,9 +14,9 @@ Public-facing Next.js app for the Rainbow monorepo. Runs on port 3001.
 
 | Command           | Description                          |
 | ----------------- | ------------------------------------ |
-| `pnpm dev`        | Start dev server on port 3001        |
+| `pnpm dev`        | Start dev server on port 3000        |
 | `pnpm build`      | Production build                     |
-| `pnpm start`      | Start production server on port 3001 |
+| `pnpm start`      | Start production server on port 3000 |
 | `pnpm lint`       | Lint sources                         |
 | `pnpm check-types`| Type check                           |
 

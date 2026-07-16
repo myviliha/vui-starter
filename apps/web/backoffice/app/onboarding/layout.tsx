@@ -12,7 +12,7 @@ export default function OnboardingLayout({
         <div className="flex items-center gap-2">
           <Logo className="h-7 w-7" />
           <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-sm font-bold tracking-tight text-transparent">
-            VUI Starter
+            Vui Starter
           </span>
         </div>
         <div className="flex items-center gap-3 text-muted-foreground">

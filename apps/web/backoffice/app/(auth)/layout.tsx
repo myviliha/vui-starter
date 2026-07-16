@@ -19,11 +19,11 @@ export default function AuthLayout({
           <Link
             href="/signin"
             className="mb-8 flex items-center justify-center gap-2"
-            aria-label="VUI Starter"
+            aria-label="Vui Starter"
           >
             <Logo className="h-8 w-8" />
             <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-base font-bold tracking-tight text-transparent">
-              VUI Starter
+              Vui Starter
             </span>
           </Link>
           {children}

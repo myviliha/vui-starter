@@ -1,6 +1,6 @@
 # Documentation
 
-Reference docs Next.js app for the Rainbow monorepo. Runs on port 5000.
+Reference docs Next.js app for the Vui Starter monorepo. Runs on port 3002.
 
 ## Stack
 
@@ -14,9 +14,9 @@ Reference docs Next.js app for the Rainbow monorepo. Runs on port 5000.
 
 | Command           | Description                          |
 | ----------------- | ------------------------------------ |
-| `pnpm dev`        | Start dev server on port 5000        |
+| `pnpm dev`        | Start dev server on port 3002        |
 | `pnpm build`      | Production build                     |
-| `pnpm start`      | Start production server on port 5000 |
+| `pnpm start`      | Start production server on port 3002 |
 | `pnpm lint`       | Lint sources                         |
 | `pnpm check-types`| Type check                           |
 

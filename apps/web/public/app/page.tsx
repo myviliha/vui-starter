@@ -36,7 +36,7 @@ export default function Home() {
           <CardHeader>
             <CardTitle>Shared design system</CardTitle>
             <CardDescription>
-              Reusable components live in <code>@repo/ui</code> and are shared
+              Reusable components live in <code>@myviliha/vui-ui</code> and are shared
               across every app in the workspace.
             </CardDescription>
           </CardHeader>

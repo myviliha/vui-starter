@@ -6,7 +6,7 @@ import {
   SewingPinFilledIcon as MapPin,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@repo/ui/record-view";
+import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
 import { cities, type City } from "@/lib/mock-data";
 
 const fields: RecordField<City>[] = [

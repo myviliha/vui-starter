@@ -7,7 +7,7 @@ type LogoProps = {
 };
 
 /**
- * VUI Starter logo — a self-contained rounded blue badge with a stylised "V".
+ * Vui Starter logo — a self-contained rounded blue badge with a stylised "V".
  * No external asset; scales with the `className` size (defaults to 24px).
  */
 export function Logo({ className }: LogoProps) {
@@ -15,7 +15,7 @@ export function Logo({ className }: LogoProps) {
     <svg
       viewBox="0 0 24 24"
       role="img"
-      aria-label="VUI Starter"
+      aria-label="Vui Starter"
       className={cn("h-6 w-6", className)}
     >
       <rect width="24" height="24" rx="6" fill="var(--brand-indigo)" />

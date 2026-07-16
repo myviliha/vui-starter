@@ -6,7 +6,7 @@ import {
   TokensIcon as Coins,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@repo/ui/record-view";
+import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
 import { currencies, type Currency } from "@/lib/mock-data";
 
 const fields: RecordField<Currency>[] = [

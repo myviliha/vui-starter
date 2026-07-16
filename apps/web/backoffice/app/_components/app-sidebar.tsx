@@ -32,7 +32,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@repo/ui/avatar";
+import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 

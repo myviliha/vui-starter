@@ -1,6 +1,6 @@
 # Backoffice
 
-Internal admin Next.js app for the Rainbow monorepo. Runs on port 3002.
+Internal admin Next.js app for Vui Starter. Runs on port 3001.
 
 ## Stack
 
@@ -14,9 +14,9 @@ Internal admin Next.js app for the Rainbow monorepo. Runs on port 3002.
 
 | Command           | Description                          |
 | ----------------- | ------------------------------------ |
-| `pnpm dev`        | Start dev server on port 3002        |
+| `pnpm dev`        | Start dev server on port 3001        |
 | `pnpm build`      | Production build                     |
-| `pnpm start`      | Start production server on port 3002 |
+| `pnpm start`      | Start production server on port 3001 |
 | `pnpm lint`       | Lint sources                         |
 | `pnpm check-types`| Type check                           |
 

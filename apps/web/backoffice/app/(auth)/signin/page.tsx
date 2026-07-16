@@ -12,8 +12,8 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
+import { Button } from "@myviliha/vui-ui/button";
+import { Input } from "@myviliha/vui-ui/input";
 import { Field, GoogleIcon, IconBadge, OrDivider } from "@/app/_components/auth";
 
 type View = "main" | "magic-sent" | "sso" | "2fa";
@@ -200,7 +200,7 @@ export default function SignInPage() {
       </form>
 
       <p className="mt-5 text-center text-muted-foreground">
-        New to VUI Starter?{" "}
+        New to Vui Starter?{" "}
         <Link href="/signup" className="font-medium text-primary hover:underline">
           Create an account
         </Link>

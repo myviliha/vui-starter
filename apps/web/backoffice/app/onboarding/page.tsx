@@ -16,10 +16,10 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Select } from "@repo/ui/select";
+import { Badge } from "@myviliha/vui-ui/badge";
+import { Button } from "@myviliha/vui-ui/button";
+import { Input } from "@myviliha/vui-ui/input";
+import { Select } from "@myviliha/vui-ui/select";
 import { Field } from "@/app/_components/auth";
 import { PLANS, TEAM_ROLES, TIMEZONES } from "@/lib/auth-demo";
 
