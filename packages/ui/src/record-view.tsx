@@ -1174,8 +1174,22 @@ function RecordDetailPanel<T extends { id: RowId }>({
 
   const primary = getPrimary(draft);
   const HeaderIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
-  const setField = (key: keyof T, value: string) =>
+
+  // Required-field validation: keys with an error get a red border on Save.
+  const [errors, setErrors] = React.useState<Set<string>>(new Set());
+  React.useEffect(() => {
+    setErrors(new Set());
+  }, [row.id]);
+
+  const setField = (key: keyof T, value: string) => {
     setDraft((d) => ({ ...d, [key]: value }));
+    setErrors((prev) => {
+      if (!prev.has(key as string)) return prev;
+      const next = new Set(prev);
+      next.delete(key as string);
+      return next;
+    });
+  };
 
   // Play the exit animation, then run the actual close/save when it ends.
   const [closing, setClosing] = React.useState(false);
@@ -1183,6 +1197,20 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const requestClose = (action: () => void) => {
     pending.current = action;
     setClosing(true);
+  };
+  const handleSave = () => {
+    const missing = fields.filter(
+      (f) =>
+        f.required &&
+        f.editable &&
+        !f.render &&
+        String(draft[f.key as keyof T] ?? "").trim() === "",
+    );
+    if (missing.length > 0) {
+      setErrors(new Set(missing.map((f) => f.key)));
+      return;
+    }
+    requestClose(() => onSave(draft));
   };
 
   return (
@@ -1270,10 +1298,16 @@ function RecordDetailPanel<T extends { id: RowId }>({
                             setField(f.key as keyof T, e.target.value)
                           }
                           aria-label={f.label}
+                          aria-invalid={errors.has(f.key) || undefined}
                           placeholder={`Add ${f.label.toLowerCase()}`}
                           rows={1}
                           // field-sizing grows the box to fit long/wrapped text
-                          className="w-full resize-none rounded-sm border border-input bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                          className={cn(
+                            "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
+                            errors.has(f.key)
+                              ? "border-destructive focus-visible:ring-destructive"
+                              : "border-input focus-visible:ring-ring",
+                          )}
                         />
                       ) : (
                         <span className="block whitespace-pre-wrap break-words px-2 pt-1.5">
@@ -1312,10 +1346,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
               <X className="size-4" />
               Cancel
             </Button>
-            <Button
-              variant="primary"
-              onClick={() => requestClose(() => onSave(draft))}
-            >
+            <Button variant="primary" onClick={handleSave}>
               <Check className="size-4" />
               Save
             </Button>
