@@ -2,10 +2,12 @@
 
 import {
   BellIcon,
+  GearIcon,
   MagnifyingGlassIcon,
   QuestionMarkCircledIcon,
 } from "@radix-ui/react-icons";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@myviliha/vui-ui/button";
@@ -13,6 +15,7 @@ import { Input } from "@myviliha/vui-ui/input";
 import { usePageChrome } from "@myviliha/vui-ui/record-view";
 
 import { SidebarToggle } from "@/app/_components/app-sidebar";
+import { UserMenu } from "@/app/_components/user-menu";
 import { colorFor } from "@/app/_components/route-meta";
 
 /** Global top bar: sidebar toggle + page title (left), centered search,
@@ -56,10 +59,11 @@ export function TopBar() {
         </div>
       </div>
 
-      {/* Right — help + notifications */}
-      <div className="ml-auto flex items-center gap-1">
+      {/* Right — help, notifications, settings, profile.
+          Bold, dark, larger glyphs (heavier stroke via [&_path]). */}
+      <div className="ml-auto flex items-center gap-1.5">
         <Button variant="ghost" size="icon" aria-label="Help &amp; support">
-          <QuestionMarkCircledIcon className="size-4 text-blue-500" />
+          <QuestionMarkCircledIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
         </Button>
         <Button
           variant="ghost"
@@ -67,12 +71,20 @@ export function TopBar() {
           aria-label="Notifications"
           className="relative"
         >
-          <BellIcon className="size-4 text-amber-500" />
+          <BellIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
           <span
             className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
             aria-hidden="true"
           />
         </Button>
+        <Link
+          href="/settings"
+          aria-label="Settings"
+          className="grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent"
+        >
+          <GearIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
+        </Link>
+        <UserMenu />
       </div>
     </header>
   );

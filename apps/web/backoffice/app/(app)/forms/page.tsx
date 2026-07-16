@@ -97,7 +97,7 @@ export default function FormsPage() {
 
       {/* Content */}
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-2xl space-y-6 p-4">
+        <div className="flex flex-col gap-4 p-4">
           <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
             One <code className="font-mono text-foreground">Form</code> wiring
             every shadcn field type — input, textarea, select, combobox, date
@@ -111,7 +111,7 @@ export default function FormsPage() {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="w-full space-y-6"
+                className="max-w-2xl space-y-6"
               >
                 <FormField
                   control={form.control}

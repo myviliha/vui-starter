@@ -118,11 +118,14 @@ export function ChartLegendContent({ payload }: { payload?: LegendEntry[] }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 pt-3">
       {payload.map((item, i) => {
-        const key = String(item.dataKey ?? item.value ?? i);
+        // Legend payload uses `value` for the label (series name / pie slice
+        // name); a pie gives every entry the same `dataKey` ("value"), so key
+        // off `value` (with index as a guaranteed-unique fallback).
+        const key = String(item.value ?? item.dataKey ?? i);
         const conf = config[key];
         return (
           <span
-            key={key}
+            key={`${key}-${i}`}
             className="flex items-center gap-1.5 text-muted-foreground"
           >
             <span

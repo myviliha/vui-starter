@@ -13,7 +13,6 @@ import {
   CubeIcon as Building,
   CubeIcon as Building2,
   DashboardIcon as LayoutGrid,
-  ExitIcon as LogOut,
   GearIcon as Settings,
   GlobeIcon as Globe,
   HamburgerMenuIcon as Menu,
@@ -33,9 +32,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
 import { Logo } from "./logo";
-import { ThemeToggle } from "./theme-toggle";
 
 /** Shared icon component type (all Radix icons share this shape). */
 type IconType = typeof Home;
@@ -320,56 +317,6 @@ function SidebarBody({
         ))}
       </nav>
 
-      {/* Footer: settings + user */}
-      <div className="space-y-1 border-t border-sidebar-border px-3 py-3">
-        <Link
-          href="/settings"
-          onClick={onNavigate}
-          title={collapsed ? "Settings" : undefined}
-          className={cn(
-            "group/nav flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
-            collapsed && "justify-center px-0",
-            isActive(pathname, "/settings")
-              ? "bg-sidebar-accent text-sidebar-foreground"
-              : "text-sidebar-foreground hover:bg-sidebar-accent",
-          )}
-        >
-          <NavIcon icon={Settings} active={isActive(pathname, "/settings")} />
-          {!collapsed && <span>Settings</span>}
-        </Link>
-        <div
-          className={cn(
-            "-mx-3 mt-2 flex items-center gap-2 border-t border-sidebar-border px-5 pb-1 pt-3",
-            collapsed && "justify-center px-0",
-          )}
-        >
-          <Avatar className="size-7">
-            <AvatarFallback>AU</AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-            <>
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-sidebar-foreground">
-                  Admin User
-                </p>
-                <p className="truncate text-muted-foreground">
-                  Administrator
-                </p>
-              </div>
-              <ThemeToggle />
-              <Link
-                href="/signin"
-                onClick={onNavigate}
-                aria-label="Sign out"
-                title="Sign out"
-                className="grid size-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-primary"
-              >
-                <LogOut className="size-4" />
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
     </>
   );
 }

@@ -733,8 +733,11 @@ export function RecordView<T extends { id: RowId }>({
         </div>
       </div>
 
+      {/* Content — padded, bordered card (matches the settings-page layout) */}
+      <div className="min-h-0 flex-1 overflow-hidden p-4">
+        <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
       {/* Sub-toolbar */}
-      <div className="flex items-center justify-between border-b border-border px-4 py-1.5">
+      <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-1.5">
         <div className="flex items-center gap-2">
           <ListFilter className="size-4 text-muted-foreground" />
           <span className="font-medium">All {title}</span>
@@ -1044,6 +1047,8 @@ export function RecordView<T extends { id: RowId }>({
             )}
           </TableBody>
         </Table>
+      </div>
+        </div>
       </div>
 
       {/* Record detail panel */}

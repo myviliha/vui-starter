@@ -67,7 +67,7 @@ export default function ComponentsPage() {
 
         {/* Content */}
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-4xl space-y-6 p-4">
+          <div className="flex flex-col gap-4 p-4">
             <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
               Every component below was added straight from the shadcn CLI
               (<code className="font-mono text-foreground">npx shadcn@latest add …</code>){" "}

@@ -103,7 +103,7 @@ export default function ChartsPage() {
                 <AreaChart data={revenue} margin={{ left: 4, right: 8 }}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="month" {...axis} />
-                  <YAxis width={40} {...axis} />
+                  <YAxis width={56} {...axis} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <ChartLegend content={<ChartLegendContent />} />
                   <Area
@@ -159,7 +159,7 @@ export default function ChartsPage() {
                 <LineChart data={revenue} margin={{ left: 4, right: 8 }}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="month" {...axis} />
-                  <YAxis width={40} {...axis} />
+                  <YAxis width={56} {...axis} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <ChartLegend content={<ChartLegendContent />} />
                   <Line
