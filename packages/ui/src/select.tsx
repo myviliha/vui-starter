@@ -109,7 +109,9 @@ export function Select({
                 )}
               >
                 <span className="truncate">{o.label}</span>
-                {active && <Check className="size-3.5 shrink-0 text-primary" />}
+                {active && (
+                  <Check className="size-3.5 shrink-0 text-[var(--button-primary)]" />
+                )}
               </button>
             );
           })}

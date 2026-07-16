@@ -10,7 +10,7 @@ export const Checkbox = React.forwardRef<
     ref={ref}
     type="checkbox"
     className={cn(
-      "size-4 shrink-0 cursor-pointer rounded border-input accent-primary",
+      "size-4 shrink-0 cursor-pointer rounded border-input accent-[var(--button-primary)]",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
       className,
     )}

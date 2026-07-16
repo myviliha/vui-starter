@@ -199,6 +199,14 @@
     border: 1px solid var(--border);
     border-radius: calc(var(--radius) - 4px);
   }
+  /* Radix icons are thin filled glyphs; add a matching stroke so they read
+     bolder/heavier throughout the app. */
+  svg[width="15"] path {
+    stroke: currentColor;
+    stroke-width: 0.55px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
   /* ponytail: rest of the paste's reset is already covered by Tailwind preflight. */
   @media (prefers-reduced-motion: reduce) {
     * {

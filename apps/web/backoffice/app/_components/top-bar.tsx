@@ -59,7 +59,7 @@ export function TopBar() {
       {/* Right — help + notifications */}
       <div className="ml-auto flex items-center gap-1">
         <Button variant="ghost" size="icon" aria-label="Help &amp; support">
-          <QuestionMarkCircledIcon className="size-4" />
+          <QuestionMarkCircledIcon className="size-4 text-blue-500" />
         </Button>
         <Button
           variant="ghost"
@@ -67,7 +67,7 @@ export function TopBar() {
           aria-label="Notifications"
           className="relative"
         >
-          <BellIcon className="size-4" />
+          <BellIcon className="size-4 text-amber-500" />
           <span
             className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
             aria-hidden="true"

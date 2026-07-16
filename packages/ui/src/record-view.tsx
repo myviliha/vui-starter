@@ -44,6 +44,7 @@ import {
   TableRow,
 } from "./table";
 import { Dropdown, DropdownItem, DropdownLabel } from "./dropdown-menu";
+import { ConfirmDialog } from "./confirm-dialog";
 import {
   downloadFile,
   parseCSV,
@@ -199,6 +200,8 @@ export function RecordView<T extends { id: RowId }>({
   const [activeId, setActiveId] = React.useState<RowId | null>(null);
   // A row created via "add" but not yet saved — Cancel/close removes it.
   const [newRowId, setNewRowId] = React.useState<RowId | null>(null);
+  // Row pending delete confirmation.
+  const [confirmDeleteId, setConfirmDeleteId] = React.useState<RowId | null>(null);
   // Whether the detail panel opened read-only (View) or editable (Edit / Add).
   const [panelReadOnly, setPanelReadOnly] = React.useState(false);
   const [page, setPage] = React.useState(1);
@@ -309,6 +312,10 @@ export function RecordView<T extends { id: RowId }>({
   }, [rows, filter, sort, fields, getPrimary]);
 
   const activeRow = rows.find((r) => r.id === activeId) ?? null;
+  const deleteTarget =
+    confirmDeleteId != null
+      ? (rows.find((r) => r.id === confirmDeleteId) ?? null)
+      : null;
 
   // Pagination (derived; `page` is clamped so it never points past the last page).
   const totalPages = Math.max(1, Math.ceil(processed.length / pageSize));
@@ -647,7 +654,7 @@ export function RecordView<T extends { id: RowId }>({
             onClick={addRow}
             className="px-1 no-underline hover:no-underline"
           >
-            <Plus className="size-4" />
+            <Plus className="size-4 text-emerald-500" />
             <span>{singular}</span>
           </Button>
 
@@ -661,7 +668,7 @@ export function RecordView<T extends { id: RowId }>({
           />
           <Dropdown
             label="Import"
-            icon={<Upload className="size-3.5" />}
+            icon={<Upload className="size-3.5 text-sky-500" />}
             align="end"
           >
             <DropdownLabel>Import from</DropdownLabel>
@@ -684,7 +691,7 @@ export function RecordView<T extends { id: RowId }>({
 
           <Dropdown
             label="Export"
-            icon={<Download className="size-3.5" />}
+            icon={<Download className="size-3.5 text-violet-500" />}
             align="end"
           >
             <DropdownLabel>Export as</DropdownLabel>
@@ -713,7 +720,7 @@ export function RecordView<T extends { id: RowId }>({
           <Dropdown
             label=""
             ariaLabel="More actions"
-            icon={<MoreHorizontal className="size-4" />}
+            icon={<MoreHorizontal className="size-4 text-slate-500" />}
             align="end"
           >
             <DropdownItem onSelect={() => setSelected(new Set())}>
@@ -731,10 +738,9 @@ export function RecordView<T extends { id: RowId }>({
         <div className="flex items-center gap-2">
           <ListFilter className="size-4 text-muted-foreground" />
           <span className="font-medium">All {title}</span>
-          <span className="text-muted-foreground">· {processed.length}</span>
         </div>
         <div className="flex items-center gap-0.5">
-          <Dropdown label="Filter" icon={<ListFilter className="size-3.5" />}>
+          <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
             <DropdownLabel>Filter by keyword</DropdownLabel>
             <div className="p-3">
               <div className="relative">
@@ -750,7 +756,7 @@ export function RecordView<T extends { id: RowId }>({
             </div>
           </Dropdown>
 
-          <Dropdown label="Sort" icon={<ArrowUpDown className="size-3.5" />}>
+          <Dropdown label="Sort" icon={<ArrowUpDown className="size-3.5 text-blue-500" />}>
             <DropdownLabel>Sort by</DropdownLabel>
             {tableFields.map((f) => (
               <DropdownItem
@@ -778,7 +784,7 @@ export function RecordView<T extends { id: RowId }>({
 
           <Dropdown
             label="Options"
-            icon={<SlidersHorizontal className="size-3.5" />}
+            icon={<SlidersHorizontal className="size-3.5 text-fuchsia-500" />}
             align="end"
           >
             <DropdownLabel>Visible columns</DropdownLabel>
@@ -797,7 +803,7 @@ export function RecordView<T extends { id: RowId }>({
           <div className="ml-1 flex items-center gap-1 border-l border-border pl-2 text-muted-foreground">
             <Dropdown
               label={`${pageSize} / page`}
-              icon={<Rows3 className="size-3.5" />}
+              icon={<Rows3 className="size-3.5 text-teal-500" />}
               align="end"
             >
               <DropdownLabel>Rows per page</DropdownLabel>
@@ -998,27 +1004,27 @@ export function RecordView<T extends { id: RowId }>({
                           onClick={() => openView(row.id)}
                           aria-label={`View ${primary.title || singular}`}
                           title="View"
-                          className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                          className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
                         >
-                          <Eye className="size-4" />
+                          <Eye className="size-4 text-blue-500" />
                         </button>
                         <button
                           type="button"
                           onClick={() => openEdit(row.id)}
                           aria-label={`Edit ${primary.title || singular}`}
                           title="Edit"
-                          className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                          className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
                         >
-                          <Pencil className="size-4" />
+                          <Pencil className="size-4 text-amber-500" />
                         </button>
                         <button
                           type="button"
-                          onClick={() => deleteRow(row.id)}
+                          onClick={() => setConfirmDeleteId(row.id)}
                           aria-label={`Delete ${primary.title || singular}`}
                           title="Delete"
-                          className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                          className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-destructive/10"
                         >
-                          <Trash2 className="size-4" />
+                          <Trash2 className="size-4 text-red-500" />
                         </button>
                       </div>
                     </TableCell>
@@ -1096,7 +1102,7 @@ export function RecordView<T extends { id: RowId }>({
             type="button"
             role="menuitem"
             onClick={() => {
-              deleteRow(menu.id);
+              setConfirmDeleteId(menu.id);
               setMenu(null);
             }}
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-destructive hover:bg-destructive/10"
@@ -1106,6 +1112,27 @@ export function RecordView<T extends { id: RowId }>({
           </button>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmDeleteId != null}
+        title={`Delete ${singular.toLowerCase()}?`}
+        description={
+          <>
+            This permanently removes{" "}
+            <span className="font-medium text-foreground">
+              {deleteTarget ? getPrimary(deleteTarget).title || "this record" : "this record"}
+            </span>
+            . This can’t be undone.
+          </>
+        }
+        destructive
+        confirmLabel="Delete"
+        onConfirm={() => {
+          if (confirmDeleteId != null) deleteRow(confirmDeleteId);
+          setConfirmDeleteId(null);
+        }}
+        onCancel={() => setConfirmDeleteId(null)}
+      />
     </div>
   );
 }
