@@ -1,7 +1,7 @@
 # Vui Starter
 
 A free, **open-source admin/CRM design system** for React — a clean, token-driven
-component library (**`@myviliha/vui-ui`**) plus a full-featured backoffice demo
+component library (**`@viliha/vui-ui`**) plus a full-featured backoffice demo
 you can clone and run.
 
 Built on **Next.js · React 19 · Tailwind CSS v4 · shadcn-style components ·
@@ -9,7 +9,7 @@ Radix Icons**. Everything runs on in-memory mock data, so you can clone and run
 with zero backend.
 
 > This repo is both the **library** (`packages/ui`, published to npm as
-> `@myviliha/vui-ui`) and a **reference app** (`apps/web/backoffice`) that shows
+> `@viliha/vui-ui`) and a **reference app** (`apps/web/backoffice`) that shows
 > every component in a real admin UI.
 
 ![Vui Starter — datatable](./.github/screenshots/organizations.png)
@@ -91,7 +91,7 @@ pnpm dev
 Or click **“Use this template”** on the GitHub repo to create your own copy.
 
 > Just want the component library in an existing app? Install it from npm
-> instead — `npm install @myviliha/vui-ui` — see
+> instead — `npm install @viliha/vui-ui` — see
 > [Use the library in your project](#use-the-library-in-your-project).
 
 ---
@@ -101,12 +101,12 @@ Or click **“Use this template”** on the GitHub repo to create your own copy.
 Install the package and its peers:
 
 ```bash
-npm install @myviliha/vui-ui           # or: pnpm add / yarn add / bun add
+npm install @viliha/vui-ui           # or: pnpm add / yarn add / bun add
 npm install -D tailwindcss @tailwindcss/postcss
 ```
 
 `react` and `react-dom` are peer dependencies (use your app’s versions).
-`@myviliha/vui-ui` ships **TypeScript source**, so your app’s bundler compiles
+`@viliha/vui-ui` ships **TypeScript source**, so your app’s bundler compiles
 it — see the per-toolchain setup below.
 
 ### 1 · New Next.js app
@@ -114,7 +114,7 @@ it — see the per-toolchain setup below.
 ```bash
 npx create-next-app@latest my-app     # TypeScript + App Router
 cd my-app
-npm install @myviliha/vui-ui
+npm install @viliha/vui-ui
 ```
 
 **a. Tailwind v4** — in your global stylesheet (e.g. `app/globals.css`):
@@ -123,7 +123,7 @@ npm install @myviliha/vui-ui
 @import "tailwindcss";
 /* Design tokens, @theme mapping, base reset, AND scanning of the library’s
    component classes — all in one import. */
-@import "@myviliha/vui-ui/theme.css";
+@import "@viliha/vui-ui/theme.css";
 ```
 
 **b. Transpile the source package** — in `next.config.ts`:
@@ -132,20 +132,20 @@ npm install @myviliha/vui-ui
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@myviliha/vui-ui"],
+  transpilePackages: ["@viliha/vui-ui"],
 };
 
 export default nextConfig;
 ```
 
-That’s it — `import { Button } from "@myviliha/vui-ui/button"` and go.
+That’s it — `import { Button } from "@viliha/vui-ui/button"` and go.
 
 ### 2 · New Vite + React app
 
 ```bash
 npm create vite@latest my-app -- --template react-ts
 cd my-app
-npm install @myviliha/vui-ui
+npm install @viliha/vui-ui
 npm install -D tailwindcss @tailwindcss/vite
 ```
 
@@ -163,18 +163,18 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });
 
 ```css
 @import "tailwindcss";
-@import "@myviliha/vui-ui/theme.css";
+@import "@viliha/vui-ui/theme.css";
 ```
 
 Vite transpiles the package’s TypeScript automatically — no extra config.
 
 ### 3 · Existing project
 
-1. `npm install @myviliha/vui-ui`
+1. `npm install @viliha/vui-ui`
 2. Make sure you’re on **Tailwind CSS v4**, then add
-   `@import "@myviliha/vui-ui/theme.css";` after `@import "tailwindcss";`.
-3. **Next.js:** add `transpilePackages: ["@myviliha/vui-ui"]`.
-   **Vite:** nothing extra. **Other bundlers:** ensure `node_modules/@myviliha/vui-ui`
+   `@import "@viliha/vui-ui/theme.css";` after `@import "tailwindcss";`.
+3. **Next.js:** add `transpilePackages: ["@viliha/vui-ui"]`.
+   **Vite:** nothing extra. **Other bundlers:** ensure `node_modules/@viliha/vui-ui`
    is transpiled (e.g. include it in your Babel/SWC/ts-loader rule).
 4. If you already define shadcn-style tokens (`--primary`, `--background`, …),
    `theme.css` will set them — remove your duplicates, or import it first and
@@ -189,13 +189,13 @@ your workspace:
 // apps/web/package.json
 {
   "dependencies": {
-    "@myviliha/vui-ui": "^0.1.0" // or "workspace:*" if vendored in your monorepo
+    "@viliha/vui-ui": "^0.1.0" // or "workspace:*" if vendored in your monorepo
   }
 }
 ```
 
-- Add `transpilePackages: ["@myviliha/vui-ui"]` to each Next.js app that uses it.
-- Import `@myviliha/vui-ui/theme.css` once in each app’s global stylesheet.
+- Add `transpilePackages: ["@viliha/vui-ui"]` to each Next.js app that uses it.
+- Import `@viliha/vui-ui/theme.css` once in each app’s global stylesheet.
 - No build/`dts` step is required — the package is consumed as source
   (“Just-in-Time”), so Turborepo caches your app build, not a library build.
 
@@ -204,9 +204,9 @@ your workspace:
 ## Using components
 
 ```tsx
-import { Button } from "@myviliha/vui-ui/button";
-import { Badge } from "@myviliha/vui-ui/badge";
-import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
+import { Button } from "@viliha/vui-ui/button";
+import { Badge } from "@viliha/vui-ui/badge";
+import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 
 export function Example() {
   return (
@@ -218,14 +218,14 @@ export function Example() {
 }
 ```
 
-Each component is a separate entry point (`@myviliha/vui-ui/<name>`), so you only
+Each component is a separate entry point (`@viliha/vui-ui/<name>`), so you only
 pull in what you use.
 
 ---
 
 ## Theming
 
-All design decisions live in **`@myviliha/vui-ui/theme.css`** as CSS variables:
+All design decisions live in **`@viliha/vui-ui/theme.css`** as CSS variables:
 
 ```css
 :root {
@@ -244,7 +244,7 @@ import** in your own CSS:
 
 ```css
 @import "tailwindcss";
-@import "@myviliha/vui-ui/theme.css";
+@import "@viliha/vui-ui/theme.css";
 
 :root {
   --primary: oklch(0.55 0.2 260);   /* your brand */
@@ -274,7 +274,7 @@ apps/
   docs/
     documentation/     # Docs app (:3001)
 packages/
-  ui/                  # @myviliha/vui-ui — the published component library
+  ui/                  # @viliha/vui-ui — the published component library
   eslint-config/       # Shared ESLint config
   typescript-config/   # Shared tsconfig
 ```

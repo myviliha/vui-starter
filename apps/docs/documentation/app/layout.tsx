@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s · Vui Starter",
   },
   description:
-    "Vui Starter is a free, open-source React admin & CRM design system built on Tailwind CSS v4, shadcn/ui and Radix Icons — install @myviliha/vui-ui and ship faster.",
+    "Vui Starter is a free, open-source React admin & CRM design system built on Tailwind CSS v4, shadcn/ui and Radix Icons — install @viliha/vui-ui and ship faster.",
   keywords: [
     "react admin template",
     "tailwind css admin",

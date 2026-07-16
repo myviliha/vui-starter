@@ -116,7 +116,7 @@ export default function MyPage() {
         primitive: the divider, hover and last-row handling come baked in, so a
         hand-rolled list can&apos;t miss the border.
       </P>
-      <CodeBlock title="account-menu.tsx">{`import { Menu, MenuItem, MenuLabel } from "@myviliha/vui-ui/menu";
+      <CodeBlock title="account-menu.tsx">{`import { Menu, MenuItem, MenuLabel } from "@viliha/vui-ui/menu";
 
 <Menu className="w-56">
   <MenuLabel>Account</MenuLabel>
@@ -129,7 +129,7 @@ export default function MyPage() {
         The shipped <code>Dropdown</code>, <code>Select</code> and the account
         menu already follow this — you get it for free when you use them. Need
         the raw class for a bespoke element? Import{" "}
-        <code>menuItemClass</code> from <code>@myviliha/vui-ui/menu</code>.
+        <code>menuItemClass</code> from <code>@viliha/vui-ui/menu</code>.
       </P>
 
       <H2>Dialogs</H2>
@@ -143,8 +143,8 @@ export default function MyPage() {
       </P>
       <CodeBlock title="invite-dialog.tsx">{`import {
   Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter,
-} from "@myviliha/vui-ui/dialog";
-import { Button } from "@myviliha/vui-ui/button";
+} from "@viliha/vui-ui/dialog";
+import { Button } from "@viliha/vui-ui/button";
 
 <Dialog open={open} onClose={close} label="Invite teammate">
   <DialogHeader>
@@ -163,7 +163,7 @@ import { Button } from "@myviliha/vui-ui/button";
         For a yes/no prompt (like delete), <code>ConfirmDialog</code> is built on{" "}
         <code>Dialog</code> — pass a title, description and handlers:
       </P>
-      <CodeBlock title="delete-confirm.tsx">{`import { ConfirmDialog } from "@myviliha/vui-ui/confirm-dialog";
+      <CodeBlock title="delete-confirm.tsx">{`import { ConfirmDialog } from "@viliha/vui-ui/confirm-dialog";
 
 <ConfirmDialog
   open={open}

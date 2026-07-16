@@ -5,8 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
-import { cn } from "@myviliha/vui-ui/utils";
-import { Badge } from "@myviliha/vui-ui/badge";
+import { cn } from "@viliha/vui-ui/utils";
+import { Badge } from "@viliha/vui-ui/badge";
 
 type NavItem = { label: string; href: string };
 type NavGroup = { title: string; items: NavItem[] };
@@ -112,12 +112,12 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
         <Wordmark />
         <div className="flex items-center gap-3">
           <a
-            href="https://www.npmjs.com/package/@myviliha/vui-ui"
+            href="https://www.npmjs.com/package/@viliha/vui-ui"
             target="_blank"
             rel="noreferrer"
             className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
           >
-            @myviliha/vui-ui
+            @viliha/vui-ui
           </a>
           <a
             href={REPO}

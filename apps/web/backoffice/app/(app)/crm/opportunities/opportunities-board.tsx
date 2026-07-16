@@ -16,16 +16,16 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Badge } from "@myviliha/vui-ui/badge";
-import { Button } from "@myviliha/vui-ui/button";
-import { Input } from "@myviliha/vui-ui/input";
+import { Badge } from "@viliha/vui-ui/badge";
+import { Button } from "@viliha/vui-ui/button";
+import { Input } from "@viliha/vui-ui/input";
 import {
   OPPORTUNITY_STAGES,
   opportunities as initialOpportunities,
   type Opportunity,
   type OpportunityStage,
 } from "@/lib/crm-data";
-import { Dropdown, DropdownItem, DropdownLabel } from "@myviliha/vui-ui/dropdown-menu";
+import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 

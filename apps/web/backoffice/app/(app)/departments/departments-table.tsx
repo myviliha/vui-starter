@@ -7,7 +7,7 @@ import {
   PersonIcon as Users,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
+import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { departments, type Department } from "@/lib/mock-data";
 
 const fields: RecordField<Department>[] = [

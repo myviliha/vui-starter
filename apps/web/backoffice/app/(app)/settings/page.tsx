@@ -10,11 +10,11 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
-import { Button } from "@myviliha/vui-ui/button";
-import { Checkbox } from "@myviliha/vui-ui/checkbox";
-import { Input } from "@myviliha/vui-ui/input";
-import { Select } from "@myviliha/vui-ui/select";
+import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
+import { Button } from "@viliha/vui-ui/button";
+import { Checkbox } from "@viliha/vui-ui/checkbox";
+import { Input } from "@viliha/vui-ui/input";
+import { Select } from "@viliha/vui-ui/select";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 

@@ -44,7 +44,7 @@ export default function ThemingPage() {
       <PageTitle
         eyebrow="Customization"
         title="Theming"
-        lead="Every design decision lives in one stylesheet — @myviliha/vui-ui/theme.css — as CSS variables. Change the tokens and the whole system follows."
+        lead="Every design decision lives in one stylesheet — @viliha/vui-ui/theme.css — as CSS variables. Change the tokens and the whole system follows."
       />
 
       <H2>Token groups</H2>
@@ -132,7 +132,7 @@ export default function ThemingPage() {
       <H2>Customize</H2>
       <P>Override tokens <strong>after</strong> importing the theme:</P>
       <CodeBlock title="app/globals.css">{`@import "tailwindcss";
-@import "@myviliha/vui-ui/theme.css";
+@import "@viliha/vui-ui/theme.css";
 
 :root {
   --primary: oklch(0.55 0.2 260);  /* your brand */

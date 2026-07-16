@@ -7,7 +7,7 @@ import {
   ReloadIcon as Reload,
 } from "@radix-ui/react-icons";
 
-import { Button } from "@myviliha/vui-ui/button";
+import { Button } from "@viliha/vui-ui/button";
 
 /** Root error boundary — shown when a route throws. Keep it self-contained
  *  (it renders in place of the page, outside the app shell). */

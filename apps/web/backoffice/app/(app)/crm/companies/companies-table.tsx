@@ -8,7 +8,7 @@ import {
   SewingPinFilledIcon as MapPin,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
+import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { companies, type Company } from "@/lib/crm-data";
 
 const fields: RecordField<Company>[] = [

@@ -10,8 +10,8 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@myviliha/vui-ui/button";
-import { Input } from "@myviliha/vui-ui/input";
+import { Button } from "@viliha/vui-ui/button";
+import { Input } from "@viliha/vui-ui/input";
 import { Field, GoogleIcon, IconBadge, OrDivider } from "@/app/_components/auth";
 import { checkBusinessEmail } from "@/lib/auth-demo";
 

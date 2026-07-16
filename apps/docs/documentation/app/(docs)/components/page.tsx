@@ -2,14 +2,14 @@
 
 import * as React from "react";
 
-import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
-import { Badge } from "@myviliha/vui-ui/badge";
-import { Button } from "@myviliha/vui-ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@myviliha/vui-ui/card";
-import { Checkbox } from "@myviliha/vui-ui/checkbox";
-import { Dropdown, DropdownItem, DropdownLabel } from "@myviliha/vui-ui/dropdown-menu";
-import { Input } from "@myviliha/vui-ui/input";
-import { Select } from "@myviliha/vui-ui/select";
+import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
+import { Badge } from "@viliha/vui-ui/badge";
+import { Button } from "@viliha/vui-ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@viliha/vui-ui/card";
+import { Checkbox } from "@viliha/vui-ui/checkbox";
+import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
+import { Input } from "@viliha/vui-ui/input";
+import { Select } from "@viliha/vui-ui/select";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
 
 function Demo({
@@ -40,13 +40,13 @@ export default function ComponentsPage() {
       <PageTitle
         eyebrow="Reference"
         title="Components"
-        lead="Every component imports from its own entry point — @myviliha/vui-ui/<name> — so you only ship what you use. Live examples below."
+        lead="Every component imports from its own entry point — @viliha/vui-ui/<name> — so you only ship what you use. Live examples below."
       />
 
       <H2>Button</H2>
       <P>Seven variants and four sizes. The primary variant uses the brand blue.</P>
       <Demo
-        code={`import { Button } from "@myviliha/vui-ui/button";
+        code={`import { Button } from "@viliha/vui-ui/button";
 
 <Button>Default</Button>
 <Button variant="primary">Primary</Button>
@@ -67,7 +67,7 @@ export default function ComponentsPage() {
 
       <H2>Badge</H2>
       <Demo
-        code={`import { Badge } from "@myviliha/vui-ui/badge";
+        code={`import { Badge } from "@viliha/vui-ui/badge";
 
 <Badge>Default</Badge>
 <Badge variant="secondary">Secondary</Badge>
@@ -88,7 +88,7 @@ export default function ComponentsPage() {
 
       <H2>Card</H2>
       <Demo
-        code={`import { Card, CardContent, CardHeader, CardTitle } from "@myviliha/vui-ui/card";
+        code={`import { Card, CardContent, CardHeader, CardTitle } from "@viliha/vui-ui/card";
 
 <Card>
   <CardHeader><CardTitle>Team</CardTitle></CardHeader>
@@ -107,7 +107,7 @@ export default function ComponentsPage() {
 
       <H2>Input</H2>
       <Demo
-        code={`import { Input } from "@myviliha/vui-ui/input";
+        code={`import { Input } from "@viliha/vui-ui/input";
 
 <Input placeholder="you@example.com" />`}
       >
@@ -116,7 +116,7 @@ export default function ComponentsPage() {
 
       <H2>Checkbox</H2>
       <Demo
-        code={`import { Checkbox } from "@myviliha/vui-ui/checkbox";
+        code={`import { Checkbox } from "@viliha/vui-ui/checkbox";
 
 <Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />`}
       >
@@ -132,7 +132,7 @@ export default function ComponentsPage() {
 
       <H2>Select</H2>
       <Demo
-        code={`import { Select } from "@myviliha/vui-ui/select";
+        code={`import { Select } from "@viliha/vui-ui/select";
 
 <Select
   value={value}
@@ -158,7 +158,7 @@ export default function ComponentsPage() {
 
       <H2>Avatar</H2>
       <Demo
-        code={`import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
+        code={`import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
 
 <Avatar><AvatarFallback>SB</AvatarFallback></Avatar>`}
       >
@@ -172,7 +172,7 @@ export default function ComponentsPage() {
 
       <H2>Dropdown</H2>
       <Demo
-        code={`import { Dropdown, DropdownItem, DropdownLabel } from "@myviliha/vui-ui/dropdown-menu";
+        code={`import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 
 <Dropdown label="Actions">
   <DropdownLabel>Manage</DropdownLabel>
@@ -196,7 +196,7 @@ export default function ComponentsPage() {
         <code className="font-mono text-[0.9em]">fields</code> array and mock or real data.
         See it live in the backoffice demo.
       </P>
-      <CodeBlock title="organizations-table.tsx">{`import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
+      <CodeBlock title="organizations-table.tsx">{`import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 
 const fields: RecordField<Org>[] = [
   { key: "name", label: "Name", editable: true, required: true, hideInTable: true },

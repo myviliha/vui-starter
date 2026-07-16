@@ -33,7 +33,7 @@ pnpm check-types    # type-check`}</CodeBlock>
       <H2>Where things live</H2>
       <Ul>
         <li>
-          <code>packages/ui</code> — the <code>@myviliha/vui-ui</code> library
+          <code>packages/ui</code> — the <code>@viliha/vui-ui</code> library
           (edit components + <code>theme.css</code> here).
         </li>
         <li>

@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Installation",
   description:
-    "Install @myviliha/vui-ui and set it up in a new Next.js app, Vite + React, an existing project, or a Turborepo monorepo.",
+    "Install @viliha/vui-ui and set it up in a new Next.js app, Vite + React, an existing project, or a Turborepo monorepo.",
 };
 
 export default function InstallationPage() {
@@ -23,11 +23,11 @@ export default function InstallationPage() {
       <PageTitle
         eyebrow="Getting started"
         title="Installation"
-        lead="@myviliha/vui-ui ships as TypeScript source, so your app's bundler compiles it. Install the package, add Tailwind v4, import the theme, and go."
+        lead="@viliha/vui-ui ships as TypeScript source, so your app's bundler compiles it. Install the package, add Tailwind v4, import the theme, and go."
       />
 
       <H2>Install the package</H2>
-      <CodeBlock title="terminal">{`npm install @myviliha/vui-ui
+      <CodeBlock title="terminal">{`npm install @viliha/vui-ui
 npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
       <P>
         <code className="font-mono text-[0.9em]">react</code> and{" "}
@@ -43,12 +43,12 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
       <CodeBlock title="app/globals.css">{`@import "tailwindcss";
 /* Design tokens, @theme mapping, base reset, and scanning of the
    library's component classes — all in one import. */
-@import "@myviliha/vui-ui/theme.css";`}</CodeBlock>
+@import "@viliha/vui-ui/theme.css";`}</CodeBlock>
       <H3>b. Transpile the source package</H3>
       <CodeBlock title="next.config.ts">{`import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@myviliha/vui-ui"],
+  transpilePackages: ["@viliha/vui-ui"],
 };
 
 export default nextConfig;`}</CodeBlock>
@@ -61,7 +61,7 @@ export default nextConfig;`}</CodeBlock>
       <H2>2 · New Vite + React app</H2>
       <CodeBlock title="terminal">{`npm create vite@latest my-app -- --template react-ts
 cd my-app
-npm install @myviliha/vui-ui
+npm install @viliha/vui-ui
 npm install -D tailwindcss @tailwindcss/vite`}</CodeBlock>
       <CodeBlock title="vite.config.ts">{`import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -69,7 +69,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock>
       <CodeBlock title="src/index.css">{`@import "tailwindcss";
-@import "@myviliha/vui-ui/theme.css";`}</CodeBlock>
+@import "@viliha/vui-ui/theme.css";`}</CodeBlock>
       <P>Vite transpiles the package's TypeScript automatically — no extra config.</P>
 
       <H2>3 · Existing project</H2>
@@ -78,14 +78,14 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock
           Install the package, then confirm you're on <strong>Tailwind CSS v4</strong>.
         </li>
         <li>
-          Add <code className="font-mono text-[0.9em]">@import "@myviliha/vui-ui/theme.css";</code>{" "}
+          Add <code className="font-mono text-[0.9em]">@import "@viliha/vui-ui/theme.css";</code>{" "}
           after <code className="font-mono text-[0.9em]">@import "tailwindcss";</code>.
         </li>
         <li>
           <strong>Next.js:</strong> add{" "}
-          <code className="font-mono text-[0.9em]">transpilePackages: ["@myviliha/vui-ui"]</code>.{" "}
+          <code className="font-mono text-[0.9em]">transpilePackages: ["@viliha/vui-ui"]</code>.{" "}
           <strong>Vite:</strong> nothing extra. <strong>Other bundlers:</strong>{" "}
-          ensure <code className="font-mono text-[0.9em]">node_modules/@myviliha/vui-ui</code> is transpiled.
+          ensure <code className="font-mono text-[0.9em]">node_modules/@viliha/vui-ui</code> is transpiled.
         </li>
         <li>
           Already define shadcn tokens (<code className="font-mono text-[0.9em]">--primary</code>, …)?
@@ -97,12 +97,12 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock
       <P>This is the package's native pattern (it is a Turborepo).</P>
       <CodeBlock title="apps/web/package.json">{`{
   "dependencies": {
-    "@myviliha/vui-ui": "^0.1.0"
+    "@viliha/vui-ui": "^0.1.0"
   }
 }`}</CodeBlock>
       <Ul>
         <li>
-          Add <code className="font-mono text-[0.9em]">transpilePackages: ["@myviliha/vui-ui"]</code>{" "}
+          Add <code className="font-mono text-[0.9em]">transpilePackages: ["@viliha/vui-ui"]</code>{" "}
           to each Next.js app that uses it.
         </li>
         <li>Import the theme once per app's global stylesheet.</li>
@@ -113,8 +113,8 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock
       </Ul>
 
       <H2>Use a component</H2>
-      <CodeBlock title="example.tsx">{`import { Button } from "@myviliha/vui-ui/button";
-import { Badge } from "@myviliha/vui-ui/badge";
+      <CodeBlock title="example.tsx">{`import { Button } from "@viliha/vui-ui/button";
+import { Badge } from "@viliha/vui-ui/badge";
 
 export function Example() {
   return (

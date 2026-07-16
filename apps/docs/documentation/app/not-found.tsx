@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button } from "@myviliha/vui-ui/button";
+import { Button } from "@viliha/vui-ui/button";
 
 export default function NotFound() {
   return (

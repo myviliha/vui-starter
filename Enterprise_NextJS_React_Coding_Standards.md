@@ -17,7 +17,7 @@ for the terse, deterministic rules an AI agent should follow, see
 
 ## Project Structure (this repo)
 
-This is a **Turborepo + pnpm** monorepo. `@myviliha/vui-ui` ships as **TypeScript
+This is a **Turborepo + pnpm** monorepo. `@viliha/vui-ui` ships as **TypeScript
 source** (no build step) — the consuming app transpiles it.
 
 ```text
@@ -32,14 +32,14 @@ apps/
     lib/                 # utils (cn re-export), mock data
   docs/documentation/    # Docs site (:3001)
 packages/
-  ui/                    # @myviliha/vui-ui — the published component library (source)
+  ui/                    # @viliha/vui-ui — the published component library (source)
     src/                 # one file per component, auto-exported via "./*"
   eslint-config/         # shared ESLint
   typescript-config/     # shared tsconfig
 ```
 
 **Rules**
-- New reusable component → `packages/ui/src/<name>.tsx` (auto-exported as `@myviliha/vui-ui/<name>` via the `./*` export map — no manual barrel edit).
+- New reusable component → `packages/ui/src/<name>.tsx` (auto-exported as `@viliha/vui-ui/<name>` via the `./*` export map — no manual barrel edit).
 - New app page → `apps/web/backoffice/app/(app)/<route>/page.tsx`, following the page template documented at docs **`/layout`**.
 - Do **not** introduce a `src/` root or move the package — the monorepo layout is intentional.
 
@@ -94,13 +94,13 @@ hooks (`useState`/`useEffect`/context), event handlers, browser APIs
 - **Layout, section, dialog, menu, and datatable patterns** are documented at
   docs **`/layout`** and **`/data-table`** — follow them so new screens inherit the design.
 - **Naming exception:** `utils.ts` exists on purpose — it re-exports `cn` and is
-  the public `@myviliha/vui-ui/utils` entry. Do not "fix" it. (The general
+  the public `@viliha/vui-ui/utils` entry. Do not "fix" it. (The general
   "avoid `utils.ts`/`helpers.ts` dumping grounds" rule still applies elsewhere.)
 
 ## Imports
 
 - Absolute imports (`@/…`); no deep `../../..` chains.
-- Import library components from their entry point: `@myviliha/vui-ui/<name>`.
+- Import library components from their entry point: `@viliha/vui-ui/<name>`.
 
 ## Error Handling
 
@@ -139,7 +139,7 @@ loads on the routes that import it (recharts is only in `/charts`; cmdk only in
 
 - Unit/logic: **Vitest**. Components: **React Testing Library**. E2E: **Playwright**.
 - Start with pure logic (formatters, resolvers, io helpers) and critical widgets.
-- `packages/ui` has a Vitest setup (`pnpm --filter @myviliha/vui-ui test`).
+- `packages/ui` has a Vitest setup (`pnpm --filter @viliha/vui-ui test`).
 
 ## Tooling
 
@@ -149,10 +149,10 @@ loads on the routes that import it (recharts is only in `/charts`; cmdk only in
 ## Verify gate (run before "done")
 
 ```bash
-pnpm --filter @myviliha/vui-ui check-types
+pnpm --filter @viliha/vui-ui check-types
 pnpm --filter backoffice lint
 pnpm --filter backoffice build          # or the app you touched
-pnpm --filter @myviliha/vui-ui test     # if you changed testable logic
+pnpm --filter @viliha/vui-ui test     # if you changed testable logic
 ```
 
 ## Recommended Stack
@@ -162,7 +162,7 @@ pnpm --filter @myviliha/vui-ui test     # if you changed testable logic
 | Framework     | Next.js App Router         |
 | Language      | TypeScript (strict)        |
 | UI            | React 19 + Tailwind CSS v4 |
-| Components    | shadcn/ui + `@myviliha/vui-ui` |
+| Components    | shadcn/ui + `@viliha/vui-ui` |
 | Charts        | Recharts                   |
 | Data Fetching | TanStack Query             |
 | Validation    | Zod                        |

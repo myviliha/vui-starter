@@ -27,7 +27,7 @@ export default function DataTablePage() {
       />
 
       <H2>Import</H2>
-      <CodeBlock title="terminal">{`import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";`}</CodeBlock>
+      <CodeBlock title="terminal">{`import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";`}</CodeBlock>
       <Note title="One component, many features">
         Editable cells · resizable + auto-sizing columns · sticky header · sort ·
         filter · column show/hide · pagination · row actions (view / edit /
@@ -43,8 +43,8 @@ export default function DataTablePage() {
       </P>
       <CodeBlock title="organizations-table.tsx">{`"use client";
 
-import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
-import { Badge } from "@myviliha/vui-ui/badge";
+import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
+import { Badge } from "@viliha/vui-ui/badge";
 
 type Org = {
   id: number;

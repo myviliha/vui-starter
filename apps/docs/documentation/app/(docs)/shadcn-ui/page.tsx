@@ -39,7 +39,7 @@ export default function ShadcnPage() {
       <Note title="Division of labor">
         Use <strong>shadcn/ui</strong> for general UI (buttons, inputs, forms,
         dialogs, tabs, popovers, …). Use{" "}
-        <strong>@myviliha/vui-ui</strong>'s <code>RecordView</code> for the
+        <strong>@viliha/vui-ui</strong>'s <code>RecordView</code> for the
         datatable (editable cells, import/export, add/edit form) — that's the one
         piece shadcn doesn't provide.
       </Note>
@@ -54,7 +54,7 @@ export default function ShadcnPage() {
       <H3>1. Import the Vui theme</H3>
       <P>This provides all the tokens shadcn expects, plus Vui's baseline.</P>
       <CodeBlock title="app/globals.css">{`@import "tailwindcss";
-@import "@myviliha/vui-ui/theme.css";`}</CodeBlock>
+@import "@viliha/vui-ui/theme.css";`}</CodeBlock>
 
       <H3>2. Initialize shadcn/ui</H3>
       <CodeBlock title="terminal">{`npx shadcn@latest init`}</CodeBlock>
@@ -150,7 +150,7 @@ export function SignupForm() {
           <code className="font-mono text-[0.9em]">
             &lt;Button variant="primary" /&gt;
           </code>{" "}
-          from <code className="font-mono text-[0.9em]">@myviliha/vui-ui/button</code>,
+          from <code className="font-mono text-[0.9em]">@viliha/vui-ui/button</code>,
           or point shadcn's button at the{" "}
           <code className="font-mono text-[0.9em]">--button-primary</code> token.
         </li>

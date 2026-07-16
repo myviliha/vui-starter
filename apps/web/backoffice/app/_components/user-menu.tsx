@@ -9,8 +9,8 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 
-import { Avatar, AvatarFallback } from "@myviliha/vui-ui/avatar";
-import { MenuItem } from "@myviliha/vui-ui/menu";
+import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
+import { MenuItem } from "@viliha/vui-ui/menu";
 import { ThemeToggle } from "./theme-toggle";
 
 // ponytail: no auth in the demo — mock the signed-in user. Swap for the real

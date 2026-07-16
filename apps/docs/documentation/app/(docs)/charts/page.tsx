@@ -40,13 +40,13 @@ export default function ChartsPage() {
       <CodeBlock title="terminal">{`npm install recharts`}</CodeBlock>
       <Note title="Monorepo">
         In this repo Recharts is already a dependency of{" "}
-        <code>@myviliha/vui-ui</code> and the backoffice app — no install needed.
+        <code>@viliha/vui-ui</code> and the backoffice app — no install needed.
       </Note>
 
       <H2>The wrapper</H2>
       <P>
         Import the themed pieces from{" "}
-        <code>@myviliha/vui-ui/chart</code> and the chart primitives (AreaChart,
+        <code>@viliha/vui-ui/chart</code> and the chart primitives (AreaChart,
         Bar, XAxis, …) straight from <code>recharts</code>.
       </P>
       <Ul>
@@ -78,7 +78,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@myviliha/vui-ui/chart";
+} from "@viliha/vui-ui/chart";
 
 const data = [
   { month: "Jan", revenue: 18600 },
@@ -128,7 +128,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@myviliha/vui-ui/chart";
+} from "@viliha/vui-ui/chart";
 
 const data = [
   { name: "Direct", value: 4200, color: "var(--chart-1)" },

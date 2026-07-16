@@ -7,7 +7,7 @@ import {
   SewingPinFilledIcon as MapPin,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@myviliha/vui-ui/record-view";
+import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { markets, type Market } from "@/lib/mock-data";
 
 function formatCenter(market: Market): string {

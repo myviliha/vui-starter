@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
-import { Button } from "@myviliha/vui-ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@myviliha/vui-ui/card";
+import { Button } from "@viliha/vui-ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@viliha/vui-ui/card";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
 
 export const metadata: Metadata = {
   title: "Introduction",
   description:
-    "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@myviliha/vui-ui) plus a full backoffice demo.",
+    "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
 };
 
 const features = [
@@ -37,7 +37,7 @@ export default function IntroductionPage() {
       <PageTitle
         eyebrow="Getting started"
         title="Vui Starter"
-        lead="A free, open-source admin & CRM design system for React — a clean, token-driven component library (@myviliha/vui-ui) plus a full backoffice demo you can clone and run."
+        lead="A free, open-source admin & CRM design system for React — a clean, token-driven component library (@viliha/vui-ui) plus a full backoffice demo you can clone and run."
       />
 
       <div className="mb-10 flex flex-wrap gap-3">
@@ -55,14 +55,14 @@ export default function IntroductionPage() {
       <H2>Overview</H2>
       <P>
         Vui Starter is both a <strong>library</strong> — published to npm as{" "}
-        <code className="font-mono text-[0.9em]">@myviliha/vui-ui</code> — and a{" "}
+        <code className="font-mono text-[0.9em]">@viliha/vui-ui</code> — and a{" "}
         <strong>reference app</strong> that shows every component in a real admin
         UI. Everything runs on in-memory mock data, so you can clone and run it
         with zero backend.
       </P>
 
       <H2>Install</H2>
-      <CodeBlock title="terminal">{`npm install @myviliha/vui-ui`}</CodeBlock>
+      <CodeBlock title="terminal">{`npm install @viliha/vui-ui`}</CodeBlock>
       <P>
         Then import the design tokens once and start using components. See{" "}
         <Link href="/installation" className="font-medium underline underline-offset-4">

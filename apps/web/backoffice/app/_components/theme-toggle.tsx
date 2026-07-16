@@ -6,7 +6,7 @@ import {
   SunIcon as Sun,
 } from "@radix-ui/react-icons";
 
-import { Button } from "@myviliha/vui-ui/button";
+import { Button } from "@viliha/vui-ui/button";
 
 /** Reads/writes the `.dark` class on <html> and persists the choice. */
 export function ThemeToggle() {

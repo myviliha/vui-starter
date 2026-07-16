@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MagnifyingGlassIcon as Search } from "@radix-ui/react-icons";
 
-import { Button } from "@myviliha/vui-ui/button";
+import { Button } from "@viliha/vui-ui/button";
 
 export default function NotFound() {
   return (

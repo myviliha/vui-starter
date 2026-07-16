@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon as ArrowLeft, LockClosedIcon as Shield } from "@radix-ui/react-icons";
 
-import { Button } from "@myviliha/vui-ui/button";
+import { Button } from "@viliha/vui-ui/button";
 import { IconBadge } from "@/app/_components/auth";
 import {
   InputOTP,

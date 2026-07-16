@@ -10,9 +10,9 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Button } from "@myviliha/vui-ui/button";
-import { Input } from "@myviliha/vui-ui/input";
-import { usePageChrome } from "@myviliha/vui-ui/record-view";
+import { Button } from "@viliha/vui-ui/button";
+import { Input } from "@viliha/vui-ui/input";
+import { usePageChrome } from "@viliha/vui-ui/record-view";
 
 import { SidebarToggle } from "@/app/_components/app-sidebar";
 import { UserMenu } from "@/app/_components/user-menu";

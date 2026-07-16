@@ -1,6 +1,6 @@
 "use client";
 
-import { type IconType, usePageTitle } from "@myviliha/vui-ui/record-view";
+import { type IconType, usePageTitle } from "@viliha/vui-ui/record-view";
 
 /** Registers a page's title/icon into the global top bar (clears on unmount). */
 export function SetPageTitle({
