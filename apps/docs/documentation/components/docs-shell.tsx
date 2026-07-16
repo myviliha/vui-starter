@@ -29,7 +29,10 @@ const NAV: NavGroup[] = [
   },
   {
     title: "Reference",
-    items: [{ label: "Components", href: "/components" }],
+    items: [
+      { label: "Components", href: "/components" },
+      { label: "Charts", href: "/charts" },
+    ],
   },
   {
     title: "Community",

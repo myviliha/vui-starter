@@ -3,6 +3,7 @@
 
 export const SEGMENT_LABELS: Record<string, string> = {
   "": "Home",
+  charts: "Charts",
   organizations: "Organizations",
   branches: "Branches",
   departments: "Departments",
@@ -25,6 +26,7 @@ export const SEGMENT_LABELS: Record<string, string> = {
 /** Full pathname → icon color (Tailwind text-* class). */
 export const ROUTE_COLORS: Record<string, string> = {
   "/": "text-blue-500",
+  "/charts": "text-fuchsia-500",
   "/organizations": "text-blue-500",
   "/branches": "text-violet-500",
   "/departments": "text-amber-500",
@@ -46,6 +48,7 @@ export const ROUTE_COLORS: Record<string, string> = {
  * shared components like tables can tint their icons per module). */
 export const ROUTE_ACCENT: Record<string, string> = {
   "/": "#3b82f6",
+  "/charts": "#d946ef",
   "/organizations": "#3b82f6",
   "/branches": "#8b5cf6",
   "/departments": "#f59e0b",

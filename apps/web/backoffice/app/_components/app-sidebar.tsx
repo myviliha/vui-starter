@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BackpackIcon as Briefcase,
+  BarChartIcon as BarChart3,
   BookmarkIcon as Flag,
   CaretSortIcon as ChevronsUpDown,
   ChevronRightIcon as ChevronRight,
@@ -53,7 +54,10 @@ function isGroup(entry: NavEntry): entry is NavGroup {
 
 const NAV: NavSection[] = [
   {
-    items: [{ label: "Home", href: "/", icon: Home, color: "text-blue-500" }],
+    items: [
+      { label: "Home", href: "/", icon: Home, color: "text-blue-500" },
+      { label: "Charts", href: "/charts", icon: BarChart3, color: "text-fuchsia-500" },
+    ],
   },
   {
     title: "Records",

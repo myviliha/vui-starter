@@ -215,7 +215,7 @@ const fields: RecordField<Org>[] = [
 
       <DocPager
         prev={{ label: "Theming", href: "/theming" }}
-        next={{ label: "Contributing", href: "/contributing" }}
+        next={{ label: "Charts", href: "/charts" }}
       />
     </article>
   );

@@ -45,6 +45,9 @@ with zero backend.
   sticky header, sort/filter/column toggle, pagination, row actions
   (view/edit/delete), required-field markers, a buffered Add/Edit form panel,
   and **CSV / JSON / Excel / PDF import & export**.
+- **Themed charts** — area, bar, line and donut charts built on
+  [Recharts](https://recharts.org), driven by the `--chart-*` tokens so they
+  match your theme and dark mode with no per-chart styling.
 - **App shell** — collapsible, colored-icon sidebar with nested groups; aligned
   page headers; light/dark theme.
 - **Ships as TypeScript source** — no build step, tree-shakeable, and your app’s
@@ -235,9 +238,10 @@ Dark mode: add the `dark` class to `<html>` (the tokens ship a `.dark` block).
 
 ## Components
 
-`avatar` · `badge` · `button` · `card` · `checkbox` · `dropdown-menu` ·
-`input` · `select` · `table` · `record-view` (the full datatable) · plus the
-`utils` (`cn`) helper and the `theme.css` design tokens.
+`avatar` · `badge` · `button` · `card` · `chart` (themed Recharts wrapper) ·
+`checkbox` · `confirm-dialog` · `dropdown-menu` · `input` · `select` · `table` ·
+`record-view` (the full datatable) · plus the `utils` (`cn`) helper and the
+`theme.css` design tokens.
 
 ---
 
