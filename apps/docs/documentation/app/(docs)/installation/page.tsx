@@ -11,7 +11,11 @@ import {
   Ul,
 } from "@/components/doc";
 
-export const metadata: Metadata = { title: "Installation" };
+export const metadata: Metadata = {
+  title: "Installation",
+  description:
+    "Install @myviliha/vui-ui and set it up in a new Next.js app, Vite + React, an existing project, or a Turborepo monorepo.",
+};
 
 export default function InstallationPage() {
   return (

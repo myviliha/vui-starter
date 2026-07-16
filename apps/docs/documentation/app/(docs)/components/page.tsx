@@ -120,8 +120,9 @@ export default function ComponentsPage() {
 
 <Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />`}
       >
-        <label className="flex items-center gap-2 text-sm">
+        <label htmlFor="demo-notify" className="flex items-center gap-2 text-sm">
           <Checkbox
+            id="demo-notify"
             checked={checked}
             onChange={(e) => setChecked(e.target.checked)}
           />

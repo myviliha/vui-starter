@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 
 import { CodeBlock, DocPager, H2, P, PageTitle, Ul } from "@/components/doc";
 
-export const metadata: Metadata = { title: "Contributing" };
+export const metadata: Metadata = {
+  title: "Contributing",
+  description:
+    "Contribute to Vui Starter — local setup, useful scripts, where things live, and the pull-request workflow.",
+};
 
 export default function ContributingPage() {
   return (

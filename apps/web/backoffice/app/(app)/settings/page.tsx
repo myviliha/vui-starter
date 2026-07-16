@@ -209,24 +209,36 @@ export default function SettingsPage() {
             description="Pick what you want to hear about."
           >
             <div className="space-y-3">
-              <label className="flex items-center gap-2 text-sm">
+              <label
+                htmlFor="notify-email"
+                className="flex items-center gap-2 text-sm"
+              >
                 <Checkbox
+                  id="notify-email"
                   checked={notifyEmail}
                   onChange={(e) => setNotifyEmail(e.target.checked)}
                 />
                 <BellIcon className="size-3.5 text-muted-foreground" />
                 Email notifications
               </label>
-              <label className="flex items-center gap-2 text-sm">
+              <label
+                htmlFor="notify-desktop"
+                className="flex items-center gap-2 text-sm"
+              >
                 <Checkbox
+                  id="notify-desktop"
                   checked={notifyDesktop}
                   onChange={(e) => setNotifyDesktop(e.target.checked)}
                 />
                 <DesktopIcon className="size-3.5 text-muted-foreground" />
                 Desktop notifications
               </label>
-              <label className="flex items-center gap-2 text-sm">
+              <label
+                htmlFor="notify-weekly"
+                className="flex items-center gap-2 text-sm"
+              >
                 <Checkbox
+                  id="notify-weekly"
                   checked={notifyWeekly}
                   onChange={(e) => setNotifyWeekly(e.target.checked)}
                 />

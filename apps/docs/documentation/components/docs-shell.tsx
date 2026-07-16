@@ -25,7 +25,7 @@ const NAV: NavGroup[] = [
   },
   {
     title: "Guides",
-    items: [{ label: "Using shadcn/ui", href: "/shadcn" }],
+    items: [{ label: "Using shadcn/ui", href: "/shadcn-ui" }],
   },
   {
     title: "Reference",

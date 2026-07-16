@@ -4,9 +4,11 @@ import { nextJsConfig } from "@repo/eslint-config/next-js";
 export default [
   ...nextJsConfig,
   {
-    files: ["components/ui/**/*.{ts,tsx}"],
+    // Docs prose contains apostrophes/quotes and inline code samples in JSX
+    // text; escaping every one adds noise without value on a docs site.
+    files: ["app/**/*.{ts,tsx}"],
     rules: {
-      "react/prop-types": "off",
+      "react/no-unescaped-entities": "off",
     },
   },
 ];

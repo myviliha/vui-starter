@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@myviliha/vui-ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@myviliha/vui-ui/card";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
+
+export const metadata: Metadata = {
+  title: "Introduction",
+  description:
+    "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@myviliha/vui-ui) plus a full backoffice demo.",
+};
 
 const features = [
   {

@@ -14,12 +14,29 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vui-starter.dev"),
   title: {
-    default: "Vui Starter — Docs",
+    default: "Vui Starter — React Admin & CRM Design System",
     template: "%s · Vui Starter",
   },
   description:
-    "Documentation for Vui Starter and @myviliha/vui-ui — a token-driven React admin/CRM design system on Tailwind CSS v4.",
+    "Vui Starter is a free, open-source React admin & CRM design system built on Tailwind CSS v4, shadcn/ui and Radix Icons — install @myviliha/vui-ui and ship faster.",
+  keywords: [
+    "react admin template",
+    "tailwind css admin",
+    "shadcn ui",
+    "crm design system",
+    "react component library",
+    "next.js admin dashboard",
+    "vui starter",
+  ],
+  openGraph: {
+    title: "Vui Starter — React Admin & CRM Design System",
+    description:
+      "A free, open-source React admin & CRM design system on Tailwind CSS v4, shadcn/ui and Radix Icons.",
+    siteName: "Vui Starter",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
