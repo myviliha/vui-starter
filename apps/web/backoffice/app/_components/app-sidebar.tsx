@@ -21,6 +21,8 @@ import {
   HomeIcon as Landmark,
   IdCardIcon as Contact,
   LayersIcon as Layers,
+  MixIcon as Blocks,
+  Pencil2Icon as FormInput,
   PersonIcon as Users,
   SewingPinFilledIcon as MapPin,
   Share2Icon as Network,
@@ -57,6 +59,13 @@ const NAV: NavSection[] = [
     items: [
       { label: "Home", href: "/", icon: Home, color: "text-blue-500" },
       { label: "Charts", href: "/charts", icon: BarChart3, color: "text-fuchsia-500" },
+    ],
+  },
+  {
+    title: "shadcn/ui",
+    items: [
+      { label: "Components", href: "/components", icon: Blocks, color: "text-indigo-500" },
+      { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
     ],
   },
   {

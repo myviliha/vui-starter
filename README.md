@@ -48,6 +48,10 @@ with zero backend.
 - **Themed charts** — area, bar, line and donut charts built on
   [Recharts](https://recharts.org), driven by the `--chart-*` tokens so they
   match your theme and dark mode with no per-chart styling.
+- **Drop-in shadcn/ui** — ~35 unmodified shadcn components adopt the theme
+  automatically (they read the same tokens). See them live at `/components`, and
+  a fully-validated shadcn Form (React Hook Form + Zod, every field type) at
+  `/forms`.
 - **App shell** — collapsible, colored-icon sidebar with nested groups; aligned
   page headers; light/dark theme.
 - **Ships as TypeScript source** — no build step, tree-shakeable, and your app’s

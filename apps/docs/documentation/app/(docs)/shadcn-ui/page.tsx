@@ -43,6 +43,12 @@ export default function ShadcnPage() {
         datatable (editable cells, import/export, add/edit form) — that's the one
         piece shadcn doesn't provide.
       </Note>
+      <Note title="See it live">
+        The backoffice demo has ~35 unmodified shadcn components at{" "}
+        <code>/components</code> and a fully-validated shadcn Form (every field
+        type + Zod) at <code>/forms</code> — all themed by <code>theme.css</code>{" "}
+        with zero overrides.
+      </Note>
 
       <H2>Setup</H2>
       <H3>1. Import the Vui theme</H3>
@@ -61,8 +67,9 @@ export default function ShadcnPage() {
           <strong>CSS variables:</strong> Yes
         </li>
         <li>
-          <strong>Icon library:</strong> Radix (Vui uses{" "}
-          <code className="font-mono text-[0.9em]">@radix-ui/react-icons</code>)
+          <strong>Icon library:</strong> Lucide (shadcn&apos;s{" "}
+          <code className="font-mono text-[0.9em]">new-york</code> components ship
+          with Lucide icons baked in — see the Icons note below)
         </li>
       </Ul>
       <P>
@@ -79,7 +86,7 @@ export default function ShadcnPage() {
     "baseColor": "neutral",
     "cssVariables": true
   },
-  "iconLibrary": "radix",
+  "iconLibrary": "lucide",
   "aliases": { "components": "@/components", "utils": "@/lib/utils" }
 }`}</CodeBlock>
 
@@ -152,8 +159,14 @@ export function SignupForm() {
           shadcn and Vui components switch together.
         </li>
         <li>
-          <strong>Icons:</strong> keep the whole app on Radix Icons so shadcn and
-          Vui components match.
+          <strong>Icons:</strong> shadcn&apos;s <code className="font-mono text-[0.9em]">new-york</code>{" "}
+          components ship with <strong>Lucide</strong> icons internally (the
+          chevron in Select, the check in Checkbox, …) — leave them as-is. Vui&apos;s
+          global &quot;icon chip&quot; rule targets{" "}
+          <code className="font-mono text-[0.9em]">svg[width=&quot;15&quot;]</code>{" "}
+          (Radix Icons), so Lucide&apos;s icons pass through untouched and stay
+          clean. Use <strong>@radix-ui/react-icons</strong> for your own app
+          chrome (nav, page headers) to get the bordered-chip treatment.
         </li>
       </Ul>
 
