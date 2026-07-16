@@ -42,6 +42,31 @@ export const ROUTE_COLORS: Record<string, string> = {
   "/settings": "text-slate-500",
 };
 
+/** Full pathname → raw accent color (drives the --page-accent CSS variable so
+ * shared components like tables can tint their icons per module). */
+export const ROUTE_ACCENT: Record<string, string> = {
+  "/": "#3b82f6",
+  "/organizations": "#3b82f6",
+  "/branches": "#8b5cf6",
+  "/departments": "#f59e0b",
+  "/employees": "#06b6d4",
+  "/markets": "#f43f5e",
+  "/businesses": "#10b981",
+  "/crm/companies": "#3b82f6",
+  "/crm/people": "#0ea5e9",
+  "/crm/opportunities": "#f97316",
+  "/system/regions": "#14b8a6",
+  "/system/countries": "#ef4444",
+  "/system/cities": "#f59e0b",
+  "/system/currencies": "#22c55e",
+  "/system/languages": "#a855f7",
+  "/settings": "#64748b",
+};
+
+export function accentFor(pathname: string): string {
+  return ROUTE_ACCENT[pathname] ?? "";
+}
+
 export function labelFor(segment: string): string {
   return (
     SEGMENT_LABELS[segment] ??

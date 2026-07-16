@@ -3,6 +3,8 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 
+import { accentFor } from "@/app/_components/route-meta";
+
 /** Thin top progress bar that animates on each route change. */
 export function RouteProgress() {
   const pathname = usePathname();
@@ -35,8 +37,13 @@ export function RouteProgress() {
 /** Re-mounts + fades page content on navigation for a smooth transition. */
 export function PageFade({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const accent = accentFor(pathname);
   return (
-    <div key={pathname} className="vui-fade-in h-full">
+    <div
+      key={pathname}
+      className="vui-fade-in h-full"
+      style={accent ? ({ "--page-accent": accent } as React.CSSProperties) : undefined}
+    >
       {children}
     </div>
   );

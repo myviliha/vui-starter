@@ -33,6 +33,8 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  /* Per-page accent (overridden by the app per route) — tints module icons. */
+  --page-accent: var(--muted-foreground);
   /* Text highlight (::selection) */
   --selection: #266df0;
   --selection-foreground: #ffffff;

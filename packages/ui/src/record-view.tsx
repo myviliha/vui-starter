@@ -856,9 +856,9 @@ export function RecordView<T extends { id: RowId }>({
               <TableHead className="relative w-max" style={{ width: colWidths[NAME_COL] }}>
                 <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
                   {TitleIcon ? (
-                    <TitleIcon className="size-3.5 shrink-0" />
+                    <TitleIcon className="size-3.5 shrink-0 text-[var(--page-accent)]" />
                   ) : (
-                    <DEFAULT_FIELD_ICON className="size-3.5 shrink-0" />
+                    <DEFAULT_FIELD_ICON className="size-3.5 shrink-0 text-[var(--page-accent)]" />
                   )}
                   Name
                 </span>
@@ -877,7 +877,7 @@ export function RecordView<T extends { id: RowId }>({
                       onClick={() => toggleSort(f.key)}
                       className="flex h-8 items-center gap-1.5 whitespace-nowrap hover:text-foreground"
                     >
-                      <HeadIcon className="size-3.5 shrink-0" />
+                      <HeadIcon className="size-3.5 shrink-0 text-[var(--page-accent)]" />
                       <span className="flex items-center gap-1 whitespace-nowrap">
                         {f.label}
                         {f.required && <RequiredMark />}
