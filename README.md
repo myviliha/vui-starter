@@ -217,7 +217,7 @@ All design decisions live in **`@myviliha/vui-ui/theme.css`** as CSS variables:
   --primary: oklch(0.205 0 0);
   --radius: 0.625rem;
   --selection: #266df0;
-  --button-primary: #266df0;        /* Attio-style primary button */
+  --button-primary: #266df0;        /* brand primary button */
   /* …neutral palette, chart + sidebar tokens, dark-mode overrides… */
 }
 ```

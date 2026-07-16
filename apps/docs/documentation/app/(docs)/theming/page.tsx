@@ -56,7 +56,7 @@ export default function ThemingPage() {
         </li>
         <li>
           <strong>Actions</strong> — <code>--primary</code>,{" "}
-          <code>--destructive</code>, and the Attio-style{" "}
+          <code>--destructive</code>, and the brand{" "}
           <code>--button-primary</code> / <code>--button-primary-hover</code> /{" "}
           <code>--button-shadow</code>.
         </li>
@@ -125,7 +125,7 @@ export default function ThemingPage() {
   --primary: oklch(0.205 0 0);
   --radius: 0.625rem;
   --selection: #266df0;
-  --button-primary: #266df0;        /* Attio-style primary button */
+  --button-primary: #266df0;        /* brand primary button */
   /* …neutral palette, chart + sidebar tokens… */
 }`}</CodeBlock>
 

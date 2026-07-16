@@ -146,7 +146,7 @@ export function SignupForm() {
           <strong>Primary button:</strong> shadcn's default{" "}
           <code className="font-mono text-[0.9em]">Button</code> uses{" "}
           <code className="font-mono text-[0.9em]">--primary</code> (neutral). For
-          the Attio-style blue, use Vui's{" "}
+          the brand blue, use Vui's{" "}
           <code className="font-mono text-[0.9em]">
             &lt;Button variant="primary" /&gt;
           </code>{" "}

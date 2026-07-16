@@ -15,7 +15,7 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.177 0 0); /* #101112 — global text color (Attio) */
+  --foreground: oklch(0.177 0 0); /* #101112 — global text color */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -38,7 +38,7 @@
   /* Text highlight (::selection) */
   --selection: #266df0;
   --selection-foreground: #ffffff;
-  /* Attio-style primary action button */
+  /* brand primary action button */
   --button-primary: #266df0;
   --button-primary-hover: #215bc4;
   --button-primary-foreground: #ffffff;
@@ -168,7 +168,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     min-height: 100vh;
-    /* Global type baseline (Attio): Inter 14px / medium, with ligatures. */
+    /* Global type baseline: Inter 14px / medium, with ligatures. */
     font-size: 14px;
     font-weight: 500;
     font-feature-settings: "calt", "liga";

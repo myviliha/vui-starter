@@ -36,7 +36,6 @@ const fields: RecordField<DemoOrganization>[] = [
     key: "branches",
     label: "Branches",
     icon: Network,
-    align: "right",
     group: "System",
     render: (row) => <span className="tabular-nums">{row.branches}</span>,
   },
@@ -44,7 +43,6 @@ const fields: RecordField<DemoOrganization>[] = [
     key: "employees",
     label: "Employees",
     icon: Users,
-    align: "right",
     group: "System",
     render: (row) => (
       <span className="tabular-nums">{row.employees.toLocaleString()}</span>

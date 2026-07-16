@@ -44,7 +44,7 @@ export default function ComponentsPage() {
       />
 
       <H2>Button</H2>
-      <P>Seven variants and four sizes. The primary variant uses the Attio-style blue.</P>
+      <P>Seven variants and four sizes. The primary variant uses the brand blue.</P>
       <Demo
         code={`import { Button } from "@myviliha/vui-ui/button";
 
@@ -214,8 +214,8 @@ const fields: RecordField<Org>[] = [
 />`}</CodeBlock>
 
       <DocPager
-        prev={{ label: "Theming", href: "/theming" }}
-        next={{ label: "Charts", href: "/charts" }}
+        prev={{ label: "Using shadcn/ui", href: "/shadcn-ui" }}
+        next={{ label: "Data table", href: "/data-table" }}
       />
     </article>
   );

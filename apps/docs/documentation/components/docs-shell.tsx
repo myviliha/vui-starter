@@ -34,6 +34,7 @@ const NAV: NavGroup[] = [
     title: "Reference",
     items: [
       { label: "Components", href: "/components" },
+      { label: "Data table", href: "/data-table" },
       { label: "Charts", href: "/charts" },
     ],
   },

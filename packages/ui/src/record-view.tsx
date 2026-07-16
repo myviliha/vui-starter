@@ -68,8 +68,56 @@ const PAGE_SIZES = [10, 25, 50, 100] as const;
 /** Fallback column-header icon so every column title shows an icon. */
 const DEFAULT_FIELD_ICON = Circle;
 
+type ColAlign = "left" | "center" | "right";
+
+/** Flexbox + text classes per alignment (for the cell content wrapper). */
+const ALIGN_BOX: Record<ColAlign, string> = {
+  left: "",
+  center: "justify-center text-center",
+  right: "justify-end text-right",
+};
+/** Text-align only (for inputs / render wrappers). */
+const ALIGN_TEXT: Record<ColAlign, string> = {
+  left: "",
+  center: "text-center",
+  right: "text-right",
+};
+
+/**
+ * Auto-align columns from their data: numeric columns and short codes
+ * (all values ≤ 4 chars, e.g. "USD", "EN") center; everything else stays left.
+ * An explicit `field.align` always wins.
+ */
+function computeColumnAligns<T extends { id: RowId }>(
+  fields: RecordField<T>[],
+  data: T[],
+): Record<string, ColAlign> {
+  const map: Record<string, ColAlign> = {};
+  for (const f of fields) {
+    if (f.align) {
+      map[f.key] = f.align;
+      continue;
+    }
+    const vals = data
+      .map((r) => r[f.key])
+      .filter((v) => v !== null && v !== undefined && String(v).trim() !== "");
+    if (vals.length === 0) {
+      map[f.key] = "left";
+      continue;
+    }
+    const allNumeric = vals.every(
+      (v) =>
+        typeof v === "number" ||
+        (typeof v === "string" && !Number.isNaN(Number(v))),
+    );
+    const allShort = vals.every((v) => String(v).trim().length <= 4);
+    map[f.key] = allNumeric || allShort ? "center" : "left";
+  }
+  return map;
+}
+
 function fieldDefaultWidth<T>(field: RecordField<T>): number {
-  return field.width ?? (field.align === "right" ? 110 : 160);
+  return field.width ?? (field.align && field.align !== "left" ? 110 : 160);
 }
 
 /** Shared icon component type (all Radix icons share this shape). */
@@ -146,7 +194,9 @@ export interface RecordField<T> {
   editable?: boolean;
   /** Mark the field mandatory — shows a `*` next to its label. */
   required?: boolean;
-  align?: "left" | "right";
+  /** Column alignment. Omit to auto-align: numbers and short codes (≤ 4 chars)
+   *  center, everything else stays left. Set explicitly to override. */
+  align?: "left" | "center" | "right";
   group?: FieldGroup;
   /** Initial column width in px (user-resizable via the header handle). */
   width?: number;
@@ -563,11 +613,21 @@ export function RecordView<T extends { id: RowId }>({
     processed.length > 0 && selected.size === processed.length;
   // Choice fields (with `options`) power the "Set …" bulk actions.
   const bulkFields = fields.filter((f) => f.options && f.options.length > 0);
+  // Per-column alignment (auto: numbers + short codes center).
+  const columnAligns = React.useMemo(
+    () => computeColumnAligns(fields, initialData),
+    [fields, initialData],
+  );
+  const alignOf = (key: string): ColAlign => columnAligns[key] ?? "left";
 
   function renderCellValue(row: T, field: RecordField<T>) {
     const isEditing = editing?.id === row.id && editing.key === field.key;
     if (field.render) {
-      return <div className="px-3 py-1.5">{field.render(row)}</div>;
+      return (
+        <div className={cn("px-3 py-1.5", ALIGN_TEXT[alignOf(field.key)])}>
+          {field.render(row)}
+        </div>
+      );
     }
     if (isEditing) {
       return (
@@ -583,7 +643,7 @@ export function RecordView<T extends { id: RowId }>({
           aria-label={`Edit ${field.label}`}
           className={cn(
             "h-8 w-full bg-background px-3 outline-none ring-2 ring-inset ring-ring",
-            field.align === "right" && "text-right",
+            ALIGN_TEXT[alignOf(field.key)],
           )}
         />
       );
@@ -636,7 +696,7 @@ export function RecordView<T extends { id: RowId }>({
             onClick={() => startEdit(row, field.key)}
             className={cn(
               "flex h-8 w-full items-center overflow-hidden px-3 text-left hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
-              field.align === "right" && "justify-end text-right",
+              ALIGN_BOX[alignOf(field.key)],
             )}
           >
             <span className="truncate">
@@ -651,7 +711,7 @@ export function RecordView<T extends { id: RowId }>({
       <div
         className={cn(
           "group/cell relative flex h-8 items-center px-3",
-          field.align === "right" && "justify-end text-right",
+          ALIGN_BOX[alignOf(field.key)],
         )}
       >
         <span className="truncate">{value}</span>
@@ -943,7 +1003,10 @@ export function RecordView<T extends { id: RowId }>({
                     <button
                       type="button"
                       onClick={() => toggleSort(f.key)}
-                      className="flex h-8 items-center gap-1.5 whitespace-nowrap hover:text-foreground"
+                      className={cn(
+                        "flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground",
+                        ALIGN_BOX[alignOf(f.key)],
+                      )}
                     >
                       <HeadIcon className="size-3.5 shrink-0 text-[var(--page-accent)]" />
                       <span className="flex items-center gap-1 whitespace-nowrap">
