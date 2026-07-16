@@ -4,6 +4,7 @@ import {
   BookmarkIcon as Flag,
   CheckCircledIcon as BadgeCheck,
   CubeIcon as Building,
+  ExclamationTriangleIcon as AlertTriangle,
   CubeIcon as Building2,
   DashboardIcon as LayoutGrid,
   EnterIcon as LogIn,
@@ -61,6 +62,8 @@ export const NAV: NavSection[] = [
           { label: "Forgot password", href: "/auth/forgot-password", icon: HelpCircle, color: "text-amber-500" },
           { label: "Reset password", href: "/auth/reset-password", icon: Lock, color: "text-violet-500" },
           { label: "Verify code", href: "/auth/verify", icon: BadgeCheck, color: "text-teal-500" },
+          // Links to a non-existent path so it renders the real 404 (not-found.tsx).
+          { label: "404 page", href: "/404", icon: AlertTriangle, color: "text-slate-500" },
         ],
       },
     ],
