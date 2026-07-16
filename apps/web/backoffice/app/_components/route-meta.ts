@@ -72,13 +72,10 @@ export const ROUTE_ACCENT: Record<string, string> = {
   "/settings": "#64748b",
 };
 
-/** Group parents that have no index page of their own — a breadcrumb for one
- * of these links to its first child (mirroring the sidebar) instead of a dead
- * URL that would 404. */
-export const SECTION_INDEX: Record<string, string> = {
-  "/crm": "/crm/companies",
-  "/system": "/system/regions",
-};
+// Group-parent → first-child map is derived automatically from the nav config
+// (see nav-config.ts), so breadcrumbs never need per-section wiring here.
+export { SECTION_INDEX } from "./nav-config";
+import { SECTION_INDEX } from "./nav-config";
 
 export function accentFor(pathname: string): string {
   return ROUTE_ACCENT[pathname] ?? "";

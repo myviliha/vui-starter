@@ -4,106 +4,23 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BackpackIcon as Briefcase,
-  BarChartIcon as BarChart3,
-  BookmarkIcon as Flag,
   CaretSortIcon as ChevronsUpDown,
   ChevronRightIcon as ChevronRight,
   Cross2Icon as X,
-  CubeIcon as Building,
-  CubeIcon as Building2,
-  DashboardIcon as LayoutGrid,
   GearIcon as Settings,
-  GlobeIcon as Globe,
   HamburgerMenuIcon as Menu,
   HomeIcon as Home,
-  HomeIcon as Landmark,
-  IdCardIcon as Contact,
-  LayersIcon as Layers,
-  MixIcon as Blocks,
-  Pencil2Icon as FormInput,
-  PersonIcon as Users,
-  SewingPinFilledIcon as MapPin,
-  Share2Icon as Network,
-  StackIcon as Server,
-  TargetIcon as Target,
-  TextIcon as Languages,
-  TokensIcon as Coins,
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
-
-/** Shared icon component type (all Radix icons share this shape). */
-type IconType = typeof Home;
-type NavLink = { label: string; href: string; icon: IconType; color?: string };
-/** A collapsible parent with nested links (a "subsection"). */
-type NavGroup = {
-  label: string;
-  icon: IconType;
-  color?: string;
-  children: NavLink[];
-};
-type NavEntry = NavLink | NavGroup;
-type NavSection = { title?: string; items: NavEntry[] };
-
-function isGroup(entry: NavEntry): entry is NavGroup {
-  return (entry as NavGroup).children !== undefined;
-}
-
-const NAV: NavSection[] = [
-  {
-    items: [
-      { label: "Home", href: "/", icon: Home, color: "text-blue-500" },
-      { label: "Charts", href: "/charts", icon: BarChart3, color: "text-fuchsia-500" },
-    ],
-  },
-  {
-    title: "shadcn/ui",
-    items: [
-      { label: "Components", href: "/components", icon: Blocks, color: "text-indigo-500" },
-      { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
-    ],
-  },
-  {
-    title: "Records",
-    items: [
-      { label: "Organizations", href: "/organizations", icon: Building2, color: "text-blue-500" },
-      { label: "Branches", href: "/branches", icon: Network, color: "text-violet-500" },
-      { label: "Departments", href: "/departments", icon: LayoutGrid, color: "text-amber-500" },
-      { label: "Employees", href: "/employees", icon: Users, color: "text-cyan-500" },
-      { label: "Markets", href: "/markets", icon: MapPin, color: "text-rose-500" },
-      { label: "Businesses", href: "/businesses", icon: Briefcase, color: "text-emerald-500" },
-    ],
-  },
-  {
-    title: "Workspace",
-    items: [
-      {
-        label: "CRM",
-        icon: Layers,
-        color: "text-indigo-500",
-        children: [
-          { label: "Companies", href: "/crm/companies", icon: Building, color: "text-blue-500" },
-          { label: "People", href: "/crm/people", icon: Contact, color: "text-sky-500" },
-          { label: "Opportunities", href: "/crm/opportunities", icon: Target, color: "text-orange-500" },
-        ],
-      },
-      {
-        label: "System",
-        icon: Server,
-        color: "text-slate-500",
-        children: [
-          { label: "Regions", href: "/system/regions", icon: Globe, color: "text-teal-500" },
-          { label: "Countries", href: "/system/countries", icon: Flag, color: "text-red-500" },
-          { label: "Cities", href: "/system/cities", icon: Landmark, color: "text-amber-500" },
-          { label: "Currencies", href: "/system/currencies", icon: Coins, color: "text-green-500" },
-          { label: "Languages", href: "/system/languages", icon: Languages, color: "text-purple-500" },
-        ],
-      },
-    ],
-  },
-];
+import {
+  isGroup,
+  NAV,
+  type IconType,
+  type NavEntry,
+  type NavLink,
+} from "./nav-config";
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
