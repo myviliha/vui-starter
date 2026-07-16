@@ -26,6 +26,7 @@ import {
   type OpportunityStage,
 } from "@/lib/crm-data";
 import { Dropdown, DropdownItem, DropdownLabel } from "@myviliha/vui-ui/dropdown-menu";
+import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 
 function formatCurrency(amount: number): string {
@@ -104,8 +105,9 @@ export function OpportunitiesBoard() {
   return (
     <div className="flex h-full flex-col">
       <SetPageTitle title="Opportunities" icon={Target} />
-      {/* Actions row — title/icon now live in the global top bar */}
-      <div className="flex h-12 shrink-0 items-center justify-end gap-2 border-b border-border px-4">
+      {/* Actions row — breadcrumbs (left) + actions (right) */}
+      <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border px-4">
+        <Breadcrumbs />
         <div className="flex items-center gap-1.5">
           <div className="relative">
             <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -295,7 +297,7 @@ function OpportunityDetailPanel({
   return (
     <>
       <div
-        className="vui-overlay-in fixed inset-0 z-[55] bg-foreground/20 backdrop-blur-sm"
+        className="vui-overlay-in fixed inset-0 z-[55] bg-foreground/25"
         onClick={onClose}
         aria-hidden="true"
       />

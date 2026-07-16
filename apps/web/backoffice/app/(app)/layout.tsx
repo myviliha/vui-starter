@@ -5,6 +5,7 @@ import {
   SidebarProvider,
 } from "@/app/_components/app-sidebar";
 import { TopBar } from "@/app/_components/top-bar";
+import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { PageFade, RouteProgress } from "@/app/_components/transitions";
 
 export default function AppLayout({
@@ -17,7 +18,7 @@ export default function AppLayout({
       <RouteProgress />
       <div className="flex h-screen overflow-hidden">
         <AppSidebar />
-        <PageChromeProvider>
+        <PageChromeProvider titleLeading={<Breadcrumbs />}>
           <div className="flex min-w-0 flex-1 flex-col">
             <TopBar />
             <div className="min-w-0 flex-1 overflow-y-auto pb-14 md:pb-0">

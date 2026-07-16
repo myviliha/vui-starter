@@ -15,6 +15,7 @@ import { Button } from "@myviliha/vui-ui/button";
 import { Checkbox } from "@myviliha/vui-ui/checkbox";
 import { Input } from "@myviliha/vui-ui/input";
 import { Select } from "@myviliha/vui-ui/select";
+import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 
 type Theme = "light" | "dark" | "system";
@@ -120,9 +121,12 @@ export default function SettingsPage() {
     <div className="flex h-full flex-col">
       <SetPageTitle title="Settings" icon={GearIcon} />
 
-      {/* Sub-toolbar */}
-      <div className="flex shrink-0 items-center border-b border-border px-4 py-1.5 text-muted-foreground">
-        Manage your profile, appearance, and notification preferences.
+      {/* Action header — breadcrumbs (left) + note (right) */}
+      <div className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border px-4">
+        <Breadcrumbs />
+        <span className="hidden truncate text-muted-foreground md:block">
+          Manage your profile, appearance, and notification preferences.
+        </span>
       </div>
 
       {/* Content — uniform spacing between sections and the save bar */}

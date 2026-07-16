@@ -1163,7 +1163,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
       {/* Dimmed backdrop — click to close. */}
       <div
         className={cn(
-          "fixed inset-0 z-[55] bg-foreground/20 backdrop-blur-sm",
+          "fixed inset-0 z-[55] bg-foreground/25",
           closing ? "vui-overlay-out" : "vui-overlay-in",
         )}
         onClick={() => requestClose(onCancel)}

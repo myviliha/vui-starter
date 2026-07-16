@@ -21,8 +21,6 @@ import {
   IdCardIcon as Contact,
   LayersIcon as Layers,
   PersonIcon as Users,
-  PinLeftIcon as PanelLeftClose,
-  PinRightIcon as PanelLeftOpen,
   SewingPinFilledIcon as MapPin,
   Share2Icon as Network,
   StackIcon as Server,
@@ -529,11 +527,7 @@ export function SidebarToggle() {
       title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       className="hidden size-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:grid"
     >
-      {collapsed ? (
-        <PanelLeftOpen className="size-4" aria-hidden="true" />
-      ) : (
-        <PanelLeftClose className="size-4" aria-hidden="true" />
-      )}
+      <Menu className="size-4" aria-hidden="true" />
     </button>
   );
 }

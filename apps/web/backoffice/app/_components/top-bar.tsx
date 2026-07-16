@@ -6,16 +6,20 @@ import {
   QuestionMarkCircledIcon,
 } from "@radix-ui/react-icons";
 
+import { usePathname } from "next/navigation";
+
 import { Button } from "@myviliha/vui-ui/button";
 import { Input } from "@myviliha/vui-ui/input";
 import { usePageChrome } from "@myviliha/vui-ui/record-view";
 
 import { SidebarToggle } from "@/app/_components/app-sidebar";
+import { colorFor } from "@/app/_components/route-meta";
 
 /** Global top bar: sidebar toggle + page title (left), centered search,
     help + notifications (right). */
 export function TopBar() {
   const { page } = usePageChrome();
+  const pathname = usePathname();
   const PageIcon = page?.icon;
 
   return (
@@ -24,7 +28,7 @@ export function TopBar() {
       <SidebarToggle />
       <div className="flex min-w-0 items-center gap-2">
         {PageIcon && (
-          <PageIcon className="size-4 shrink-0 text-muted-foreground" />
+          <PageIcon className={`size-4 shrink-0 ${colorFor(pathname)}`} />
         )}
         {page && (
           <h1 className="truncate font-semibold tracking-tight">

@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@myviliha/vui-ui/table";
+import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 import { StatCard } from "@/app/_components/stat-card";
 import {
@@ -52,9 +53,12 @@ export default function HomePage() {
     <div className="flex h-full flex-col">
       <SetPageTitle title="Home" icon={Home} />
 
-      {/* Sub-toolbar — mirrors the datatable's secondary bar */}
-      <div className="flex shrink-0 items-center border-b border-border px-4 py-1.5 text-muted-foreground">
-        Overview of organizations, teams, and markets across the platform.
+      {/* Action header — breadcrumbs (left) + overview note (right) */}
+      <div className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border px-4">
+        <Breadcrumbs />
+        <span className="hidden truncate text-muted-foreground md:block">
+          Overview of organizations, teams, and markets across the platform.
+        </span>
       </div>
 
       {/* Scrollable content — full-bleed, borders separate sections (no gaps/padding) */}
