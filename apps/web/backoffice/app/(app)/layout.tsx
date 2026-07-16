@@ -28,7 +28,7 @@ export default function AppLayout({
             <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pb-14 md:pb-0">
               <PageFade>{children}</PageFade>
             </div>
-            <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-2 text-center text-muted-foreground md:block">
+            <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-1 text-center text-[10px] text-foreground md:block">
               © 2026 VILIHA PTE. LTD. · MIT Licensed
             </footer>
           </div>
