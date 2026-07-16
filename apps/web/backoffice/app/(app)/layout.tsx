@@ -21,7 +21,7 @@ export default function AppLayout({
         <PageChromeProvider titleLeading={<Breadcrumbs />}>
           <div className="flex min-w-0 flex-1 flex-col">
             <TopBar />
-            <div className="min-w-0 flex-1 overflow-y-auto pb-14 md:pb-0">
+            <div className="min-h-0 min-w-0 flex-1 overflow-y-auto pb-14 md:pb-0">
               <PageFade>{children}</PageFade>
             </div>
             <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-2 text-center text-muted-foreground md:block">
