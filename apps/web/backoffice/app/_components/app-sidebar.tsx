@@ -443,7 +443,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
  * inline with the workspace title; drag the right edge to resize its width.
  */
 export function AppSidebar() {
-  const { collapsed, width, resizing, toggleCollapsed, setWidth, setResizing, persist } =
+  const { collapsed, width, resizing, setWidth, setResizing, persist } =
     useSidebar();
 
   function startResize(e: React.MouseEvent) {
@@ -469,19 +469,6 @@ export function AppSidebar() {
     document.body.style.cursor = "col-resize";
   }
 
-  const collapseButton = (
-    <button
-      type="button"
-      onClick={toggleCollapsed}
-      aria-label="Collapse sidebar"
-      aria-expanded
-      title="Collapse sidebar"
-      className="grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-primary"
-    >
-      <PanelLeftClose className="size-4" aria-hidden="true" />
-    </button>
-  );
-
   return (
     <aside
       style={{ width: collapsed ? SIDEBAR_COLLAPSED_W : width }}
@@ -490,7 +477,7 @@ export function AppSidebar() {
         !resizing && "transition-[width] duration-200 ease-out",
       )}
     >
-      <SidebarBody collapsed={collapsed} headerAction={collapseButton} />
+      <SidebarBody collapsed={collapsed} />
 
       {/* Resize handle (right edge) */}
       {!collapsed && (
@@ -528,25 +515,32 @@ export function AppSidebar() {
 }
 
 /**
- * Expand toggle for a collapsed sidebar. Renders inline (before the page title)
- * only on desktop when collapsed; nothing when expanded. Place it in a page
- * header's title row (RecordView receives it via PageChromeProvider).
+ * Global sidebar collapse/expand toggle. Lives in the top bar so it's always
+ * available regardless of page or collapsed state (desktop only).
  */
-export function SidebarExpandButton() {
+export function SidebarToggle() {
   const { collapsed, toggleCollapsed } = useSidebar();
-  if (!collapsed) return null;
   return (
     <button
       type="button"
       onClick={toggleCollapsed}
-      aria-label="Expand sidebar"
-      aria-expanded={false}
-      title="Expand sidebar"
-      className="-ml-1.5 hidden size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-primary md:grid"
+      aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+      aria-expanded={!collapsed}
+      title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+      className="hidden size-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:grid"
     >
-      <PanelLeftOpen className="size-4" aria-hidden="true" />
+      {collapsed ? (
+        <PanelLeftOpen className="size-4" aria-hidden="true" />
+      ) : (
+        <PanelLeftClose className="size-4" aria-hidden="true" />
+      )}
     </button>
   );
+}
+
+/** @deprecated Use the SidebarToggle in the top bar. Kept as a no-op shim. */
+export function SidebarExpandButton() {
+  return null;
 }
 
 const BOTTOM_BAR_ITEMS: NavLink[] = [

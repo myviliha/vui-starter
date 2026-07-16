@@ -1,3 +1,5 @@
+"use client";
+
 import {
   CubeIcon as Building2,
   HomeIcon as Home,
@@ -14,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@myviliha/vui-ui/table";
-import { SidebarExpandButton } from "@/app/_components/app-sidebar";
+import { SetPageTitle } from "@/app/_components/set-page-title";
 import { StatCard } from "@/app/_components/stat-card";
 import {
   employees,
@@ -48,12 +50,7 @@ export default function HomePage() {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header — same height + border as the datatable page header */}
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
-        <SidebarExpandButton />
-        <Home className="size-4 text-muted-foreground" aria-hidden="true" />
-        <h1 className="font-semibold tracking-tight">Home</h1>
-      </div>
+      <SetPageTitle title="Home" icon={Home} />
 
       {/* Sub-toolbar — mirrors the datatable's secondary bar */}
       <div className="flex shrink-0 items-center border-b border-border px-4 py-1.5 text-muted-foreground">

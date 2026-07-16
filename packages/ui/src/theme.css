@@ -207,3 +207,79 @@
     }
   }
 }
+
+/* Motion primitives — enterprise-style entrance transitions. Reduced-motion is
+   respected via the rule above (animation-duration is clamped for those users). */
+@keyframes vui-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes vui-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes vui-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes vui-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.vui-fade-in {
+  animation: vui-fade-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.vui-overlay-in {
+  animation: vui-overlay-in 0.2s ease-out both;
+}
+.vui-panel-in {
+  animation: vui-slide-in-right 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vui-pop-in {
+  animation: vui-pop-in 0.14s ease-out both;
+  transform-origin: var(--vui-pop-origin, top);
+}
+
+@keyframes vui-slide-out-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes vui-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.vui-panel-out {
+  animation: vui-slide-out-right 0.24s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vui-overlay-out {
+  animation: vui-overlay-out 0.2s ease-out both;
+}

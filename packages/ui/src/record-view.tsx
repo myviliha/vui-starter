@@ -72,7 +72,7 @@ function fieldDefaultWidth<T>(field: RecordField<T>): number {
 }
 
 /** Shared icon component type (all Radix icons share this shape). */
-type IconType = typeof Circle;
+export type IconType = typeof Circle;
 
 /** Mandatory-field marker — an asterisk icon (Radix has no asterisk glyph, so
     it's an inline SVG) sized to the label text; no border chip (no width="15"). */
@@ -94,13 +94,19 @@ function RequiredMark() {
   );
 }
 
+export type PageMeta = { title: string; icon?: IconType };
+
 const PageChromeContext = React.createContext<{
   titleLeading?: React.ReactNode;
-}>({});
+  /** Current page's title/icon, registered by the active view (e.g. RecordView). */
+  page: PageMeta | null;
+  setPage: (page: PageMeta | null) => void;
+}>({ page: null, setPage: () => {} });
 
 /**
- * Provides a node rendered immediately before the page title in every
- * RecordView header (e.g. a sidebar-expand toggle shown only when collapsed).
+ * Shares page chrome across the app shell: a leading node for the header
+ * (e.g. a sidebar-expand toggle) plus the current page's title/icon so a global
+ * top bar can display it. Wrap the top bar AND the page content with this.
  */
 export function PageChromeProvider({
   titleLeading,
@@ -109,11 +115,27 @@ export function PageChromeProvider({
   titleLeading?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const [page, setPage] = React.useState<PageMeta | null>(null);
   return (
-    <PageChromeContext.Provider value={{ titleLeading }}>
+    <PageChromeContext.Provider value={{ titleLeading, page, setPage }}>
       {children}
     </PageChromeContext.Provider>
   );
+}
+
+/** Read the current page chrome (title/icon, leading node). */
+export function usePageChrome() {
+  return React.useContext(PageChromeContext);
+}
+
+/** Register the current page's title/icon into the shell (clears on unmount). */
+export function usePageTitle(title: string, icon?: IconType) {
+  const { setPage } = React.useContext(PageChromeContext);
+  React.useEffect(() => {
+    setPage({ title, icon });
+    return () => setPage(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
 }
 
 export interface RecordField<T> {
@@ -159,6 +181,8 @@ export function RecordView<T extends { id: RowId }>({
   getPrimary,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
+  // Surface the page title/icon in the app's global top bar.
+  usePageTitle(title, TitleIcon);
   const [rows, setRows] = React.useState<T[]>(initialData);
   const [filter, setFilter] = React.useState("");
   const [sort, setSort] = React.useState<{
@@ -175,6 +199,8 @@ export function RecordView<T extends { id: RowId }>({
   const [activeId, setActiveId] = React.useState<RowId | null>(null);
   // A row created via "add" but not yet saved — Cancel/close removes it.
   const [newRowId, setNewRowId] = React.useState<RowId | null>(null);
+  // Whether the detail panel opened read-only (View) or editable (Edit / Add).
+  const [panelReadOnly, setPanelReadOnly] = React.useState(false);
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState<number>(25);
   const [flashId, setFlashId] = React.useState<RowId | null>(null);
@@ -372,8 +398,19 @@ export function RecordView<T extends { id: RowId }>({
     // Prepend so the new record is immediately visible at the top…
     setRows((prev) => [row, ...prev]);
     setPage(1);
+    setPanelReadOnly(false);
     setActiveId(row.id);
     setNewRowId(row.id);
+  }
+  /** Open the detail panel read-only (View). */
+  function openView(id: RowId) {
+    setPanelReadOnly(true);
+    setActiveId(id);
+  }
+  /** Open the detail panel editable (Edit). */
+  function openEdit(id: RowId) {
+    setPanelReadOnly(false);
+    setActiveId(id);
   }
   /** Commit the form's buffered draft back into the table. */
   function saveForm(updated: T) {
@@ -599,13 +636,10 @@ export function RecordView<T extends { id: RowId }>({
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header */}
+      {/* Header — title/icon now live in the global top bar; this row holds the
+          per-record actions (add / import / export). */}
       <div className="flex h-12 items-center justify-between border-b border-border px-4">
-        <div className="flex items-center gap-2">
-          {titleLeading}
-          {TitleIcon && <TitleIcon className="size-4 text-muted-foreground" />}
-          <h1 className="font-semibold tracking-tight">{title}</h1>
-        </div>
+        <div className="flex items-center gap-2">{titleLeading}</div>
         <div className="flex items-center gap-1.5">
           <Button
             variant="link"
@@ -934,7 +968,7 @@ export function RecordView<T extends { id: RowId }>({
                     >
                       <button
                         type="button"
-                        onClick={() => setActiveId(row.id)}
+                        onClick={() => openView(row.id)}
                         className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60"
                       >
                         <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
@@ -961,7 +995,7 @@ export function RecordView<T extends { id: RowId }>({
                       <div className="flex items-center justify-end gap-0.5 pr-2">
                         <button
                           type="button"
-                          onClick={() => setActiveId(row.id)}
+                          onClick={() => openView(row.id)}
                           aria-label={`View ${primary.title || singular}`}
                           title="View"
                           className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -970,7 +1004,7 @@ export function RecordView<T extends { id: RowId }>({
                         </button>
                         <button
                           type="button"
-                          onClick={() => setActiveId(row.id)}
+                          onClick={() => openEdit(row.id)}
                           aria-label={`Edit ${primary.title || singular}`}
                           title="Edit"
                           className="grid size-7 cursor-pointer place-items-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -1014,6 +1048,8 @@ export function RecordView<T extends { id: RowId }>({
           singular={singular}
           icon={TitleIcon}
           getPrimary={getPrimary}
+          readOnly={panelReadOnly}
+          onEdit={() => setPanelReadOnly(false)}
           onSave={saveForm}
           onCancel={cancelForm}
         />
@@ -1081,6 +1117,10 @@ interface DetailPanelProps<T extends { id: RowId }> {
   singular: string;
   icon?: IconType;
   getPrimary: (row: T) => { title: string; initials: string; subtitle?: string };
+  /** Read-only (View) vs editable (Edit / Add). */
+  readOnly?: boolean;
+  /** Switch a read-only panel into edit mode. */
+  onEdit?: () => void;
   /** Commit the buffered draft to the table. */
   onSave: (row: T) => void;
   /** Discard the draft (and drop the row if it was never saved). */
@@ -1093,6 +1133,8 @@ function RecordDetailPanel<T extends { id: RowId }>({
   singular,
   icon: TitleIcon,
   getPrimary,
+  readOnly = false,
+  onEdit,
   onSave,
   onCancel,
 }: DetailPanelProps<T>) {
@@ -1108,11 +1150,39 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const setField = (key: keyof T, value: string) =>
     setDraft((d) => ({ ...d, [key]: value }));
 
+  // Play the exit animation, then run the actual close/save when it ends.
+  const [closing, setClosing] = React.useState(false);
+  const pending = React.useRef<(() => void) | null>(null);
+  const requestClose = (action: () => void) => {
+    pending.current = action;
+    setClosing(true);
+  };
+
   return (
-    <aside
-      aria-label={`${singular} form`}
-      className="fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]"
-    >
+    <>
+      {/* Dimmed backdrop — click to close. */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[55] bg-foreground/20 backdrop-blur-sm",
+          closing ? "vui-overlay-out" : "vui-overlay-in",
+        )}
+        onClick={() => requestClose(onCancel)}
+        aria-hidden="true"
+      />
+      <aside
+        aria-label={`${singular} form`}
+        className={cn(
+          "fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]",
+          closing ? "vui-panel-out" : "vui-panel-in",
+        )}
+        onAnimationEnd={(e) => {
+          if (e.target === e.currentTarget && closing && pending.current) {
+            const run = pending.current;
+            pending.current = null;
+            run();
+          }
+        }}
+      >
       {/* Header — icon + title (placeholder when new); matches the page header. */}
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
         <span className="flex size-6 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
@@ -1129,7 +1199,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
         <Button
           variant="ghost"
           size="icon"
-          onClick={onCancel}
+          onClick={() => requestClose(onCancel)}
           aria-label="Close"
           className="ml-auto"
         >
@@ -1156,28 +1226,30 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {groupFields.map((f) => (
                   <div
                     key={f.key}
-                    className="flex items-center gap-3 px-3 py-3 leading-relaxed"
+                    className="flex items-start gap-3 px-3 py-3 leading-relaxed"
                   >
-                    <dt className="flex w-28 shrink-0 items-center gap-1.5 text-muted-foreground">
+                    <dt className="flex w-28 shrink-0 items-center gap-1.5 pt-1.5 text-muted-foreground">
                       {f.icon && <f.icon className="size-3.5" />}
                       {f.label}
                       {f.required && <RequiredMark />}
                     </dt>
                     <dd className="min-w-0 flex-1">
                       {f.render ? (
-                        f.render(draft)
-                      ) : f.editable ? (
-                        <input
+                        <div className="pt-0.5">{f.render(draft)}</div>
+                      ) : !readOnly && f.editable ? (
+                        <textarea
                           value={String(draft[f.key as keyof T] ?? "")}
                           onChange={(e) =>
                             setField(f.key as keyof T, e.target.value)
                           }
                           aria-label={f.label}
                           placeholder={`Add ${f.label.toLowerCase()}`}
-                          className="h-8 w-full rounded-sm border border-input bg-background px-2 outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                          rows={1}
+                          // field-sizing grows the box to fit long/wrapped text
+                          className="w-full resize-none rounded-sm border border-input bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
                         />
                       ) : (
-                        <span className="px-2">
+                        <span className="block whitespace-pre-wrap break-words px-2 pt-1.5">
                           {String(draft[f.key as keyof T] ?? "") || (
                             <span className="text-muted-foreground">—</span>
                           )}
@@ -1192,17 +1264,38 @@ function RecordDetailPanel<T extends { id: RowId }>({
         })}
       </div>
 
-      {/* Footer — reusable Add-form actions; border + padding match the app footer. */}
+      {/* Footer — View shows Close/Edit; Edit shows Cancel/Save. */}
       <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-4 py-3">
-        <Button onClick={onCancel}>
-          <X className="size-4" />
-          Cancel
-        </Button>
-        <Button variant="primary" onClick={() => onSave(draft)}>
-          <Check className="size-4" />
-          Save
-        </Button>
+        {readOnly ? (
+          <>
+            <Button onClick={() => requestClose(onCancel)}>
+              <X className="size-4" />
+              Close
+            </Button>
+            {onEdit && (
+              <Button variant="primary" onClick={onEdit}>
+                <Pencil className="size-4" />
+                Edit
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            <Button onClick={() => requestClose(onCancel)}>
+              <X className="size-4" />
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => requestClose(() => onSave(draft))}
+            >
+              <Check className="size-4" />
+              Save
+            </Button>
+          </>
+        )}
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

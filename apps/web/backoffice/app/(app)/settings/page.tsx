@@ -15,7 +15,7 @@ import { Button } from "@myviliha/vui-ui/button";
 import { Checkbox } from "@myviliha/vui-ui/checkbox";
 import { Input } from "@myviliha/vui-ui/input";
 import { Select } from "@myviliha/vui-ui/select";
-import { SidebarExpandButton } from "@/app/_components/app-sidebar";
+import { SetPageTitle } from "@/app/_components/set-page-title";
 
 type Theme = "light" | "dark" | "system";
 
@@ -118,12 +118,7 @@ export default function SettingsPage() {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header */}
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
-        <SidebarExpandButton />
-        <GearIcon className="size-4 text-muted-foreground" aria-hidden="true" />
-        <h1 className="font-semibold tracking-tight">Settings</h1>
-      </div>
+      <SetPageTitle title="Settings" icon={GearIcon} />
 
       {/* Sub-toolbar */}
       <div className="flex shrink-0 items-center border-b border-border px-4 py-1.5 text-muted-foreground">

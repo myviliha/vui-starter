@@ -2,9 +2,10 @@ import { PageChromeProvider } from "@myviliha/vui-ui/record-view";
 import {
   AppSidebar,
   MobileNav,
-  SidebarExpandButton,
   SidebarProvider,
 } from "@/app/_components/app-sidebar";
+import { TopBar } from "@/app/_components/top-bar";
+import { PageFade, RouteProgress } from "@/app/_components/transitions";
 
 export default function AppLayout({
   children,
@@ -13,18 +14,20 @@ export default function AppLayout({
 }>) {
   return (
     <SidebarProvider>
+      <RouteProgress />
       <div className="flex h-screen overflow-hidden">
         <AppSidebar />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <div className="min-w-0 flex-1 overflow-y-auto pb-14 md:pb-0">
-            <PageChromeProvider titleLeading={<SidebarExpandButton />}>
-              {children}
-            </PageChromeProvider>
+        <PageChromeProvider>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <TopBar />
+            <div className="min-w-0 flex-1 overflow-y-auto pb-14 md:pb-0">
+              <PageFade>{children}</PageFade>
+            </div>
+            <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-2 text-center text-muted-foreground md:block">
+              © 2026 VILIHA PTE. LTD. · MIT Licensed
+            </footer>
           </div>
-          <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-2 text-center text-muted-foreground md:block">
-            © 2026 VILIHA PTE. LTD. · MIT Licensed
-          </footer>
-        </div>
+        </PageChromeProvider>
         <MobileNav />
       </div>
     </SidebarProvider>

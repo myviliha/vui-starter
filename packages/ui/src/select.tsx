@@ -89,7 +89,7 @@ export function Select({
           role="listbox"
           aria-label={ariaLabel}
           tabIndex={-1}
-          className="absolute z-50 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md"
+          className="vui-pop-in absolute z-50 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md"
         >
           {options.map((o) => {
             const active = o.value === value;

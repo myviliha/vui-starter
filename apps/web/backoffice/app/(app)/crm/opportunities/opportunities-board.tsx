@@ -26,7 +26,7 @@ import {
   type OpportunityStage,
 } from "@/lib/crm-data";
 import { Dropdown, DropdownItem, DropdownLabel } from "@myviliha/vui-ui/dropdown-menu";
-import { SidebarExpandButton } from "@/app/_components/app-sidebar";
+import { SetPageTitle } from "@/app/_components/set-page-title";
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -103,13 +103,9 @@ export function OpportunitiesBoard() {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header — h-12, matches the datatable page header */}
-      <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border px-4">
-        <div className="flex min-w-0 items-center gap-2">
-          <SidebarExpandButton />
-          <Target className="size-4 shrink-0 text-muted-foreground" />
-          <h1 className="truncate font-semibold tracking-tight">Opportunities</h1>
-        </div>
+      <SetPageTitle title="Opportunities" icon={Target} />
+      {/* Actions row — title/icon now live in the global top bar */}
+      <div className="flex h-12 shrink-0 items-center justify-end gap-2 border-b border-border px-4">
         <div className="flex items-center gap-1.5">
           <div className="relative">
             <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -297,10 +293,16 @@ function OpportunityDetailPanel({
   onClose,
 }: DetailProps) {
   return (
-    <aside
-      aria-label="Opportunity details"
-      className="fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]"
-    >
+    <>
+      <div
+        className="vui-overlay-in fixed inset-0 z-[55] bg-foreground/20 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <aside
+        aria-label="Opportunity details"
+        className="vui-panel-in fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]"
+      >
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
         <Target className="size-4 shrink-0 text-muted-foreground" />
         <span className="truncate font-semibold">
@@ -399,7 +401,8 @@ function OpportunityDetailPanel({
           Delete opportunity
         </Button>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 

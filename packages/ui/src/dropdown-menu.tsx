@@ -67,7 +67,7 @@ export function Dropdown({
       {open && (
         <div
           className={cn(
-            "absolute z-40 mt-1 min-w-52 overflow-hidden rounded-md border border-border bg-popover text-left text-sm font-normal text-popover-foreground shadow-md",
+            "vui-pop-in absolute z-40 mt-1 min-w-52 overflow-hidden rounded-md border border-border bg-popover text-left text-sm font-normal text-popover-foreground shadow-md",
             align === "end" ? "right-0" : "left-0",
           )}
         >
