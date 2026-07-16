@@ -61,34 +61,28 @@ export default function HomePage() {
         </span>
       </div>
 
-      {/* Scrollable content — full-bleed, borders separate sections (no gaps/padding) */}
+      {/* Scrollable content — padded, card sections (matches the settings layout) */}
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {/* Stats — bordered cells, flush to the edges */}
+        <div className="flex flex-col gap-4 p-4">
+        {/* Stats — bordered cards */}
         <section
           aria-label="Key metrics"
-          className="grid grid-cols-2 border-b border-border lg:grid-cols-4"
+          className="grid grid-cols-2 gap-4 lg:grid-cols-4"
         >
-          {statCards.map((stat, i) => (
+          {statCards.map((stat) => (
             <StatCard
               key={stat.label}
               label={stat.label}
               value={stat.value}
               delta={stat.delta}
               trend={stat.trend}
-              className={cn(
-                "border-border",
-                // vertical dividers between columns
-                i % 2 === 0 && "border-r",
-                "lg:border-r lg:last:border-r-0",
-                // horizontal divider for the second row on the 2-col layout
-                i < 2 && "border-b lg:border-b-0",
-              )}
+              className="rounded-lg border border-border bg-card"
             />
           ))}
         </section>
 
-        {/* Content boxes — small 5px gutter; each is its own bordered box */}
-        <div className="grid grid-cols-1 gap-[5px] p-[5px] lg:grid-cols-3">
+        {/* Content sections */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <section className="overflow-hidden rounded-lg border border-border bg-card lg:col-span-2">
             <SectionHeader>Recent organizations</SectionHeader>
             {organizations.length === 0 ? (
@@ -151,7 +145,7 @@ export default function HomePage() {
           </section>
 
           {/* Side column — separate boxes */}
-          <aside className="grid grid-cols-1 content-start gap-[5px]">
+          <aside className="grid grid-cols-1 content-start gap-4">
             {/* Region breakdown */}
             <section className="overflow-hidden rounded-lg border border-border bg-card">
               <SectionHeader>Organizations by region</SectionHeader>
@@ -214,6 +208,7 @@ export default function HomePage() {
               </div>
             </section>
           </aside>
+        </div>
         </div>
       </div>
     </div>
