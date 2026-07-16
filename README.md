@@ -1,5 +1,8 @@
 # Vui Starter
 
+[![npm](https://img.shields.io/npm/v/@viliha/vui-ui?color=266df0&label=%40viliha%2Fvui-ui)](https://www.npmjs.com/package/@viliha/vui-ui)
+[![license](https://img.shields.io/npm/l/@viliha/vui-ui)](./LICENSE)
+
 A free, **open-source admin/CRM design system** for React — a clean, token-driven
 component library (**`@viliha/vui-ui`**) plus a full-featured backoffice demo
 you can clone and run.

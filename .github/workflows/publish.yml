@@ -1,0 +1,35 @@
+name: Publish
+
+# Publishes @viliha/vui-ui to npm when a v* tag is pushed.
+# Requires an npm automation token stored as the NPM_TOKEN repo secret
+# (Settings → Secrets and variables → Actions). Automation tokens bypass 2FA.
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: publish @viliha/vui-ui
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm install --frozen-lockfile
+      # Gate the release on the same checks as local "done".
+      - run: pnpm --filter @viliha/vui-ui check-types
+      - run: pnpm --filter @viliha/vui-ui test
+      - run: pnpm --filter @viliha/vui-ui publish --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
