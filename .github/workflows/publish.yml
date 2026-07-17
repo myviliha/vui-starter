@@ -20,12 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
-          cache: pnpm
           registry-url: "https://registry.npmjs.org"
+      # Install pnpm directly — avoids setup-node's "cache: pnpm" needing pnpm
+      # on PATH before it's installed.
+      - run: npm install -g pnpm@9
       - run: pnpm install --frozen-lockfile
       # Gate the release on the same checks as local "done".
       - run: pnpm --filter @viliha/vui-ui check-types
