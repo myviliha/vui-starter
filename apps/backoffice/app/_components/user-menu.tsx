@@ -51,13 +51,10 @@ export function UserMenu() {
         aria-expanded={open}
         aria-label="Account menu"
         onClick={() => setOpen((v) => !v)}
-        className="grid size-9 shrink-0 place-items-center rounded-full transition-colors hover:bg-accent"
+        // Matches the Settings gear control (size-9 rounded-md box, size-5 glyph).
+        className="grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent"
       >
-        <Avatar className="size-8">
-          <AvatarFallback className="font-semibold text-foreground">
-            {USER.initials}
-          </AvatarFallback>
-        </Avatar>
+        <PersonIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
       </button>
 
       {open && (

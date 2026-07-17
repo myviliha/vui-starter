@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-ui",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Vui UI — a clean, token-driven React admin/CRM component library built on Tailwind CSS v4, shadcn-style patterns, and Radix Icons. Ships as TypeScript source (Just-in-Time), compiled by the consuming app.",
   "license": "MIT",
   "author": "Suman Bonakurthi",
