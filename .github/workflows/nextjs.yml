@@ -1,0 +1,65 @@
+name: Deploy Next.js site to Pages
+
+# Static-exports the backoffice app (apps/backoffice) and deploys it to GitHub
+# Pages. In repo Settings → Pages, set Source = "GitHub Actions".
+#
+# Adapted from GitHub's Next.js template for this repo:
+#  - pnpm monorepo (app lives in apps/backoffice), not a root npm/yarn app
+#  - custom domain (vui.viliha.com via apps/backoffice/public/CNAME), so we do
+#    NOT use configure-pages' `static_site_generator: next` — it injects a
+#    basePath that would break every /_next asset on a root custom domain.
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; never cancel an in-progress production deploy.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - name: Setup Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 22
+      - name: Install pnpm
+        run: npm install -g pnpm@9
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: apps/backoffice/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/backoffice/**/*.[jt]s', 'apps/backoffice/**/*.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build with Next.js
+        run: pnpm --filter backoffice build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/backoffice/out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
