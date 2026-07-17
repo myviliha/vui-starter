@@ -154,7 +154,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
       <footer className="shrink-0 border-t border-border bg-background px-4 py-2.5 text-center text-xs text-muted-foreground md:px-6">
         Made with <span className="text-rose-500">♥</span> from Vietnam by the{" "}
         <a
-          href="https://vui.viliha.com"
+          href="https://viliha.com"
           target="_blank"
           rel="noreferrer"
           className="font-medium text-foreground hover:underline"

@@ -304,4 +304,4 @@ pnpm check-types    # type-check
 
 ---
 
-Made with ♥ from Vietnam by the [Viliha Team](https://vui.viliha.com).
+Made with ♥ from Vietnam by the [Viliha Team](https://viliha.com).
