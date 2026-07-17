@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
 import { Wordmark } from "./wordmark";
+import { QuickActionsLauncher } from "./quick-actions";
 import {
   isGroup,
   NAV,
@@ -218,8 +219,19 @@ function SidebarBody({
         {!collapsed && headerAction}
       </div>
 
+      {/* Quick actions — fixed above the scrolling nav, with a full-width
+          divider and comfortable top/bottom padding. */}
+      <div
+        className={cn(
+          "border-b border-sidebar-border px-3 py-3",
+          collapsed && "flex justify-center",
+        )}
+      >
+        <QuickActionsLauncher collapsed={collapsed} />
+      </div>
+
       {/* Navigation */}
-      <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-2">
+      <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-3">
         {NAV.map((section, index) => (
           <React.Fragment key={section.title ?? `section-${index}`}>
             {/* Collapsed group separator — a nav-level sibling so the nav's
