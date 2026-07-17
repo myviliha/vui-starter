@@ -30,6 +30,15 @@ jobs:
       # Gate the release on the same checks as local "done".
       - run: pnpm --filter @viliha/vui-ui check-types
       - run: pnpm --filter @viliha/vui-ui test
-      - run: pnpm --filter @viliha/vui-ui publish --no-git-checks --access public
+      # Write the token to ~/.npmrc explicitly — pnpm publish doesn't reliably
+      # read setup-node's NODE_AUTH_TOKEN indirection. Fails fast if unset.
+      - name: Configure npm auth
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is not set (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> "$HOME/.npmrc"
+      - run: pnpm --filter @viliha/vui-ui publish --no-git-checks --access public
