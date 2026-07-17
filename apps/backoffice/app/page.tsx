@@ -1,6 +1,13 @@
-import { redirect } from "next/navigation";
+"use client";
 
-/** The app opens on the dashboard so visitors land straight on the demo. */
+import * as React from "react";
+import { useRouter } from "next/navigation";
+
+/** The app opens on the dashboard. Client redirect (works with static export). */
 export default function RootPage() {
-  redirect("/dashboard");
+  const router = useRouter();
+  React.useEffect(() => {
+    router.replace("/dashboard");
+  }, [router]);
+  return null;
 }
