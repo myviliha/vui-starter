@@ -18,7 +18,7 @@ importers:
         specifier: 5.9.2
         version: 5.9.2
 
-  apps/web/backoffice:
+  apps/backoffice:
     dependencies:
       '@hookform/resolvers':
         specifier: ^5.4.0
@@ -34,7 +34,7 @@ importers:
         version: 8.21.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@viliha/vui-ui':
         specifier: workspace:*
-        version: link:../../../packages/ui
+        version: link:../../packages/ui
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -89,10 +89,10 @@ importers:
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
-        version: link:../../../packages/eslint-config
+        version: link:../../packages/eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
-        version: link:../../../packages/typescript-config
+        version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
         specifier: ^4.3.0
         version: 4.3.2
@@ -110,7 +110,7 @@ importers:
         version: 9.39.4(jiti@2.7.0)
       postcss:
         specifier: ^8.5.15
-        version: 8.5.16
+        version: 8.5.19
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.2
@@ -2583,10 +2583,6 @@ packages:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postcss@8.5.16:
-    resolution: {integrity: sha512-vuwillviilfKZsg0VGj5R/YwwcHx4SLsIOI/7K6mQkWx+l5cUHTjj5g0AasTBcyXsbfTgrwsUNmVUb5xVwyPwg==}
-    engines: {node: ^10 || ^12 || >=14}
-
   postcss@8.5.19:
     resolution: {integrity: sha512-Mz8SaolMd8nB+G13WkORcxQKHZ/NE4xXevtkJHVuG+guo9/wYKlIMTKAqGdEmYOXR2ijPjTYNHssizdaVSUNdQ==}
     engines: {node: ^10 || ^12 || >=14}
@@ -4280,7 +4276,7 @@ snapshots:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.3.2
       '@tailwindcss/oxide': 4.3.2
-      postcss: 8.5.16
+      postcss: 8.5.19
       tailwindcss: 4.3.2
 
   '@tanstack/react-table@8.21.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
@@ -5562,12 +5558,6 @@ snapshots:
   possible-typed-array-names@1.1.0: {}
 
   postcss@8.4.31:
-    dependencies:
-      nanoid: 3.3.15
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-
-  postcss@8.5.16:
     dependencies:
       nanoid: 3.3.15
       picocolors: 1.1.1

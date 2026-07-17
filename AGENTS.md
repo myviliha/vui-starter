@@ -7,7 +7,7 @@ rationale, see [`Enterprise_NextJS_React_Coding_Standards.md`](./Enterprise_Next
 
 Turborepo + pnpm monorepo. Two apps + one published library:
 
-- `apps/web/backoffice` — Admin app, dev on **:3000**.
+- `apps/backoffice` — Admin app, dev on **:3000**.
 - `apps/docs/documentation` — Docs site, dev on **:3001**.
 - `packages/ui` — `@viliha/vui-ui`, shipped as **TypeScript source** (no build).
 
@@ -16,11 +16,11 @@ Turborepo + pnpm monorepo. Two apps + one published library:
 | Task | Location |
 | --- | --- |
 | New reusable component | `packages/ui/src/<name>.tsx` → auto-exported as `@viliha/vui-ui/<name>` (the `./*` export map; **no barrel edit needed**) |
-| New admin page | `apps/web/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout` |
-| New auth page | `apps/web/backoffice/app/auth/<name>/page.tsx` |
+| New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout` |
+| New auth page | `apps/backoffice/app/auth/<name>/page.tsx` |
 | shadcn component | `npx shadcn@latest add <name>` (from the backoffice dir) → `components/ui/` |
 | Design token / color / radius | `packages/ui/src/theme.css` — **never hard-code**, add/read a token |
-| Navigation (sidebar + breadcrumbs) | `apps/web/backoffice/app/_components/nav-config.ts` — single source; breadcrumbs derive from it |
+| Navigation (sidebar + breadcrumbs) | `apps/backoffice/app/_components/nav-config.ts` — single source; breadcrumbs derive from it |
 
 ## Single sources of truth — never duplicate
 

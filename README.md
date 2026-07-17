@@ -12,7 +12,7 @@ Radix Icons**. Everything runs on in-memory mock data, so you can clone and run
 with zero backend.
 
 > This repo is both the **library** (`packages/ui`, published to npm as
-> `@viliha/vui-ui`) and a **reference app** (`apps/web/backoffice`) that shows
+> `@viliha/vui-ui`) and a **reference app** (`apps/backoffice`) that shows
 > every component in a real admin UI.
 
 ![Vui Starter — datatable](./.github/screenshots/organizations.png)
@@ -73,7 +73,7 @@ pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-One Next.js app (`apps/web/backoffice`) on **http://localhost:3000** — the admin
+One Next.js app (`apps/backoffice`) on **http://localhost:3000** — the admin
 UI plus the docs, served at **`/docs`** (open it from the docs icon in the top
 bar).
 

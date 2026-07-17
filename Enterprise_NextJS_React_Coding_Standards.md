@@ -40,7 +40,7 @@ packages/
 
 **Rules**
 - New reusable component → `packages/ui/src/<name>.tsx` (auto-exported as `@viliha/vui-ui/<name>` via the `./*` export map — no manual barrel edit).
-- New app page → `apps/web/backoffice/app/(app)/<route>/page.tsx`, following the page template documented at docs **`/layout`**.
+- New app page → `apps/backoffice/app/(app)/<route>/page.tsx`, following the page template documented at docs **`/layout`**.
 - Do **not** introduce a `src/` root or move the package — the monorepo layout is intentional.
 
 ## Server vs Client Components

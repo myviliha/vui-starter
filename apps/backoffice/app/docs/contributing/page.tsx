@@ -37,7 +37,7 @@ pnpm check-types    # type-check`}</CodeBlock>
           (edit components + <code>theme.css</code> here).
         </li>
         <li>
-          <code>apps/web/backoffice</code> — the admin demo that dogfoods the library.
+          <code>apps/backoffice</code> — the admin demo that dogfoods the library.
         </li>
         <li>
           <code>apps/docs/documentation</code> — this documentation site.
