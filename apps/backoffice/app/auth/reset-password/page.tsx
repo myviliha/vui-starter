@@ -10,7 +10,13 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
-import { Field, IconBadge } from "@/app/_components/auth";
+import {
+  AuthCard,
+  AuthCardBody,
+  AuthCardFooter,
+  AuthCardHeader,
+  Field,
+} from "@/app/_components/auth";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = React.useState("");
@@ -34,74 +40,66 @@ export default function ResetPasswordPage() {
 
   if (done) {
     return (
-      <Panel>
-        <IconBadge>
-          <CheckCircle className="size-6" />
-        </IconBadge>
-        <h1 className="mt-4 text-center text-base font-semibold">
-          Password updated
-        </h1>
-        <p className="mt-1 text-center text-muted-foreground">
-          Your password has been changed. You can sign in now.
-        </p>
-        <Link href="/auth/signin" className="mt-5 block">
-          <Button variant="primary" className="w-full">
-            Continue to sign in
-          </Button>
-        </Link>
-      </Panel>
+      <AuthCard>
+        <AuthCardHeader
+          icon={<CheckCircle className="size-6" />}
+          title="Password updated"
+          description="Your password has been changed. You can sign in now."
+        />
+        <AuthCardFooter>
+          <Link href="/auth/signin" className="block">
+            <Button variant="primary" className="w-full">
+              Continue to sign in
+            </Button>
+          </Link>
+        </AuthCardFooter>
+      </AuthCard>
     );
   }
 
   return (
-    <Panel>
-      <h1 className="text-center text-base font-semibold">
-        Set a new password
-      </h1>
-      <p className="mt-1 text-center text-muted-foreground">
-        Choose a strong password you don&apos;t use elsewhere.
-      </p>
-      <form className="mt-5 space-y-3" onSubmit={submit}>
-        <Field label="New password" htmlFor="password">
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="new-password"
-            placeholder="At least 8 characters"
-          />
-        </Field>
-        <Field label="Confirm password" htmlFor="confirm" error={error}>
-          <Input
-            id="confirm"
-            type="password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            autoComplete="new-password"
-            placeholder="Re-enter password"
-          />
-        </Field>
-        <Button type="submit" className="w-full">
-          <Lock className="size-4" />
-          Update password
-        </Button>
+    <AuthCard>
+      <form onSubmit={submit}>
+        <AuthCardHeader
+          title="Set a new password"
+          description="Choose a strong password you don't use elsewhere."
+        />
+        <AuthCardBody className="space-y-3">
+          <Field label="New password" htmlFor="password">
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+              placeholder="At least 8 characters"
+            />
+          </Field>
+          <Field label="Confirm password" htmlFor="confirm" error={error}>
+            <Input
+              id="confirm"
+              type="password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              autoComplete="new-password"
+              placeholder="Re-enter password"
+            />
+          </Field>
+        </AuthCardBody>
+        <AuthCardFooter className="space-y-3">
+          <Button type="submit" className="w-full">
+            <Lock className="size-4" />
+            Update password
+          </Button>
+          <Link
+            href="/auth/signin"
+            className="flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="size-3.5" />
+            Back to sign in
+          </Link>
+        </AuthCardFooter>
       </form>
-      <Link
-        href="/auth/signin"
-        className="mt-5 flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-3.5" />
-        Back to sign in
-      </Link>
-    </Panel>
-  );
-}
-
-function Panel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl border border-border bg-background p-6 shadow-sm">
-      {children}
-    </div>
+    </AuthCard>
   );
 }

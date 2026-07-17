@@ -10,7 +10,13 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
-import { Field, IconBadge } from "@/app/_components/auth";
+import {
+  AuthCard,
+  AuthCardBody,
+  AuthCardFooter,
+  AuthCardHeader,
+  Field,
+} from "@/app/_components/auth";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -31,69 +37,63 @@ export default function ForgotPasswordPage() {
 
   if (sent) {
     return (
-      <Panel>
-        <IconBadge>
-          <MailCheck className="size-6" />
-        </IconBadge>
-        <h1 className="mt-4 text-center text-base font-semibold">
-          Check your email
-        </h1>
-        <p className="mt-1 text-center text-muted-foreground">
-          A reset link was sent to{" "}
-          <span className="font-medium text-foreground">{email}</span>
-        </p>
-        <div className="mt-5 space-y-2">
+      <AuthCard>
+        <AuthCardHeader
+          icon={<MailCheck className="size-6" />}
+          title="Check your email"
+          description={
+            <>
+              A reset link was sent to{" "}
+              <span className="font-medium text-foreground">{email}</span>
+            </>
+          }
+        />
+        <AuthCardFooter className="space-y-2">
           {/* Demo shortcut — no real inbox in the demo. */}
-          <Link href="/auth/reset-password">
+          <Link href="/auth/reset-password" className="block">
             <Button className="w-full">I&apos;ve got the link — continue</Button>
           </Link>
           <Button variant="ghost" className="w-full" onClick={() => setSent(false)}>
             Use a different email
           </Button>
-        </div>
-      </Panel>
+        </AuthCardFooter>
+      </AuthCard>
     );
   }
 
   return (
-    <Panel>
-      <h1 className="text-center text-base font-semibold">
-        Reset your password
-      </h1>
-      <p className="mt-1 text-center text-muted-foreground">
-        Enter your email and we&apos;ll send you a reset link.
-      </p>
-      <form className="mt-5 space-y-3" onSubmit={submit}>
-        <Field label="Work email" htmlFor="email" error={error}>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@company.com"
-            autoComplete="email"
-          />
-        </Field>
-        <Button type="submit" className="w-full">
-          <Mail className="size-4" />
-          Send reset link
-        </Button>
+    <AuthCard>
+      <form onSubmit={submit}>
+        <AuthCardHeader
+          title="Reset your password"
+          description="Enter your email and we'll send you a reset link."
+        />
+        <AuthCardBody>
+          <Field label="Work email" htmlFor="email" error={error}>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@company.com"
+              autoComplete="email"
+            />
+          </Field>
+        </AuthCardBody>
+        <AuthCardFooter className="space-y-3">
+          <Button type="submit" className="w-full">
+            <Mail className="size-4" />
+            Send reset link
+          </Button>
+          <Link
+            href="/auth/signin"
+            className="flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="size-3.5" />
+            Back to sign in
+          </Link>
+        </AuthCardFooter>
       </form>
-      <Link
-        href="/auth/signin"
-        className="mt-5 flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-3.5" />
-        Back to sign in
-      </Link>
-    </Panel>
-  );
-}
-
-function Panel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl border border-border bg-background p-6 shadow-sm">
-      {children}
-    </div>
+    </AuthCard>
   );
 }

@@ -74,3 +74,79 @@ export function IconBadge({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+/**
+ * Sectioned auth card — the same header / body / footer treatment as the app's
+ * dialogs (bordered sections), so every auth screen is consistent and reusable.
+ * Compose: <AuthCard><AuthCardHeader …/><AuthCardBody>…</AuthCardBody>
+ * <AuthCardFooter>…</AuthCardFooter></AuthCard>.
+ */
+export function AuthCard({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "overflow-hidden rounded-lg border border-border bg-background shadow-sm",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Bordered header section: optional icon badge, title, optional description. */
+export function AuthCardHeader({
+  title,
+  description,
+  icon,
+}: {
+  title: string;
+  description?: React.ReactNode;
+  icon?: React.ReactNode;
+}) {
+  return (
+    <div className="border-b border-border bg-muted/40 px-5 py-4 text-center">
+      {icon && (
+        <div className="mb-3">
+          <IconBadge>{icon}</IconBadge>
+        </div>
+      )}
+      <h1 className="text-base font-semibold tracking-tight">{title}</h1>
+      {description && (
+        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      )}
+    </div>
+  );
+}
+
+/** Content section. */
+export function AuthCardBody({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return <div className={cn("px-5 py-5", className)}>{children}</div>;
+}
+
+/** Bordered actions/footer section. */
+export function AuthCardFooter({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn("border-t border-border bg-muted/40 px-5 py-4", className)}>
+      {children}
+    </div>
+  );
+}

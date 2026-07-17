@@ -12,7 +12,15 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
-import { Field, GoogleIcon, IconBadge, OrDivider } from "@/app/_components/auth";
+import {
+  AuthCard,
+  AuthCardBody,
+  AuthCardFooter,
+  AuthCardHeader,
+  Field,
+  GoogleIcon,
+  OrDivider,
+} from "@/app/_components/auth";
 import { checkBusinessEmail } from "@/lib/auth-demo";
 
 export default function SignUpPage() {
@@ -43,79 +51,73 @@ export default function SignUpPage() {
 
   if (sent) {
     return (
-      <Panel>
-        <IconBadge>
-          <MailCheck className="size-6" />
-        </IconBadge>
-        <h1 className="mt-4 text-center text-base font-semibold">
-          Verify your email
-        </h1>
-        <p className="mt-1 text-center text-muted-foreground">
-          Verification link sent to{" "}
-          <span className="font-medium text-foreground">{email}</span>
-        </p>
-        <div className="mt-5 space-y-2">
+      <AuthCard>
+        <AuthCardHeader
+          icon={<MailCheck className="size-6" />}
+          title="Verify your email"
+          description={
+            <>
+              Verification link sent to{" "}
+              <span className="font-medium text-foreground">{email}</span>
+            </>
+          }
+        />
+        <AuthCardFooter className="space-y-2">
           {/* Demo shortcut — no real inbox in the demo. */}
           <Button className="w-full" onClick={() => router.push("/onboarding")}>
             I&apos;ve verified — continue
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full"
-            onClick={() => setSent(false)}
-          >
+          <Button variant="ghost" className="w-full" onClick={() => setSent(false)}>
             Change email
           </Button>
-        </div>
-      </Panel>
+        </AuthCardFooter>
+      </AuthCard>
     );
   }
 
   return (
-    <Panel>
-      <h1 className="text-center text-base font-semibold">
-        Create your account
-      </h1>
+    <AuthCard>
+      <form onSubmit={submit}>
+        <AuthCardHeader title="Create your account" />
+        <AuthCardBody className="space-y-4">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => router.push("/onboarding")}
+          >
+            <GoogleIcon />
+            Sign up with Google
+          </Button>
 
-      <div className="mt-5">
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => router.push("/onboarding")}
-        >
-          <GoogleIcon />
-          Sign up with Google
-        </Button>
-      </div>
+          <OrDivider />
 
-      <OrDivider />
+          <Field label="Work email" htmlFor="email" error={error}>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@company.com"
+              autoComplete="email"
+            />
+          </Field>
 
-      <form className="space-y-3" onSubmit={submit}>
-        <Field label="Work email" htmlFor="email" error={error}>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@company.com"
-            autoComplete="email"
-          />
-        </Field>
-
-        <RecaptchaMock checked={robot} onChange={setRobot} />
-
-        <Button type="submit" className="w-full">
-          Create account
-        </Button>
+          <RecaptchaMock checked={robot} onChange={setRobot} />
+        </AuthCardBody>
+        <AuthCardFooter className="space-y-3">
+          <Button type="submit" className="w-full">
+            Create account
+          </Button>
+          <p className="text-center text-muted-foreground">
+            Already have an account?{" "}
+            <Link href="/auth/signin" className="font-medium text-primary hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </AuthCardFooter>
       </form>
-
-      <p className="mt-5 text-center text-muted-foreground">
-        Already have an account?{" "}
-        <Link href="/auth/signin" className="font-medium text-primary hover:underline">
-          Sign in
-        </Link>
-      </p>
-    </Panel>
+    </AuthCard>
   );
 }
 
@@ -151,14 +153,6 @@ function RecaptchaMock({
         <ShieldQuestion className="size-5" aria-hidden="true" />
         <span className="text-xs leading-tight">reCAPTCHA</span>
       </div>
-    </div>
-  );
-}
-
-function Panel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl border border-border bg-background p-6 shadow-sm">
-      {children}
     </div>
   );
 }

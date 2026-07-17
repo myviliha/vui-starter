@@ -76,7 +76,9 @@ export function DialogHeader({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("border-b border-border px-5 py-3", className)}>
+    <div
+      className={cn("border-b border-border bg-muted/40 px-5 py-3", className)}
+    >
       {children}
     </div>
   );
@@ -127,7 +129,7 @@ export function DialogFooter({
   return (
     <div
       className={cn(
-        "flex items-center justify-end gap-2 border-t border-border px-5 py-3",
+        "flex items-center justify-end gap-2 border-t border-border bg-muted/40 px-5 py-3",
         className,
       )}
     >
