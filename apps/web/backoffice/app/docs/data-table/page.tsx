@@ -152,15 +152,15 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         Drop <code>&lt;RecordView /&gt;</code> straight into a page — it renders
         its own action header (with breadcrumbs), toolbar, and a padded, bordered
         card, matching the{" "}
-        <a href="/layout" className="font-medium text-foreground underline">
+        <a href="/docs/layout" className="font-medium text-foreground underline">
           page layout
         </a>{" "}
         conventions automatically.
       </Note>
 
       <DocPager
-        prev={{ label: "Components", href: "/components" }}
-        next={{ label: "Charts", href: "/charts" }}
+        prev={{ label: "Components", href: "/docs/components" }}
+        next={{ label: "Charts", href: "/docs/charts" }}
       />
     </article>
   );

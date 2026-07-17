@@ -65,7 +65,7 @@ pnpm check-types    # type-check`}</CodeBlock>
         MIT © Suman Bonakurthi. Free for personal and commercial use.
       </P>
 
-      <DocPager prev={{ label: "Charts", href: "/charts" }} />
+      <DocPager prev={{ label: "Charts", href: "/docs/charts" }} />
     </article>
   );
 }

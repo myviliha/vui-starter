@@ -214,8 +214,8 @@ const fields: RecordField<Org>[] = [
 />`}</CodeBlock>
 
       <DocPager
-        prev={{ label: "Using shadcn/ui", href: "/shadcn-ui" }}
-        next={{ label: "Data table", href: "/data-table" }}
+        prev={{ label: "Using shadcn/ui", href: "/docs/shadcn-ui" }}
+        next={{ label: "Data table", href: "/docs/data-table" }}
       />
     </article>
   );

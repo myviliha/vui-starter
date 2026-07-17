@@ -5,6 +5,7 @@ import {
   GearIcon,
   MagnifyingGlassIcon,
   QuestionMarkCircledIcon,
+  ReaderIcon,
 } from "@radix-ui/react-icons";
 
 import Link from "next/link";
@@ -65,6 +66,13 @@ export function TopBar() {
         <Button variant="ghost" size="icon" aria-label="Help &amp; support">
           <QuestionMarkCircledIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
         </Button>
+        <Link
+          href="/docs"
+          aria-label="Documentation"
+          className="grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent"
+        >
+          <ReaderIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
+        </Link>
         <Button
           variant="ghost"
           size="icon"

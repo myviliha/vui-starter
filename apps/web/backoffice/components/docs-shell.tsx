@@ -15,32 +15,32 @@ const NAV: NavGroup[] = [
   {
     title: "Getting started",
     items: [
-      { label: "Introduction", href: "/" },
-      { label: "Installation", href: "/installation" },
+      { label: "Introduction", href: "/docs" },
+      { label: "Installation", href: "/docs/installation" },
     ],
   },
   {
     title: "Customization",
     items: [
-      { label: "Theming", href: "/theming" },
-      { label: "Layout & patterns", href: "/layout" },
+      { label: "Theming", href: "/docs/theming" },
+      { label: "Layout & patterns", href: "/docs/layout" },
     ],
   },
   {
     title: "Guides",
-    items: [{ label: "Using shadcn/ui", href: "/shadcn-ui" }],
+    items: [{ label: "Using shadcn/ui", href: "/docs/shadcn-ui" }],
   },
   {
     title: "Reference",
     items: [
-      { label: "Components", href: "/components" },
-      { label: "Data table", href: "/data-table" },
-      { label: "Charts", href: "/charts" },
+      { label: "Components", href: "/docs/components" },
+      { label: "Data table", href: "/docs/data-table" },
+      { label: "Charts", href: "/docs/charts" },
     ],
   },
   {
     title: "Community",
-    items: [{ label: "Contributing", href: "/contributing" }],
+    items: [{ label: "Contributing", href: "/docs/contributing" }],
   },
 ];
 
@@ -48,7 +48,7 @@ const REPO = "https://github.com/myviliha/vui-starter";
 
 function Wordmark() {
   return (
-    <Link href="/" className="flex items-center gap-2">
+    <Link href="/docs" className="flex items-center gap-2">
       <svg viewBox="0 0 24 24" role="img" aria-label="Vui" className="h-6 w-6">
         <rect width="24" height="24" rx="6" fill="var(--brand-indigo)" />
         <path

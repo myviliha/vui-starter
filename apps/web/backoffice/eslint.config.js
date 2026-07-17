@@ -9,4 +9,11 @@ export default [
       "react/prop-types": "off",
     },
   },
+  {
+    // Docs pages are prose-heavy; don't force HTML entity escaping in copy.
+    files: ["app/docs/**/*.{ts,tsx}"],
+    rules: {
+      "react/no-unescaped-entities": "off",
+    },
+  },
 ];

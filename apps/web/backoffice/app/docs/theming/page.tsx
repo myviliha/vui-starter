@@ -154,8 +154,8 @@ export default function ThemingPage() {
       </Note>
 
       <DocPager
-        prev={{ label: "Installation", href: "/installation" }}
-        next={{ label: "Layout & patterns", href: "/layout" }}
+        prev={{ label: "Installation", href: "/docs/installation" }}
+        next={{ label: "Layout & patterns", href: "/docs/layout" }}
       />
     </article>
   );

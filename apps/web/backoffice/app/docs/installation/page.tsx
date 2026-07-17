@@ -126,8 +126,8 @@ export function Example() {
 }`}</CodeBlock>
 
       <DocPager
-        prev={{ label: "Introduction", href: "/" }}
-        next={{ label: "Theming", href: "/theming" }}
+        prev={{ label: "Introduction", href: "/docs" }}
+        next={{ label: "Theming", href: "/docs/theming" }}
       />
     </article>
   );

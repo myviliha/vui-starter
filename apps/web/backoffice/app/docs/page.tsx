@@ -41,13 +41,13 @@ export default function IntroductionPage() {
       />
 
       <div className="mb-10 flex flex-wrap gap-3">
-        <Link href="/installation">
+        <Link href="/docs/installation">
           <Button variant="primary">
             Get started
             <ArrowRightIcon className="size-4" />
           </Button>
         </Link>
-        <Link href="/components">
+        <Link href="/docs/components">
           <Button>Browse components</Button>
         </Link>
       </div>
@@ -65,7 +65,7 @@ export default function IntroductionPage() {
       <CodeBlock title="terminal">{`npm install @viliha/vui-ui`}</CodeBlock>
       <P>
         Then import the design tokens once and start using components. See{" "}
-        <Link href="/installation" className="font-medium underline underline-offset-4">
+        <Link href="/docs/installation" className="font-medium underline underline-offset-4">
           Installation
         </Link>{" "}
         for Next.js, Vite, existing projects and Turborepo.
@@ -85,7 +85,7 @@ export default function IntroductionPage() {
         ))}
       </div>
 
-      <DocPager next={{ label: "Installation", href: "/installation" }} />
+      <DocPager next={{ label: "Installation", href: "/docs/installation" }} />
     </article>
   );
 }

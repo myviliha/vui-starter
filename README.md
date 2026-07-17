@@ -70,15 +70,12 @@ Requires **Node 18+** and **pnpm 9+**.
 git clone https://github.com/myviliha/vui-starter.git
 cd vui-starter
 pnpm install
-pnpm dev          # starts both apps (admin, docs)
+pnpm dev          # http://localhost:3000
 ```
 
-| App   | Path                        | Dev URL                 |
-| ----- | --------------------------- | ----------------------- |
-| Admin | `apps/web/backoffice`       | http://localhost:3000   |
-| Docs  | `apps/docs/documentation`   | http://localhost:3001   |
-
-Run a single app: `pnpm --filter backoffice dev`.
+One Next.js app (`apps/web/backoffice`) on **http://localhost:3000** — the admin
+UI plus the docs, served at **`/docs`** (open it from the docs icon in the top
+bar).
 
 ### Scaffold your own project from this template
 
@@ -273,9 +270,7 @@ datatable) · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 ```
 apps/
   web/
-    backoffice/        # Admin app — the design system in a real app (:3000)
-  docs/
-    documentation/     # Docs app (:3001)
+    backoffice/        # The app (:3000) — admin UI + docs at /docs
 packages/
   ui/                  # @viliha/vui-ui — the published component library
   eslint-config/       # Shared ESLint config

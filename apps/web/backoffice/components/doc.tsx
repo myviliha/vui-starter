@@ -18,9 +18,9 @@ export function PageTitle({
           {eyebrow}
         </p>
       )}
-      <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
       {lead && (
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {lead}
         </p>
       )}
@@ -30,7 +30,7 @@ export function PageTitle({
 
 export function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-10 mb-3 scroll-mt-20 border-b border-border pb-2 text-xl font-semibold tracking-tight">
+    <h2 className="mt-10 mb-3 scroll-mt-20 border-b border-border pb-2 text-lg font-semibold tracking-tight">
       {children}
     </h2>
   );
@@ -38,19 +38,19 @@ export function H2({ children }: { children: React.ReactNode }) {
 
 export function H3({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="mt-6 mb-2 text-base font-semibold tracking-tight">
+    <h3 className="mt-6 mb-2 text-sm font-semibold tracking-tight">
       {children}
     </h3>
   );
 }
 
 export function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-4 leading-relaxed text-foreground/90">{children}</p>;
+  return <p className="mb-4 text-sm leading-relaxed text-foreground">{children}</p>;
 }
 
 export function Lead({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-6 text-base leading-relaxed text-muted-foreground">
+    <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
       {children}
     </p>
   );
@@ -58,7 +58,7 @@ export function Lead({ children }: { children: React.ReactNode }) {
 
 export function Ul({ children }: { children: React.ReactNode }) {
   return (
-    <ul className="mb-4 ml-5 list-disc space-y-1.5 leading-relaxed text-foreground/90 marker:text-muted-foreground">
+    <ul className="mb-4 ml-5 list-disc space-y-1.5 text-sm leading-relaxed text-foreground marker:text-muted-foreground">
       {children}
     </ul>
   );
