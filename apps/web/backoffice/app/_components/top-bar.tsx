@@ -68,7 +68,9 @@ export function TopBar() {
         </Button>
         <Link
           href="/docs"
-          aria-label="Documentation"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Documentation (opens in a new tab)"
           className="grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent"
         >
           <ReaderIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
