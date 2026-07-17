@@ -149,6 +149,19 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           <div className="mx-auto max-w-3xl px-6 py-10 md:px-10">{children}</div>
         </main>
       </div>
+
+      {/* Footer */}
+      <footer className="shrink-0 border-t border-border bg-background px-4 py-2.5 text-center text-xs text-muted-foreground md:px-6">
+        Made with <span className="text-rose-500">♥</span> from Vietnam by the{" "}
+        <a
+          href="https://vui.viliha.com"
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-foreground hover:underline"
+        >
+          Viliha Team
+        </a>
+      </footer>
     </div>
   );
 }

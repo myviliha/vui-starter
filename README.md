@@ -1,5 +1,6 @@
 # Vui Starter
 
+[![live](https://img.shields.io/badge/live-vui.viliha.com-266df0)](https://vui.viliha.com)
 [![npm](https://img.shields.io/npm/v/@viliha/vui-ui?color=266df0&label=%40viliha%2Fvui-ui)](https://www.npmjs.com/package/@viliha/vui-ui)
 [![license](https://img.shields.io/npm/l/@viliha/vui-ui)](./LICENSE)
 
@@ -300,3 +301,7 @@ pnpm check-types    # type-check
 ## License
 
 [MIT](./LICENSE) © Suman Bonakurthi. Free for personal and commercial use.
+
+---
+
+Made with ♥ from Vietnam by the [Viliha Team](https://vui.viliha.com).

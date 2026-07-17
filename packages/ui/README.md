@@ -5,8 +5,10 @@ CSS v4, shadcn-style patterns, and Radix Icons. Ships as **TypeScript source**
 (Just-in-Time) — your app's bundler compiles only what you import.
 
 Part of [**Vui Starter**](https://github.com/myviliha/vui-starter) — a free,
-open-source admin design system. See the repo for the full docs, a live
-backoffice demo, and per-toolchain setup guides.
+open-source admin design system.
+
+- 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com)
+- 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
 
 ## Install
 
@@ -80,3 +82,7 @@ to rebrand the whole system:
 ## License
 
 MIT © Suman Bonakurthi
+
+---
+
+Made with ♥ from Vietnam by the [Viliha Team](https://vui.viliha.com).
