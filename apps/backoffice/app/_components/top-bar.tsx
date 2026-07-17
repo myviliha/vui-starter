@@ -11,13 +11,17 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import { usePageChrome } from "@viliha/vui-ui/record-view";
 
 import { SidebarToggle } from "@/app/_components/app-sidebar";
 import { UserMenu } from "@/app/_components/user-menu";
 import { colorFor } from "@/app/_components/route-meta";
+
+/** One shared size for every top-bar icon control, so the cluster is uniform. */
+const iconControl =
+  "grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent";
+const iconGlyph = "size-5 text-foreground [&_path]:[stroke-width:1px]";
 
 /** Global top bar: sidebar toggle + page title (left), centered search,
     help + notifications (right). */
@@ -62,37 +66,34 @@ export function TopBar() {
 
       {/* Right — help, notifications, settings, profile.
           Bold, dark, larger glyphs (heavier stroke via [&_path]). */}
+      {/* All controls share one size (size-9 box, size-5 glyph) so the cluster
+          is visually uniform — see iconControl. */}
       <div className="ml-auto flex items-center gap-1.5">
-        <Button variant="ghost" size="icon" aria-label="Help &amp; support">
-          <QuestionMarkCircledIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
-        </Button>
+        <button type="button" aria-label="Help &amp; support" className={iconControl}>
+          <QuestionMarkCircledIcon className={iconGlyph} />
+        </button>
         <Link
           href="/docs"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Documentation (opens in a new tab)"
-          className="grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent"
+          className={iconControl}
         >
-          <ReaderIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
+          <ReaderIcon className={iconGlyph} />
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
+          type="button"
           aria-label="Notifications"
-          className="relative"
+          className={`relative ${iconControl}`}
         >
-          <BellIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
+          <BellIcon className={iconGlyph} />
           <span
             className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
             aria-hidden="true"
           />
-        </Button>
-        <Link
-          href="/settings"
-          aria-label="Settings"
-          className="grid size-9 shrink-0 place-items-center rounded-md transition-colors hover:bg-accent"
-        >
-          <GearIcon className="size-5 text-foreground [&_path]:[stroke-width:1px]" />
+        </button>
+        <Link href="/settings" aria-label="Settings" className={iconControl}>
+          <GearIcon className={iconGlyph} />
         </Link>
         <UserMenu />
       </div>

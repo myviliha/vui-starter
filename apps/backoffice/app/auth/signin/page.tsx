@@ -168,7 +168,7 @@ export default function SignInPage() {
       <form onSubmit={sendMagicLink}>
         <AuthCardHeader title="Sign in to your account" />
         <AuthCardBody className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-4">
             <Button
               type="button"
               variant="outline"

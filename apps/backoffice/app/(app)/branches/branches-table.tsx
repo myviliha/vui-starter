@@ -25,6 +25,8 @@ const fields: RecordField<Branch>[] = [
     key: "isHeadquarters",
     label: "HQ",
     icon: CircleDot,
+    // Wide enough for the "Headquarters" badge so it never spills into Actions.
+    width: 150,
     group: "System",
     render: (row) =>
       row.isHeadquarters ? (

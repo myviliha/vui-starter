@@ -60,7 +60,7 @@ type FieldGroup = "General" | "Work" | "Social" | "System";
 const GROUP_ORDER: FieldGroup[] = ["General", "Work", "Social", "System"];
 
 /** Fixed (non-resizable) leading/trailing column widths, in px. */
-const CHECKBOX_W = 44;
+const CHECKBOX_W = 56;
 const ACTIONS_W = 120;
 const NAME_COL = "__name";
 const NAME_DEFAULT_W = 190;
@@ -633,7 +633,7 @@ export function RecordView<T extends { id: RowId }>({
     const cellKey = `${row.id}:${field.key}`;
     const hoverActions =
       (field.editable || (field.copyable && value)) ? (
-        <span className="absolute inset-y-0 right-1 flex items-center gap-0.5 opacity-0 transition-opacity group-hover/cell:opacity-100 focus-within:opacity-100">
+        <span className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center divide-x divide-border overflow-hidden rounded-sm bg-background shadow-sm ring-1 ring-border opacity-0 transition-opacity group-hover/cell:opacity-100 focus-within:opacity-100">
           {field.copyable && value && (
             <button
               type="button"
@@ -643,7 +643,7 @@ export function RecordView<T extends { id: RowId }>({
               }}
               aria-label={`Copy ${field.label}`}
               title={`Copy ${field.label}`}
-              className="grid size-6 place-items-center rounded-sm bg-background text-muted-foreground shadow-sm ring-1 ring-border hover:text-foreground"
+              className="grid size-6 place-items-center text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               {copiedKey === cellKey ? (
                 <Check className="size-3.5 text-emerald-600" />
@@ -661,7 +661,7 @@ export function RecordView<T extends { id: RowId }>({
               }}
               aria-label={`Edit ${field.label}`}
               title={`Edit ${field.label}`}
-              className="grid size-6 place-items-center rounded-sm bg-background text-muted-foreground shadow-sm ring-1 ring-border hover:text-foreground"
+              className="grid size-6 place-items-center text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Pencil className="size-3.5" />
             </button>
@@ -954,7 +954,7 @@ export function RecordView<T extends { id: RowId }>({
           <TableHeader className="sticky top-0 z-20 bg-background [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:bg-background">
             <TableRow className="hover:bg-transparent">
               <TableHead style={{ width: CHECKBOX_W }} className="p-0">
-                <div className="flex h-8 items-center pl-4">
+                <div className="flex h-8 items-center pl-8">
                   <Checkbox
                     checked={allSelected}
                     onChange={toggleSelectAll}
@@ -1047,9 +1047,11 @@ export function RecordView<T extends { id: RowId }>({
                     className="group data-[active=true]:bg-accent/60 data-[dragover=true]:border-t-2 data-[dragover=true]:border-t-primary data-[flash=true]:bg-primary/10"
                   >
                     <TableCell className="p-0">
-                      <div className="relative flex h-8 items-center pl-4">
-                        {/* Drag grip — overlaid in the left gutter on hover,
-                            so it never shifts the checkbox's alignment. */}
+                      <div className="relative flex h-8 items-center pl-8">
+                        {/* Drag grip — always visible in a light color (so the
+                            reorder affordance is discoverable), darkening on
+                            hover. Sits in its own reserved slot in the left
+                            gutter so it never overlaps the checkbox. */}
                         <div
                           draggable
                           onDragStart={(e) => {
@@ -1063,7 +1065,7 @@ export function RecordView<T extends { id: RowId }>({
                           }}
                           aria-label={`Drag ${primary.title || singular} to reorder`}
                           title="Drag to reorder"
-                          className="absolute left-0 top-1/2 flex h-6 w-4 -translate-y-1/2 cursor-grab items-center justify-center text-muted-foreground/50 opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100 active:cursor-grabbing"
+                          className="absolute left-1.5 top-1/2 flex h-6 w-4 -translate-y-1/2 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
                         >
                           <GripVertical className="size-3.5" />
                         </div>

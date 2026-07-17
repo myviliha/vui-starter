@@ -221,17 +221,24 @@ function SidebarBody({
       {/* Navigation */}
       <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-2">
         {NAV.map((section, index) => (
-          <div key={section.title ?? `section-${index}`} className="space-y-1">
-            {section.title && !collapsed && (
-              <p className="px-2 pb-1 text-sm font-medium text-muted-foreground">
-                {section.title}
-              </p>
-            )}
+          <React.Fragment key={section.title ?? `section-${index}`}>
+            {/* Collapsed group separator — a nav-level sibling so the nav's
+                space-y rhythm spaces it equally above and below. */}
             {section.title && collapsed && index > 0 && (
-              <div className="mx-2 my-2 border-t border-sidebar-border" />
+              <div
+                className="mx-2 border-t border-sidebar-border"
+                aria-hidden="true"
+              />
             )}
-            {section.items.map(renderEntry)}
-          </div>
+            <div className="space-y-1">
+              {section.title && !collapsed && (
+                <p className="px-2 pb-1 text-sm font-medium text-muted-foreground">
+                  {section.title}
+                </p>
+              )}
+              {section.items.map(renderEntry)}
+            </div>
+          </React.Fragment>
         ))}
       </nav>
 
@@ -403,9 +410,9 @@ export function SidebarToggle() {
       aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       aria-expanded={!collapsed}
       title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-      className="hidden size-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:grid"
+      className="hidden size-9 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:grid"
     >
-      <Menu className="size-4" aria-hidden="true" />
+      <Menu className="size-5" aria-hidden="true" />
     </button>
   );
 }
