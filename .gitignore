@@ -40,3 +40,5 @@ yarn-error.log*
 
 # Idea
 .idea
+# Local bug reports / working artifacts (not part of the OSS repo)
+bugs/
