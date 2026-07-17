@@ -45,13 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-      # action-setup puts pnpm (from packageManager) on PATH before setup-node's
-      # pnpm cache runs — same ordering as ci.yml. The npx-pnpm@11 workaround
-      # failed here because pnpm never landed on PATH.
+      # action-setup puts pnpm on PATH; the npx-pnpm@11 workaround failed here
+      # because pnpm never landed on PATH. No `cache: pnpm` — this job runs no
+      # `pnpm install` (audit reads the lockfile directly), so an empty pnpm
+      # store makes setup-node's post-run cache save fail on a new lockfile.
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
-          cache: pnpm
       - name: Audit production deps (fail on high/critical)
         run: pnpm audit --prod --audit-level high
