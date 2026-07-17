@@ -9,6 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
     "prettier": "^3.7.4",
     "turbo": "^2.9.17",
     "typescript": "5.9.2"
