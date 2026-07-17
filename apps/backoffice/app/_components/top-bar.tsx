@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   BellIcon,
   GearIcon,
@@ -17,6 +18,7 @@ import { usePageChrome } from "@viliha/vui-ui/record-view";
 import { SidebarToggle } from "@/app/_components/app-sidebar";
 import { UserMenu } from "@/app/_components/user-menu";
 import { colorFor } from "@/app/_components/route-meta";
+import { Shortcut } from "@viliha/vui-ui/kbd";
 
 /** One shared size for every top-bar icon control, so the cluster is uniform. */
 const iconControl =
@@ -29,6 +31,21 @@ export function TopBar() {
   const { page } = usePageChrome();
   const pathname = usePathname();
   const PageIcon = page?.icon;
+  const searchRef = React.useRef<HTMLInputElement>(null);
+
+  // ⌘⌥K / Ctrl+Alt+K focuses global search (⌘K is Quick Actions). Uses e.code
+  // because macOS Option remaps e.key to a composed character.
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === "KeyK") {
+        e.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.select();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <header className="relative flex h-12 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
@@ -53,14 +70,16 @@ export function TopBar() {
             aria-hidden="true"
           />
           <Input
+            ref={searchRef}
             type="search"
             placeholder="Search…"
             aria-label="Global search"
             className="h-8 pl-9"
           />
-          <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
-            ⌘K
-          </kbd>
+          <Shortcut
+            keys={["⌘", "⌥", "K"]}
+            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2"
+          />
         </div>
       </div>
 

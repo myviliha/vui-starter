@@ -60,7 +60,8 @@ export function Example() {
 ## Components
 
 `avatar` · `badge` · `button` · `card` · `chart` (themed Recharts wrapper) ·
-`checkbox` · `dialog` · `confirm-dialog` · `dropdown-menu` · `input` · `menu` ·
+`checkbox` · `command-palette` (⌘K launcher) · `dialog` · `confirm-dialog` ·
+`dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) · `menu` ·
 `required-mark` · `select` · `table` · `record-view` (the full datatable) · plus
 the `utils` (`cn`) helper and the `theme.css` design tokens.
 

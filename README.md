@@ -260,10 +260,11 @@ Dark mode: add the `dark` class to `<html>` (the tokens ship a `.dark` block).
 ## Components
 
 `avatar` · `badge` · `button` · `card` · `chart` (themed Recharts wrapper) ·
-`checkbox` · `dialog` (sectioned modal) · `confirm-dialog` · `dropdown-menu` ·
-`input` · `menu` (bordered list) · `required-mark` (the `*` marker) · `select` ·
-`table` · `record-view` (the full datatable) · plus the `utils` (`cn`) helper and
-the `theme.css` design tokens.
+`checkbox` · `command-palette` (⌘K command menu) · `dialog` (sectioned modal) ·
+`confirm-dialog` · `dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) ·
+`menu` (bordered list) · `required-mark` (the `*` marker) · `select` · `table` ·
+`record-view` (the full datatable) · plus the `utils` (`cn`) helper and the
+`theme.css` design tokens.
 
 ---
 
