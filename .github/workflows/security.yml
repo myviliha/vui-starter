@@ -45,14 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      # action-setup puts pnpm (from packageManager) on PATH before setup-node's
+      # pnpm cache runs — same ordering as ci.yml. The npx-pnpm@11 workaround
+      # failed here because pnpm never landed on PATH.
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
-      # npm retired the legacy /security/audits endpoint (410); pnpm 11 uses the
-      # bulk advisory endpoint. Run pnpm 11 via npx so the repo's packageManager
-      # stays on pnpm 9, and disable pnpm's version self-management so it doesn't
-      # re-exec pnpm 9 (which would hit the dead endpoint again).
+          cache: pnpm
       - name: Audit production deps (fail on high/critical)
-        env:
-          npm_config_manage_package_manager_versions: "false"
-        run: npx --yes pnpm@11 audit --prod --audit-level high
+        run: pnpm audit --prod --audit-level high
