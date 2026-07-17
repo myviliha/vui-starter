@@ -45,6 +45,7 @@ import {
 } from "./table";
 import { Dropdown, DropdownItem, DropdownLabel } from "./dropdown-menu";
 import { ConfirmDialog } from "./confirm-dialog";
+import { RequiredMark } from "./required-mark";
 import {
   downloadFile,
   parseCSV,
@@ -122,26 +123,6 @@ function fieldDefaultWidth<T>(field: RecordField<T>): number {
 
 /** Shared icon component type (all Radix icons share this shape). */
 export type IconType = typeof Circle;
-
-/** Mandatory-field marker — an asterisk icon (Radix has no asterisk glyph, so
-    it's an inline SVG) sized to the label text; no border chip (no width="15"). */
-function RequiredMark() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2.5}
-      strokeLinecap="round"
-      className="size-3.5 shrink-0 self-center text-destructive"
-      aria-label="required"
-    >
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5.5" y1="8.5" x2="18.5" y2="15.5" />
-      <line x1="18.5" y1="8.5" x2="5.5" y2="15.5" />
-    </svg>
-  );
-}
 
 export type PageMeta = { title: string; icon?: IconType };
 

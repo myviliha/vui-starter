@@ -12,6 +12,7 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import {
   AuthCard,
+  AuthCardAside,
   AuthCardBody,
   AuthCardFooter,
   AuthCardHeader,
@@ -69,7 +70,7 @@ export default function ForgotPasswordPage() {
           description="Enter your email and we'll send you a reset link."
         />
         <AuthCardBody>
-          <Field label="Work email" htmlFor="email" error={error}>
+          <Field label="Work email" htmlFor="email" required error={error}>
             <Input
               id="email"
               type="email"
@@ -80,18 +81,20 @@ export default function ForgotPasswordPage() {
             />
           </Field>
         </AuthCardBody>
-        <AuthCardFooter className="space-y-3">
+        <AuthCardFooter>
           <Button type="submit" className="w-full">
             <Mail className="size-4" />
             Send reset link
           </Button>
-          <Link
-            href="/auth/signin"
-            className="flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="size-3.5" />
-            Back to sign in
-          </Link>
+          <AuthCardAside>
+            <Link
+              href="/auth/signin"
+              className="flex items-center justify-center gap-1 hover:text-foreground"
+            >
+              <ArrowLeft className="size-3.5" />
+              Back to sign in
+            </Link>
+          </AuthCardAside>
         </AuthCardFooter>
       </form>
     </AuthCard>

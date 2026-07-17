@@ -14,6 +14,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
+import { Wordmark } from "./wordmark";
 import {
   isGroup,
   NAV,
@@ -464,12 +465,7 @@ export function MobileNav() {
         )}
       >
         <div className="flex items-center justify-between px-3 pt-3">
-          <div className="flex items-center gap-2">
-            <Logo variant="mark" className="h-6 w-6" />
-            <span className="text-lg font-bold tracking-tight text-foreground">
-              Vui Starter
-            </span>
-          </div>
+          <Wordmark />
           <button
             type="button"
             onClick={close}

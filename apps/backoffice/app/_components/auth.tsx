@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { RequiredMark } from "@viliha/vui-ui/required-mark";
 
 /** Multicolor Google "G" (brand mark — colors are intentional). */
 export function GoogleIcon({ className }: { className?: string }) {
@@ -37,24 +38,30 @@ export function OrDivider({ label = "or" }: { label?: string }) {
   );
 }
 
-/** Labeled form field with optional hint / error text. */
+/** Labeled form field with optional required marker / hint / error text. */
 export function Field({
   label,
   htmlFor,
   hint,
   error,
+  required,
   children,
 }: {
   label: string;
   htmlFor?: string;
   hint?: string;
   error?: string;
+  required?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-1">
-      <label htmlFor={htmlFor} className="font-medium">
+    <div className="space-y-1.5">
+      <label
+        htmlFor={htmlFor}
+        className="flex items-center gap-1 font-medium leading-relaxed"
+      >
         {label}
+        {required && <RequiredMark />}
       </label>
       {children}
       {error ? (
@@ -133,7 +140,32 @@ export function AuthCardBody({
   className?: string;
   children: React.ReactNode;
 }) {
-  return <div className={cn("px-5 py-5", className)}>{children}</div>;
+  return (
+    <div className={cn("space-y-4 px-5 py-6 leading-relaxed", className)}>
+      {children}
+    </div>
+  );
+}
+
+/** Secondary nav row in a footer (e.g. "New here? Sign up") — set off from the
+ *  primary action by its own top divider for a clean, consistent hierarchy. */
+export function AuthCardAside({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "mt-4 space-y-3 border-t border-border pt-4 text-center leading-relaxed text-muted-foreground",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 }
 
 /** Bordered actions/footer section. */

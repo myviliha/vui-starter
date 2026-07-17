@@ -172,7 +172,7 @@ export function SignupForm() {
 
       <DocPager
         prev={{ label: "Layout & patterns", href: "/docs/layout" }}
-        next={{ label: "Components", href: "/docs/components" }}
+        next={{ label: "Auth screens", href: "/docs/auth" }}
       />
     </article>
   );

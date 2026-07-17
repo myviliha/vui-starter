@@ -14,6 +14,7 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import {
   AuthCard,
+  AuthCardAside,
   AuthCardBody,
   AuthCardFooter,
   AuthCardHeader,
@@ -92,7 +93,7 @@ export default function SignUpPage() {
 
           <OrDivider />
 
-          <Field label="Work email" htmlFor="email" error={error}>
+          <Field label="Work email" htmlFor="email" required error={error}>
             <Input
               id="email"
               type="email"
@@ -105,16 +106,16 @@ export default function SignUpPage() {
 
           <RecaptchaMock checked={robot} onChange={setRobot} />
         </AuthCardBody>
-        <AuthCardFooter className="space-y-3">
+        <AuthCardFooter>
           <Button type="submit" className="w-full">
             Create account
           </Button>
-          <p className="text-center text-muted-foreground">
+          <AuthCardAside>
             Already have an account?{" "}
             <Link href="/auth/signin" className="font-medium text-primary hover:underline">
               Sign in
             </Link>
-          </p>
+          </AuthCardAside>
         </AuthCardFooter>
       </form>
     </AuthCard>

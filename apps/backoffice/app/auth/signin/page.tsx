@@ -15,6 +15,7 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import {
   AuthCard,
+  AuthCardAside,
   AuthCardBody,
   AuthCardFooter,
   AuthCardHeader,
@@ -87,7 +88,7 @@ export default function SignInPage() {
         >
           <AuthCardHeader title="Single sign-on" />
           <AuthCardBody>
-            <Field label="Organization ID" htmlFor="org">
+            <Field label="Organization ID" htmlFor="org" required>
               <Input
                 id="org"
                 value={orgId}
@@ -98,11 +99,13 @@ export default function SignInPage() {
               />
             </Field>
           </AuthCardBody>
-          <AuthCardFooter className="space-y-3">
+          <AuthCardFooter>
             <Button type="submit" className="w-full" disabled={!orgId || busy}>
               Continue to your provider
             </Button>
-            <BackLink onClick={() => setView("main")} />
+            <AuthCardAside>
+              <BackLink onClick={() => setView("main")} />
+            </AuthCardAside>
           </AuthCardFooter>
         </form>
       </AuthCard>
@@ -135,7 +138,7 @@ export default function SignInPage() {
               className="text-center text-base tracking-[0.5em]"
             />
           </AuthCardBody>
-          <AuthCardFooter className="space-y-3">
+          <AuthCardFooter>
             <Button
               type="submit"
               className="w-full"
@@ -143,14 +146,16 @@ export default function SignInPage() {
             >
               Verify &amp; sign in
             </Button>
-            <button
-              type="button"
-              onClick={finish}
-              className="mx-auto block text-primary hover:underline"
-            >
-              Use a passkey instead
-            </button>
-            <BackLink onClick={() => setView("main")} />
+            <AuthCardAside>
+              <button
+                type="button"
+                onClick={finish}
+                className="mx-auto block text-primary hover:underline"
+              >
+                Use a passkey instead
+              </button>
+              <BackLink onClick={() => setView("main")} />
+            </AuthCardAside>
           </AuthCardFooter>
         </form>
       </AuthCard>
@@ -190,7 +195,7 @@ export default function SignInPage() {
 
           <OrDivider />
 
-          <Field label="Work email" htmlFor="email" error={emailError}>
+          <Field label="Work email" htmlFor="email" required error={emailError}>
             <Input
               id="email"
               type="email"
@@ -201,17 +206,17 @@ export default function SignInPage() {
             />
           </Field>
         </AuthCardBody>
-        <AuthCardFooter className="space-y-3">
+        <AuthCardFooter>
           <Button type="submit" className="w-full">
             <Mail className="size-4" />
             Email me a magic link
           </Button>
-          <p className="text-center text-muted-foreground">
+          <AuthCardAside>
             New to Vui Starter?{" "}
             <Link href="/auth/signup" className="font-medium text-primary hover:underline">
               Create an account
             </Link>
-          </p>
+          </AuthCardAside>
         </AuthCardFooter>
       </form>
     </AuthCard>

@@ -12,6 +12,7 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import {
   AuthCard,
+  AuthCardAside,
   AuthCardBody,
   AuthCardFooter,
   AuthCardHeader,
@@ -64,8 +65,8 @@ export default function ResetPasswordPage() {
           title="Set a new password"
           description="Choose a strong password you don't use elsewhere."
         />
-        <AuthCardBody className="space-y-3">
-          <Field label="New password" htmlFor="password">
+        <AuthCardBody>
+          <Field label="New password" htmlFor="password" required>
             <Input
               id="password"
               type="password"
@@ -75,7 +76,7 @@ export default function ResetPasswordPage() {
               placeholder="At least 8 characters"
             />
           </Field>
-          <Field label="Confirm password" htmlFor="confirm" error={error}>
+          <Field label="Confirm password" htmlFor="confirm" required error={error}>
             <Input
               id="confirm"
               type="password"
@@ -86,18 +87,20 @@ export default function ResetPasswordPage() {
             />
           </Field>
         </AuthCardBody>
-        <AuthCardFooter className="space-y-3">
+        <AuthCardFooter>
           <Button type="submit" className="w-full">
             <Lock className="size-4" />
             Update password
           </Button>
-          <Link
-            href="/auth/signin"
-            className="flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="size-3.5" />
-            Back to sign in
-          </Link>
+          <AuthCardAside>
+            <Link
+              href="/auth/signin"
+              className="flex items-center justify-center gap-1 hover:text-foreground"
+            >
+              <ArrowLeft className="size-3.5" />
+              Back to sign in
+            </Link>
+          </AuthCardAside>
         </AuthCardFooter>
       </form>
     </AuthCard>

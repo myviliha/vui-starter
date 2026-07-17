@@ -8,6 +8,7 @@ import { ArrowLeftIcon as ArrowLeft, LockClosedIcon as Shield } from "@radix-ui/
 import { Button } from "@viliha/vui-ui/button";
 import {
   AuthCard,
+  AuthCardAside,
   AuthCardBody,
   AuthCardFooter,
   AuthCardHeader,
@@ -41,7 +42,7 @@ export default function VerifyPage() {
           title="Enter verification code"
           description="We sent a 6-digit code to your email."
         />
-        <AuthCardBody className="flex flex-col items-center gap-3">
+        <AuthCardBody className="flex flex-col items-center gap-4">
           <InputOTP
             maxLength={6}
             value={code}
@@ -58,24 +59,26 @@ export default function VerifyPage() {
           </InputOTP>
           {error && <p className="text-destructive">{error}</p>}
         </AuthCardBody>
-        <AuthCardFooter className="space-y-3">
+        <AuthCardFooter>
           <Button type="submit" className="w-full" disabled={code.length !== 6}>
             Verify
           </Button>
-          <button
-            type="button"
-            onClick={() => setCode("")}
-            className="mx-auto block text-muted-foreground hover:text-foreground"
-          >
-            Didn&apos;t get a code? Resend
-          </button>
-          <Link
-            href="/auth/signin"
-            className="flex items-center justify-center gap-1 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="size-3.5" />
-            Back to sign in
-          </Link>
+          <AuthCardAside>
+            <button
+              type="button"
+              onClick={() => setCode("")}
+              className="mx-auto block hover:text-foreground"
+            >
+              Didn&apos;t get a code? Resend
+            </button>
+            <Link
+              href="/auth/signin"
+              className="flex items-center justify-center gap-1 hover:text-foreground"
+            >
+              <ArrowLeft className="size-3.5" />
+              Back to sign in
+            </Link>
+          </AuthCardAside>
         </AuthCardFooter>
       </form>
     </AuthCard>

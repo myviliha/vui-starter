@@ -7,6 +7,7 @@ import { ArrowLeftIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@viliha/vui-ui/utils";
 import { Badge } from "@viliha/vui-ui/badge";
+import { Wordmark as BrandWordmark } from "@/app/_components/wordmark";
 
 type NavItem = { label: string; href: string };
 type NavGroup = { title: string; items: NavItem[] };
@@ -28,7 +29,10 @@ const NAV: NavGroup[] = [
   },
   {
     title: "Guides",
-    items: [{ label: "Using shadcn/ui", href: "/docs/shadcn-ui" }],
+    items: [
+      { label: "Using shadcn/ui", href: "/docs/shadcn-ui" },
+      { label: "Auth screens", href: "/docs/auth" },
+    ],
   },
   {
     title: "Reference",
@@ -48,25 +52,10 @@ const REPO = "https://github.com/myviliha/vui-starter";
 
 function Wordmark() {
   return (
-    <Link href="/docs" className="flex items-center gap-2">
-      <svg viewBox="0 0 24 24" role="img" aria-label="Vui" className="h-6 w-6">
-        <rect width="24" height="24" rx="6" fill="var(--brand-indigo)" />
-        <path
-          d="M6.5 7.25 L12 16.75 L17.5 7.25"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <span className="text-lg font-bold tracking-tight text-foreground">
-        Vui Starter
-      </span>
-      <Badge variant="muted" className="ml-1">
-        Docs
-      </Badge>
-    </Link>
+    <div className="flex items-center gap-2">
+      <BrandWordmark href="/docs" />
+      <Badge variant="muted">Docs</Badge>
+    </div>
   );
 }
 

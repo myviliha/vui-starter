@@ -61,8 +61,8 @@ export function Example() {
 
 `avatar` · `badge` · `button` · `card` · `chart` (themed Recharts wrapper) ·
 `checkbox` · `dialog` · `confirm-dialog` · `dropdown-menu` · `input` · `menu` ·
-`select` · `table` · `record-view` (the full datatable) · plus the `utils`
-(`cn`) helper and the `theme.css` design tokens.
+`required-mark` · `select` · `table` · `record-view` (the full datatable) · plus
+the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 ## Theming
 
