@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@viliha/vui-ui/utils";
 import { Badge } from "@viliha/vui-ui/badge";
@@ -111,6 +111,13 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-4 md:px-6">
         <Wordmark />
         <div className="flex items-center gap-3">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <ArrowLeftIcon className="size-3.5" />
+            Back to app
+          </Link>
           <a
             href="https://www.npmjs.com/package/@viliha/vui-ui"
             target="_blank"
