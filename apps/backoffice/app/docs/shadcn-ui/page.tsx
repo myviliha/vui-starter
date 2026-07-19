@@ -12,6 +12,7 @@ import {
 } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/shadcn-ui/" },
   title: "Using shadcn/ui",
   description:
     "Use shadcn/ui components with Vui Starter — they adopt the same design tokens automatically. Use shadcn for general UI and RecordView for datatables.",

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { CodeBlock, DocPager, H2, Note, P, PageTitle, Ul } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/theming/" },
   title: "Theming",
   description:
     "Customize Vui Starter with CSS-variable design tokens — colors, radius, dark mode and typography — all from one theme.css.",

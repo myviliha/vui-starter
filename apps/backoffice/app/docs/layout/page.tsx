@@ -12,6 +12,7 @@ import {
 } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/layout/" },
   title: "Layout & patterns",
   description:
     "The standard page template, section cards, breadcrumb placement, bordered list components, and sectioned dialogs — the conventions every new page and component in Vui Starter follows.",

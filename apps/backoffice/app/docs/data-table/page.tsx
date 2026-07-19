@@ -12,6 +12,7 @@ import {
 } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/data-table/" },
   title: "Data table (RecordView)",
   description:
     "RecordView is Vui Starter's batteries-included data table: editable cells, sorting, filtering, pagination, row actions, a buffered add/edit panel, bulk actions, CSV/JSON/Excel/PDF import & export, and auto-aligned columns — all from one fields array.",

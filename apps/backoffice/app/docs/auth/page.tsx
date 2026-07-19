@@ -12,6 +12,7 @@ import {
 } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/auth/" },
   title: "Auth screens",
   description:
     "Ready-made authentication screens — sign in, sign up, forgot/reset password, verify code — built on a reusable sectioned AuthCard so every screen is consistent.",

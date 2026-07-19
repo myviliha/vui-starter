@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { CodeBlock, DocPager, H2, P, PageTitle, Ul } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/contributing/" },
   title: "Contributing",
   description:
     "Contribute to Vui Starter — local setup, useful scripts, where things live, and the pull-request workflow.",

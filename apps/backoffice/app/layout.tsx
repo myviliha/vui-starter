@@ -51,6 +51,32 @@ export const metadata: Metadata = {
     images: [SITE.ogImage],
   },
   robots: { index: true, follow: true },
+  alternates: { canonical: "/" },
+};
+
+/** Structured data (schema.org). Indexable pages set their own canonical, so
+ * this describes the site + product once, at the root. */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: SITE.name,
+      url: SITE.url,
+      description: SITE.description,
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: SITE.name,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web",
+      description: SITE.description,
+      url: SITE.url,
+      author: { "@type": "Person", name: SITE.author },
+      isAccessibleForFree: true,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -62,6 +88,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}

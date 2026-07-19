@@ -133,9 +133,15 @@ export const PUBLIC_ROUTES: string[] = [
   "/docs/contributing",
 ];
 
-/** Page metadata for a backoffice route. Sets a per-page title + description
- * (Open Graph / Twitter inherit the rest from the root layout). Canonical is
- * left to Google's self-canonicalization to avoid trailing-slash mismatches. */
+/** Self-referencing canonical for a route. The app is exported with
+ * `trailingSlash: true`, so pages are served at `/foo/` — the canonical must
+ * match that exactly, otherwise it points at a URL the host 301s away from. */
+export function canonicalFor(path: string): string {
+  return path === "/" ? "/" : `${path}/`;
+}
+
+/** Page metadata for a backoffice route. Sets a per-page title, description
+ * and self-canonical (Open Graph / Twitter inherit the rest from root). */
 export function pageMeta(path: string): Metadata {
   const m = ROUTE_META[path];
   if (!m) return {};
@@ -143,7 +149,8 @@ export function pageMeta(path: string): Metadata {
   return {
     title,
     description,
-    openGraph: { title, description },
+    alternates: { canonical: canonicalFor(path) },
+    openGraph: { title, description, url: canonicalFor(path) },
     twitter: { title, description },
   };
 }

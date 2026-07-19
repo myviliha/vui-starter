@@ -12,6 +12,7 @@ import {
 } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/installation/" },
   title: "Installation",
   description:
     "Install @viliha/vui-ui and set it up in a new Next.js app, Vite + React, an existing project, or a Turborepo monorepo.",

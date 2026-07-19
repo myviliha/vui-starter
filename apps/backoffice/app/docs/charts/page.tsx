@@ -12,6 +12,7 @@ import {
 } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/charts/" },
   title: "Charts",
   description:
     "Add themed charts to Vui Starter with Recharts. The ChartContainer wrapper drives every series from the --chart-* design tokens, so charts match your theme and dark mode automatically.",

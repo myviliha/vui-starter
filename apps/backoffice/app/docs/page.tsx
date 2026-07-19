@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@viliha/vui-ui/card";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/docs/" },
   title: "Introduction",
   description:
     "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
