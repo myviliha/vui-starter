@@ -88,7 +88,11 @@ export function TopBar() {
       {/* All controls share one size (size-9 box, size-5 glyph) so the cluster
           is visually uniform — see iconControl. */}
       <div className="ml-auto flex items-center gap-1.5">
-        <button type="button" aria-label="Help &amp; support" className={iconControl}>
+        <button
+          type="button"
+          aria-label="Help &amp; support"
+          className={`hidden sm:grid ${iconControl}`}
+        >
           <QuestionMarkCircledIcon className={iconGlyph} />
         </button>
         <Link
@@ -111,7 +115,11 @@ export function TopBar() {
             aria-hidden="true"
           />
         </button>
-        <Link href="/settings" aria-label="Settings" className={iconControl}>
+        <Link
+          href="/settings"
+          aria-label="Settings"
+          className={`hidden sm:grid ${iconControl}`}
+        >
           <GearIcon className={iconGlyph} />
         </Link>
         <UserMenu />

@@ -715,7 +715,7 @@ export function RecordView<T extends { id: RowId }>({
             className="px-1 no-underline hover:no-underline"
           >
             <Plus className="size-4 text-emerald-500" />
-            <span>{singular}</span>
+            <span className="hidden sm:inline">{singular}</span>
           </Button>
 
           <input
@@ -728,6 +728,7 @@ export function RecordView<T extends { id: RowId }>({
           />
           <Dropdown
             label="Import"
+            labelClassName="hidden sm:inline"
             icon={<Upload className="size-3.5 text-sky-500" />}
             align="end"
           >
@@ -751,6 +752,7 @@ export function RecordView<T extends { id: RowId }>({
 
           <Dropdown
             label="Export"
+            labelClassName="hidden sm:inline"
             icon={<Download className="size-3.5 text-violet-500" />}
             align="end"
           >

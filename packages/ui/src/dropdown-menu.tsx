@@ -14,6 +14,9 @@ interface DropdownProps {
   ariaLabel?: string;
   /** Render the trigger as a compact toolbar button (default) or a plain one. */
   active?: boolean;
+  /** Extra classes on the label text — e.g. `hidden sm:inline` to hide it on
+   *  mobile so the trigger collapses to an icon-only button. */
+  labelClassName?: string;
 }
 
 /** Minimal click-to-open menu with outside-click + Escape to close. */
@@ -24,6 +27,7 @@ export function Dropdown({
   children,
   ariaLabel,
   active,
+  labelClassName,
 }: DropdownProps) {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -62,7 +66,7 @@ export function Dropdown({
         )}
       >
         {icon}
-        {label}
+        {label && <span className={cn("truncate", labelClassName)}>{label}</span>}
       </button>
       {open && (
         <div
