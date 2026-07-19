@@ -14,7 +14,6 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
-import { Wordmark } from "./wordmark";
 import { QuickActionsLauncher } from "./quick-actions";
 import {
   isGroup,
@@ -483,18 +482,19 @@ export function MobileNav() {
           open ? "translate-x-0" : "pointer-events-none -translate-x-full",
         )}
       >
-        <div className="flex items-center justify-between px-3 pt-3">
-          <Wordmark />
-          <button
-            type="button"
-            onClick={close}
-            aria-label="Close navigation"
-            className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-sidebar-accent"
-          >
-            <X className="size-4" />
-          </button>
-        </div>
-        <SidebarBody onNavigate={close} />
+        <SidebarBody
+          onNavigate={close}
+          headerAction={
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Close navigation"
+              className="grid size-8 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-sidebar-accent"
+            >
+              <X className="size-4" />
+            </button>
+          }
+        />
       </div>
 
       {/* Fixed bottom navigation bar */}
