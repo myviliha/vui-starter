@@ -1,7 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Wordmark } from "@/app/_components/wordmark";
+
+// Auth screens shouldn't surface in search results.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default function AuthLayout({
   children,

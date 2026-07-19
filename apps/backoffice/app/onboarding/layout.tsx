@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
+
 import { Logo } from "@/app/_components/logo";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
+
+// Onboarding is a post-signup flow — keep it out of the index.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default function OnboardingLayout({
   children,
