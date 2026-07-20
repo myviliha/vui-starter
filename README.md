@@ -33,6 +33,7 @@ with zero backend.
   - [4 · Turborepo / monorepo](#4--turborepo--monorepo)
 - [Using components](#using-components)
 - [Theming](#theming)
+- [Configuration](#configuration)
 - [Components](#components)
 - [Project structure](#project-structure)
 - [Contributing](#contributing)
@@ -254,6 +255,27 @@ import** in your own CSS:
 ```
 
 Dark mode: add the `dark` class to `<html>` (the tokens ship a `.dark` block).
+
+---
+
+## Configuration
+
+The demo app’s footer identity (company, year, license) is env-driven — no code
+edit needed to rebrand it. Copy `apps/backoffice/.env.example` to
+`apps/backoffice/.env.local` and set any of:
+
+```bash
+NEXT_PUBLIC_COMPANY_NAME="Acme Inc."
+NEXT_PUBLIC_COPYRIGHT_YEAR="2026"
+NEXT_PUBLIC_LICENSE="All rights reserved"
+# …or override the whole line at once (takes precedence over the three above):
+NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
+```
+
+All are optional; unset falls back to the current `© 2026 VILIHA PTE. LTD. ·
+MIT Licensed`. These are `NEXT_PUBLIC_` vars read at **build time** and inlined
+into the export — set them where your deploy runs `pnpm build`, not just at
+runtime.
 
 ---
 
