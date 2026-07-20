@@ -5,10 +5,9 @@ rationale, see [`Enterprise_NextJS_React_Coding_Standards.md`](./Enterprise_Next
 
 ## What this repo is
 
-Turborepo + pnpm monorepo. Two apps + one published library:
+Turborepo + pnpm monorepo. One app + one published library:
 
-- `apps/backoffice` — Admin app, dev on **:3000**.
-- `apps/docs/documentation` — Docs site, dev on **:3001**.
+- `apps/backoffice` — Admin app **and** the docs site (docs are routes under `app/docs`, served at `/docs`). Dev on **:3000**.
 - `packages/ui` — `@viliha/vui-ui`, shipped as **TypeScript source** (no build).
 
 ## Where things go (do exactly this)

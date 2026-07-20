@@ -294,10 +294,10 @@ runtime.
 
 ```
 apps/
-  web/
-    backoffice/        # The app (:3000) — admin UI + docs at /docs
+  backoffice/          # The app (:3000) — admin UI + docs at /docs
 packages/
   ui/                  # @viliha/vui-ui — the published component library
+                       #   (ships AGENT.md — an AI-agent usage guide)
   eslint-config/       # Shared ESLint config
   typescript-config/   # Shared tsconfig
 ```

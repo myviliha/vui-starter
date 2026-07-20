@@ -57,6 +57,14 @@ export function Example() {
 }
 ```
 
+## Building with an AI agent
+
+This package ships an **AI-agent usage guide** at
+`node_modules/@viliha/vui-ui/AGENT.md` — the standards to follow when generating
+UI with VUI (token discipline, reuse-first, page layout, RecordView, a11y, dark
+mode). Point your agent at it, or copy it into your repo as `AGENTS.md` so tools
+auto-load it.
+
 ## Components
 
 `avatar` · `badge` · `button` · `card` · `chart` (themed Recharts wrapper) ·
