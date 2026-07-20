@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   CalendarIcon as CalendarDays,
+  CheckIcon as Check,
   Cross2Icon as X,
   CubeIcon as Building2,
   DragHandleDots2Icon as GripVertical,
@@ -54,6 +55,8 @@ export function OpportunitiesBoard() {
   const [items, setItems] = React.useState<Opportunity[]>(initialOpportunities);
   const [filter, setFilter] = React.useState("");
   const [activeId, setActiveId] = React.useState<number | null>(null);
+  // A card created via "add" but not yet saved — Cancel/close removes it.
+  const [newId, setNewId] = React.useState<number | null>(null);
   const [dragId, setDragId] = React.useState<number | null>(null);
   const [dropStage, setDropStage] = React.useState<OpportunityStage | null>(null);
 
@@ -85,6 +88,7 @@ export function OpportunitiesBoard() {
     };
     setItems((prev) => [...prev, row]);
     setActiveId(row.id);
+    setNewId(row.id);
   }
 
   function updateItem(id: number, patch: Partial<Opportunity>) {
@@ -218,9 +222,22 @@ export function OpportunitiesBoard() {
       {activeItem && (
         <OpportunityDetailPanel
           item={activeItem}
-          onChange={(patch) => updateItem(activeItem.id, patch)}
-          onDelete={() => deleteItem(activeItem.id)}
-          onClose={() => setActiveId(null)}
+          isNew={activeItem.id === newId}
+          onSave={(draft) => {
+            updateItem(activeItem.id, draft);
+            setNewId(null);
+            setActiveId(null);
+          }}
+          onDelete={() => {
+            deleteItem(activeItem.id);
+            setNewId(null);
+          }}
+          onCancel={() => {
+            // Discard a never-saved new card entirely.
+            if (activeItem.id === newId) deleteItem(activeItem.id);
+            setNewId(null);
+            setActiveId(null);
+          }}
         />
       )}
     </div>
@@ -283,22 +300,35 @@ function OpportunityCard({
 
 interface DetailProps {
   item: Opportunity;
-  onChange: (patch: Partial<Opportunity>) => void;
+  /** New (unsaved) card — hides Delete; Cancel drops the card. */
+  isNew: boolean;
+  /** Commit the buffered draft to the board. */
+  onSave: (draft: Opportunity) => void;
   onDelete: () => void;
-  onClose: () => void;
+  /** Discard the draft (and the card if it was never saved). */
+  onCancel: () => void;
 }
 
 function OpportunityDetailPanel({
   item,
-  onChange,
+  isNew,
+  onSave,
   onDelete,
-  onClose,
+  onCancel,
 }: DetailProps) {
+  // Buffer edits locally; the board only changes on Save (like organizations).
+  const [draft, setDraft] = React.useState<Opportunity>(item);
+  React.useEffect(() => {
+    setDraft(item);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item.id]);
+  const patch = (p: Partial<Opportunity>) => setDraft((d) => ({ ...d, ...p }));
+
   return (
     <>
       <div
         className="vui-overlay-in fixed inset-0 z-[55] bg-foreground/25"
-        onClick={onClose}
+        onClick={onCancel}
         aria-hidden="true"
       />
       <aside
@@ -308,12 +338,12 @@ function OpportunityDetailPanel({
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
         <Target className="size-4 shrink-0 text-muted-foreground" />
         <span className="truncate font-semibold">
-          {item.name || "Untitled opportunity"}
+          {draft.name || "Untitled opportunity"}
         </span>
         <Button
           variant="ghost"
           size="icon"
-          onClick={onClose}
+          onClick={onCancel}
           aria-label="Close"
           className="ml-auto"
         >
@@ -329,8 +359,8 @@ function OpportunityDetailPanel({
 
           <Field label="Name">
             <Input
-              value={item.name}
-              onChange={(e) => onChange({ name: e.target.value })}
+              value={draft.name}
+              onChange={(e) => patch({ name: e.target.value })}
               aria-label="Name"
               className="h-8"
             />
@@ -338,8 +368,8 @@ function OpportunityDetailPanel({
 
           <Field label="Company" icon={Building2}>
             <Input
-              value={item.company}
-              onChange={(e) => onChange({ company: e.target.value })}
+              value={draft.company}
+              onChange={(e) => patch({ company: e.target.value })}
               aria-label="Company"
               className="h-8"
             />
@@ -349,21 +379,21 @@ function OpportunityDetailPanel({
             <Input
               type="number"
               min={0}
-              value={item.amount}
-              onChange={(e) => onChange({ amount: Number(e.target.value) || 0 })}
+              value={draft.amount}
+              onChange={(e) => patch({ amount: Number(e.target.value) || 0 })}
               aria-label="Amount"
               className="h-8 tabular-nums"
             />
           </Field>
 
           <Field label="Stage" icon={ListFilter}>
-            <Dropdown label={item.stage} align="start" active>
+            <Dropdown label={draft.stage} align="start" active>
               <DropdownLabel>Move to stage</DropdownLabel>
               {OPPORTUNITY_STAGES.map((s) => (
                 <DropdownItem
                   key={s}
-                  checked={item.stage === s}
-                  onSelect={() => onChange({ stage: s })}
+                  checked={draft.stage === s}
+                  onSelect={() => patch({ stage: s })}
                 >
                   {s}
                 </DropdownItem>
@@ -373,8 +403,8 @@ function OpportunityDetailPanel({
 
           <Field label="Owner" icon={User}>
             <Input
-              value={item.owner}
-              onChange={(e) => onChange({ owner: e.target.value })}
+              value={draft.owner}
+              onChange={(e) => patch({ owner: e.target.value })}
               aria-label="Owner"
               className="h-8"
             />
@@ -383,8 +413,8 @@ function OpportunityDetailPanel({
           <Field label="Close date" icon={CalendarDays}>
             <Input
               type="date"
-              value={item.closeDate}
-              onChange={(e) => onChange({ closeDate: e.target.value })}
+              value={draft.closeDate}
+              onChange={(e) => patch({ closeDate: e.target.value })}
               aria-label="Close date"
               className="h-8"
             />
@@ -392,15 +422,27 @@ function OpportunityDetailPanel({
         </div>
       </div>
 
-      <div className="border-t border-border p-3">
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={onDelete}
-          className="w-full"
-        >
-          <Trash2 className="size-4" />
-          Delete opportunity
+      {/* Footer — Add shows Cancel/Save; Edit adds a leading Delete.
+          Save uses the primary color; Delete uses the destructive (red) token. */}
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border p-3">
+        {!isNew && (
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={onDelete}
+            className="mr-auto"
+          >
+            <Trash2 className="size-4" />
+            Delete
+          </Button>
+        )}
+        <Button size="sm" onClick={onCancel}>
+          <X className="size-4" />
+          Cancel
+        </Button>
+        <Button variant="primary" size="sm" onClick={() => onSave(draft)}>
+          <Check className="size-4" />
+          Save
         </Button>
       </div>
       </aside>
