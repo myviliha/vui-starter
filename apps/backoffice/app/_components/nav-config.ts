@@ -1,4 +1,5 @@
 import {
+  AvatarIcon as UserCircle,
   BackpackIcon as Briefcase,
   BarChartIcon as BarChart3,
   BookmarkIcon as Flag,
@@ -8,11 +9,11 @@ import {
   CubeIcon as Building2,
   DashboardIcon as LayoutGrid,
   EnterIcon as LogIn,
+  GearIcon as Settings,
   GlobeIcon as Globe,
   HomeIcon as Home,
   HomeIcon as Landmark,
   IdCardIcon as Contact,
-  LayersIcon as Layers,
   LockClosedIcon as Lock,
   MixIcon as Blocks,
   Pencil2Icon as FormInput,
@@ -20,7 +21,6 @@ import {
   QuestionMarkCircledIcon as HelpCircle,
   SewingPinFilledIcon as MapPin,
   Share2Icon as Network,
-  StackIcon as Server,
   TargetIcon as Target,
   TextIcon as Languages,
   TokensIcon as Coins,
@@ -91,7 +91,7 @@ export const NAV: NavSection[] = [
     items: [
       {
         label: "CRM",
-        icon: Layers,
+        icon: UserCircle,
         color: "text-indigo-500",
         children: [
           { label: "Companies", href: "/crm/companies", icon: Building, color: "text-blue-500" },
@@ -101,7 +101,7 @@ export const NAV: NavSection[] = [
       },
       {
         label: "System",
-        icon: Server,
+        icon: Settings,
         color: "text-slate-500",
         children: [
           { label: "Regions", href: "/system/regions", icon: Globe, color: "text-teal-500" },
