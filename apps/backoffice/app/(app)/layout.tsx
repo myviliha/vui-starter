@@ -1,4 +1,5 @@
 import { PageChromeProvider } from "@viliha/vui-ui/record-view";
+import { FOOTER_NOTICE } from "@/lib/seo";
 import {
   AppSidebar,
   MobileNav,
@@ -31,7 +32,7 @@ export default function AppLayout({
                 <PageFade>{children}</PageFade>
               </div>
               <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-1 text-center text-[10px] text-muted-foreground md:block">
-                © 2026 VILIHA PTE. LTD. · MIT Licensed
+                {FOOTER_NOTICE}
               </footer>
             </div>
           </PageChromeProvider>

@@ -10,7 +10,18 @@ export const SITE = {
     "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
   ogImage: "/brand/pulse-wordmark.png",
   author: "Suman Bonakurthi",
+  // Footer identity — overridable per deployment via env (see .env.example).
+  // NEXT_PUBLIC_ so the value is inlined into the client bundle at build time.
+  company: process.env.NEXT_PUBLIC_COMPANY_NAME ?? "VILIHA PTE. LTD.",
+  copyrightYear: process.env.NEXT_PUBLIC_COPYRIGHT_YEAR ?? "2026",
+  license: process.env.NEXT_PUBLIC_LICENSE ?? "MIT Licensed",
 } as const;
+
+/** Footer copyright line. Set NEXT_PUBLIC_FOOTER_NOTICE to override the whole
+ * string, or just the individual company/year/license vars above. */
+export const FOOTER_NOTICE =
+  process.env.NEXT_PUBLIC_FOOTER_NOTICE ??
+  `© ${SITE.copyrightYear} ${SITE.company} · ${SITE.license}`;
 
 /** Per-route title + description for the backoffice demo pages. Keeping it in
  * one table means a page file only names its route, not its copy. */

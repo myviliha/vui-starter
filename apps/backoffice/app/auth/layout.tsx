@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Wordmark } from "@/app/_components/wordmark";
+import { FOOTER_NOTICE } from "@/lib/seo";
 
 // Auth screens shouldn't surface in search results.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -35,7 +36,7 @@ export default function AuthLayout({
             Privacy Policy
           </Link>
         </div>
-        <p className="mt-2">© 2026 VILIHA PTE. LTD. · MIT Licensed</p>
+        <p className="mt-2">{FOOTER_NOTICE}</p>
       </footer>
     </div>
   );
