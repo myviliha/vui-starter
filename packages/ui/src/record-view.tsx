@@ -708,16 +708,6 @@ export function RecordView<T extends { id: RowId }>({
       <div className="flex h-12 items-center justify-between border-b border-border px-4">
         <div className="flex items-center gap-2">{titleLeading}</div>
         <div className="flex items-center gap-1.5">
-          <Button
-            variant="link"
-            size="sm"
-            onClick={addRow}
-            className="px-1 no-underline hover:no-underline"
-          >
-            <Plus className="size-4 text-emerald-500" />
-            <span className="hidden sm:inline">{singular}</span>
-          </Button>
-
           <input
             ref={importRef}
             type="file"
@@ -792,6 +782,11 @@ export function RecordView<T extends { id: RowId }>({
               Show all columns
             </DropdownItem>
           </Dropdown>
+
+          <Button variant="primary" size="sm" onClick={addRow} className="ml-1">
+            <Plus className="size-4" />
+            <span className="hidden sm:inline">{singular}</span>
+          </Button>
         </div>
       </div>
 

@@ -23,7 +23,7 @@ const NEUTRAL =
 const VARIANTS: Record<ButtonVariant, string> = {
   default: NEUTRAL,
   primary:
-    "border border-transparent bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)] [&_svg]:border-white/30",
+    "border border-transparent bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)] [&_svg]:border-[var(--button-primary-hover)]",
   secondary: NEUTRAL,
   outline: NEUTRAL,
   ghost: "hover:bg-accent hover:text-accent-foreground",

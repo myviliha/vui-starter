@@ -28,25 +28,37 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/** Nav glyph. Border/padding come from the global icon chip rule. Inactive icons
-    keep their brand color; active inverts (dark fill, light glyph); nested
-    (sub-menu) icons are smaller so the hierarchy reads even when collapsed. */
+/** Nav glyph. All icons share one size for a consistent left-aligned column.
+    Top-level icons are bordered chips (from the global icon rule): inactive keep
+    their brand color, active inverts (dark fill, light glyph). Sub-menu icons are
+    `plain` — no chip, muted — so nesting reads without any indentation. */
 function NavIcon({
   icon: Icon,
   active,
   color,
-  nested,
+  plain,
 }: {
   icon: IconType;
   active: boolean;
   color?: string;
-  nested?: boolean;
+  plain?: boolean;
 }) {
+  if (plain)
+    return (
+      <Icon
+        className={cn(
+          // keep the 2px chip padding (transparent border) so plain glyphs sit
+          // on the same baseline/box as bordered ones — only the border is gone.
+          "size-[18px] shrink-0 border-transparent bg-transparent transition-colors",
+          active ? "text-sidebar-foreground" : "text-muted-foreground",
+        )}
+        aria-hidden="true"
+      />
+    );
   return (
     <Icon
       className={cn(
-        "shrink-0 transition-colors",
-        nested ? "size-4" : "size-[18px]",
+        "size-[18px] shrink-0 transition-colors",
         active
           ? "border-sidebar-foreground bg-sidebar-foreground text-background"
           : cn("bg-background", color ?? "text-muted-foreground"),
@@ -90,7 +102,7 @@ function SidebarBody({
       return next;
     });
 
-  const renderLink = (item: NavLink, nested = false) => {
+  const renderLink = (item: NavLink, sub = false) => {
     const active = isActive(pathname, item.href);
     return (
       <Link
@@ -101,19 +113,15 @@ function SidebarBody({
         title={collapsed ? item.label : undefined}
         className={cn(
           "group/nav flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
-          collapsed && "justify-center px-0",
-          nested && !collapsed && "gap-2.5 py-1.5",
           active
             ? "bg-sidebar-accent text-sidebar-foreground"
-            : "text-sidebar-foreground hover:bg-sidebar-accent",
+            : cn(
+                "hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                sub ? "text-muted-foreground" : "text-sidebar-foreground",
+              ),
         )}
       >
-        <NavIcon
-          icon={item.icon}
-          active={active}
-          color={item.color}
-          nested={nested}
-        />
+        <NavIcon icon={item.icon} active={active} color={item.color} plain={sub} />
         {!collapsed && <span className="truncate">{item.label}</span>}
       </Link>
     );
@@ -137,7 +145,7 @@ function SidebarBody({
             aria-expanded={open}
             title={entry.label}
             className={cn(
-              "group/nav flex w-full items-center justify-center gap-0.5 rounded-md py-1.5 transition-colors",
+              "group/nav flex w-full items-center gap-0.5 rounded-md px-2 py-1.5 transition-colors",
               anyActive
                 ? "text-sidebar-foreground"
                 : "hover:bg-sidebar-accent",
@@ -153,7 +161,7 @@ function SidebarBody({
             />
           </button>
           {open && (
-            <div className="ml-3 space-y-1 border-l border-sidebar-border pl-1">
+            <div className="space-y-1">
               {entry.children.map((child) => renderLink(child, true))}
             </div>
           )}
@@ -184,7 +192,7 @@ function SidebarBody({
           />
         </button>
         {open && (
-          <div className="ml-[1.15rem] space-y-1 border-l border-sidebar-border pl-2">
+          <div className="space-y-1">
             {entry.children.map((child) => renderLink(child, true))}
           </div>
         )}
