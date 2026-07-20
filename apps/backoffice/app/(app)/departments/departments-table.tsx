@@ -18,7 +18,7 @@ const fields: RecordField<Department>[] = [
     key: "employees",
     label: "Employees",
     icon: Users,
-    align: "right",
+    // No explicit align — auto-aligns center (numeric). See RecordView.
     group: "System",
     render: (row) => (
       <span className="tabular-nums">{row.employees.toLocaleString()}</span>

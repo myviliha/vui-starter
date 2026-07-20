@@ -27,7 +27,7 @@ const fields: RecordField<Market>[] = [
     width: 180,
     group: "System",
     render: (row) => (
-      <span className="font-mono text-muted-foreground">
+      <span className="whitespace-nowrap font-mono tabular-nums text-muted-foreground">
         {formatCenter(row)}
       </span>
     ),
@@ -36,7 +36,7 @@ const fields: RecordField<Market>[] = [
     key: "radiusMiles",
     label: "Radius",
     icon: Ruler,
-    align: "right",
+    // No explicit align — auto-aligns center (numeric).
     group: "System",
     render: (row) => (
       <span className="tabular-nums">

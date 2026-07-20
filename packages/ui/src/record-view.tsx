@@ -951,7 +951,10 @@ export function RecordView<T extends { id: RowId }>({
           <TableHeader className="sticky top-0 z-20 bg-background [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:bg-background">
             <TableRow className="hover:bg-transparent">
               <TableHead style={{ width: CHECKBOX_W }} className="p-0">
-                <div className="flex h-8 items-center pl-8">
+                <div className="flex h-8 items-center gap-2 pl-2 pr-3">
+                  {/* Spacer matching the row drag-grip slot so this checkbox
+                      lines up vertically with the row checkboxes below. */}
+                  <span aria-hidden="true" className="h-6 w-4 shrink-0" />
                   <Checkbox
                     checked={allSelected}
                     onChange={toggleSelectAll}
@@ -1002,16 +1005,18 @@ export function RecordView<T extends { id: RowId }>({
                   </TableHead>
                 );
               })}
+              {/* Flex spacer absorbs leftover width so data columns keep their
+                  natural size AND the Actions column stays pinned to the right
+                  edge. Borderless so no stray divider shows in the gap. */}
+              <TableHead aria-hidden="true" className="w-full border-r-0" />
               <TableHead
                 style={{ width: ACTIONS_W }}
-                className="border-r-0 text-right"
+                className="sticky right-0 z-30 border-l border-border text-right shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
               >
-                <span className="flex h-8 items-center justify-end whitespace-nowrap pr-2">
+                <span className="flex h-8 items-center justify-center whitespace-nowrap px-2">
                   Actions
                 </span>
               </TableHead>
-              {/* Filler so row borders reach the right edge of the page. */}
-              <TableHead aria-hidden="true" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -1043,12 +1048,12 @@ export function RecordView<T extends { id: RowId }>({
                     }}
                     className="group data-[active=true]:bg-accent/60 data-[dragover=true]:border-t-2 data-[dragover=true]:border-t-primary data-[flash=true]:bg-primary/10"
                   >
-                    <TableCell className="p-0">
-                      <div className="relative flex h-8 items-center pl-8">
+                    <TableCell className="p-0" style={{ width: CHECKBOX_W }}>
+                      <div className="flex h-8 items-center gap-2 pl-2 pr-3">
                         {/* Drag grip — always visible in a light color (so the
                             reorder affordance is discoverable), darkening on
-                            hover. Sits in its own reserved slot in the left
-                            gutter so it never overlaps the checkbox. */}
+                            hover. Inline before the checkbox; plain glyph (no
+                            icon-chip border) so it doesn't read as a box. */}
                         <div
                           draggable
                           onDragStart={(e) => {
@@ -1062,9 +1067,9 @@ export function RecordView<T extends { id: RowId }>({
                           }}
                           aria-label={`Drag ${primary.title || singular} to reorder`}
                           title="Drag to reorder"
-                          className="absolute left-1.5 top-1/2 flex h-6 w-4 -translate-y-1/2 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
+                          className="flex h-6 w-4 shrink-0 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
                         >
-                          <GripVertical className="size-3.5" />
+                          <GripVertical className="size-3.5 border-transparent bg-transparent" />
                         </div>
                         <Checkbox
                           checked={selected.has(row.id)}
@@ -1099,11 +1104,12 @@ export function RecordView<T extends { id: RowId }>({
                         {renderCellValue(row, f)}
                       </TableCell>
                     ))}
+                    <TableCell aria-hidden="true" className="w-full border-r-0" />
                     <TableCell
-                      className="border-r-0 p-0"
+                      className="sticky right-0 z-10 border-l border-border bg-card p-0 shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
                       style={{ width: ACTIONS_W }}
                     >
-                      <div className="flex items-center justify-end gap-0.5 pr-2">
+                      <div className="flex items-center justify-center gap-0.5 px-2">
                         <button
                           type="button"
                           onClick={() => openView(row.id)}
@@ -1133,7 +1139,6 @@ export function RecordView<T extends { id: RowId }>({
                         </button>
                       </div>
                     </TableCell>
-                    <TableCell aria-hidden="true" />
                   </TableRow>
                 );
               })
