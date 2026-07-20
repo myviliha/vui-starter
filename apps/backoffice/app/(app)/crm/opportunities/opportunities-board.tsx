@@ -130,12 +130,25 @@ export function OpportunitiesBoard() {
         </div>
       </div>
 
-      {/* Sub-toolbar — mirrors the datatable secondary bar */}
-      <div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-1.5 text-muted-foreground">
-        <ListFilter className="size-4" />
-        <span className="font-medium text-foreground">All opportunities</span>
-        <span className="tabular-nums">· {visible.length}</span>
-        <span className="tabular-nums">· {formatCurrency(totalValue)} pipeline</span>
+      {/* Summary bar — a bordered box whose left/right edges line up with the
+          board padding below; metrics separated by icons + dividers. */}
+      <div className="shrink-0 px-4 pt-4">
+        <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-2">
+          <span className="flex items-center gap-1.5 font-medium text-foreground">
+            <ListFilter className="size-4 text-muted-foreground" />
+            All opportunities
+          </span>
+          <span aria-hidden="true" className="h-4 w-px bg-border" />
+          <span className="flex items-center gap-1.5 tabular-nums text-foreground">
+            <Target className="size-3.5 text-muted-foreground" />
+            {visible.length}
+          </span>
+          <span aria-hidden="true" className="h-4 w-px bg-border" />
+          <span className="flex items-center gap-1.5 tabular-nums text-foreground">
+            <Coins className="size-3.5 text-muted-foreground" />
+            {formatCurrency(totalValue)} pipeline
+          </span>
+        </div>
       </div>
 
       {/* Board — full-bleed with a 5px gutter */}
