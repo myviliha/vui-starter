@@ -1,0 +1,28 @@
+# Vui Starter
+
+> A free, open-source React admin & CRM design system: a token-driven component
+> library (@viliha/vui-ui) plus a full backoffice demo. Built on Next.js,
+> React 19, Tailwind CSS v4, shadcn-style components and Radix Icons.
+
+Note for fetchers: every docs URL ends with a trailing slash. Request the
+slash-terminated URL directly — the no-slash form returns a 301 redirect.
+
+## Docs
+- [Introduction](https://vui.viliha.com/docs/): what Vui Starter is and how the docs are organized.
+- [Installation](https://vui.viliha.com/docs/installation/): install @viliha/vui-ui in Next.js, Vite, an existing app, or a Turborepo monorepo.
+- [Configuration](https://vui.viliha.com/docs/configuration/): per-deployment settings via environment variables (footer branding with NEXT_PUBLIC_* vars).
+- [Theming](https://vui.viliha.com/docs/theming/): CSS-variable design tokens — colors, radius, typography, dark mode — all from theme.css.
+- [Layout & patterns](https://vui.viliha.com/docs/layout/): the standard page template, section cards, breadcrumbs, bordered lists, and dialogs.
+- [Building with AI agents](https://vui.viliha.com/docs/ai-agents/): using the theme with AI coding agents; the AGENT.md guide shipped inside the npm package.
+- [Using shadcn/ui](https://vui.viliha.com/docs/shadcn-ui/): how VUI complements shadcn/ui and which library owns what.
+- [Auth screens](https://vui.viliha.com/docs/auth/): authentication page patterns (sign in/up, reset, verify).
+- [Components](https://vui.viliha.com/docs/components/): component reference with live examples (Button, Badge, Card, Input, Select, Dropdown, RecordView…).
+- [Data table](https://vui.viliha.com/docs/data-table/): the RecordView datatable — fields array, editing, sorting, filtering, pagination, import/export.
+- [Charts](https://vui.viliha.com/docs/charts/): themed Recharts wrapper driven by chart tokens.
+
+## Contributing
+- [Contributing](https://vui.viliha.com/docs/contributing/): contribute to the theme — humans follow CONTRIBUTING.md, AI agents follow AGENTS.md.
+
+## Package & source
+- [@viliha/vui-ui on npm](https://www.npmjs.com/package/@viliha/vui-ui): the published component library; ships AGENT.md, an AI-agent usage guide.
+- [GitHub repository](https://github.com/myviliha/vui-starter): source for the library, the demo app, and these docs.

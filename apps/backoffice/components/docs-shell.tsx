@@ -31,6 +31,7 @@ const NAV: NavGroup[] = [
   {
     title: "Guides",
     items: [
+      { label: "Building with AI agents", href: "/docs/ai-agents" },
       { label: "Using shadcn/ui", href: "/docs/shadcn-ui" },
       { label: "Auth screens", href: "/docs/auth" },
     ],

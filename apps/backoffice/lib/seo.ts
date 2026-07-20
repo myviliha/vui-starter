@@ -142,6 +142,7 @@ export const PUBLIC_ROUTES: string[] = [
   "/docs/charts",
   "/docs/auth",
   "/docs/shadcn-ui",
+  "/docs/ai-agents",
   "/docs/contributing",
 ];
 

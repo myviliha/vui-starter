@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
 
-import { CodeBlock, DocPager, H2, P, PageTitle, Ul } from "@/components/doc";
+import {
+  CodeBlock,
+  DocPager,
+  H2,
+  Note,
+  P,
+  PageTitle,
+  Ul,
+} from "@/components/doc";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/contributing/" },
   title: "Contributing",
   description:
-    "Contribute to Vui Starter — local setup, useful scripts, where things live, and the pull-request workflow.",
+    "Contribute to Vui Starter — local setup, the agent-assisted workflow (AGENTS.md), where things live, and the pull-request workflow.",
 };
 
 export default function ContributingPage() {
@@ -15,15 +23,43 @@ export default function ContributingPage() {
       <PageTitle
         eyebrow="Community"
         title="Contributing"
-        lead="Vui Starter is MIT-licensed and open to contributions — bug fixes, new components, docs, and demos are all welcome."
+        lead="Vui Starter is MIT-licensed and open to contributions — bug fixes, new components, docs, and demos are all welcome. This page is for changing the theme itself; to build your own app with VUI, see Building with AI agents."
       />
+
+      <Note title="Which guide do I need?">
+        Two scenarios, two homes.{" "}
+        <strong>Contributing to the theme</strong> (this page) — humans follow{" "}
+        <code>CONTRIBUTING.md</code>, agents follow <code>AGENTS.md</code>.{" "}
+        <strong>Using the theme in your own app</strong> — see{" "}
+        <a
+          href="/docs/ai-agents"
+          className="font-medium text-foreground underline"
+        >
+          Building with AI agents
+        </a>
+        .
+      </Note>
 
       <H2>Local setup</H2>
       <P>Requires Node 18+ and pnpm 9+.</P>
       <CodeBlock title="terminal">{`git clone https://github.com/myviliha/vui-starter.git
 cd vui-starter
 pnpm install
-pnpm dev            # backoffice :3001 · public :3000 · docs :3002`}</CodeBlock>
+pnpm dev            # backoffice + docs on :3000`}</CodeBlock>
+
+      <H2>Contributing with an AI agent</H2>
+      <P>
+        The repo ships deterministic, machine-checkable rules for coding agents
+        in <code>AGENTS.md</code> — the filename Claude Code, Cursor and Copilot
+        auto-load. It states exactly where new components, pages, tokens and
+        navigation go, the hard rules (Server Components first, no <code>any</code>,
+        no hard-coded design values, reuse before create), and the commands a
+        change must pass before it&apos;s &quot;done&quot;. Point your agent at
+        the repo and it will follow the same standards a human reviewer expects.
+      </P>
+      <CodeBlock title="verify before a PR">{`pnpm --filter @viliha/vui-ui check-types
+pnpm --filter backoffice lint     # eslint --max-warnings 0
+pnpm --filter backoffice build`}</CodeBlock>
 
       <H2>Useful scripts</H2>
       <CodeBlock title="terminal">{`pnpm dev            # run all apps

@@ -178,7 +178,7 @@ import { Button } from "@viliha/vui-ui/button";
 
       <DocPager
         prev={{ label: "Theming", href: "/docs/theming" }}
-        next={{ label: "Using shadcn/ui", href: "/docs/shadcn-ui" }}
+        next={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
       />
     </article>
   );

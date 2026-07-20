@@ -172,7 +172,7 @@ export function SignupForm() {
       </Ul>
 
       <DocPager
-        prev={{ label: "Layout & patterns", href: "/docs/layout" }}
+        prev={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
         next={{ label: "Auth screens", href: "/docs/auth" }}
       />
     </article>
