@@ -134,6 +134,7 @@ export const PUBLIC_ROUTES: string[] = [
   ...Object.keys(ROUTE_META),
   "/docs",
   "/docs/installation",
+  "/docs/configuration",
   "/docs/theming",
   "/docs/layout",
   "/docs/components",

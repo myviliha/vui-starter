@@ -128,7 +128,7 @@ export function Example() {
 
       <DocPager
         prev={{ label: "Introduction", href: "/docs" }}
-        next={{ label: "Theming", href: "/docs/theming" }}
+        next={{ label: "Configuration", href: "/docs/configuration" }}
       />
     </article>
   );
