@@ -216,6 +216,14 @@ interface RecordViewProps<T extends { id: RowId }> {
   onHome?: () => void;
   /** Intro text for the page-form documentation panel ("about this form"). */
   formDescription?: string;
+  /** Controlled rows. When set, RecordView renders these and reports edits via
+   *  onDataChange instead of holding rows in internal state. */
+  data?: T[];
+  /** Receives the next rows array in controlled mode. */
+  onDataChange?: (rows: T[]) => void;
+  /** When set, the "add" button calls this (e.g. navigate to a create route)
+   *  instead of opening the built-in form. */
+  onCreate?: () => void;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -230,11 +238,31 @@ export function RecordView<T extends { id: RowId }>({
   formColumns = 1,
   onHome,
   formDescription,
+  data,
+  onDataChange,
+  onCreate,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
   usePageTitle(title, TitleIcon);
-  const [rows, setRows] = React.useState<T[]>(initialData);
+  // Rows are either controlled (data + onDataChange) or held internally.
+  const [internalRows, setInternalRows] = React.useState<T[]>(initialData);
+  const controlled = data !== undefined;
+  const rows = controlled ? data : internalRows;
+  const setRows = React.useCallback(
+    (updater: React.SetStateAction<T[]>) => {
+      if (controlled) {
+        const next =
+          typeof updater === "function"
+            ? (updater as (prev: T[]) => T[])(data as T[])
+            : updater;
+        onDataChange?.(next);
+      } else {
+        setInternalRows(updater);
+      }
+    },
+    [controlled, data, onDataChange],
+  );
   const [filter, setFilter] = React.useState("");
   const [sort, setSort] = React.useState<{
     key: string;
@@ -465,6 +493,11 @@ export function RecordView<T extends { id: RowId }>({
     setBulkDeleteOpen(false);
   }
   function addRow() {
+    // Routed create: delegate to the caller (e.g. navigate to /new).
+    if (onCreate) {
+      onCreate();
+      return;
+    }
     const row = { ...makeEmptyRow(), id: nextId.current++ };
     // Prepend so the new record is immediately visible at the top…
     setRows((prev) => [row, ...prev]);
@@ -1672,4 +1705,15 @@ function RecordDetailPanel<T extends { id: RowId }>({
       </aside>
     </>
   );
+}
+
+/**
+ * Standalone full-page record form for a dedicated route (e.g. `/…/new`).
+ * Wraps the page layout of the detail panel so the same form/breadcrumb/doc
+ * chrome is reused outside the table.
+ */
+export function RecordForm<T extends { id: RowId }>(
+  props: Omit<DetailPanelProps<T>, "layout">,
+) {
+  return <RecordDetailPanel layout="page" {...props} />;
 }
