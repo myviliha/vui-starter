@@ -1500,10 +1500,12 @@ function RecordDetailPanel<T extends { id: RowId }>({
             <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
               <div
                 className={cn(
-                  "mx-auto w-full",
+                  "w-full",
                   columns === 2
-                    ? "grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
-                    : "max-w-3xl space-y-4",
+                    ? "mx-auto grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
+                    : // One column: left-aligned so it starts at the container's
+                      // padding (not centered), matching the datatable container.
+                      "max-w-3xl space-y-4",
                 )}
               >
                 {formBody}

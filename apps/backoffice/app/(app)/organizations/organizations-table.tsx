@@ -72,7 +72,7 @@ export function OrganizationsTable() {
       singular="Organization"
       icon={Building2}
       formMode="page"
-      formColumns={2}
+      formColumns={1}
       fields={fields}
       initialData={organizations}
       getPrimary={(row) => ({
