@@ -10,6 +10,8 @@ import {
   Share2Icon as Network,
 } from "@radix-ui/react-icons";
 
+import { useRouter } from "next/navigation";
+
 import { Badge } from "@viliha/vui-ui/badge";
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import {
@@ -66,6 +68,7 @@ const fields: RecordField<DemoOrganization>[] = [
 ];
 
 export function OrganizationsTable() {
+  const router = useRouter();
   return (
     <RecordView
       title="Organizations"
@@ -73,6 +76,7 @@ export function OrganizationsTable() {
       icon={Building2}
       formMode="page"
       formColumns={1}
+      onHome={() => router.push("/dashboard")}
       fields={fields}
       initialData={organizations}
       getPrimary={(row) => ({

@@ -208,6 +208,8 @@ interface RecordViewProps<T extends { id: RowId }> {
   formMode?: "panel" | "page";
   /** Full-page form column count (page mode only). Default 1. */
   formColumns?: 1 | 2;
+  /** Navigate to Home from the page-form breadcrumb (e.g. router.push). */
+  onHome?: () => void;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -220,6 +222,7 @@ export function RecordView<T extends { id: RowId }>({
   getPrimary,
   formMode = "panel",
   formColumns = 1,
+  onHome,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -715,7 +718,8 @@ export function RecordView<T extends { id: RowId }>({
         layout="page"
         columns={formColumns}
         isNew={activeId === newRowId}
-        titleLeading={titleLeading}
+        title={title}
+        onHome={onHome}
         fields={fields}
         row={activeRow}
         singular={singular}
@@ -1318,8 +1322,10 @@ interface DetailPanelProps<T extends { id: RowId }> {
   columns?: 1 | 2;
   /** New (unsaved) record — drives the "Create new …" breadcrumb. */
   isNew?: boolean;
-  /** Route breadcrumb trail shown in the page-layout header. */
-  titleLeading?: React.ReactNode;
+  /** Plural collection title (e.g. "Organizations") — the clickable parent crumb. */
+  title?: string;
+  /** Navigate to Home from the breadcrumb. */
+  onHome?: () => void;
 }
 
 function RecordDetailPanel<T extends { id: RowId }>({
@@ -1335,7 +1341,8 @@ function RecordDetailPanel<T extends { id: RowId }>({
   layout = "panel",
   columns = 1,
   isNew = false,
-  titleLeading,
+  title,
+  onHome,
 }: DetailPanelProps<T>) {
   const [draft, setDraft] = React.useState<T>(row);
   // Reset the buffered form when a different record is opened.
@@ -1486,14 +1493,38 @@ function RecordDetailPanel<T extends { id: RowId }>({
         : `Update ${singular.toLowerCase()}`;
     return (
       <div className="flex h-full flex-col">
-        <div className="flex h-12 shrink-0 items-center gap-1 border-b border-border px-4 text-sm">
-          {titleLeading}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex h-12 shrink-0 items-center gap-1.5 border-b border-border px-4 text-sm"
+        >
+          {onHome && (
+            <>
+              <button
+                type="button"
+                onClick={onHome}
+                className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Home
+              </button>
+              <ChevronRight
+                className="size-3 shrink-0 text-muted-foreground/60"
+                aria-hidden="true"
+              />
+            </>
+          )}
+          <button
+            type="button"
+            onClick={onCancel}
+            className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {title ?? singular}
+          </button>
           <ChevronRight
             className="size-3 shrink-0 text-muted-foreground/60"
             aria-hidden="true"
           />
           <span className="truncate font-medium text-foreground">{crumb}</span>
-        </div>
+        </nav>
         {/* Padded, bordered card — matches the datatable content container. */}
         <div className="min-h-0 flex-1 overflow-hidden p-4">
           <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
