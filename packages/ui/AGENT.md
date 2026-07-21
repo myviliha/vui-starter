@@ -226,6 +226,20 @@ Allow RecordView to manage:
 - bulk actions
 - import/export
 
+## Add / edit form
+
+The buffered add/edit form renders in one of two layouts:
+
+- **Slide-over panel** — the default; nothing to configure.
+- **Full-page form** — set `formMode="page"` (with `formColumns={1 | 2}`). Add
+  `formDescription` and a per-field `description` to show an AWS-style help
+  panel beside the form.
+
+For the form on its own URL, render the exported `RecordForm` on a route and use
+controlled data (`data` + `onDataChange`) with `onCreate` / `onView` / `onEdit`
+to navigate instead of opening the overlay. Breadcrumbs everywhere come from the
+shared `@viliha/vui-ui/breadcrumbs` component.
+
 ---
 
 # Charts

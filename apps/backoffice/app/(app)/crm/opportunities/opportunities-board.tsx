@@ -437,7 +437,7 @@ function OpportunityDetailPanel({
 
       {/* Footer — Add shows Cancel/Save; Edit adds a leading Delete.
           Save uses the primary color; Delete uses the destructive (red) token. */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border p-3">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-y border-border bg-muted/40 px-4 py-3">
         {!isNew && (
           <Button
             variant="destructive"
