@@ -22,6 +22,7 @@ import {
   DotsHorizontalIcon as MoreHorizontal,
   DragHandleDots2Icon as GripVertical,
   EyeOpenIcon as Eye,
+  InfoCircledIcon as Info,
   MagnifyingGlassIcon as Search,
   MixerHorizontalIcon as ListFilter,
   MixerHorizontalIcon as SlidersHorizontal,
@@ -171,6 +172,8 @@ export function usePageTitle(title: string, icon?: IconType) {
 export interface RecordField<T> {
   key: Extract<keyof T, string>;
   label: string;
+  /** Help text shown in the page-form documentation panel. */
+  description?: string;
   icon?: IconType;
   editable?: boolean;
   /** Mark the field mandatory — shows a `*` next to its label. */
@@ -210,6 +213,8 @@ interface RecordViewProps<T extends { id: RowId }> {
   formColumns?: 1 | 2;
   /** Navigate to Home from the page-form breadcrumb (e.g. router.push). */
   onHome?: () => void;
+  /** Intro text for the page-form documentation panel ("about this form"). */
+  formDescription?: string;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -223,6 +228,7 @@ export function RecordView<T extends { id: RowId }>({
   formMode = "panel",
   formColumns = 1,
   onHome,
+  formDescription,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -720,6 +726,7 @@ export function RecordView<T extends { id: RowId }>({
         isNew={activeId === newRowId}
         title={title}
         onHome={onHome}
+        formDescription={formDescription}
         fields={fields}
         row={activeRow}
         singular={singular}
@@ -1326,6 +1333,8 @@ interface DetailPanelProps<T extends { id: RowId }> {
   title?: string;
   /** Navigate to Home from the breadcrumb. */
   onHome?: () => void;
+  /** Intro text for the documentation panel. */
+  formDescription?: string;
 }
 
 function RecordDetailPanel<T extends { id: RowId }>({
@@ -1343,6 +1352,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   isNew = false,
   title,
   onHome,
+  formDescription,
 }: DetailPanelProps<T>) {
   const [draft, setDraft] = React.useState<T>(row);
   // Reset the buffered form when a different record is opened.
@@ -1491,6 +1501,41 @@ function RecordDetailPanel<T extends { id: RowId }>({
       : isNew
         ? `Create new ${singular.toLowerCase()}`
         : `Update ${singular.toLowerCase()}`;
+    // AWS-style documentation column: an intro plus per-field help text.
+    const documentedFields = fields.filter((f) => f.description);
+    const docPanel =
+      formDescription || documentedFields.length > 0 ? (
+        <aside
+          aria-label={`${title ?? singular} help`}
+          className="hidden w-80 shrink-0 overflow-y-auto rounded-lg border border-border bg-muted/20 lg:block"
+        >
+          <div className="space-y-4 p-4 text-sm">
+            <div className="space-y-1.5">
+              <h2 className="flex items-center gap-1.5 font-semibold text-foreground">
+                <Info className="size-4 text-[var(--button-primary)]" />
+                About {title ?? singular}
+              </h2>
+              {formDescription && (
+                <p className="leading-relaxed text-muted-foreground">
+                  {formDescription}
+                </p>
+              )}
+            </div>
+            {documentedFields.length > 0 && (
+              <dl className="space-y-3 border-t border-border pt-4">
+                {documentedFields.map((f) => (
+                  <div key={f.key} className="space-y-0.5">
+                    <dt className="font-medium text-foreground">{f.label}</dt>
+                    <dd className="leading-relaxed text-muted-foreground">
+                      {f.description}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        </aside>
+      ) : null;
     return (
       <div className="flex h-full flex-col">
         <nav
@@ -1525,24 +1570,28 @@ function RecordDetailPanel<T extends { id: RowId }>({
           />
           <span className="truncate font-medium text-foreground">{crumb}</span>
         </nav>
-        {/* Padded, bordered card — matches the datatable content container. */}
+        {/* Content — form card (left) + optional documentation panel (right). */}
         <div className="min-h-0 flex-1 overflow-hidden p-4">
-          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
-            <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
-              <div
-                className={cn(
-                  "w-full",
-                  columns === 2
-                    ? "mx-auto grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
-                    : // One column: left-aligned so it starts at the container's
-                      // padding (not centered), matching the datatable container.
-                      "max-w-3xl space-y-4",
-                )}
-              >
-                {formBody}
+          <div className="flex h-full gap-4">
+            {/* Padded, bordered card — matches the datatable content container. */}
+            <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card">
+              <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+                <div
+                  className={cn(
+                    "w-full",
+                    columns === 2
+                      ? "mx-auto grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
+                      : // One column: left-aligned so it starts at the container's
+                        // padding (not centered), matching the datatable container.
+                        "max-w-3xl space-y-4",
+                  )}
+                >
+                  {formBody}
+                </div>
               </div>
+              {formFooter}
             </div>
-            {formFooter}
+            {docPanel}
           </div>
         </div>
       </div>

@@ -30,13 +30,14 @@ const statusBadge: Record<
 };
 
 const fields: RecordField<DemoOrganization>[] = [
-  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "url", label: "Domain", icon: Globe, editable: true, copyable: true, width: 200, group: "General" },
-  { key: "email", label: "Email", icon: Mail, editable: true, required: true, copyable: true, width: 220, group: "General" },
-  { key: "country", label: "Country", icon: MapPin, editable: true, group: "General" },
+  { key: "name", label: "Name", description: "The organization's legal or trading name, shown across the app.", editable: true, required: true, group: "General", hideInTable: true },
+  { key: "url", label: "Domain", description: "Primary web domain, e.g. acme.com — used to group users and match emails.", icon: Globe, editable: true, copyable: true, width: 200, group: "General" },
+  { key: "email", label: "Email", description: "Main contact address for billing and account notices.", icon: Mail, editable: true, required: true, copyable: true, width: 220, group: "General" },
+  { key: "country", label: "Country", description: "Headquarters country. Drives default currency, tax and locale.", icon: MapPin, editable: true, group: "General" },
   {
     key: "branches",
     label: "Branches",
+    description: "Number of physical or regional offices under this organization.",
     icon: Network,
     group: "System",
     render: (row) => <span className="tabular-nums">{row.branches}</span>,
@@ -44,6 +45,7 @@ const fields: RecordField<DemoOrganization>[] = [
   {
     key: "employees",
     label: "Employees",
+    description: "Approximate headcount. Used for reporting and plan sizing.",
     icon: Users,
     group: "System",
     render: (row) => (
@@ -53,6 +55,7 @@ const fields: RecordField<DemoOrganization>[] = [
   {
     key: "status",
     label: "Status",
+    description: "Account lifecycle: Trial while evaluating, Active once live, Suspended to disable access.",
     icon: CircleDot,
     group: "System",
     options: [
@@ -77,6 +80,7 @@ export function OrganizationsTable() {
       formMode="page"
       formColumns={1}
       onHome={() => router.push("/dashboard")}
+      formDescription="Organizations are the top-level tenants in the system. Each one groups its branches, departments and employees, and owns its billing and locale settings. Fill in the details below to create or update a record."
       fields={fields}
       initialData={organizations}
       getPrimary={(row) => ({
