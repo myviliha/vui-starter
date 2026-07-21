@@ -53,13 +53,10 @@ function Section({
 }) {
   return (
     <section
-      className={cn(
-        "rounded-lg border border-border bg-card",
-        className,
-      )}
+      className={cn("overflow-hidden rounded-lg border border-border", className)}
     >
-      <div className="rounded-t-lg border-b border-border bg-muted/40 px-4 py-3">
-        <h2 className="font-medium">{title}</h2>
+      <div className="border-b border-border bg-muted/40 px-3 py-2">
+        <h2 className="font-semibold text-[var(--button-primary)]">{title}</h2>
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
@@ -121,23 +118,17 @@ export default function SettingsPage() {
     <div className="flex h-full flex-col">
       <SetPageTitle title="Settings" icon={GearIcon} />
 
-      {/* Action header — breadcrumbs (left) + note (right) */}
-      <div className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border px-4">
+      {/* Breadcrumb bar — matches the record form pages. */}
+      <div className="flex h-12 shrink-0 items-center border-b border-border px-4">
         <Breadcrumbs />
-        <span className="hidden truncate text-muted-foreground md:block">
-          Manage your profile, appearance, and notification preferences.
-        </span>
       </div>
 
-      {/* Content — uniform spacing between sections and the save bar */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-4 p-4">
-          <div className="grid gap-4 lg:grid-cols-2">
-          <Section
-            title="Profile"
-            description="Your personal information."
-            className="lg:col-span-2"
-          >
+      {/* Content — padded, bordered card with a fixed footer (matches the add form). */}
+      <div className="min-h-0 flex-1 overflow-hidden p-4">
+        <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
+          <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+            <div className="w-full space-y-4">
+          <Section title="Profile" description="Your personal information.">
             <div className="space-y-4 sm:max-w-xl">
               <div className="flex items-center gap-3">
                 <Avatar className="size-12">
@@ -246,8 +237,10 @@ export default function SettingsPage() {
             </div>
           </Section>
 
+            </div>
           </div>
-          <div className="flex items-center justify-end gap-2">
+          {/* Fixed footer — matches the add form's action bar. */}
+          <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-4 py-3">
             {saved && (
               <span className="text-sm text-muted-foreground">Saved ✓</span>
             )}
