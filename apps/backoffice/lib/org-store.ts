@@ -32,6 +32,10 @@ export const orgStore = {
     rows = [row, ...rows];
     emit();
   },
+  update(row: DemoOrganization) {
+    rows = rows.map((r) => (r.id === row.id ? row : r));
+    emit();
+  },
   get(id: number) {
     return rows.find((r) => r.id === id) ?? null;
   },

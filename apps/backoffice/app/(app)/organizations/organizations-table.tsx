@@ -26,6 +26,8 @@ export function OrganizationsTable() {
       formColumns={1}
       onHome={() => router.push("/dashboard")}
       onCreate={() => router.push("/organizations/new")}
+      onView={(id) => router.push(`/organizations/edit?id=${id}`)}
+      onEdit={(id) => router.push(`/organizations/edit?id=${id}`)}
       formDescription={ORG_FORM_DESCRIPTION}
       fields={fields}
       initialData={rows}

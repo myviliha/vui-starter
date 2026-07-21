@@ -224,6 +224,10 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** When set, the "add" button calls this (e.g. navigate to a create route)
    *  instead of opening the built-in form. */
   onCreate?: () => void;
+  /** When set, opening/editing a row navigates (e.g. to an edit route) instead
+   *  of opening the built-in overlay form. */
+  onView?: (id: RowId) => void;
+  onEdit?: (id: RowId) => void;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -241,6 +245,8 @@ export function RecordView<T extends { id: RowId }>({
   data,
   onDataChange,
   onCreate,
+  onView,
+  onEdit,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -508,11 +514,19 @@ export function RecordView<T extends { id: RowId }>({
   }
   /** Open the detail panel read-only (View). */
   function openView(id: RowId) {
+    if (onView) {
+      onView(id);
+      return;
+    }
     setPanelReadOnly(true);
     setActiveId(id);
   }
   /** Open the detail panel editable (Edit). */
   function openEdit(id: RowId) {
+    if (onEdit) {
+      onEdit(id);
+      return;
+    }
     setPanelReadOnly(false);
     setActiveId(id);
   }
@@ -1262,7 +1276,7 @@ export function RecordView<T extends { id: RowId }>({
             type="button"
             role="menuitem"
             onClick={() => {
-              setActiveId(menu.id);
+              openView(menu.id);
               setMenu(null);
             }}
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground"
