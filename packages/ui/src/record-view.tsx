@@ -1522,9 +1522,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
               )}
             </div>
             {documentedFields.length > 0 && (
-              <dl className="space-y-3 border-t border-border pt-4">
+              <dl className="divide-y divide-border border-t border-border">
                 {documentedFields.map((f) => (
-                  <div key={f.key} className="space-y-0.5">
+                  <div key={f.key} className="space-y-0.5 py-3 first:pt-4">
                     <dt className="font-medium text-foreground">{f.label}</dt>
                     <dd className="leading-relaxed text-muted-foreground">
                       {f.description}
