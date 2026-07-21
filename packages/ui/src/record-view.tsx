@@ -9,7 +9,6 @@ import {
   TableIcon as SheetIcon,
   UploadIcon as Upload,
   ArrowDownIcon as ArrowDown,
-  ArrowLeftIcon as ArrowLeft,
   ArrowTopRightIcon as ArrowUpRight,
   ArrowUpIcon as ArrowUp,
   CaretSortIcon as ArrowUpDown,
@@ -34,6 +33,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "./utils";
+import { Breadcrumbs, type Crumb } from "./breadcrumbs";
 import { Button } from "./button";
 import { Checkbox } from "./checkbox";
 import { Input } from "./input";
@@ -1574,51 +1574,16 @@ function RecordDetailPanel<T extends { id: RowId }>({
       ) : null;
     return (
       <div className="flex h-full flex-col">
-        {/* Breadcrumb — same markup as the app's route breadcrumbs for consistency. */}
-        <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4 text-sm">
-          <button
-            type="button"
-            onClick={onCancel}
-            aria-label="Back"
-            title="Back"
-            className="grid size-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            <ArrowLeft className="size-3.5" />
-          </button>
-          <nav
-            aria-label="Breadcrumb"
-            className="flex min-w-0 items-center gap-1"
-          >
-            {onHome && (
-              <span className="flex min-w-0 items-center gap-1">
-                <button
-                  type="button"
-                  onClick={onHome}
-                  className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Home
-                </button>
-                <ChevronRight
-                  className="size-3 shrink-0 text-muted-foreground/60"
-                  aria-hidden="true"
-                />
-              </span>
-            )}
-            <span className="flex min-w-0 items-center gap-1">
-              <button
-                type="button"
-                onClick={onCancel}
-                className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {title ?? singular}
-              </button>
-              <ChevronRight
-                className="size-3 shrink-0 text-muted-foreground/60"
-                aria-hidden="true"
-              />
-            </span>
-            <span className="truncate font-medium text-foreground">{crumb}</span>
-          </nav>
+        {/* Breadcrumb — the shared Breadcrumbs component (consistent app-wide). */}
+        <div className="flex h-12 shrink-0 items-center border-b border-border px-4">
+          <Breadcrumbs
+            onBack={onCancel}
+            crumbs={[
+              ...(onHome ? [{ label: "Home", onClick: onHome }] : []),
+              { label: title ?? singular, onClick: onCancel },
+              { label: crumb },
+            ] as Crumb[]}
+          />
         </div>
         {/* Content — form card (left) + optional documentation panel (right). */}
         <div className="min-h-0 flex-1 overflow-hidden p-4">
