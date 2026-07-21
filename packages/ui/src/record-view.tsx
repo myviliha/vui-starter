@@ -204,6 +204,8 @@ interface RecordViewProps<T extends { id: RowId }> {
     initials: string;
     subtitle?: string;
   };
+  /** Add/Edit form presentation: "panel" slide-over (default) or "page" full-page. */
+  formMode?: "panel" | "page";
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -214,6 +216,7 @@ export function RecordView<T extends { id: RowId }>({
   initialData,
   makeEmptyRow,
   getPrimary,
+  formMode = "panel",
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -698,6 +701,27 @@ export function RecordView<T extends { id: RowId }>({
         <span className="truncate">{value}</span>
         {hoverActions}
       </div>
+    );
+  }
+
+  // Full-page form mode: replace the table chrome entirely while adding/editing
+  // (this also hides the import/export/add actions, which live in that chrome).
+  if (formMode === "page" && activeRow) {
+    return (
+      <RecordDetailPanel
+        layout="page"
+        isNew={activeId === newRowId}
+        titleLeading={titleLeading}
+        fields={fields}
+        row={activeRow}
+        singular={singular}
+        icon={TitleIcon}
+        getPrimary={getPrimary}
+        readOnly={panelReadOnly}
+        onEdit={() => setPanelReadOnly(false)}
+        onSave={saveForm}
+        onCancel={cancelForm}
+      />
     );
   }
 
@@ -1284,6 +1308,12 @@ interface DetailPanelProps<T extends { id: RowId }> {
   onSave: (row: T) => void;
   /** Discard the draft (and drop the row if it was never saved). */
   onCancel: () => void;
+  /** "panel" = slide-over (default); "page" = full-page form. */
+  layout?: "panel" | "page";
+  /** New (unsaved) record — drives the "Create new …" breadcrumb. */
+  isNew?: boolean;
+  /** Route breadcrumb trail shown in the page-layout header. */
+  titleLeading?: React.ReactNode;
 }
 
 function RecordDetailPanel<T extends { id: RowId }>({
@@ -1296,6 +1326,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
   onEdit,
   onSave,
   onCancel,
+  layout = "panel",
+  isNew = false,
+  titleLeading,
 }: DetailPanelProps<T>) {
   const [draft, setDraft] = React.useState<T>(row);
   // Reset the buffered form when a different record is opened.
@@ -1330,6 +1363,10 @@ function RecordDetailPanel<T extends { id: RowId }>({
     pending.current = action;
     setClosing(true);
   };
+  // The page layout has no slide-out animation — run the action immediately.
+  const dismiss = (action: () => void) =>
+    layout === "page" ? action() : requestClose(action);
+
   const handleSave = () => {
     const missing = fields.filter(
       (f) =>
@@ -1342,8 +1379,123 @@ function RecordDetailPanel<T extends { id: RowId }>({
       setErrors(new Set(missing.map((f) => f.key)));
       return;
     }
-    requestClose(() => onSave(draft));
+    dismiss(() => onSave(draft));
   };
+
+  // Grouped field sections — shared by the slide-over and full-page layouts.
+  const formBody = GROUP_ORDER.map((group) => {
+    const groupFields = fields.filter((f) => (f.group ?? "General") === group);
+    if (groupFields.length === 0) return null;
+    return (
+      <section
+        key={group}
+        className="overflow-hidden rounded-lg border border-border"
+      >
+        <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-medium text-muted-foreground">
+          {group}
+        </h3>
+        <dl className="divide-y divide-border">
+          {groupFields.map((f) => (
+            <div
+              key={f.key}
+              className="flex items-start gap-3 px-3 py-3 leading-relaxed"
+            >
+              <dt className="flex w-28 shrink-0 items-center gap-1.5 pt-1.5 text-muted-foreground">
+                {f.icon && <f.icon className="size-3.5" />}
+                {f.label}
+                {f.required && <RequiredMark />}
+              </dt>
+              <dd className="min-w-0 flex-1">
+                {f.render ? (
+                  <div className="pt-0.5">{f.render(draft)}</div>
+                ) : !readOnly && f.editable ? (
+                  <textarea
+                    value={String(draft[f.key as keyof T] ?? "")}
+                    onChange={(e) => setField(f.key as keyof T, e.target.value)}
+                    aria-label={f.label}
+                    aria-invalid={errors.has(f.key) || undefined}
+                    placeholder={`Add ${f.label.toLowerCase()}`}
+                    rows={1}
+                    // field-sizing grows the box to fit long/wrapped text
+                    className={cn(
+                      "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
+                      errors.has(f.key)
+                        ? "border-destructive focus-visible:ring-destructive"
+                        : "border-input focus-visible:ring-ring",
+                    )}
+                  />
+                ) : (
+                  <span className="block whitespace-pre-wrap break-words px-2 pt-1.5">
+                    {String(draft[f.key as keyof T] ?? "") || (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </span>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    );
+  });
+
+  // Footer actions — View shows Close/Edit; Add/Edit shows Cancel/Save.
+  const formFooter = (
+    <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-4 py-3">
+      {readOnly ? (
+        <>
+          <Button onClick={() => dismiss(onCancel)}>
+            <X className="size-4" />
+            Close
+          </Button>
+          {onEdit && (
+            <Button variant="primary" onClick={onEdit}>
+              <Pencil className="size-4" />
+              Edit
+            </Button>
+          )}
+        </>
+      ) : (
+        <>
+          <Button onClick={() => dismiss(onCancel)}>
+            <X className="size-4" />
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleSave}>
+            <Check className="size-4" />
+            Save
+          </Button>
+        </>
+      )}
+    </div>
+  );
+
+  // Full-page form: breadcrumb header → scrollable single column → fixed actions.
+  if (layout === "page") {
+    const crumb = readOnly
+      ? primary.title || `View ${singular.toLowerCase()}`
+      : isNew
+        ? `Create new ${singular.toLowerCase()}`
+        : `Update ${singular.toLowerCase()}`;
+    return (
+      <div className="flex h-full flex-col">
+        <div className="flex h-12 shrink-0 items-center gap-1 border-b border-border px-4 text-sm">
+          {titleLeading}
+          <ChevronRight
+            className="size-3 shrink-0 text-muted-foreground/60"
+            aria-hidden="true"
+          />
+          <span className="truncate font-medium text-foreground">{crumb}</span>
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-auto w-full max-w-3xl space-y-4 p-4 md:p-6">
+            {formBody}
+          </div>
+        </div>
+        {formFooter}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -1370,121 +1522,36 @@ function RecordDetailPanel<T extends { id: RowId }>({
           }
         }}
       >
-      {/* Header — icon + title (placeholder when new); matches the page header. */}
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
-        <span className="flex size-6 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
-          <HeaderIcon className="size-3.5" />
-        </span>
-        <span
-          className={cn(
-            "truncate font-semibold",
-            !primary.title && "text-muted-foreground",
-          )}
-        >
-          {primary.title || `New ${singular}`}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => requestClose(onCancel)}
-          aria-label="Close"
-          className="ml-auto"
-        >
-          <X className="size-4" />
-        </Button>
-      </div>
-
-      {/* Body — one bordered section per field group. */}
-      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
-        {GROUP_ORDER.map((group) => {
-          const groupFields = fields.filter(
-            (f) => (f.group ?? "General") === group,
-          );
-          if (groupFields.length === 0) return null;
-          return (
-            <section
-              key={group}
-              className="overflow-hidden rounded-lg border border-border"
-            >
-              <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-medium text-muted-foreground">
-                {group}
-              </h3>
-              <dl className="divide-y divide-border">
-                {groupFields.map((f) => (
-                  <div
-                    key={f.key}
-                    className="flex items-start gap-3 px-3 py-3 leading-relaxed"
-                  >
-                    <dt className="flex w-28 shrink-0 items-center gap-1.5 pt-1.5 text-muted-foreground">
-                      {f.icon && <f.icon className="size-3.5" />}
-                      {f.label}
-                      {f.required && <RequiredMark />}
-                    </dt>
-                    <dd className="min-w-0 flex-1">
-                      {f.render ? (
-                        <div className="pt-0.5">{f.render(draft)}</div>
-                      ) : !readOnly && f.editable ? (
-                        <textarea
-                          value={String(draft[f.key as keyof T] ?? "")}
-                          onChange={(e) =>
-                            setField(f.key as keyof T, e.target.value)
-                          }
-                          aria-label={f.label}
-                          aria-invalid={errors.has(f.key) || undefined}
-                          placeholder={`Add ${f.label.toLowerCase()}`}
-                          rows={1}
-                          // field-sizing grows the box to fit long/wrapped text
-                          className={cn(
-                            "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
-                            errors.has(f.key)
-                              ? "border-destructive focus-visible:ring-destructive"
-                              : "border-input focus-visible:ring-ring",
-                          )}
-                        />
-                      ) : (
-                        <span className="block whitespace-pre-wrap break-words px-2 pt-1.5">
-                          {String(draft[f.key as keyof T] ?? "") || (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </span>
-                      )}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          );
-        })}
-      </div>
-
-      {/* Footer — View shows Close/Edit; Edit shows Cancel/Save. */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-4 py-3">
-        {readOnly ? (
-          <>
-            <Button onClick={() => requestClose(onCancel)}>
-              <X className="size-4" />
-              Close
-            </Button>
-            {onEdit && (
-              <Button variant="primary" onClick={onEdit}>
-                <Pencil className="size-4" />
-                Edit
-              </Button>
+        {/* Header — icon + title (placeholder when new); matches the page header. */}
+        <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
+          <span className="flex size-6 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
+            <HeaderIcon className="size-3.5" />
+          </span>
+          <span
+            className={cn(
+              "truncate font-semibold",
+              !primary.title && "text-muted-foreground",
             )}
-          </>
-        ) : (
-          <>
-            <Button onClick={() => requestClose(onCancel)}>
-              <X className="size-4" />
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleSave}>
-              <Check className="size-4" />
-              Save
-            </Button>
-          </>
-        )}
-      </div>
+          >
+            {primary.title || `New ${singular}`}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => requestClose(onCancel)}
+            aria-label="Close"
+            className="ml-auto"
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
+
+        {/* Body — one bordered section per field group. */}
+        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+          {formBody}
+        </div>
+
+        {formFooter}
       </aside>
     </>
   );

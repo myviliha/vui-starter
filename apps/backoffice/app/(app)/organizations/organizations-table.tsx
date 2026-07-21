@@ -71,6 +71,7 @@ export function OrganizationsTable() {
       title="Organizations"
       singular="Organization"
       icon={Building2}
+      formMode="page"
       fields={fields}
       initialData={organizations}
       getPrimary={(row) => ({
