@@ -206,6 +206,8 @@ interface RecordViewProps<T extends { id: RowId }> {
   };
   /** Add/Edit form presentation: "panel" slide-over (default) or "page" full-page. */
   formMode?: "panel" | "page";
+  /** Full-page form column count (page mode only). Default 1. */
+  formColumns?: 1 | 2;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -217,6 +219,7 @@ export function RecordView<T extends { id: RowId }>({
   makeEmptyRow,
   getPrimary,
   formMode = "panel",
+  formColumns = 1,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -710,6 +713,7 @@ export function RecordView<T extends { id: RowId }>({
     return (
       <RecordDetailPanel
         layout="page"
+        columns={formColumns}
         isNew={activeId === newRowId}
         titleLeading={titleLeading}
         fields={fields}
@@ -1310,6 +1314,8 @@ interface DetailPanelProps<T extends { id: RowId }> {
   onCancel: () => void;
   /** "panel" = slide-over (default); "page" = full-page form. */
   layout?: "panel" | "page";
+  /** Full-page form column count. Default 1. */
+  columns?: 1 | 2;
   /** New (unsaved) record — drives the "Create new …" breadcrumb. */
   isNew?: boolean;
   /** Route breadcrumb trail shown in the page-layout header. */
@@ -1327,6 +1333,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   onSave,
   onCancel,
   layout = "panel",
+  columns = 1,
   isNew = false,
   titleLeading,
 }: DetailPanelProps<T>) {
@@ -1487,12 +1494,24 @@ function RecordDetailPanel<T extends { id: RowId }>({
           />
           <span className="truncate font-medium text-foreground">{crumb}</span>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-3xl space-y-4 p-4 md:p-6">
-            {formBody}
+        {/* Padded, bordered card — matches the datatable content container. */}
+        <div className="min-h-0 flex-1 overflow-hidden p-4">
+          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+              <div
+                className={cn(
+                  "mx-auto w-full",
+                  columns === 2
+                    ? "grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
+                    : "max-w-3xl space-y-4",
+                )}
+              >
+                {formBody}
+              </div>
+            </div>
+            {formFooter}
           </div>
         </div>
-        {formFooter}
       </div>
     );
   }
