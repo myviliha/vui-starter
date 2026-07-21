@@ -9,6 +9,7 @@ import {
   TableIcon as SheetIcon,
   UploadIcon as Upload,
   ArrowDownIcon as ArrowDown,
+  ArrowLeftIcon as ArrowLeft,
   ArrowTopRightIcon as ArrowUpRight,
   ArrowUpIcon as ArrowUp,
   CaretSortIcon as ArrowUpDown,
@@ -1415,7 +1416,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
         key={group}
         className="overflow-hidden rounded-lg border border-border"
       >
-        <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-medium text-muted-foreground">
+        <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-semibold text-[var(--button-primary)]">
           {group}
         </h3>
         <dl className="divide-y divide-border">
@@ -1425,7 +1426,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
               className="flex items-start gap-3 px-3 py-3 leading-relaxed"
             >
               <dt className="flex w-28 shrink-0 items-center gap-1.5 pt-1.5 text-muted-foreground">
-                {f.icon && <f.icon className="size-3.5" />}
+                {f.icon && (
+                  <f.icon className="size-3.5 text-[var(--button-primary)]" />
+                )}
                 {f.label}
                 {f.required && <RequiredMark />}
               </dt>
@@ -1511,7 +1514,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
         >
           <div className="space-y-4 p-4 text-sm">
             <div className="space-y-1.5">
-              <h2 className="flex items-center gap-1.5 font-semibold text-foreground">
+              <h2 className="flex items-center gap-1.5 font-semibold text-[var(--button-primary)]">
                 <Info className="size-4 text-[var(--button-primary)]" />
                 About {title ?? singular}
               </h2>
@@ -1538,38 +1541,52 @@ function RecordDetailPanel<T extends { id: RowId }>({
       ) : null;
     return (
       <div className="flex h-full flex-col">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex h-12 shrink-0 items-center gap-1.5 border-b border-border px-4 text-sm"
-        >
-          {onHome && (
-            <>
+        {/* Breadcrumb — same markup as the app's route breadcrumbs for consistency. */}
+        <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4 text-sm">
+          <button
+            type="button"
+            onClick={onCancel}
+            aria-label="Back"
+            title="Back"
+            className="grid size-6 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <ArrowLeft className="size-3.5" />
+          </button>
+          <nav
+            aria-label="Breadcrumb"
+            className="flex min-w-0 items-center gap-1"
+          >
+            {onHome && (
+              <span className="flex min-w-0 items-center gap-1">
+                <button
+                  type="button"
+                  onClick={onHome}
+                  className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Home
+                </button>
+                <ChevronRight
+                  className="size-3 shrink-0 text-muted-foreground/60"
+                  aria-hidden="true"
+                />
+              </span>
+            )}
+            <span className="flex min-w-0 items-center gap-1">
               <button
                 type="button"
-                onClick={onHome}
+                onClick={onCancel}
                 className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
               >
-                Home
+                {title ?? singular}
               </button>
               <ChevronRight
                 className="size-3 shrink-0 text-muted-foreground/60"
                 aria-hidden="true"
               />
-            </>
-          )}
-          <button
-            type="button"
-            onClick={onCancel}
-            className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {title ?? singular}
-          </button>
-          <ChevronRight
-            className="size-3 shrink-0 text-muted-foreground/60"
-            aria-hidden="true"
-          />
-          <span className="truncate font-medium text-foreground">{crumb}</span>
-        </nav>
+            </span>
+            <span className="truncate font-medium text-foreground">{crumb}</span>
+          </nav>
+        </div>
         {/* Content — form card (left) + optional documentation panel (right). */}
         <div className="min-h-0 flex-1 overflow-hidden p-4">
           <div className="flex h-full gap-4">
@@ -1581,9 +1598,8 @@ function RecordDetailPanel<T extends { id: RowId }>({
                     "w-full",
                     columns === 2
                       ? "mx-auto grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
-                      : // One column: left-aligned so it starts at the container's
-                        // padding (not centered), matching the datatable container.
-                        "max-w-3xl space-y-4",
+                      : // One column: sections span the full container width.
+                        "space-y-4",
                   )}
                 >
                   {formBody}
