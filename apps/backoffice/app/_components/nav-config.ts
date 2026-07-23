@@ -3,6 +3,7 @@ import {
   BackpackIcon as Briefcase,
   BarChartIcon as BarChart3,
   BookmarkIcon as Flag,
+  CalendarIcon,
   CheckCircledIcon as BadgeCheck,
   CubeIcon as Building,
   ExclamationTriangleIcon as AlertTriangle,
@@ -75,6 +76,7 @@ export const NAV: NavSection[] = [
       { label: "Components", href: "/components", icon: Blocks, color: "text-indigo-500" },
       { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
       { label: "Steps", href: "/steps", icon: StepsIcon, color: "text-violet-500" },
+      { label: "Calendar", href: "/calendar", icon: CalendarIcon, color: "text-rose-500" },
     ],
   },
   {
