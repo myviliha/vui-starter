@@ -57,6 +57,53 @@ export function Example() {
 }
 ```
 
+### Datatables & forms
+
+`RecordView` is a complete admin datatable from a single `fields` array —
+editable cells, sorting, filtering, pagination, row actions, bulk actions,
+CSV / JSON / Excel / PDF import & export, and a buffered **Add / Edit / View**
+form (slide-over or full-page). Required fields render a `*`, alignment and
+colors come from the tokens — you never style a field by hand.
+
+```tsx
+import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
+
+const fields: RecordField<Customer>[] = [
+  { key: "name", label: "Name", required: true, hideInTable: true },
+  { key: "email", label: "Email", copyable: true },
+  { key: "country", label: "Country" },
+];
+
+<RecordView
+  title="Customers"
+  singular="Customer"
+  fields={fields}
+  initialData={rows}
+  getPrimary={(r) => ({ title: r.name, initials: r.name.slice(0, 2) })}
+  makeEmptyRow={() => ({ id: Date.now(), name: "", email: "", country: "" })}
+/>;
+```
+
+The same `fields` also drive `RecordForm` — the Add/Edit/View screen — and its
+Info panel (from `formDescription` + per-field `description`). See the
+[Data table docs](https://vui.viliha.com/docs/data-table).
+
+## Patterns
+
+The reference app composes these primitives into the conventions documented at
+[vui.viliha.com/docs/layout](https://vui.viliha.com/docs/layout):
+
+- **Five page types** — data table, record form (Add / Edit / View), dashboard,
+  settings, and kanban board.
+- **Command palette** — Quick actions (`⌘K`, navigate pages) and Global search
+  (`⌘⌥K`, find records), both built on the exported `CommandPalette`.
+- **Breadcrumbs** — the exported `Breadcrumbs` component fed a route-derived
+  trail.
+
+Copy them from the
+[backoffice demo](https://github.com/myviliha/vui-starter/tree/main/apps/backoffice)
+and adapt.
+
 ## Building with an AI agent
 
 This package ships an **AI-agent usage guide** at
