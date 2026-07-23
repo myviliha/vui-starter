@@ -53,6 +53,15 @@ When asked to add a page, **state which variant and default to slide-over.** Bot
 
 **From a field spec to a form — never style fields by hand.** A request like "Add Customer: Name (mandatory, text), Email (mandatory), Country" becomes a `RecordField[]`, nothing more: `{ key, label, required: true }` per field (add `description` for the Info-panel help). The component designs Add/Edit/View from that array — required renders the `*`, the label + icon + control are center-aligned on one baseline, colors come from theme tokens. Do **not** add per-field className, padding, or color; if a field looks unstyled, you built a raw input instead of feeding `fields`.
 
+## Command palette (Quick actions & Global search)
+
+Two ⌘K palettes, **both the same headless `CommandPalette`** (`@viliha/vui-ui/command-palette`) — never hand-roll a search dropdown:
+
+- **Quick actions** (`⌘K` / `/`) → navigates **pages**; actions derived from `nav-config.ts`. Wiring: `app/_components/quick-actions.tsx`.
+- **Global search** (`⌘⌥K`) → searches **records**; index built from the data modules. Wiring: `app/_components/global-search.tsx`.
+
+Each is a provider (open state + a `keydown` effect, told apart by `e.altKey`) mounting `CommandPalette` with a `CommandAction[]` (`{ id, label, group?, icon?, keywords?, onSelect }`). To add a searchable source, push more actions — for real data, swap the demo record index for API results. Docs + examples at `/layout`.
+
 ## Breadcrumbs
 
 One trail, **route-derived, never hand-written per page.** Two layers:

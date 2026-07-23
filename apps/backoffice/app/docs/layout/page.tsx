@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/layout/" },
   title: "Layout & patterns",
   description:
-    "The standard page template and the four page types (data table, dashboard, settings form, kanban board), plus section cards, breadcrumbs, bordered lists and dialogs — the conventions every new page in Vui Starter follows.",
+    "The standard page template and the five page types (data table, record form, dashboard, settings, kanban board), plus breadcrumbs, the ⌘K command palette (Quick actions & Global search), section cards, bordered lists and dialogs — the conventions every new page in Vui Starter follows.",
 };
 
 export default function LayoutPage() {
@@ -317,6 +317,97 @@ export default function DepartmentsPage() {
         breadcrumbs via context, so a datatable page is just{" "}
         <code>&lt;RecordView … /&gt;</code> — the header, breadcrumbs and padded
         card come for free.
+      </Note>
+
+      <H2>Command palette — Quick actions &amp; Global search</H2>
+      <P>
+        Two ⌘K-style palettes ship in the shell, both built on the same headless{" "}
+        <code>CommandPalette</code> from <code>@viliha/vui-ui</code>. They differ
+        only in <em>what</em> they search:
+      </P>
+      <Ul>
+        <li>
+          <strong>Quick actions</strong> (<code>⌘K</code>, or <code>/</code> when
+          not typing) — jumps between <strong>pages</strong>. Launched from the
+          sidebar button; its actions are derived from <code>nav-config.ts</code>
+          , so a new page shows up automatically.
+        </li>
+        <li>
+          <strong>Global search</strong> (<code>⌘⌥K</code>) — searches{" "}
+          <strong>records</strong> (organizations, people, opportunities,
+          reference data…). Launched from the top-bar search box; each result
+          navigates to where the record lives.
+        </li>
+      </Ul>
+      <Shot
+        src="/page-types/quick-actions.png"
+        alt="Quick actions (⌘K) — jump to any page, grouped like the sidebar"
+      />
+      <Shot
+        src="/page-types/global-search.png"
+        alt="Global search (⌘⌥K) — find records across the app, grouped by type"
+      />
+
+      <H3>How to implement one</H3>
+      <P>
+        <code>CommandPalette</code> is headless and router-agnostic: you own the
+        open state and pass an <code>actions</code> array; each action carries
+        its own <code>onSelect</code>. A small provider holds the open state,
+        wires the global shortcut, and mounts the palette once — copy{" "}
+        <code>app/_components/quick-actions.tsx</code> (pages) or{" "}
+        <code>global-search.tsx</code> (records) as your starting point.
+      </P>
+      <CodeBlock title="a command-palette provider (the whole pattern)">{`"use client";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { CommandPalette, type CommandAction } from "@viliha/vui-ui/command-palette";
+
+export function SearchProvider({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  // Global shortcut — ⌘K here; use e.altKey to tell ⌘K from ⌘⌥K.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && e.code === "KeyK") {
+        e.preventDefault();
+        setOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Build actions from anything — NAV pages, or records from your API.
+  const actions: CommandAction[] = useMemo(
+    () => [
+      { id: "orgs", label: "Organizations", group: "Go to",
+        onSelect: () => router.push("/organizations") },
+      // …one entry per page (Quick actions) or per record (Global search)
+    ],
+    [router],
+  );
+
+  return (
+    <>
+      {children}
+      <CommandPalette open={open} onClose={() => setOpen(false)} actions={actions} />
+    </>
+  );
+}`}</CodeBlock>
+      <P>
+        Each <code>CommandAction</code> is{" "}
+        <code>{`{ id, label, group?, icon?, keywords?, onSelect }`}</code> —{" "}
+        <code>group</code> renders a heading, <code>keywords</code> widen the
+        match, <code>onSelect</code> does the work. Global search&apos;s record
+        index is the demo&apos;s stand-in for a backend: swap it for your API
+        results and everything else stays the same.
+      </P>
+      <Note title="Two shortcuts, no clash">
+        <code>⌘K</code> opens Quick actions, <code>⌘⌥K</code> opens Global
+        search, and <code>/</code> opens Quick actions when you aren&apos;t
+        typing in a field. Each is registered by its own provider, distinguished
+        by <code>e.altKey</code>.
       </Note>
 
       <H2>Bordered list components</H2>
