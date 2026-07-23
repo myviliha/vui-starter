@@ -207,6 +207,17 @@ One trail, **derived from the route — never hand-written per page.**
 
 To reorder or rename, edit the nav config; the trail follows automatically.
 
+## Open tabs
+
+Enterprise apps often keep several pages open at once. The reference app ships a
+browser-style **tab strip** under the top bar (a reference-app pattern — copy
+`open-tabs.tsx`): an `OpenTabsProvider` tracks opened routes, switching is a
+router push, and the list persists in `sessionStorage`. Tab labels/icons come
+from the same nav config as the sidebar. ⌘/Ctrl-click a nav item opens a
+background tab; expose an `openTab(href, { background })` for custom "open in new
+tab" buttons. Keep it a navigation-tab model (don't try to keep every page
+mounted) unless you specifically need live state preserved across tabs.
+
 ---
 
 # Forms

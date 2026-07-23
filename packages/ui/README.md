@@ -97,6 +97,8 @@ The reference app composes these primitives into the conventions documented at
   settings, and kanban board.
 - **Command palette** — Quick actions (`⌘K`, navigate pages) and Global search
   (`⌘⌥K`, find records), both built on the exported `CommandPalette`.
+- **Open tabs** — a browser-style strip of opened pages under the top bar
+  (⌘-click a nav item for a background tab), persisted across reloads.
 - **Breadcrumbs** — the exported `Breadcrumbs` component fed a route-derived
   trail.
 

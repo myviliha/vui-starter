@@ -58,7 +58,8 @@ with zero backend.
   a fully-validated shadcn Form (React Hook Form + Zod, every field type) at
   `/forms`.
 - **App shell** — collapsible, colored-icon sidebar with nested groups; aligned
-  page headers; light/dark theme.
+  page headers; a ⌘K command palette (Quick actions) + ⌘⌥K global search; and a
+  **browser-style open-tabs strip** (⌘-click a nav item for a new tab); light/dark theme.
 - **Ships as TypeScript source** — no build step, tree-shakeable, and your app’s
   bundler compiles only what you import.
 - **AI-agent ready** — the package ships an agent guide (`AGENT.md`) and a
