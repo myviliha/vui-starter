@@ -15,7 +15,7 @@ Turborepo + pnpm monorepo. One app + one published library:
 | Task | Location |
 | --- | --- |
 | New reusable component | `packages/ui/src/<name>.tsx` → auto-exported as `@viliha/vui-ui/<name>` (the `./*` export map; **no barrel edit needed**) |
-| New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout`. **Ask which add/edit layout** (see "Adding a record page" below); default to **slide-over**. |
+| New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout`. **Pick a page type** (see "Page types" below) and state which; for a record form default to **slide-over**. |
 | New auth page | `apps/backoffice/app/auth/<name>/page.tsx` |
 | shadcn component | `npx shadcn@latest add <name>` (from the backoffice dir) → `components/ui/` |
 | Design token / color / radius | `packages/ui/src/theme.css` — **never hard-code**, add/read a token |
@@ -28,16 +28,30 @@ Turborepo + pnpm monorepo. One app + one published library:
 - **Page layout / section cards / dialogs / menus / datatable** → documented at docs `/layout` and `/data-table`. Reuse `Dialog`, `Menu`, `RecordView`, `ChartContainer` — don't re-implement.
 - **`cn`** → `@viliha/vui-ui/utils`. `utils.ts` is intentional; do not "fix" it.
 
-## Adding a record page
+## Page types
 
-Two add/edit layouts, both from the same `RecordForm` — **pick one, don't invent a third:**
+There are **five** page shapes — **pick the one the requirement calls for, don't invent a sixth.** State which type you're building. Visuals + full structure at docs `/layout` ("Page types").
 
-- **Slide-over (standard / default).** Add/edit opens as an overlay panel from `RecordView`. Nothing to configure — this is what you get by default. Use it unless asked otherwise. Example: `departments`.
-- **Full-page route.** A dedicated `/new` (or `/edit`) route rendering `<RecordForm layout="page" columns={1|2} … />`. Use for long forms or when the add flow needs its own URL. Example: `organizations/new`.
+| # | Type | Build with | Example route | Use when |
+| --- | --- | --- | --- | --- |
+| 1 | **Data table** | `RecordView` + a `fields` array (thin server `page.tsx` → client `*-table.tsx`) | `organizations`, `branches`, `departments` | Any list of records |
+| 2 | **Record form** (Add / Edit / View) | `RecordView`/`RecordForm` from the same `fields` | slide-over: `branches`; full-page: `organizations/new` | Create/edit/view a record |
+| 3 | **Dashboard** | manual frame: `StatCard` grid + bordered-card sections | `dashboard` | An overview / landing screen |
+| 4 | **Settings (single-form)** | one bordered card of `Section`s + a fixed Save footer | `settings` | "A form with a Save button," not a list |
+| 5 | **Board (Kanban)** | `overflow-x-auto` row of fixed-width column sections | `crm/opportunities` | Stage/status pipelines |
 
-Rule: when asked to add a page, **state which layout you're using and default to slide-over.** Both inherit the blue Save, the header/body/footer separators, and token colors from `RecordForm` — you never copy those styles, you get them by using the component. See the consumer guide `packages/ui/AGENT.md` ("Add / edit form") for the same rule downstream.
+Types 3–5 use the standard page frame (`flex h-full flex-col` → action header with `<Breadcrumbs/>` → scrolling `p-4` content). Client pages (3–5) put their `metadata` in a sibling `layout.tsx` (they can't `export const metadata`).
 
-**From a field spec to a form — never style fields by hand.** A request like "Add Customer: Name (mandatory, text), Email (mandatory), Country" becomes a `RecordField[]` config, nothing more: `{ key, label, required: true }` per field. The component designs Add/Edit/View from that array — required renders the `*`, the label + icon + control are center-aligned on one baseline, and colors come from theme tokens. Do **not** add per-field className, padding, or color; if a field looks unstyled, you built a raw input instead of feeding `fields`.
+### Record form — two variants (type 2)
+
+Both come from the same `RecordForm`; **pick one, don't invent a third:**
+
+- **Slide-over (standard / default).** Add/edit/view open as an overlay panel from `RecordView`. Nothing to configure. Uncontrolled (`initialData`). Example: `departments`.
+- **Full-page route.** `formMode="page"` + dedicated `/new` & `/edit` routes rendering `<RecordForm layout="page" columns={1|2} … />`; controlled, config shared via `*-config.tsx`. Adds a breadcrumb bar, a **dynamic Info panel** (from `formDescription` + per-field `description`), and a fixed Save/Cancel footer. Use for long forms or when the flow needs its own URL. Example: `organizations/new`.
+
+When asked to add a page, **state which variant and default to slide-over.** Both inherit the blue Save, header/body/footer separators and token colors from the component — you never copy those styles. Same rule downstream in `packages/ui/AGENT.md`.
+
+**From a field spec to a form — never style fields by hand.** A request like "Add Customer: Name (mandatory, text), Email (mandatory), Country" becomes a `RecordField[]`, nothing more: `{ key, label, required: true }` per field (add `description` for the Info-panel help). The component designs Add/Edit/View from that array — required renders the `*`, the label + icon + control are center-aligned on one baseline, colors come from theme tokens. Do **not** add per-field className, padding, or color; if a field looks unstyled, you built a raw input instead of feeding `fields`.
 
 ## Breadcrumbs
 
