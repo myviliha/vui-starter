@@ -139,6 +139,7 @@ export const PUBLIC_ROUTES: string[] = [
   "/docs/layout",
   "/docs/components",
   "/docs/data-table",
+  "/docs/steps",
   "/docs/charts",
   "/docs/auth",
   "/docs/shadcn-ui",
