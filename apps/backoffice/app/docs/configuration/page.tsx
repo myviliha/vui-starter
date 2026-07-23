@@ -39,7 +39,10 @@ NEXT_PUBLIC_COPYRIGHT_YEAR="2026"
 NEXT_PUBLIC_LICENSE="All rights reserved"
 
 # …or override the whole line at once (wins over the three above):
-NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"`}</CodeBlock>
+NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
+
+# Max pages kept open in the tab strip (default 5, min 1):
+NEXT_PUBLIC_MAX_TABS="5"`}</CodeBlock>
       <Ul>
         <li>
           <code>NEXT_PUBLIC_COMPANY_NAME</code> — company shown in the footer.
@@ -53,6 +56,10 @@ NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"`}</CodeBloc
         <li>
           <code>NEXT_PUBLIC_FOOTER_NOTICE</code> — replaces the entire line,
           taking precedence over the three above.
+        </li>
+        <li>
+          <code>NEXT_PUBLIC_MAX_TABS</code> — how many pages the tab strip keeps
+          open before evicting the oldest (default 5).
         </li>
       </Ul>
       <P>
