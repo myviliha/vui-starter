@@ -220,13 +220,9 @@ export function TabStrip() {
       aria-label="Open pages"
       className="flex h-9 shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-background px-3"
     >
-      <span className="shrink-0 pr-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <span className="mr-1 shrink-0 rounded-md bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white">
         Tabs
       </span>
-      <span
-        aria-hidden="true"
-        className="mr-1 h-4 w-px shrink-0 bg-border"
-      />
       {tabs.map((t) => {
         const active = t.href === activeHref;
         const Icon = t.icon;
@@ -236,7 +232,7 @@ export function TabStrip() {
             role="tab"
             aria-selected={active}
             className={cn(
-              "group flex h-7 shrink-0 items-center gap-1.5 rounded-md pl-2 pr-1 text-sm transition-colors",
+              "group flex h-7 shrink-0 items-center gap-1.5 rounded-md pl-2.5 pr-2 text-sm transition-colors",
               active
                 ? "bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)]"
                 : "text-muted-foreground hover:bg-accent/50",
