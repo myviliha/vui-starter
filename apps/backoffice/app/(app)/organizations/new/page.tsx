@@ -25,6 +25,7 @@ export default function NewOrganizationPage() {
       <SetPageTitle title={ORG_TITLE} icon={ORG_ICON} />
       <RecordForm
         isNew
+        persistKey="/organizations/new"
         columns={1}
         fields={fields}
         row={row}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { RecordView } from "@viliha/vui-ui/record-view";
 import { orgStore, useOrganizations } from "@/lib/org-store";
@@ -16,9 +16,11 @@ import {
 
 export function OrganizationsTable() {
   const router = useRouter();
+  const pathname = usePathname();
   const rows = useOrganizations();
   return (
     <RecordView
+      persistKey={pathname}
       title={ORG_TITLE}
       singular={ORG_SINGULAR}
       icon={ORG_ICON}

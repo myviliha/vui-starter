@@ -196,6 +196,54 @@ export interface RecordField<T> {
   options?: { value: string; label: string }[];
 }
 
+/**
+ * `useState` that mirrors to `sessionStorage` under `key`, so a page's work
+ * (table filters/sort/page, a form draft) survives leaving and returning — the
+ * per-tab work-preservation behind the open-tabs strip. When `key` is undefined
+ * it is a plain `useState`, so this is fully opt-in and backward compatible.
+ * Restores on mount (client-only, so exported/SSR markup still matches) and
+ * never clobbers stored data with the initial value.
+ */
+function usePersistentState<T>(
+  key: string | undefined,
+  initial: T,
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [state, setState] = React.useState<T>(initial);
+  const firstWrite = React.useRef(true);
+  React.useEffect(() => {
+    if (!key) return;
+    try {
+      const raw = sessionStorage.getItem(key);
+      if (raw !== null) setState(JSON.parse(raw) as T);
+    } catch {
+      // ignore malformed storage
+    }
+  }, [key]);
+  React.useEffect(() => {
+    if (!key) return;
+    if (firstWrite.current) {
+      firstWrite.current = false; // don't overwrite stored value with `initial`
+      return;
+    }
+    try {
+      sessionStorage.setItem(key, JSON.stringify(state));
+    } catch {
+      // ignore storage failures (private mode, quota)
+    }
+  }, [key, state]);
+  return [state, setState];
+}
+
+/** Drop a persisted key — e.g. once a form Save/Cancel discards its draft. */
+function clearPersisted(key: string | undefined) {
+  if (!key) return;
+  try {
+    sessionStorage.removeItem(key);
+  } catch {
+    // ignore
+  }
+}
+
 interface RecordViewProps<T extends { id: RowId }> {
   title: string;
   singular: string;
@@ -228,6 +276,9 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  of opening the built-in overlay form. */
   onView?: (id: RowId) => void;
   onEdit?: (id: RowId) => void;
+  /** Persist this view's filter / sort / page under this key (e.g. the route),
+   *  so the work survives leaving and returning via the open-tabs strip. */
+  persistKey?: string;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -247,6 +298,7 @@ export function RecordView<T extends { id: RowId }>({
   onCreate,
   onView,
   onEdit,
+  persistKey,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -269,11 +321,14 @@ export function RecordView<T extends { id: RowId }>({
     },
     [controlled, data, onDataChange],
   );
-  const [filter, setFilter] = React.useState("");
-  const [sort, setSort] = React.useState<{
+  const [filter, setFilter] = usePersistentState(
+    persistKey ? `${persistKey}::filter` : undefined,
+    "",
+  );
+  const [sort, setSort] = usePersistentState<{
     key: string;
     dir: "asc" | "desc";
-  } | null>(null);
+  } | null>(persistKey ? `${persistKey}::sort` : undefined, null);
   const [hidden, setHidden] = React.useState<Set<string>>(new Set());
   const [selected, setSelected] = React.useState<Set<RowId>>(new Set());
   const [editing, setEditing] = React.useState<{
@@ -289,7 +344,10 @@ export function RecordView<T extends { id: RowId }>({
   const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
   // Whether the detail panel opened read-only (View) or editable (Edit / Add).
   const [panelReadOnly, setPanelReadOnly] = React.useState(false);
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = usePersistentState(
+    persistKey ? `${persistKey}::page` : undefined,
+    1,
+  );
   const [pageSize, setPageSize] = React.useState<number>(25);
   const [flashId, setFlashId] = React.useState<RowId | null>(null);
   const [copiedKey, setCopiedKey] = React.useState<string | null>(null);
@@ -418,7 +476,7 @@ export function RecordView<T extends { id: RowId }>({
   // Reset to the first page when the filter or page size changes.
   React.useEffect(() => {
     setPage(1);
-  }, [filter, pageSize]);
+  }, [filter, pageSize, setPage]);
 
   function startEdit(row: T, key: string) {
     setEditing({ id: row.id, key });
@@ -1390,6 +1448,9 @@ interface DetailPanelProps<T extends { id: RowId }> {
   onHome?: () => void;
   /** Intro text for the documentation panel. */
   formDescription?: string;
+  /** Persist the in-progress draft under this key (e.g. the route), so a
+   *  half-filled form survives leaving and returning via the open-tabs strip. */
+  persistKey?: string;
 }
 
 function RecordDetailPanel<T extends { id: RowId }>({
@@ -1408,10 +1469,18 @@ function RecordDetailPanel<T extends { id: RowId }>({
   title,
   onHome,
   formDescription,
+  persistKey,
 }: DetailPanelProps<T>) {
-  const [draft, setDraft] = React.useState<T>(row);
-  // Reset the buffered form when a different record is opened.
+  const draftKey = persistKey ? `${persistKey}::draft` : undefined;
+  const [draft, setDraft] = usePersistentState<T>(draftKey, row);
+  // Reset the buffered form when a *different* record is opened — but skip the
+  // first run so a restored draft (persistKey) isn't clobbered on mount.
+  const firstRowEffect = React.useRef(true);
   React.useEffect(() => {
+    if (firstRowEffect.current) {
+      firstRowEffect.current = false;
+      return;
+    }
     setDraft(row);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row.id]);
@@ -1458,7 +1527,14 @@ function RecordDetailPanel<T extends { id: RowId }>({
       setErrors(new Set(missing.map((f) => f.key)));
       return;
     }
+    clearPersisted(draftKey); // work committed — drop the saved draft
     dismiss(() => onSave(draft));
+  };
+
+  // Cancel/close discards the draft too, so it doesn't reappear next visit.
+  const handleCancel = () => {
+    clearPersisted(draftKey);
+    dismiss(onCancel);
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
@@ -1528,7 +1604,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
     <div className="flex shrink-0 items-center justify-end gap-2 border-y border-border bg-muted/40 px-4 py-3">
       {readOnly ? (
         <>
-          <Button onClick={() => dismiss(onCancel)}>
+          <Button onClick={handleCancel}>
             <X className="size-4" />
             Close
           </Button>
@@ -1541,7 +1617,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
         </>
       ) : (
         <>
-          <Button onClick={() => dismiss(onCancel)}>
+          <Button onClick={handleCancel}>
             <X className="size-4" />
             Cancel
           </Button>
@@ -1644,7 +1720,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
           "fixed inset-0 z-[55] bg-foreground/25",
           closing ? "vui-overlay-out" : "vui-overlay-in",
         )}
-        onClick={() => requestClose(onCancel)}
+        onClick={handleCancel}
         aria-hidden="true"
       />
       <aside
@@ -1677,7 +1753,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => requestClose(onCancel)}
+            onClick={handleCancel}
             aria-label="Close"
             className="ml-auto"
           >

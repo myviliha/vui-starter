@@ -10,6 +10,8 @@ import {
   Share2Icon as Network,
 } from "@radix-ui/react-icons";
 
+import { usePathname } from "next/navigation";
+
 import { Badge } from "@viliha/vui-ui/badge";
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { branches, type Branch } from "@/lib/mock-data";
@@ -38,8 +40,10 @@ const fields: RecordField<Branch>[] = [
 ];
 
 export function BranchesTable() {
+  const pathname = usePathname();
   return (
     <RecordView
+      persistKey={pathname}
       title="Branches"
       singular="Branch"
       icon={Network}

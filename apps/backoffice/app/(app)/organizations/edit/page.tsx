@@ -42,6 +42,7 @@ function EditOrganizationForm() {
     <main className="h-full">
       <SetPageTitle title={ORG_TITLE} icon={ORG_ICON} />
       <RecordForm
+        persistKey={`/organizations/edit?id=${row.id}`}
         columns={1}
         fields={fields}
         row={row}
