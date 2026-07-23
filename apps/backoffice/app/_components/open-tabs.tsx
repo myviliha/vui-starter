@@ -295,7 +295,10 @@ export function KeepAliveTabs({ children }: { children: React.ReactNode }) {
   const active = tabKey(usePathname());
   const { tabs } = useOpenTabs();
   const cache = React.useRef(new Map<string, React.ReactNode>());
-  // Capture the active route's element; keep prior tabs' elements untouched.
+  // Refresh the active route's element (so re-opening an /edit tab with a
+  // different record shows the right data); inactive tabs keep their cached
+  // element and stay mounted. In-progress form work survives via RecordForm's
+  // sessionStorage draft (see persistKey), which is StrictMode-safe.
   cache.current.set(active, children);
   // Drop entries for tabs that have been closed.
   const open = new Set(tabs.map((t) => t.href));

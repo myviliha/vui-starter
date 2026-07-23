@@ -1473,17 +1473,15 @@ function RecordDetailPanel<T extends { id: RowId }>({
 }: DetailPanelProps<T>) {
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
-  // Reset the buffered form when a *different* record is opened — but skip the
-  // first run so a restored draft (persistKey) isn't clobbered on mount.
-  const firstRowEffect = React.useRef(true);
+  // Reset the buffered form only when a *genuinely different* record is opened.
+  // Tracking the last id (not a "first run" flag) is StrictMode-safe: the dev
+  // double-invoke sees the same id and won't wipe a restored / in-progress draft.
+  const lastRowId = React.useRef(row.id);
   React.useEffect(() => {
-    if (firstRowEffect.current) {
-      firstRowEffect.current = false;
-      return;
-    }
+    if (lastRowId.current === row.id) return;
+    lastRowId.current = row.id;
     setDraft(row);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row.id]);
+  }, [row, setDraft]);
 
   const primary = getPrimary(draft);
   const HeaderIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
