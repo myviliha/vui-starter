@@ -7,6 +7,9 @@ packages:
 # declares ^0.34.5, so pin it forward.
 overrides:
   sharp: "^0.35.0"
+  # postcss <=8.5.11 has a high-severity sourceMappingURL file-read advisory
+  # (GHSA-6g55-p6wh-862q); next pulls in 8.4.31, so pin it forward.
+  postcss: "^8.5.12"
 
 onlyBuiltDependencies:
   - esbuild
