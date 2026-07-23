@@ -36,6 +36,36 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
         dependencies — your app's versions are used (React 18 or 19).
       </P>
 
+      <H2>Scaffold the whole app + demo (<code>init</code>)</H2>
+      <P>
+        The steps below wire up the <em>theme + components</em>. To also get the{" "}
+        <strong>app shell</strong> (layout, sidebar, open tabs, command palette,
+        nav config, logo) and the <strong>demo pages</strong>, run the scaffolder
+        — it copies them into your repo so you own and edit them:
+      </P>
+      <CodeBlock title="terminal">{`npx @viliha/vui-ui init`}</CodeBlock>
+      <P>
+        It asks whether this is a <strong>fresh</strong> or{" "}
+        <strong>existing</strong> project and whether to include the demo pages.
+        It&apos;s non-destructive (existing files are skipped). Flags for CI /
+        agents: <code className="font-mono text-[0.9em]">--fresh</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--existing</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--demo</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--no-demo</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--yes</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--force</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--dry-run</code>.
+      </P>
+      <Note title="Existing projects: run --dry-run first">
+        <code>init --existing</code> never overwrites your config — it adds the
+        shell/pages and prints the four things to merge (
+        <code>transpilePackages</code>, the <code>theme.css</code> import, the{" "}
+        <code>@/*</code> alias, and <code>import &quot;./globals.css&quot;</code>).
+        Preview with <code>npx @viliha/vui-ui init --existing --dry-run</code>. Want
+        only the components? Skip <code>init</code> and follow the manual setup
+        below.
+      </Note>
+
       <H2>1 · New Next.js app</H2>
       <H3>a. Import the theme</H3>
       <P>

@@ -125,7 +125,7 @@ cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md
       </P>
 
       <DocPager
-        prev={{ label: "Layout & patterns", href: "/docs/layout" }}
+        prev={{ label: "Navigation & tabs", href: "/docs/navigation" }}
         next={{ label: "Using shadcn/ui", href: "/docs/shadcn-ui" }}
       />
     </article>

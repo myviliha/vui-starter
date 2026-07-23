@@ -79,6 +79,42 @@ NEXT_PUBLIC_MAX_TABS="5"`}</CodeBlock>
         <code>© 2026 VILIHA PTE. LTD. · MIT Licensed</code>.
       </P>
 
+      <H2>Logo &amp; branding</H2>
+      <P>
+        Two ways to set your logo — no component code needed for the common case:
+      </P>
+      <Ul>
+        <li>
+          <strong>Drop an image + one env var.</strong> Put your file in{" "}
+          <code>public/</code> (e.g. <code>public/logo.svg</code>) and set{" "}
+          <code>NEXT_PUBLIC_LOGO_URL=&quot;/logo.svg&quot;</code>, then rebuild. It
+          renders in the sidebar header (and anywhere <code>&lt;Logo /&gt;</code>{" "}
+          is used).
+        </li>
+        <li>
+          <strong>Leave it unset</strong> → the built-in rounded badge with a
+          stylised &ldquo;V&rdquo; shows instead. Its color is the{" "}
+          <code>--brand-indigo</code> token — change it in{" "}
+          <a href="/docs/theming" className="font-medium text-foreground underline">theme.css</a>{" "}
+          to recolor the fallback.
+        </li>
+      </Ul>
+      <P>
+        For more control — a separate wordmark, a dark-mode variant, or custom
+        sizing — edit <code>app/_components/logo.tsx</code> directly (it takes a{" "}
+        <code>variant</code> and <code>className</code>).
+      </P>
+
+      <H2>Open tabs</H2>
+      <P>
+        <code>NEXT_PUBLIC_MAX_TABS</code> (above) caps how many pages the tab strip
+        keeps open. The strip itself is an app-shell pattern you wire in — see{" "}
+        <a href="/docs/navigation" className="font-medium text-foreground underline">
+          Navigation &amp; tabs
+        </a>{" "}
+        for the setup.
+      </P>
+
       <Note title="Build-time values">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>{" "}
         into the static export — set them where your deploy runs{" "}

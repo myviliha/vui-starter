@@ -38,6 +38,66 @@ export default nextConfig;
 
 (Vite and most bundlers need no extra config.)
 
+## Scaffold the full app + demo (`init`)
+
+The package ships the **components**; the **app shell** (layout, sidebar,
+browser-style **open tabs**, command palette, nav config, logo) and the **demo
+pages** live in a one-shot scaffolder:
+
+```bash
+npx @viliha/vui-ui init
+```
+
+It's **interactive** — it asks whether this is a **fresh** or **existing**
+project and whether to include the **demo pages** (dashboard, CRM, calendar,
+chat, support, settings, auth). Files are copied into *your* repo, so you own and
+edit them. It's **non-destructive**: existing files are skipped.
+
+```
+Flags (for CI / agents, skip the prompts):
+  --fresh | --existing    project type
+  --demo  | --no-demo     include demo pages (default: with demo)
+  --yes, -y               accept defaults (fresh, with demo)
+  --force                 overwrite existing files
+  --dry-run               preview without writing
+```
+
+After it runs, install the peer deps it prints, then `npm run dev` → `/dashboard`.
+
+### Fresh project (recommended)
+
+Start from a `create-next-app` base. `init --fresh` also writes `next.config.mjs`,
+`app/globals.css`, and the root layout, so the demo runs out of the box.
+
+### ⚠️ Existing project — read this first
+
+Adding VUI to an app you already have needs care. **`init --existing` never
+overwrites your config** — it adds the shell + pages under `app/(app)/` and
+`app/_components/`, then prints the four things to merge yourself:
+
+1. **`next.config`** — add `transpilePackages: ["@viliha/vui-ui"]`.
+   (Optional, for the open-tabs *keep-alive*: `output: "export"`,
+   `images: { unoptimized: true }`, `trailingSlash: true`.)
+2. **`app/globals.css`** — add:
+   ```css
+   @import "tailwindcss";
+   @import "@viliha/vui-ui/theme.css";
+   ```
+3. **`tsconfig.json`** — the scaffold imports via `@/*`; map it to your root:
+   `"compilerOptions": { "paths": { "@/*": ["./*"] } }`.
+4. **Root `app/layout.tsx`** — `import "./globals.css"` (and mount fonts to match
+   the demo's look).
+
+Run **`npx @viliha/vui-ui init --existing --dry-run`** first to see exactly what
+it will add. If you only want the components (not the shell/pages), **skip `init`
+entirely** — the [Setup](#setup) above is all you need, then import from
+`@viliha/vui-ui/*`.
+
+> **Note on the theme in an existing app:** VUI owns its design tokens in
+> `theme.css`. If your app already defines shadcn/ui or other CSS variables with
+> the same names, import `theme.css` **last** and remove the duplicates, or the
+> two token sets will fight. On a fresh project this never comes up.
+
 ## Usage
 
 Each component is its own entry point, so you only ship what you use:

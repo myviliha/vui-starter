@@ -2,8 +2,13 @@ Add a page: <Title>
 
 Page type:  <data table | record form | dashboard | settings | board>   # pick one
 Route:      apps/backoffice/app/(app)/<route>/page.tsx
-Nav:        add to nav-config.ts under section "<Section>" with icon <Icon>
-             (sidebar + breadcrumbs follow automatically)
+Nav:        add to nav-config.ts + mirror the color in route-meta.ts
+             (sidebar + breadcrumbs + open-tabs all follow automatically).
+             Pick the grouping shape:
+               - titled Section  — a static band under a heading (always visible)
+               - collapsible Group — a parent with `children` that hide/unhide
+             (see docs /navigation). Default to an existing Section; only add a
+             Group when nesting several related sub-pages.
 Data:       <where rows/records come from — a mock module now, your API later>
 
 # If it's a DATA TABLE / RECORD FORM, list the fields (become RecordField[]):

@@ -26,6 +26,7 @@ const NAV: NavGroup[] = [
     items: [
       { label: "Theming", href: "/docs/theming" },
       { label: "Layout & patterns", href: "/docs/layout" },
+      { label: "Navigation & tabs", href: "/docs/navigation" },
     ],
   },
   {

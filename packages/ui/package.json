@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-ui",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "description": "Vui UI — a clean, token-driven React admin/CRM component library built on Tailwind CSS v4, shadcn-style patterns, and Radix Icons. Ships as TypeScript source (Just-in-Time), compiled by the consuming app.",
   "license": "MIT",
   "author": "Suman Bonakurthi",
@@ -33,9 +33,15 @@
     "src",
     "!src/**/*.test.ts",
     "!src/**/*.test.tsx",
+    "bin",
+    "template",
     "AGENT.md",
     "CLAUDE.template.md"
   ],
+  "bin": {
+    "vui-ui": "bin/vui.mjs",
+    "vui": "bin/vui.mjs"
+  },
   "exports": {
     "./theme.css": "./src/theme.css",
     "./utils": "./src/utils.ts",
@@ -48,7 +54,9 @@
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsgo --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "sync-template": "node scripts/sync-template.mjs",
+    "prepublishOnly": "node scripts/sync-template.mjs"
   },
   "peerDependencies": {
     "react": "^18 || ^19",

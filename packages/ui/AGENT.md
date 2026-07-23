@@ -67,6 +67,23 @@ Never duplicate functionality already provided by VUI.
 
 # Installation Requirements
 
+## Scaffold the shell + demo (`init`)
+
+The package ships the components; the **app shell** (layout, sidebar, open tabs,
+command palette, nav config, logo) and **demo pages** are scaffolded with:
+
+```bash
+npx @viliha/vui-ui init          # interactive: fresh vs existing, with/without demo
+```
+
+Files land in the consumer's repo (they own them). **Fresh project:** writes
+config too, runs out of the box. **Existing project:** `init --existing` never
+overwrites config — it adds the shell/pages and prints the merge steps
+(`transpilePackages`, the `theme.css` import, the `@/*` alias, `import
+"./globals.css"`). Flags: `--fresh` / `--existing` / `--demo` / `--no-demo` /
+`--yes` / `--force` / `--dry-run`. If you only need components, skip `init` and
+just do the setup below.
+
 VUI ships as TypeScript source.
 
 ## Next.js
@@ -207,16 +224,69 @@ One trail, **derived from the route — never hand-written per page.**
 
 To reorder or rename, edit the nav config; the trail follows automatically.
 
-## Open tabs
+## Sidebar: sections & collapsible groups
 
-Enterprise apps often keep several pages open at once. The reference app ships a
-browser-style **tab strip** under the top bar (a reference-app pattern — copy
-`open-tabs.tsx`): an `OpenTabsProvider` tracks opened routes, switching is a
-router push, and the list persists in `sessionStorage`. Tab labels/icons come
-from the same nav config as the sidebar. ⌘/Ctrl-click a nav item opens a
-background tab; expose an `openTab(href, { background })` for custom "open in new
-tab" buttons. Keep it a navigation-tab model (don't try to keep every page
-mounted) unless you specifically need live state preserved across tabs.
+The sidebar is driven by one `NAV` config (copy `nav-config.ts`). There are
+**two grouping shapes — use them, don't invent a third:**
+
+- **Section** (`NavSection`, `{ title?, items }`) — a top-level band with an
+  optional `title` heading. Items are **always visible** (no collapse). Use it to
+  cluster related pages under a label (e.g. *Records*, *System*). The first
+  section usually has no title.
+- **Collapsible group** (`NavGroup`, an entry with `children`) — a parent row with
+  a chevron that **hides/unhides** its nested links; it auto-opens when a child is
+  the active route. Use it for a set of sub-pages under one parent (e.g. *Auth*,
+  *CRM*, *System*) to keep the sidebar short. A group parent has no page of its
+  own — its breadcrumb points at its first child.
+
+```ts
+export const NAV: NavSection[] = [
+  { items: [                                   // untitled section
+    { label: "Home", href: "/dashboard", icon: Home },
+    { label: "Auth", icon: Lock, children: [   // collapsible group (hide/unhide)
+      { label: "Sign in", href: "/auth/signin", icon: LogIn },
+    ]},
+  ]},
+  { title: "Records", items: [                  // titled section (static band)
+    { label: "Organizations", href: "/organizations", icon: Building2 },
+  ]},
+];
+```
+
+When adding a page, always add it to `NAV` and mirror its color in
+`route-meta.ts` — the sidebar, breadcrumbs, and tabs all derive from these.
+
+## Open tabs (keep-alive)
+
+Enterprise apps keep several pages open at once. The reference app ships a
+browser-style **tab strip** under the top bar — a reference-app pattern (copy
+`open-tabs.tsx`), not a package export. **This is a first-class feature; wire it
+in — a fresh install won't have it.**
+
+It is **keep-alive**: every opened page stays mounted (inactive ones hidden), so
+switching is instant (no remount/flash) and each page keeps its live state
+(scroll, form input, filters). Mount the three pieces once in your app layout:
+
+```tsx
+<OpenTabsProvider>
+  <AppSidebar /> <TopBar />
+  <TabStrip />                          {/* the strip, under the top bar */}
+  <KeepAliveTabs>{children}</KeepAliveTabs>   {/* keeps open pages mounted */}
+</OpenTabsProvider>
+```
+
+- Labels/icons/colors derive from `nav-config.ts` + `route-meta.ts` — no per-tab wiring.
+- The list persists in `sessionStorage`, capped by `NEXT_PUBLIC_MAX_TABS`
+  (default 5; oldest FIFO-evicted with a warning).
+- Tabs are drag-reorderable and right-click-taggable with one of seven colors.
+- ⌘/Ctrl-click a nav item opens a **background tab**; call
+  `useOpenTabs().openTab(href, { background: true })` for custom "open in new tab"
+  buttons. `tabKey` normalizes trailing slashes so `/foo` and `/foo/` are one tab.
+
+Keep-alive relies on a static-export (all-client) shell. If your app renders
+server components per route, either adopt the demo's static-export shell or fall
+back to a plain navigation-tab model (router push per tab) — the strip,
+persistence, and nav-config wiring stay identical.
 
 ---
 

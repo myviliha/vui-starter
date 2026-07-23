@@ -568,7 +568,7 @@ import { Button } from "@viliha/vui-ui/button";
 
       <DocPager
         prev={{ label: "Theming", href: "/docs/theming" }}
-        next={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
+        next={{ label: "Navigation & tabs", href: "/docs/navigation" }}
       />
     </article>
   );
