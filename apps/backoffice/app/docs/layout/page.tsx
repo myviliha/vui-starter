@@ -417,7 +417,10 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         pages stay one click apart. Navigating opens (or focuses) a tab;{" "}
         <code>⌘</code>/<code>Ctrl</code>-clicking a sidebar item opens it in a{" "}
         <strong>background tab</strong> without leaving the current page; the{" "}
-        <code>✕</code> closes one. The open list persists across reloads via{" "}
+        <code>✕</code> closes one. Tabs can be <strong>dragged to reorder</strong>{" "}
+        (each shows a grip handle; the shift animates via FLIP) and{" "}
+        <strong>right-clicked to tag with one of seven color labels</strong>. The
+        open list, order and colors persist across reloads via{" "}
         <code>sessionStorage</code>, capped by{" "}
         <code>NEXT_PUBLIC_MAX_TABS</code> (default 5 — opening more evicts the
         oldest with a warning).
