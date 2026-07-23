@@ -10,6 +10,7 @@ import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { PageFade, RouteProgress } from "@/app/_components/transitions";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
+import { OpenTabsProvider, TabStrip } from "@/app/_components/open-tabs";
 
 export default function AppLayout({
   children,
@@ -20,12 +21,14 @@ export default function AppLayout({
     <SidebarProvider>
       <QuickActionsProvider>
        <GlobalSearchProvider>
+        <OpenTabsProvider>
         <RouteProgress />
         <div className="flex h-screen overflow-hidden">
           <AppSidebar />
           <PageChromeProvider titleLeading={<Breadcrumbs />}>
             <div className="flex min-h-0 min-w-0 flex-1 flex-col">
               <TopBar />
+              <TabStrip />
               {/* Single scroll owner is each page's own inner content area; this
                   wrapper clips (overflow-hidden) and is `relative` so any
                   absolutely-positioned descendant (e.g. cmdk's hidden label) is
@@ -40,6 +43,7 @@ export default function AppLayout({
           </PageChromeProvider>
           <MobileNav />
         </div>
+        </OpenTabsProvider>
        </GlobalSearchProvider>
       </QuickActionsProvider>
     </SidebarProvider>

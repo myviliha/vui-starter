@@ -410,6 +410,31 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         by <code>e.altKey</code>.
       </Note>
 
+      <H2>Open tabs</H2>
+      <P>
+        The shell keeps a <strong>browser-style strip of the pages you&apos;ve
+        opened</strong>, so several pages stay one click apart. Navigating opens
+        (or focuses) a tab; <code>⌘</code>/<code>Ctrl</code>-clicking a sidebar
+        item opens it in a <strong>background tab</strong> without leaving the
+        current page; the <code>✕</code> closes one. The open list persists
+        across reloads via <code>sessionStorage</code>.
+      </P>
+      <Shot
+        src="/page-types/open-tabs.png"
+        alt="Open tabs — a browser-style strip under the top bar with closable page tabs"
+      />
+      <P>
+        It&apos;s <code>OpenTabsProvider</code> + <code>&lt;TabStrip /&gt;</code>{" "}
+        mounted once in <code>(app)/layout.tsx</code>, directly under{" "}
+        <code>&lt;TopBar /&gt;</code>. Tab labels, icons and colors come from the
+        same <code>nav-config.ts</code> / <code>route-meta.ts</code> source as
+        the sidebar, so a new page is tab-able with no extra wiring. This is the{" "}
+        <strong>navigation-tab</strong> model — switching is a router push (the
+        page re-renders). For a custom &quot;open in new tab&quot; button
+        anywhere, call{" "}
+        <code>{`useOpenTabs().openTab(href, { background: true })`}</code>.
+      </P>
+
       <H2>Bordered list components</H2>
       <P>
         Any component that renders a list of records — dropdown menus, selects,

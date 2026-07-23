@@ -62,6 +62,10 @@ Two ⌘K palettes, **both the same headless `CommandPalette`** (`@viliha/vui-ui/
 
 Each is a provider (open state + a `keydown` effect, told apart by `e.altKey`) mounting `CommandPalette` with a `CommandAction[]` (`{ id, label, group?, icon?, keywords?, onSelect }`). To add a searchable source, push more actions — for real data, swap the demo record index for API results. Docs + examples at `/layout`.
 
+## Open tabs
+
+A browser-style strip of opened pages lives in the shell: `OpenTabsProvider` + `<TabStrip/>` in `app/_components/open-tabs.tsx`, mounted once in `(app)/layout.tsx` under `<TopBar/>`. Navigation-tab model — switching is a router push; the list persists in `sessionStorage`. Labels/icons/colors derive from `nav-config.ts` + `route-meta.ts` (no per-tab wiring). ⌘/Ctrl-click a sidebar item opens a background tab; for a custom "open in new tab" call `useOpenTabs().openTab(href, { background: true })`.
+
 ## Breadcrumbs
 
 One trail, **route-derived, never hand-written per page.** Two layers:

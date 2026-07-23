@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
 import { QuickActionsLauncher } from "./quick-actions";
+import { useOpenTabs } from "./open-tabs";
 import {
   isGroup,
   NAV,
@@ -102,15 +103,27 @@ function SidebarBody({
       return next;
     });
 
+  const { openTab } = useOpenTabs();
+
   const renderLink = (item: NavLink, sub = false) => {
     const active = isActive(pathname, item.href);
+    const onClick = (e: React.MouseEvent) => {
+      // ⌘/Ctrl+click → open in a background tab (stay on the current page),
+      // the same gesture as a browser. Plain click navigates as usual.
+      if (e.metaKey || e.ctrlKey) {
+        e.preventDefault();
+        openTab(item.href, { background: true });
+        return;
+      }
+      onNavigate?.();
+    };
     return (
       <Link
         key={item.href}
         href={item.href}
-        onClick={onNavigate}
+        onClick={onClick}
         aria-current={active ? "page" : undefined}
-        title={collapsed ? item.label : undefined}
+        title={collapsed ? `${item.label} — ⌘-click for a new tab` : undefined}
         className={cn(
           "group/nav flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
           active
