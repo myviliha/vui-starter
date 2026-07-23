@@ -52,8 +52,10 @@ jobs:
       # that action still runs on the deprecated Node 20, and its setup emitted a
       # spurious cache "Path Validation Error". Audit reads the lockfile directly,
       # so no install and no cache step are needed.
-      - name: Enable pnpm
-        run: corepack enable
+      - name: Enable pnpm (corepack)
+        run: |
+          corepack enable
+          corepack prepare --activate
         env:
           COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
       - name: Audit production deps (fail on high/critical)

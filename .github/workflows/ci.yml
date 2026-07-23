@@ -32,7 +32,10 @@ jobs:
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: ${{ matrix.node }}
-      - run: corepack enable
+      - name: Enable pnpm (corepack)
+        run: |
+          corepack enable
+          corepack prepare --activate
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm check-types

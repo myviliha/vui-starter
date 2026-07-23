@@ -39,8 +39,10 @@ jobs:
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
-      - name: Enable pnpm
-        run: corepack enable
+      - name: Enable pnpm (corepack)
+        run: |
+          corepack enable
+          corepack prepare --activate
       - name: Setup Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Restore Next.js cache
