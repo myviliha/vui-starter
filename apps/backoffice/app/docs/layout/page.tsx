@@ -413,27 +413,39 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
       <H2>Open tabs</H2>
       <P>
         The shell keeps a <strong>browser-style strip of the pages you&apos;ve
-        opened</strong>, so several pages stay one click apart. Navigating opens
-        (or focuses) a tab; <code>⌘</code>/<code>Ctrl</code>-clicking a sidebar
-        item opens it in a <strong>background tab</strong> without leaving the
-        current page; the <code>✕</code> closes one. The open list persists
-        across reloads via <code>sessionStorage</code>.
+        opened</strong> under the top bar (labelled <em>Tabs</em>), so several
+        pages stay one click apart. Navigating opens (or focuses) a tab;{" "}
+        <code>⌘</code>/<code>Ctrl</code>-clicking a sidebar item opens it in a{" "}
+        <strong>background tab</strong> without leaving the current page; the{" "}
+        <code>✕</code> closes one. The open list persists across reloads via{" "}
+        <code>sessionStorage</code>, capped by{" "}
+        <code>NEXT_PUBLIC_MAX_TABS</code> (default 5 — opening more evicts the
+        oldest with a warning).
       </P>
       <Shot
         src="/page-types/open-tabs.png"
-        alt="Open tabs — a browser-style strip under the top bar with closable page tabs"
+        alt="Open tabs — a labelled strip under the top bar with the active tab in the primary color"
       />
       <P>
         It&apos;s <code>OpenTabsProvider</code> + <code>&lt;TabStrip /&gt;</code>{" "}
-        mounted once in <code>(app)/layout.tsx</code>, directly under{" "}
-        <code>&lt;TopBar /&gt;</code>. Tab labels, icons and colors come from the
-        same <code>nav-config.ts</code> / <code>route-meta.ts</code> source as
-        the sidebar, so a new page is tab-able with no extra wiring. This is the{" "}
-        <strong>navigation-tab</strong> model — switching is a router push (the
-        page re-renders). For a custom &quot;open in new tab&quot; button
-        anywhere, call{" "}
+        +{" "}
+        <code>&lt;KeepAliveTabs /&gt;</code> mounted once in{" "}
+        <code>(app)/layout.tsx</code>. It is{" "}
+        <strong>keep-alive</strong>: every open page stays mounted (inactive ones
+        hidden), so switching tabs is <strong>instant — no remount, no flash</strong>
+        , and each page keeps its live state (scroll, inputs, in-progress work).
+        New menu items mount on first visit. Tab labels/icons/colors derive from
+        the same <code>nav-config.ts</code> / <code>route-meta.ts</code> source as
+        the sidebar, so a new page is tab-able with no extra wiring. For a custom
+        &quot;open in new tab&quot; button, call{" "}
         <code>{`useOpenTabs().openTab(href, { background: true })`}</code>.
       </P>
+      <Note title="Why keep-alive here">
+        The app is a <strong>static export</strong> (all client at runtime), so
+        keeping pages mounted costs no server work and loses no SSR — it just
+        makes tab switching feel native. The <code>MAX_TABS</code> cap bounds how
+        many stay mounted.
+      </Note>
 
       <H2>Multi-step wizard</H2>
       <P>
