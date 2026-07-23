@@ -46,6 +46,11 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
     description:
       "Form patterns demo — inputs, selects, validation and multi-step forms built with React Hook Form and vui-ui.",
   },
+  "/steps": {
+    title: "Steps",
+    description:
+      "Multi-step wizard demo built on the Steps indicator — stepper, per-step forms and Back/Next in the Vui Starter admin.",
+  },
   "/settings": {
     title: "Settings",
     description:

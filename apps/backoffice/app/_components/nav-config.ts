@@ -19,6 +19,7 @@ import {
   Pencil2Icon as FormInput,
   PersonIcon as Users,
   QuestionMarkCircledIcon as HelpCircle,
+  RowsIcon as StepsIcon,
   SewingPinFilledIcon as MapPin,
   Share2Icon as Network,
   TargetIcon as Target,
@@ -73,6 +74,7 @@ export const NAV: NavSection[] = [
     items: [
       { label: "Components", href: "/components", icon: Blocks, color: "text-indigo-500" },
       { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
+      { label: "Steps", href: "/steps", icon: StepsIcon, color: "text-violet-500" },
     ],
   },
   {
