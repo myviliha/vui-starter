@@ -1,5 +1,5 @@
 import { PageChromeProvider } from "@viliha/vui-ui/record-view";
-import { FOOTER_NOTICE } from "@/lib/seo";
+import { FOOTER_NOTICE, FOOTER_OVERRIDDEN, SITE } from "@/lib/seo";
 import {
   AppSidebar,
   MobileNav,
@@ -41,7 +41,26 @@ export default function AppLayout({
                 <KeepAliveTabs>{children}</KeepAliveTabs>
               </div>
               <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-1 text-center text-[10px] text-muted-foreground md:block">
-                {FOOTER_NOTICE}
+                {FOOTER_OVERRIDDEN ? (
+                  FOOTER_NOTICE
+                ) : (
+                  <>
+                    © {SITE.copyrightYear}{" "}
+                    {SITE.companyUrl ? (
+                      <a
+                        href={SITE.companyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline-offset-2 hover:text-foreground hover:underline"
+                      >
+                        {SITE.company}
+                      </a>
+                    ) : (
+                      SITE.company
+                    )}{" "}
+                    · {SITE.license}
+                  </>
+                )}
               </footer>
             </div>
           </PageChromeProvider>

@@ -13,15 +13,22 @@ export const SITE = {
   // Footer identity — overridable per deployment via env (see .env.example).
   // NEXT_PUBLIC_ so the value is inlined into the client bundle at build time.
   company: process.env.NEXT_PUBLIC_COMPANY_NAME ?? "VILIHA PTE. LTD.",
-  copyrightYear: process.env.NEXT_PUBLIC_COPYRIGHT_YEAR ?? "2026",
+  // Optional link for the company name in the footer (e.g. https://viliha.com).
+  companyUrl: process.env.NEXT_PUBLIC_COMPANY_URL ?? "",
+  // Always the current year — inlined at build, so a rebuild/deploy keeps it fresh.
+  copyrightYear: new Date().getFullYear(),
   license: process.env.NEXT_PUBLIC_LICENSE ?? "MIT Licensed",
 } as const;
 
-/** Footer copyright line. Set NEXT_PUBLIC_FOOTER_NOTICE to override the whole
- * string, or just the individual company/year/license vars above. */
+/** Footer copyright line (plain string). Set NEXT_PUBLIC_FOOTER_NOTICE to
+ * override the whole thing, or set company / url / license vars above (the year
+ * is always the current year). The app footer links the company to its url. */
 export const FOOTER_NOTICE =
   process.env.NEXT_PUBLIC_FOOTER_NOTICE ??
   `© ${SITE.copyrightYear} ${SITE.company} · ${SITE.license}`;
+
+/** True when the footer line is a custom override (render it verbatim). */
+export const FOOTER_OVERRIDDEN = Boolean(process.env.NEXT_PUBLIC_FOOTER_NOTICE);
 
 /** Per-route title + description for the backoffice demo pages. Keeping it in
  * one table means a page file only names its route, not its copy. */
@@ -50,6 +57,11 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
     title: "Steps",
     description:
       "Multi-step wizard demo built on the Steps indicator — stepper, per-step forms and Back/Next in the Vui Starter admin.",
+  },
+  "/calendar": {
+    title: "Calendar",
+    description:
+      "Calendar demo — a Google-style month view with appointments you can add and remove, built on the Vui Starter design system.",
   },
   "/settings": {
     title: "Settings",

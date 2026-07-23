@@ -33,12 +33,15 @@ export default function ConfigurationPage() {
         <code>FOOTER_NOTICE</code> in <code>lib/seo.ts</code>, so both layouts
         stay in sync — set any of these and rebuild:
       </P>
-      <CodeBlock title=".env.local">{`# All optional; unset falls back to the default notice.
+      <CodeBlock title=".env.local">{`# All optional; unset falls back to the defaults.
 NEXT_PUBLIC_COMPANY_NAME="Acme Inc."
-NEXT_PUBLIC_COPYRIGHT_YEAR="2026"
+NEXT_PUBLIC_COMPANY_URL="https://acme.com"   # links the company name in the footer
 NEXT_PUBLIC_LICENSE="All rights reserved"
+# The copyright year is automatic (current/build year) — no env needed.
 
-# …or override the whole line at once (wins over the three above):
+NEXT_PUBLIC_LOGO_URL="/logo.svg"             # your logo from /public; else built-in mark
+
+# …or override the whole footer line at once (wins over the vars above):
 NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
 
 # Max pages kept open in the tab strip (default 5, min 1):
@@ -48,14 +51,23 @@ NEXT_PUBLIC_MAX_TABS="5"`}</CodeBlock>
           <code>NEXT_PUBLIC_COMPANY_NAME</code> — company shown in the footer.
         </li>
         <li>
-          <code>NEXT_PUBLIC_COPYRIGHT_YEAR</code> — the copyright year.
+          <code>NEXT_PUBLIC_COMPANY_URL</code> — optional; links the company name.
         </li>
         <li>
           <code>NEXT_PUBLIC_LICENSE</code> — the license/rights text.
         </li>
         <li>
-          <code>NEXT_PUBLIC_FOOTER_NOTICE</code> — replaces the entire line,
-          taking precedence over the three above.
+          <strong>Copyright year</strong> — automatic (always the current /
+          build year); there is no env var for it.
+        </li>
+        <li>
+          <code>NEXT_PUBLIC_LOGO_URL</code> — your logo image from{" "}
+          <code>/public</code> (e.g. <code>/logo.svg</code>); falls back to the
+          built-in mark.
+        </li>
+        <li>
+          <code>NEXT_PUBLIC_FOOTER_NOTICE</code> — replaces the entire footer
+          line, taking precedence over the vars above.
         </li>
         <li>
           <code>NEXT_PUBLIC_MAX_TABS</code> — how many pages the tab strip keeps
