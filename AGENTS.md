@@ -37,6 +37,21 @@ Two add/edit layouts, both from the same `RecordForm` — **pick one, don't inve
 
 Rule: when asked to add a page, **state which layout you're using and default to slide-over.** Both inherit the blue Save, the header/body/footer separators, and token colors from `RecordForm` — you never copy those styles, you get them by using the component. See the consumer guide `packages/ui/AGENT.md` ("Add / edit form") for the same rule downstream.
 
+## Breadcrumbs
+
+One trail, **route-derived, never hand-written per page.** Two layers:
+
+- **Design** → the shared `Breadcrumbs` component (`@viliha/vui-ui/breadcrumbs`). Last crumb = current page (bold, non-interactive); earlier crumbs are links; chevron separators; optional back arrow. Never build a trail from raw `<a>`/`<span>`.
+- **Logic** → `crumbsFor(pathname)` in `app/_components/route-meta.ts`, driven by `nav-config.ts`. The trail is computed from the URL:
+  - always rooted at **Home** (`/dashboard`);
+  - one crumb per path segment; label from `SEGMENT_LABELS`, else Title-cased;
+  - a section/group parent has no index page, so `SECTION_INDEX` (auto-derived from `NAV`) points its crumb at its **first child** — clicking `System` lands on the first System page. This is the standard; keep it.
+  - the last segment is the current page (non-interactive).
+
+To change the trail, edit `nav-config.ts` (structure/order) and the label/color maps in `route-meta.ts`; breadcrumbs follow automatically. A one-off page may pass an explicit `crumbs` array to the shared component (as `RecordForm` does for "Create new …"), but the default is always route-derived — never re-implement the deriver per page.
+
+**Landing page:** ship exactly one, at `/dashboard`, labeled "Home" (sidebar first item + breadcrumb root). Do **not** add a separate `/home`. Add a "Dashboards" section only when multiple dashboards are actually needed.
+
 ## Hard rules
 
 1. **Server Components by default.** Add `"use client"` only for hooks, event handlers, browser APIs, or interactive Radix/cmdk. Keep the boundary on the smallest leaf.

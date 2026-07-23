@@ -22,10 +22,14 @@ Do not reinvent the framework. Build with it.
 
 > **What you get from the package vs. what to copy.** `@viliha/vui-ui` ships the
 > component primitives (`Button`, `Input`, `Select`, `Dialog`, `Menu`,
-> `RecordView`, `ChartContainer`, `theme.css`, …). App-shell patterns referenced
-> below — `SetPageTitle`, `Breadcrumbs`, the sidebar/`nav-config`, and the
-> `AuthCard*` auth screens — are **reference-app patterns**, not package exports.
-> Copy them from the [backoffice demo](https://github.com/myviliha/vui-starter/tree/main/apps/backoffice)
+> `RecordView`, `ChartContainer`, `Breadcrumbs`, `theme.css`, …). App-shell
+> patterns referenced below — `SetPageTitle`, the sidebar, and the `AuthCard*`
+> auth screens — are **reference-app patterns**, not package exports.
+> The breadcrumb *trail-building logic* (`crumbsFor` + `nav-config` +
+> `route-meta`) is also a reference-app pattern: the package exports the
+> presentational `Breadcrumbs` component; the app derives the trail from the
+> route and feeds it in. Copy the patterns from the
+> [backoffice demo](https://github.com/myviliha/vui-starter/tree/main/apps/backoffice)
 > and adapt.
 
 ---
@@ -185,6 +189,23 @@ Always use:
 - Top Navigation
 
 Do not build custom navigation systems unless the project explicitly requires it.
+
+## Breadcrumbs
+
+One trail, **derived from the route — never hand-written per page.**
+
+- Render with the shared `Breadcrumbs` component (`@viliha/vui-ui/breadcrumbs`):
+  last crumb is the current page (bold, non-interactive), earlier crumbs are
+  links, chevron separators.
+- Build the trail from the URL against a single nav config (copy `crumbsFor` +
+  `nav-config` + `route-meta` from the reference app). Root it at **Home**
+  (your dashboard route). A section/group parent has no page of its own, so its
+  crumb links to its **first child** — clicking a section lands on that
+  section's first page.
+- Ship **one** landing page, labeled "Home". Don't split "Home" and "Dashboard"
+  into two routes.
+
+To reorder or rename, edit the nav config; the trail follows automatically.
 
 ---
 
