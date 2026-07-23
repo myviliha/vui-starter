@@ -18,22 +18,14 @@ jobs:
   publish:
     name: publish @viliha/vui-ui
     runs-on: ubuntu-latest
-    env:
-      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-      # pnpm via corepack (bundled with Node) — pnpm/action-setup still runs on
-      # the deprecated Node 20. corepack enable AFTER setup-node puts pnpm on
-      # PATH; no setup-node `cache: pnpm` (its cache step resolves the store
-      # before corepack runs, so pnpm wouldn't be found yet).
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
+          cache: pnpm
           registry-url: "https://registry.npmjs.org"
-      - name: Enable pnpm (corepack)
-        run: |
-          corepack enable
-          corepack prepare --activate
       - run: pnpm install --frozen-lockfile
       # Gate the release on the same checks as local "done".
       - run: pnpm --filter @viliha/vui-ui check-types
