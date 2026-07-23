@@ -61,17 +61,26 @@ export function Example() {
 
 This package ships an **AI-agent usage guide** at
 `node_modules/@viliha/vui-ui/AGENT.md` — the standards to follow when generating
-UI with VUI (token discipline, reuse-first, page layout, RecordView, a11y, dark
-mode). Point your agent at it, or copy it into your repo as `AGENTS.md` so tools
-auto-load it.
+UI with VUI (token discipline, reuse-first, page layout, RecordView, forms,
+a11y, dark mode). The quickest way to load it is the shipped
+`CLAUDE.template.md`:
+
+```bash
+cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md   # Claude Code
+# or ./AGENTS.md for Cursor / Copilot
+```
+
+It's a one-line `@import` of `AGENT.md`, so the rules stay in one place. Prefer a
+verbatim copy? `cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md`.
 
 ## Components
 
-`avatar` · `badge` · `button` · `card` · `chart` (themed Recharts wrapper) ·
-`checkbox` · `command-palette` (⌘K launcher) · `dialog` · `confirm-dialog` ·
-`dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) · `menu` ·
-`required-mark` · `select` · `table` · `record-view` (the full datatable) · plus
-the `utils` (`cn`) helper and the `theme.css` design tokens.
+`avatar` · `badge` · `breadcrumbs` · `button` · `card` · `chart` (themed Recharts
+wrapper) · `checkbox` · `command-palette` (⌘K launcher) · `dialog` ·
+`confirm-dialog` · `dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) ·
+`menu` · `required-mark` · `select` · `table` · `record-view` (the full datatable
++ `RecordForm`) · plus the `utils` (`cn`) helper and the `theme.css` design
+tokens.
 
 ## Theming
 
