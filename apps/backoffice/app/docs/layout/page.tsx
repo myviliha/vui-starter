@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 import {
   CodeBlock,
@@ -115,6 +116,10 @@ export default function DepartmentsPage() {
         </a>{" "}
         page for the full <code>fields</code> reference.
       </P>
+      <Shot
+        src="/page-types/data-table.png"
+        alt="Data table page — the Organizations list (RecordView)"
+      />
 
       <H3>2 · Record form — Add / Edit / View</H3>
       <P>
@@ -158,6 +163,14 @@ export default function DepartmentsPage() {
 // /organizations/new/page.tsx renders the exported RecordForm directly,
 // using the same fields from organizations-config.tsx.
 <RecordForm isNew fields={fields} row={draft} onSave={…} onCancel={…} />`}</CodeBlock>
+      <Shot
+        src="/page-types/form-full-page.png"
+        alt="Full-page record form — Create organization, with the documentation panel and Save/Cancel footer"
+      />
+      <P>
+        The slide-over variant renders the same fields in a right-hand panel over
+        the table (see the &quot;Form — slide-over&quot; thumbnail above).
+      </P>
 
       <H3>3 · Dashboard page</H3>
       <P>
@@ -176,6 +189,11 @@ export default function DepartmentsPage() {
     </div>
   </div>
 </div>`}</CodeBlock>
+
+      <Shot
+        src="/page-types/dashboard.png"
+        alt="Dashboard page — the Home overview with stat cards and content sections"
+      />
 
       <H3>4 · Settings (single-form) page</H3>
       <P>
@@ -198,6 +216,11 @@ export default function DepartmentsPage() {
   </div>
 </div>`}</CodeBlock>
 
+      <Shot
+        src="/page-types/settings.png"
+        alt="Settings page — a single card of Section blocks with a fixed Save footer"
+      />
+
       <H3>5 · Board (Kanban) page</H3>
       <P>
         A horizontally-scrolling column board — the Opportunities pipeline. The
@@ -218,6 +241,11 @@ export default function DepartmentsPage() {
     ))}
   </div>
 </div>`}</CodeBlock>
+
+      <Shot
+        src="/page-types/board.png"
+        alt="Board page — the Opportunities pipeline with drag-and-drop stage columns"
+      />
 
       <Note title="Client pages need a layout.tsx for metadata">
         The Dashboard, Settings and Board pages are Client Components
@@ -345,6 +373,24 @@ import { Button } from "@viliha/vui-ui/button";
         next={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
       />
     </article>
+  );
+}
+
+/** A captioned screenshot of a real page (from public/page-types/). */
+function Shot({ src, alt }: { src: string; alt: string }) {
+  return (
+    <figure className="my-4 overflow-hidden rounded-lg border border-border shadow-sm">
+      <Image
+        src={src}
+        alt={alt}
+        width={2560}
+        height={1600}
+        className="h-auto w-full"
+      />
+      <figcaption className="border-t border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+        {alt}
+      </figcaption>
+    </figure>
   );
 }
 
