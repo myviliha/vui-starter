@@ -435,6 +435,54 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         <code>{`useOpenTabs().openTab(href, { background: true })`}</code>.
       </P>
 
+      <H2>Multi-step wizard</H2>
+      <P>
+        For a guided flow (registration, onboarding, checkout), pair the exported{" "}
+        <code>Steps</code> indicator with your own step state. <code>Steps</code>{" "}
+        is controlled and presentational — pass the steps and the current index;
+        completed steps fill with the primary color and a check, the current one
+        is ringed, upcoming ones are muted. Build each step&apos;s body from the
+        usual primitives (<code>Input</code>, <code>Select</code>, the shared{" "}
+        <code>Field</code>) inside a section card, with a Back/Next footer. Live
+        demo: <code>/register-business</code>.
+      </P>
+      <CodeBlock title="a stepper-driven wizard">{`import { Steps, type Step } from "@viliha/vui-ui/steps";
+
+const STEPS: Step[] = [
+  { label: "Organization", description: "Business details" },
+  { label: "Account", description: "Your credentials" },
+  { label: "Review", description: "Confirm details" },
+];
+
+function Wizard() {
+  const [step, setStep] = useState(0);
+  return (
+    <>
+      <Steps steps={STEPS} current={step} />
+      {step === 0 && <OrganizationFields />}
+      {/* … */}
+      <div className="flex justify-between border-t border-border bg-muted/40 px-4 py-3">
+        <Button onClick={() => setStep((s) => s - 1)} disabled={step === 0}>Back</Button>
+        <Button variant="primary" onClick={() => setStep((s) => s + 1)}>Next</Button>
+      </div>
+    </>
+  );
+}`}</CodeBlock>
+      <Shot
+        src="/page-types/wizard.png"
+        alt="Register Your Business — a three-step wizard built with the Steps indicator"
+      />
+      <P>
+        See the{" "}
+        <a
+          href="/docs/templates"
+          className="font-medium text-foreground underline"
+        >
+          workflow requirement template
+        </a>{" "}
+        for how to brief an agent to build one of these.
+      </P>
+
       <H2>Bordered list components</H2>
       <P>
         Any component that renders a list of records — dropdown menus, selects,

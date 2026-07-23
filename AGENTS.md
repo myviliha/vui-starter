@@ -66,6 +66,10 @@ Each is a provider (open state + a `keydown` effect, told apart by `e.altKey`) m
 
 A browser-style strip of opened pages lives in the shell: `OpenTabsProvider` + `<TabStrip/>` in `app/_components/open-tabs.tsx`, mounted once in `(app)/layout.tsx` under `<TopBar/>`. Navigation-tab model — switching is a router push; the list persists in `sessionStorage`. Labels/icons/colors derive from `nav-config.ts` + `route-meta.ts` (no per-tab wiring). ⌘/Ctrl-click a sidebar item opens a background tab; for a custom "open in new tab" call `useOpenTabs().openTab(href, { background: true })`.
 
+## Multi-step wizards
+
+For guided flows (registration, onboarding, checkout) use the exported `Steps` indicator (`@viliha/vui-ui/steps`) + your own step index — never hand-roll a stepper. Build each step's body from `Input`/`Select`/`Field` in a section card with a Back/Next footer. Reference: `app/register-business/`. See docs `/layout` ("Multi-step wizard") and the workflow requirement template at `/docs/templates`.
+
 ## Breadcrumbs
 
 One trail, **route-derived, never hand-written per page.** Two layers:

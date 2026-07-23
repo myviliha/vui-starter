@@ -99,6 +99,8 @@ The reference app composes these primitives into the conventions documented at
   (`⌘⌥K`, find records), both built on the exported `CommandPalette`.
 - **Open tabs** — a browser-style strip of opened pages under the top bar
   (⌘-click a nav item for a background tab), persisted across reloads.
+- **Multi-step wizard** — the exported `Steps` indicator + your step state for
+  guided flows (see the `/register-business` demo).
 - **Breadcrumbs** — the exported `Breadcrumbs` component fed a route-derived
   trail.
 
@@ -127,9 +129,9 @@ verbatim copy? `cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md`.
 `avatar` · `badge` · `breadcrumbs` · `button` · `card` · `chart` (themed Recharts
 wrapper) · `checkbox` · `command-palette` (⌘K launcher) · `dialog` ·
 `confirm-dialog` · `dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) ·
-`menu` · `required-mark` · `select` · `table` · `record-view` (the full datatable
-+ `RecordForm`) · plus the `utils` (`cn`) helper and the `theme.css` design
-tokens.
+`menu` · `required-mark` · `select` · `steps` (multi-step wizard indicator) ·
+`table` · `record-view` (the full datatable + `RecordForm`) · plus the `utils`
+(`cn`) helper and the `theme.css` design tokens.
 
 ## Theming
 
