@@ -15,7 +15,7 @@ Turborepo + pnpm monorepo. One app + one published library:
 | Task | Location |
 | --- | --- |
 | New reusable component | `packages/ui/src/<name>.tsx` → auto-exported as `@viliha/vui-ui/<name>` (the `./*` export map; **no barrel edit needed**) |
-| New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout` |
+| New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout`. **Ask which add/edit layout** (see "Adding a record page" below); default to **slide-over**. |
 | New auth page | `apps/backoffice/app/auth/<name>/page.tsx` |
 | shadcn component | `npx shadcn@latest add <name>` (from the backoffice dir) → `components/ui/` |
 | Design token / color / radius | `packages/ui/src/theme.css` — **never hard-code**, add/read a token |
@@ -28,6 +28,15 @@ Turborepo + pnpm monorepo. One app + one published library:
 - **Page layout / section cards / dialogs / menus / datatable** → documented at docs `/layout` and `/data-table`. Reuse `Dialog`, `Menu`, `RecordView`, `ChartContainer` — don't re-implement.
 - **`cn`** → `@viliha/vui-ui/utils`. `utils.ts` is intentional; do not "fix" it.
 
+## Adding a record page
+
+Two add/edit layouts, both from the same `RecordForm` — **pick one, don't invent a third:**
+
+- **Slide-over (standard / default).** Add/edit opens as an overlay panel from `RecordView`. Nothing to configure — this is what you get by default. Use it unless asked otherwise. Example: `departments`.
+- **Full-page route.** A dedicated `/new` (or `/edit`) route rendering `<RecordForm layout="page" columns={1|2} … />`. Use for long forms or when the add flow needs its own URL. Example: `organizations/new`.
+
+Rule: when asked to add a page, **state which layout you're using and default to slide-over.** Both inherit the blue Save, the header/body/footer separators, and token colors from `RecordForm` — you never copy those styles, you get them by using the component. See the consumer guide `packages/ui/AGENT.md` ("Add / edit form") for the same rule downstream.
+
 ## Hard rules
 
 1. **Server Components by default.** Add `"use client"` only for hooks, event handlers, browser APIs, or interactive Radix/cmdk. Keep the boundary on the smallest leaf.
@@ -35,7 +44,7 @@ Turborepo + pnpm monorepo. One app + one published library:
 3. **No hard-coded design values** — use theme tokens / shared components.
 4. **No new dependency** for what a few lines can do. Prefer stdlib/native/existing deps.
 5. **Follow the page pattern:** `flex h-full flex-col` → action header with `<Breadcrumbs/>` → content `min-h-0 flex-1 overflow-y-auto` → `flex flex-col gap-4 p-4`. Content padding is always `p-4`/`gap-4`.
-6. **Datatables:** use `RecordView` (`@viliha/vui-ui/record-view`) with a `fields` array; don't build tables by hand. See docs `/data-table`.
+6. **Datatables & record forms:** use `RecordView`/`RecordForm` (`@viliha/vui-ui/record-view`) with a `fields` array; never hand-roll a table **or** an add/edit form. This is what enforces the design — the blue primary `Save` (`--button-primary`), the section-header / body / footer separators, and the field-icon accent all come from the component. A hand-built `<form>` gets none of it. See docs `/layout` and `/data-table`.
 7. **Lists/menus:** use `Menu`/`MenuItem` (bordered-row standard) or the shared `Dropdown`/`Select`; don't hand-roll list borders.
 8. **Icons:** Radix Icons (`@radix-ui/react-icons`) for app chrome; leave shadcn's internal Lucide icons as-is.
 9. **Comment deliberate no-ops** (e.g. clipboard/storage `catch`). Never silently swallow errors elsewhere.
