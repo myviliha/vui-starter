@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 import {
   CodeBlock,
@@ -76,6 +77,8 @@ export default function MyPage() {
         invent a fifth shape.
       </P>
 
+      <PageTypeGallery />
+
       <H3>1 · Data table page</H3>
       <P>
         For any list of records — <strong>Organizations, Branches, Departments,
@@ -113,25 +116,33 @@ export default function DepartmentsPage() {
         page for the full <code>fields</code> reference.
       </P>
 
-      <Note title="Add / Edit / View: two variants (Branches vs. Organizations)">
-        The same <code>RecordView</code> renders the add/edit/view form in one of
-        two ways — this is the difference you see between Branches and
-        Organizations.
-        <br />
-        <br />
-        <strong>Slide-over overlay (default)</strong> — Branches, Departments.
-        Just render <code>&lt;RecordView&gt;</code> with no <code>formMode</code>;
-        add/edit/view open a right-hand panel over the table. Uncontrolled
-        (pass <code>initialData</code>).
-        <br />
-        <br />
-        <strong>Full-page routes</strong> — Organizations. Set{" "}
-        <code>formMode=&quot;page&quot;</code> and route the actions to dedicated
-        URLs; the form takes over the whole page with a breadcrumb bar and a
-        fixed Save/Cancel footer. Controlled — the table and the{" "}
-        <code>/new</code> &amp; <code>/edit</code> routes share one data source
-        and one <code>*-config.tsx</code>.
-      </Note>
+      <H3>2 · Record form — Add / Edit / View</H3>
+      <P>
+        The Add, Edit and View screens for a record are <strong>one form</strong>
+        , rendered by <code>RecordView</code>/<code>RecordForm</code> from the
+        same <code>fields</code> array — View is the read-only state, Edit the
+        editable one, Add the same on a blank row. You never build three separate
+        forms. It renders in one of two variants, and this is exactly the
+        difference between Branches and Organizations:
+      </P>
+      <Ul>
+        <li>
+          <strong>Slide-over overlay (default)</strong> — Branches, Departments.
+          Render <code>&lt;RecordView&gt;</code> with no <code>formMode</code>;
+          Add/Edit/View open a right-hand panel over the table. Uncontrolled
+          (pass <code>initialData</code>). Best for short forms and quick edits.
+        </li>
+        <li>
+          <strong>Full-page routes</strong> — Organizations. Set{" "}
+          <code>formMode=&quot;page&quot;</code> and route the actions to
+          dedicated URLs (<code>/new</code>, <code>/edit</code>); the form takes
+          over the whole page with a breadcrumb bar, an optional
+          documentation panel, and a fixed Save/Cancel footer. Controlled — the
+          table and the routes share one data source and one{" "}
+          <code>*-config.tsx</code>. Best for long forms or when the form needs
+          its own URL.
+        </li>
+      </Ul>
       <CodeBlock title="slide-over (Branches) vs. full-page routes (Organizations)">{`// Branches — overlay, uncontrolled. That's the whole difference.
 <RecordView title="Branches" fields={fields} initialData={branches} … />
 
@@ -148,7 +159,7 @@ export default function DepartmentsPage() {
 // using the same fields from organizations-config.tsx.
 <RecordForm isNew fields={fields} row={draft} onSave={…} onCancel={…} />`}</CodeBlock>
 
-      <H3>2 · Dashboard page</H3>
+      <H3>3 · Dashboard page</H3>
       <P>
         An overview screen (the Home page at <code>/dashboard</code>): a row of{" "}
         <code>StatCard</code>s, then a grid of bordered-card sections (tables,
@@ -166,7 +177,7 @@ export default function DepartmentsPage() {
   </div>
 </div>`}</CodeBlock>
 
-      <H3>3 · Settings (single-form) page</H3>
+      <H3>4 · Settings (single-form) page</H3>
       <P>
         One long form on its own page — Settings. Instead of a scrolling column
         of sections, the content is a <strong>single bordered card</strong>:
@@ -187,7 +198,7 @@ export default function DepartmentsPage() {
   </div>
 </div>`}</CodeBlock>
 
-      <H3>4 · Board (Kanban) page</H3>
+      <H3>5 · Board (Kanban) page</H3>
       <P>
         A horizontally-scrolling column board — the Opportunities pipeline. The
         content region scrolls on the <em>x</em> axis and holds fixed-width
@@ -334,5 +345,126 @@ import { Button } from "@viliha/vui-ui/button";
         next={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
       />
     </article>
+  );
+}
+
+/* ── Schematic page-type thumbnails (theme-aware, no image assets) ────────── */
+
+function Thumb({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <figure className="m-0">
+      <div className="flex aspect-[4/3] flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+        {/* window chrome / action header */}
+        <div className="flex shrink-0 items-center gap-1 border-b border-border bg-muted/40 px-2 py-1.5">
+          <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+          <span className="h-1.5 w-12 rounded-full bg-muted-foreground/25" />
+        </div>
+        <div className="min-h-0 flex-1 p-2">{children}</div>
+      </div>
+      <figcaption className="mt-1.5 text-center text-xs text-muted-foreground">
+        {label}
+      </figcaption>
+    </figure>
+  );
+}
+
+/** A form label + input pair. */
+function Field() {
+  return (
+    <div className="flex items-center gap-1">
+      <span className="h-1.5 w-4 shrink-0 rounded bg-muted-foreground/30" />
+      <span className="h-2 flex-1 rounded border border-border bg-background" />
+    </div>
+  );
+}
+
+function PageTypeGallery() {
+  return (
+    <div className="my-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      <Thumb label="1 · Data table">
+        <div className="flex h-full flex-col gap-1.5">
+          <div className="flex items-center gap-1">
+            <span className="h-2 w-6 rounded bg-muted" />
+            <span className="h-2 w-2 rounded bg-muted" />
+            <span className="ml-auto h-2 w-5 rounded bg-[var(--button-primary)]" />
+          </div>
+          <span className="h-2 w-full rounded bg-muted/70" />
+          <span className="h-2 w-full rounded bg-muted/70" />
+          <span className="h-2 w-full rounded bg-muted/70" />
+          <span className="h-2 w-full rounded bg-muted/70" />
+        </div>
+      </Thumb>
+
+      <Thumb label="2 · Form — full page">
+        <div className="flex h-full gap-1.5">
+          <div className="flex flex-1 flex-col gap-1">
+            <Field />
+            <Field />
+            <Field />
+            <div className="mt-auto flex justify-end gap-1">
+              <span className="h-2 w-4 rounded border border-border" />
+              <span className="h-2 w-5 rounded bg-[var(--button-primary)]" />
+            </div>
+          </div>
+          {/* AWS-style documentation panel */}
+          <div className="w-1/3 rounded border border-border bg-muted/30" />
+        </div>
+      </Thumb>
+
+      <Thumb label="2 · Form — slide-over">
+        <div className="flex h-full gap-1.5">
+          <div className="flex flex-1 flex-col gap-1.5 opacity-40">
+            <span className="h-2 w-full rounded bg-muted/70" />
+            <span className="h-2 w-full rounded bg-muted/70" />
+            <span className="h-2 w-full rounded bg-muted/70" />
+            <span className="h-2 w-full rounded bg-muted/70" />
+          </div>
+          <div className="flex w-2/5 flex-col gap-1 rounded border border-border bg-card p-1 shadow">
+            <Field />
+            <Field />
+            <span className="mt-auto h-2 w-full rounded bg-[var(--button-primary)]" />
+          </div>
+        </div>
+      </Thumb>
+
+      <Thumb label="3 · Dashboard">
+        <div className="flex h-full flex-col gap-1.5">
+          <div className="grid grid-cols-4 gap-1">
+            <span className="h-3 rounded bg-muted" />
+            <span className="h-3 rounded bg-muted" />
+            <span className="h-3 rounded bg-muted" />
+            <span className="h-3 rounded bg-muted" />
+          </div>
+          <div className="grid flex-1 grid-cols-3 gap-1">
+            <span className="col-span-2 rounded bg-muted/70" />
+            <span className="rounded bg-muted/70" />
+          </div>
+        </div>
+      </Thumb>
+
+      <Thumb label="4 · Settings">
+        <div className="flex h-full flex-col gap-1.5">
+          <span className="h-4 w-full rounded bg-muted/70" />
+          <span className="h-4 w-full rounded bg-muted/70" />
+          <div className="mt-auto flex justify-end border-t border-border pt-1.5">
+            <span className="h-2 w-6 rounded bg-[var(--button-primary)]" />
+          </div>
+        </div>
+      </Thumb>
+
+      <Thumb label="5 · Board (Kanban)">
+        <div className="grid h-full grid-cols-4 gap-1">
+          {[0, 1, 2, 3].map((c) => (
+            <div
+              key={c}
+              className="flex flex-col gap-1 rounded border border-dashed border-border bg-muted/30 p-1"
+            >
+              <span className="h-2 rounded bg-card shadow-sm" />
+              <span className="h-2 rounded bg-card shadow-sm" />
+            </div>
+          ))}
+        </div>
+      </Thumb>
+    </div>
   );
 }
