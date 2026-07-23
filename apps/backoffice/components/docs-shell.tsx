@@ -34,6 +34,8 @@ const NAV: NavGroup[] = [
       { label: "Building with AI agents", href: "/docs/ai-agents" },
       { label: "Requirement templates", href: "/docs/templates" },
       { label: "Using shadcn/ui", href: "/docs/shadcn-ui" },
+      { label: "Chat", href: "/docs/chat" },
+      { label: "Support & ticketing", href: "/docs/support" },
       { label: "Auth screens", href: "/docs/auth" },
     ],
   },
@@ -44,6 +46,7 @@ const NAV: NavGroup[] = [
       { label: "Data table", href: "/docs/data-table" },
       { label: "Steps", href: "/docs/steps" },
       { label: "Charts", href: "/docs/charts" },
+      { label: "Calendar", href: "/docs/calendar" },
     ],
   },
   {

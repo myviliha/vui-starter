@@ -123,7 +123,7 @@ export default function SignIn() {
       </Note>
 
       <DocPager
-        prev={{ label: "Using shadcn/ui", href: "/docs/shadcn-ui" }}
+        prev={{ label: "Support & ticketing", href: "/docs/support" }}
         next={{ label: "Components", href: "/docs/components" }}
       />
     </article>

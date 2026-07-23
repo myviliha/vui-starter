@@ -155,7 +155,7 @@ const data = [
 
       <DocPager
         prev={{ label: "Data table", href: "/docs/data-table" }}
-        next={{ label: "Contributing", href: "/docs/contributing" }}
+        next={{ label: "Calendar", href: "/docs/calendar" }}
       />
     </article>
   );

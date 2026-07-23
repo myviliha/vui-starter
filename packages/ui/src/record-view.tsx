@@ -1552,23 +1552,26 @@ function RecordDetailPanel<T extends { id: RowId }>({
         <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-semibold text-[var(--button-primary)]">
           {group}
         </h3>
-        <dl className="divide-y divide-border">
+        {/* Two columns sized to content: the label column auto-widens to the
+            longest label (never wraps), controls stay aligned. The panel width
+            follows (see the slide-over `sm:w-auto`). */}
+        <dl className="grid grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3">
           {groupFields.map((f) => (
             // Label, icon, required mark and control share one baseline —
             // vertically centered. ponytail: a wrapped textarea grows down and
             // the label centers against it; acceptable for the single-line norm.
             <div
               key={f.key}
-              className="flex items-center gap-3 px-3 py-3 leading-relaxed"
+              className="col-span-2 grid grid-cols-subgrid items-center border-t border-border px-3 py-3 leading-relaxed first:border-t-0"
             >
-              <dt className="flex w-28 shrink-0 items-center gap-1.5 text-muted-foreground">
+              <dt className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground">
                 {f.icon && (
                   <f.icon className="size-3.5 text-[var(--button-primary)]" />
                 )}
                 {f.label}
                 {f.required && <RequiredMark />}
               </dt>
-              <dd className="min-w-0 flex-1">
+              <dd className="min-w-0">
                 {f.render ? (
                   <div>{f.render(draft)}</div>
                 ) : !readOnly && f.editable ? (
@@ -1729,7 +1732,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
       <aside
         aria-label={`${singular} form`}
         className={cn(
-          "fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]",
+          // Auto-size to content: wide enough for the longest label + control on
+          // one line, clamped so it never gets too narrow or wider than the viewport.
+          "fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-auto sm:min-w-[420px] sm:max-w-[90vw]",
           closing ? "vui-panel-out" : "vui-panel-in",
         )}
         onAnimationEnd={(e) => {

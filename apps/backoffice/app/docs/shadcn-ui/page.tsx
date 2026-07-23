@@ -173,7 +173,7 @@ export function SignupForm() {
 
       <DocPager
         prev={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
-        next={{ label: "Auth screens", href: "/docs/auth" }}
+        next={{ label: "Chat", href: "/docs/chat" }}
       />
     </article>
   );

@@ -4,6 +4,7 @@ import {
   BarChartIcon as BarChart3,
   BookmarkIcon as Flag,
   CalendarIcon,
+  ChatBubbleIcon,
   CheckCircledIcon as BadgeCheck,
   CubeIcon as Building,
   ExclamationTriangleIcon as AlertTriangle,
@@ -77,6 +78,8 @@ export const NAV: NavSection[] = [
       { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
       { label: "Steps", href: "/steps", icon: StepsIcon, color: "text-violet-500" },
       { label: "Calendar", href: "/calendar", icon: CalendarIcon, color: "text-rose-500" },
+      { label: "Chat", href: "/chat", icon: ChatBubbleIcon, color: "text-sky-500" },
+      { label: "Support", href: "/support", icon: HelpCircle, color: "text-emerald-500" },
     ],
   },
   {

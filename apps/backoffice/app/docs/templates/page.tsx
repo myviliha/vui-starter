@@ -93,6 +93,34 @@ export default function TemplatesPage() {
         content={tmpl("feature-requirement.md")}
       />
 
+      <H2>6 · Worked example — Calendar page</H2>
+      <P>
+        A filled-in <a href="/docs/layout" className="font-medium text-foreground underline">page</a>{" "}
+        brief for the appointments{" "}
+        <a href="/docs/calendar" className="font-medium text-foreground underline">Calendar</a>{" "}
+        (Month/Week/Day, AM/PM hour grid, color labels, add dialog). Copy it as
+        the shape to aim for when briefing a rich screen.
+      </P>
+      <TemplateBlock filename="calendar.md" content={tmpl("calendar.md")} />
+
+      <H2>7 · Worked example — Chat (ChatGPT-style)</H2>
+      <P>
+        A filled-in brief for the{" "}
+        <a href="/docs/chat" className="font-medium text-foreground underline">Chat</a>{" "}
+        assistant — centered thread, auto-growing composer, and image/file
+        attachments with preview and remove.
+      </P>
+      <TemplateBlock filename="chat.md" content={tmpl("chat.md")} />
+
+      <H2>8 · Worked example — Support &amp; ticketing</H2>
+      <P>
+        A filled-in brief for the{" "}
+        <a href="/docs/support" className="font-medium text-foreground underline">Support</a>{" "}
+        desk — a ticket queue with status/priority, a detail pane, and a reply
+        thread.
+      </P>
+      <TemplateBlock filename="support.md" content={tmpl("support.md")} />
+
       <Note title="Specificity beats length">
         You don&apos;t need long prose — you need the blanks filled. A field
         list, a page type, and a done-when checklist get you a first pass that
