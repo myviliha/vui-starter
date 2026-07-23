@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/layout/" },
   title: "Layout & patterns",
   description:
-    "The standard page template, section cards, breadcrumb placement, bordered list components, and sectioned dialogs — the conventions every new page and component in Vui Starter follows.",
+    "The standard page template and the four page types (data table, dashboard, settings form, kanban board), plus section cards, breadcrumbs, bordered lists and dialogs — the conventions every new page in Vui Starter follows.",
 };
 
 export default function LayoutPage() {
@@ -66,6 +66,156 @@ export default function MyPage() {
         The content wrapper is always <code>p-4</code> with <code>gap-4</code>{" "}
         between sections. Home, Settings, Charts, Forms, and the datatable pages
         all use this exact frame — new pages should too.
+      </Note>
+
+      <H2>Page types</H2>
+      <P>
+        Every page shares the frame above; only the content region changes. The
+        theme has <strong>four page types</strong> — when you add a page, decide
+        which one the requirement calls for, then fill in its content. Don&apos;t
+        invent a fifth shape.
+      </P>
+
+      <H3>1 · Data table page</H3>
+      <P>
+        For any list of records — <strong>Organizations, Branches, Departments,
+        Employees, Markets</strong>, and the System / CRM lists. The route is a
+        thin server <code>page.tsx</code> that renders a client{" "}
+        <code>*-table.tsx</code>, which is a single <code>RecordView</code> fed a{" "}
+        <code>fields</code> array. RecordView supplies its own action header,
+        breadcrumbs, padded card, sorting, filtering, pagination, row actions,
+        the add/edit form and import/export — you configure, you don&apos;t lay
+        out. Every data table page uses this one layout; only the{" "}
+        <code>fields</code> config differs.
+      </P>
+      <CodeBlock title="app/(app)/departments/ — server page + client table">{`// page.tsx — server component: metadata + the table, nothing else
+export const metadata = pageMeta("/departments");
+export default function DepartmentsPage() {
+  return <main className="h-full"><DepartmentsTable /></main>;
+}
+
+// departments-table.tsx — "use client"
+<RecordView
+  title="Departments" singular="Department" icon={LayoutGrid}
+  fields={fields}                       // the whole design comes from here
+  initialData={departments}
+  getPrimary={(row) => ({ title: row.name, initials: "…" })}
+  makeEmptyRow={() => ({ /* blank row */ })}
+/>`}</CodeBlock>
+      <P>
+        See the{" "}
+        <a
+          href="/docs/data-table"
+          className="font-medium text-foreground underline"
+        >
+          Data table
+        </a>{" "}
+        page for the full <code>fields</code> reference.
+      </P>
+
+      <Note title="Add / Edit / View: two variants (Branches vs. Organizations)">
+        The same <code>RecordView</code> renders the add/edit/view form in one of
+        two ways — this is the difference you see between Branches and
+        Organizations.
+        <br />
+        <br />
+        <strong>Slide-over overlay (default)</strong> — Branches, Departments.
+        Just render <code>&lt;RecordView&gt;</code> with no <code>formMode</code>;
+        add/edit/view open a right-hand panel over the table. Uncontrolled
+        (pass <code>initialData</code>).
+        <br />
+        <br />
+        <strong>Full-page routes</strong> — Organizations. Set{" "}
+        <code>formMode=&quot;page&quot;</code> and route the actions to dedicated
+        URLs; the form takes over the whole page with a breadcrumb bar and a
+        fixed Save/Cancel footer. Controlled — the table and the{" "}
+        <code>/new</code> &amp; <code>/edit</code> routes share one data source
+        and one <code>*-config.tsx</code>.
+      </Note>
+      <CodeBlock title="slide-over (Branches) vs. full-page routes (Organizations)">{`// Branches — overlay, uncontrolled. That's the whole difference.
+<RecordView title="Branches" fields={fields} initialData={branches} … />
+
+// Organizations — full-page routes, controlled via a shared store.
+<RecordView
+  formMode="page" formColumns={1}
+  fields={fields} data={rows} onDataChange={orgStore.set}
+  onCreate={() => router.push("/organizations/new")}
+  onView={(id) => router.push(\`/organizations/edit?id=\${id}\`)}
+  onEdit={(id) => router.push(\`/organizations/edit?id=\${id}\`)}
+  … />
+
+// /organizations/new/page.tsx renders the exported RecordForm directly,
+// using the same fields from organizations-config.tsx.
+<RecordForm isNew fields={fields} row={draft} onSave={…} onCancel={…} />`}</CodeBlock>
+
+      <H3>2 · Dashboard page</H3>
+      <P>
+        An overview screen (the Home page at <code>/dashboard</code>): a row of{" "}
+        <code>StatCard</code>s, then a grid of bordered-card sections (tables,
+        progress bars, lists). It uses the standard scrolling content region —
+        stat grid first, then a responsive <code>grid</code> of sections.
+      </P>
+      <CodeBlock title="dashboard content region">{`<div className="min-h-0 flex-1 overflow-y-auto">
+  <div className="flex flex-col gap-4 p-4">
+    <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* <StatCard /> × 4 */}
+    </section>
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      {/* bordered-card sections — a wide table + a side column */}
+    </div>
+  </div>
+</div>`}</CodeBlock>
+
+      <H3>3 · Settings (single-form) page</H3>
+      <P>
+        One long form on its own page — Settings. Instead of a scrolling column
+        of sections, the content is a <strong>single bordered card</strong>:
+        scrollable <code>Section</code> cards inside, and a{" "}
+        <strong>fixed footer action bar</strong> (Save) pinned to the bottom —
+        the same footer the full-page record form uses. Reach for this whenever a
+        page is &quot;a form with a Save button,&quot; not a list.
+      </P>
+      <CodeBlock title="settings content region">{`<div className="min-h-0 flex-1 overflow-hidden p-4">
+  <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
+    <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+      {/* <Section title="Profile"> … </Section> cards */}
+    </div>
+    {/* fixed footer — matches the record form's action bar */}
+    <div className="flex shrink-0 items-center justify-end gap-2 border-y border-border bg-muted/40 px-4 py-3">
+      <Button variant="primary">Save changes</Button>
+    </div>
+  </div>
+</div>`}</CodeBlock>
+
+      <H3>4 · Board (Kanban) page</H3>
+      <P>
+        A horizontally-scrolling column board — the Opportunities pipeline. The
+        content region scrolls on the <em>x</em> axis and holds fixed-width
+        (<code>w-72</code>) columns; each column is a dashed, droppable card list
+        with drag-and-drop between stages. Use it for stage/status pipelines, not
+        for flat lists (those are data tables).
+      </P>
+      <CodeBlock title="board content region">{`<div className="min-h-0 flex-1 overflow-x-auto p-4">
+  <div className="flex h-full gap-4">
+    {stages.map((stage) => (
+      <section key={stage} className="flex h-full w-72 shrink-0 flex-col gap-3">
+        {/* column header + count */}
+        <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto rounded-lg border border-dashed border-border bg-muted/30 p-2">
+          {/* draggable cards */}
+        </div>
+      </section>
+    ))}
+  </div>
+</div>`}</CodeBlock>
+
+      <Note title="Client pages need a layout.tsx for metadata">
+        The Dashboard, Settings and Board pages are Client Components
+        (<code>&quot;use client&quot;</code>), so they can&apos;t{" "}
+        <code>export const metadata</code>. Put a tiny sibling{" "}
+        <code>layout.tsx</code> that exports{" "}
+        <code>metadata = pageMeta(&quot;/route&quot;)</code> and returns its
+        children — Dashboard and Settings both do this. Data table pages keep
+        their server <code>page.tsx</code>, so they export metadata directly.
       </Note>
 
       <H2>Sections</H2>
