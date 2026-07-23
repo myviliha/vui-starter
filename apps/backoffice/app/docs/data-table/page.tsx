@@ -108,6 +108,8 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>formMode</code> — <code>&quot;panel&quot;</code> (default, slide-over) or <code>&quot;page&quot;</code> (full-page form). See form layouts below.</li>
         <li><code>formColumns</code> — <code>1</code> (default) or <code>2</code> field-group columns, in page mode.</li>
         <li><code>formDescription</code> — intro text for the page-form documentation panel.</li>
+        <li><code>resizableColumns</code> — <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
+        <li><code>persistKey</code> — a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
       </Ul>
 
       <H2>Field options</H2>
