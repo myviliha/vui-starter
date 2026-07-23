@@ -1,8 +1,13 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
-import { Cross2Icon, FileIcon } from "@radix-ui/react-icons";
+import {
+  Cross2Icon,
+  DragHandleDots2Icon,
+  FileIcon,
+} from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { isGroup, NAV, type IconType } from "./nav-config";
@@ -65,6 +70,7 @@ function tabMeta(href: string): Tab {
 }
 
 const KEY = "vui.openTabs";
+const COLORS_KEY = "vui.openTabColors";
 
 /** Max tabs kept open, from the env (build-time inlined). Default 5, min 1. */
 export const MAX_TABS = (() => {
@@ -72,12 +78,35 @@ export const MAX_TABS = (() => {
   return Number.isFinite(n) && n >= 1 ? Math.floor(n) : 5;
 })();
 
+/** Seven color labels a user can tag a tab with (static classes for Tailwind). */
+export const TAB_COLORS: { key: string; dot: string; ring: string }[] = [
+  { key: "blue", dot: "bg-blue-500", ring: "ring-blue-500" },
+  { key: "emerald", dot: "bg-emerald-500", ring: "ring-emerald-500" },
+  { key: "amber", dot: "bg-amber-500", ring: "ring-amber-500" },
+  { key: "violet", dot: "bg-violet-500", ring: "ring-violet-500" },
+  { key: "rose", dot: "bg-rose-500", ring: "ring-rose-500" },
+  { key: "cyan", dot: "bg-cyan-500", ring: "ring-cyan-500" },
+  { key: "orange", dot: "bg-orange-500", ring: "ring-orange-500" },
+];
+const DOT_FOR = new Map(TAB_COLORS.map((c) => [c.key, c.dot]));
+
+// useLayoutEffect on the client (to measure before paint), useEffect on the
+// server — avoids the SSR warning. Stable per environment.
+const useIsoLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
 type Ctx = {
   tabs: Tab[];
   activeHref: string;
   /** Add a tab. `background: true` opens it without leaving the current page. */
   openTab: (href: string, opts?: { background?: boolean }) => void;
   close: (href: string) => void;
+  /** Move the tab `from` to the position of the tab `to` (drag reorder). */
+  reorder: (from: string, to: string) => void;
+  /** href → color key (see TAB_COLORS); undefined = no label. */
+  colors: Record<string, string>;
+  /** Tag a tab with a color (null clears it). */
+  setColor: (href: string, colorKey: string | null) => void;
   /** Transient warning (e.g. the oldest tab was evicted at the cap). */
   notice: string | null;
 };
@@ -97,6 +126,7 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   // Only hrefs are stored (icons don't serialize); tabs are derived on render.
   const [hrefs, setHrefs] = React.useState<string[]>([]);
+  const [colors, setColors] = React.useState<Record<string, string>>({});
   const [notice, setNotice] = React.useState<string | null>(null);
   const noticeTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   // Latest active path for the (pure) reducer without re-creating callbacks.
@@ -144,8 +174,22 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
       stored.splice(i, 1);
     }
     setHrefs(stored);
+    try {
+      setColors(JSON.parse(sessionStorage.getItem(COLORS_KEY) || "{}"));
+    } catch {
+      // ignore malformed storage
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Persist color labels.
+  React.useEffect(() => {
+    try {
+      sessionStorage.setItem(COLORS_KEY, JSON.stringify(colors));
+    } catch {
+      // ignore storage failures
+    }
+  }, [colors]);
 
   // Add the current route as a tab when navigating.
   React.useEffect(() => {
@@ -190,15 +234,44 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
     [hrefs, activePath, router],
   );
 
+  const reorder = React.useCallback((from: string, to: string) => {
+    const a = tabKey(from);
+    const b = tabKey(to);
+    if (a === b) return;
+    setHrefs((prev) => {
+      const next = [...prev];
+      const fi = next.indexOf(a);
+      if (fi === -1) return prev;
+      next.splice(fi, 1); // remove dragged tab
+      const ti = next.indexOf(b); // target position in the shortened array
+      if (ti === -1) return prev;
+      next.splice(ti, 0, a); // drop it before the target
+      return next;
+    });
+  }, []);
+
+  const setColor = React.useCallback((href: string, colorKey: string | null) => {
+    const key = tabKey(href);
+    setColors((prev) => {
+      const next = { ...prev };
+      if (colorKey) next[key] = colorKey;
+      else delete next[key];
+      return next;
+    });
+  }, []);
+
   const value = React.useMemo<Ctx>(
     () => ({
       tabs: hrefs.map(tabMeta),
       activeHref: activePath,
       openTab,
       close,
+      reorder,
+      colors,
+      setColor,
       notice,
     }),
-    [hrefs, activePath, openTab, close, notice],
+    [hrefs, activePath, openTab, close, reorder, colors, setColor, notice],
   );
 
   return (
@@ -208,10 +281,55 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** The tab strip — render it directly under the top bar. */
+/** The tab strip — render it directly under the top bar. Tabs can be dragged to
+ *  reorder and right-clicked to tag with one of seven color labels. */
 export function TabStrip() {
-  const { tabs, activeHref, close, notice } = useOpenTabs();
+  const { tabs, activeHref, close, reorder, colors, setColor, notice } =
+    useOpenTabs();
   const router = useRouter();
+  const dragHref = React.useRef<string | null>(null);
+  const lastOver = React.useRef<string | null>(null);
+  const tabEls = React.useRef(new Map<string, HTMLDivElement>());
+  const prevRects = React.useRef(new Map<string, DOMRect>());
+  const [menu, setMenu] = React.useState<{
+    href: string;
+    x: number;
+    y: number;
+  } | null>(null);
+
+  React.useEffect(() => {
+    if (!menu) return;
+    const dismiss = () => setMenu(null);
+    window.addEventListener("click", dismiss);
+    window.addEventListener("scroll", dismiss, true);
+    return () => {
+      window.removeEventListener("click", dismiss);
+      window.removeEventListener("scroll", dismiss, true);
+    };
+  }, [menu]);
+
+  // FLIP: when the tab order changes, slide each tab from its old position to
+  // its new one so reordering animates smoothly instead of jumping.
+  useIsoLayoutEffect(() => {
+    const els = tabEls.current;
+    els.forEach((el, href) => {
+      const prev = prevRects.current.get(href);
+      const rect = el.getBoundingClientRect();
+      const dx = prev ? prev.left - rect.left : 0;
+      if (dx) {
+        el.style.transition = "none";
+        el.style.transform = `translateX(${dx}px)`;
+        requestAnimationFrame(() => {
+          el.style.transition = "transform 220ms cubic-bezier(0.22, 1, 0.36, 1)";
+          el.style.transform = "";
+        });
+      }
+      prevRects.current.set(href, rect);
+    });
+    for (const h of [...prevRects.current.keys()])
+      if (!els.has(h)) prevRects.current.delete(h);
+  });
+
   if (tabs.length === 0) return null;
 
   return (
@@ -226,18 +344,64 @@ export function TabStrip() {
       {tabs.map((t) => {
         const active = t.href === activeHref;
         const Icon = t.icon;
+        const colorKey = colors[t.href];
+        const dot = colorKey ? DOT_FOR.get(colorKey) : null;
         return (
           <div
             key={t.href}
+            ref={(el) => {
+              if (el) tabEls.current.set(t.href, el);
+              else tabEls.current.delete(t.href);
+            }}
             role="tab"
             aria-selected={active}
+            tabIndex={active ? 0 : -1}
+            draggable
+            onDragStart={() => {
+              dragHref.current = t.href;
+              lastOver.current = t.href;
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              // Reorder live as you drag past a tab (FLIP animates the shift).
+              const d = dragHref.current;
+              if (d && d !== t.href && lastOver.current !== t.href) {
+                lastOver.current = t.href;
+                reorder(d, t.href);
+              }
+            }}
+            onDrop={(e) => e.preventDefault()}
+            onDragEnd={() => {
+              dragHref.current = null;
+              lastOver.current = null;
+            }}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              setMenu({ href: t.href, x: e.clientX, y: e.clientY });
+            }}
+            title="Drag to reorder · right-click to color"
             className={cn(
-              "group flex h-7 shrink-0 items-center gap-1.5 rounded-md pl-2.5 pr-2 text-sm transition-colors",
+              "group flex h-7 shrink-0 cursor-grab items-center gap-1 rounded-md pl-1.5 pr-2 text-sm transition-colors active:cursor-grabbing",
               active
                 ? "bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)]"
                 : "text-muted-foreground hover:bg-accent/50",
             )}
           >
+            <DragHandleDots2Icon
+              aria-hidden="true"
+              className={cn(
+                "size-3.5 shrink-0",
+                active
+                  ? "text-[var(--button-primary-foreground)]"
+                  : "text-muted-foreground/50",
+              )}
+            />
+            {dot && (
+              <span
+                aria-hidden="true"
+                className={cn("size-2 shrink-0 rounded-full", dot)}
+              />
+            )}
             <button
               type="button"
               onClick={() => router.push(t.href)}
@@ -275,6 +439,47 @@ export function TabStrip() {
           {notice}
         </span>
       )}
+
+      {menu &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            aria-label="Tab color"
+            style={{ position: "fixed", top: menu.y + 4, left: menu.x }}
+            className="vui-pop-in z-[200] flex items-center gap-1.5 rounded-md border border-border bg-popover p-1.5 shadow-md"
+          >
+            {TAB_COLORS.map((c) => (
+              <button
+                key={c.key}
+                type="button"
+                aria-label={c.key}
+                title={c.key}
+                onClick={() => {
+                  setColor(menu.href, c.key);
+                  setMenu(null);
+                }}
+                className={cn(
+                  "size-4 rounded-full ring-offset-1 transition-transform hover:scale-110",
+                  c.dot,
+                  colors[menu.href] === c.key && cn("ring-2", c.ring),
+                )}
+              />
+            ))}
+            <button
+              type="button"
+              aria-label="No color"
+              title="No color"
+              onClick={() => {
+                setColor(menu.href, null);
+                setMenu(null);
+              }}
+              className="grid size-4 place-items-center rounded-full border border-border text-muted-foreground hover:bg-accent"
+            >
+              <Cross2Icon className="size-2.5" />
+            </button>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
