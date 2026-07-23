@@ -30,7 +30,7 @@ export default function DataTablePage() {
       <H2>Import</H2>
       <CodeBlock title="terminal">{`import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";`}</CodeBlock>
       <Note title="One component, many features">
-        Editable cells · resizable + auto-sizing columns · sticky header · sort ·
+        Editable cells · auto-sizing columns (opt-in resize) · sticky header · sort ·
         filter · column show/hide · pagination · row actions (view / edit /
         delete) · required-field markers · buffered add/edit form (slide-over or
         full-page) · bulk actions (set field / delete) · CSV / JSON / Excel / PDF
@@ -122,7 +122,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>description</code> — help text shown in the page-form documentation panel.</li>
         <li><code>options</code> — makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action.</li>
         <li><code>icon</code> — column-header icon.</li>
-        <li><code>width</code> — initial column width (px); columns are also user-resizable.</li>
+        <li><code>width</code> — initial column width (px). Columns auto-size by default; pass <code>resizableColumns</code> on <code>RecordView</code> to let users drag-resize them.</li>
         <li><code>align</code> — <code>&quot;left&quot;</code> / <code>&quot;center&quot;</code> / <code>&quot;right&quot;</code> (see below).</li>
       </Ul>
 

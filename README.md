@@ -46,7 +46,7 @@ with zero backend.
 - **Design system in one stylesheet** — colors, typography, radius, dark mode,
   selection color and the icon treatment all live in `theme.css` as CSS
   variables. Restyle the whole app by editing tokens in one place.
-- **RecordView datatable** — editable cells, resizable/auto-sizing columns,
+- **RecordView datatable** — editable cells, auto-sizing columns (opt-in resize),
   sticky header, sort/filter/column toggle, pagination, row actions
   (view/edit/delete), required-field markers, a buffered Add/Edit form panel,
   and **CSV / JSON / Excel / PDF import & export**.

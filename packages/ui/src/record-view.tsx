@@ -279,6 +279,9 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Persist this view's filter / sort / page under this key (e.g. the route),
    *  so the work survives leaving and returning via the open-tabs strip. */
   persistKey?: string;
+  /** Allow dragging column edges to resize them. Off by default — columns
+   *  auto-size, and no resize handle appears on hover. */
+  resizableColumns?: boolean;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -299,6 +302,7 @@ export function RecordView<T extends { id: RowId }>({
   onView,
   onEdit,
   persistKey,
+  resizableColumns = false,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -408,7 +412,8 @@ export function RecordView<T extends { id: RowId }>({
       0,
     );
 
-  const resizeHandle = (col: string, label: string) => (
+  const resizeHandle = (col: string, label: string) =>
+    !resizableColumns ? null : (
     <button
       type="button"
       aria-label={`Resize ${label} column`}
