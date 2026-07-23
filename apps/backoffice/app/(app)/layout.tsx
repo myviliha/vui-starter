@@ -7,10 +7,14 @@ import {
 } from "@/app/_components/app-sidebar";
 import { TopBar } from "@/app/_components/top-bar";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
-import { PageFade, RouteProgress } from "@/app/_components/transitions";
+import { RouteProgress } from "@/app/_components/transitions";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
-import { OpenTabsProvider, TabStrip } from "@/app/_components/open-tabs";
+import {
+  KeepAliveTabs,
+  OpenTabsProvider,
+  TabStrip,
+} from "@/app/_components/open-tabs";
 
 export default function AppLayout({
   children,
@@ -34,7 +38,9 @@ export default function AppLayout({
                   absolutely-positioned descendant (e.g. cmdk's hidden label) is
                   contained here instead of escaping to extend the document. */}
               <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden pb-14 md:pb-0">
-                <PageFade>{children}</PageFade>
+                {/* Keep-alive: open tabs stay mounted so switching is instant
+                    (no remount/flash) and each page keeps its live state. */}
+                <KeepAliveTabs>{children}</KeepAliveTabs>
               </div>
               <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-1 text-center text-[10px] text-muted-foreground md:block">
                 {FOOTER_NOTICE}

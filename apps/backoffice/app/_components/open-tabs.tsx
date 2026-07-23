@@ -39,9 +39,17 @@ const NAV_META = (() => {
   return m;
 })();
 
+/** Canonical tab identity: drop the query and any trailing slash, so
+ *  "/branches" (nav config) and "/branches/" (trailingSlash router) are one
+ *  tab. Root "/" is preserved. */
+function tabKey(href: string): string {
+  const path = (href.split("?")[0] ?? href) || "/";
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+}
+
 /** Resolve a tab's display metadata from its path (query ignored). */
 function tabMeta(href: string): Tab {
-  const clean = href.split("?")[0] ?? href;
+  const clean = tabKey(href);
   const exact = NAV_META.get(clean);
   if (exact) return { href: clean, ...exact };
   // e.g. /organizations/new → inherit the parent's icon/color, label the leaf.
@@ -83,15 +91,17 @@ export function useOpenTabs(): Ctx {
 }
 
 export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+  // Normalize away the trailing slash (trailingSlash: true) so a nav-added
+  // "/branches/" and a ⌘-click-added "/branches" are the same tab.
+  const activePath = tabKey(usePathname());
   const router = useRouter();
   // Only hrefs are stored (icons don't serialize); tabs are derived on render.
   const [hrefs, setHrefs] = React.useState<string[]>([]);
   const [notice, setNotice] = React.useState<string | null>(null);
   const noticeTimer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
-  // Latest pathname for the (pure) reducer without re-creating callbacks.
-  const activeRef = React.useRef(pathname);
-  activeRef.current = pathname;
+  // Latest active path for the (pure) reducer without re-creating callbacks.
+  const activeRef = React.useRef(activePath);
+  activeRef.current = activePath;
   // Set inside the reducer when a tab is evicted; drained by the persist effect
   // so the warning fires exactly once. ponytail: a ref write in a reducer is a
   // benign, idempotent side effect — fine here, avoids a second state pass.
@@ -126,9 +136,10 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore malformed storage
     }
-    if (!stored.includes(pathname)) stored.push(pathname);
+    stored = stored.map(tabKey);
+    if (!stored.includes(activePath)) stored.push(activePath);
     while (stored.length > MAX_TABS) {
-      const i = stored.findIndex((h) => h !== pathname);
+      const i = stored.findIndex((h) => h !== activePath);
       if (i === -1) break;
       stored.splice(i, 1);
     }
@@ -138,8 +149,8 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
 
   // Add the current route as a tab when navigating.
   React.useEffect(() => {
-    setHrefs((prev) => capAdd(prev, pathname));
-  }, [pathname, capAdd]);
+    setHrefs((prev) => capAdd(prev, activePath));
+  }, [activePath, capAdd]);
 
   // Persist the open list, and surface any eviction that just happened.
   React.useEffect(() => {
@@ -156,7 +167,7 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
 
   const openTab = React.useCallback(
     (href: string, opts?: { background?: boolean }) => {
-      const clean = href.split("?")[0] ?? href;
+      const clean = tabKey(href);
       setHrefs((prev) => capAdd(prev, clean));
       // Foreground open switches to it; background just parks it in the strip.
       if (!opts?.background) router.push(href);
@@ -166,27 +177,28 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
 
   const close = React.useCallback(
     (href: string) => {
-      const idx = hrefs.indexOf(href);
-      const next = hrefs.filter((h) => h !== href);
+      const key = tabKey(href);
+      const idx = hrefs.indexOf(key);
+      const next = hrefs.filter((h) => h !== key);
       setHrefs(next.length ? next : ["/dashboard"]);
       // If the active tab closed, fall back to its neighbour.
-      if (href === pathname) {
+      if (key === activePath) {
         const target = next[idx - 1] ?? next[idx] ?? "/dashboard";
         router.push(target);
       }
     },
-    [hrefs, pathname, router],
+    [hrefs, activePath, router],
   );
 
   const value = React.useMemo<Ctx>(
     () => ({
       tabs: hrefs.map(tabMeta),
-      activeHref: pathname,
+      activeHref: activePath,
       openTab,
       close,
       notice,
     }),
-    [hrefs, pathname, openTab, close, notice],
+    [hrefs, activePath, openTab, close, notice],
   );
 
   return (
@@ -206,8 +218,15 @@ export function TabStrip() {
     <div
       role="tablist"
       aria-label="Open pages"
-      className="flex h-9 shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-background px-2"
+      className="flex h-9 shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-background px-3"
     >
+      <span className="shrink-0 pr-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        Tabs
+      </span>
+      <span
+        aria-hidden="true"
+        className="mr-1 h-4 w-px shrink-0 bg-border"
+      />
       {tabs.map((t) => {
         const active = t.href === activeHref;
         const Icon = t.icon;
@@ -261,5 +280,44 @@ export function TabStrip() {
         </span>
       )}
     </div>
+  );
+}
+
+/**
+ * Keep-alive outlet — renders the content of every OPEN tab and shows only the
+ * active one (the rest are `hidden`), so switching tabs is instant with no
+ * remount or flash and each page keeps its live state. It works by caching the
+ * active route's element per pathname; inactive routes keep rendering their
+ * last element (same component type + key → React preserves the instance). New
+ * routes mount on first visit; closed tabs are pruned (bounded by MAX_TABS).
+ *
+ * Because it renders app pages itself, they are no longer re-created by the file
+ * router on navigation — fine here: the app is a static export (all client at
+ * runtime, no SSR/SEO to lose).
+ */
+export function KeepAliveTabs({ children }: { children: React.ReactNode }) {
+  const active = tabKey(usePathname());
+  const { tabs } = useOpenTabs();
+  const cache = React.useRef(new Map<string, React.ReactNode>());
+  // Capture the active route's element; keep prior tabs' elements untouched.
+  cache.current.set(active, children);
+  // Drop entries for tabs that have been closed.
+  const open = new Set(tabs.map((t) => t.href));
+  for (const key of [...cache.current.keys()]) {
+    if (key !== active && !open.has(key)) cache.current.delete(key);
+  }
+  return (
+    <>
+      {[...cache.current.entries()].map(([href, node]) => (
+        <div
+          key={href}
+          data-tab={href}
+          hidden={href !== active}
+          className={href === active ? "flex min-h-0 flex-1 flex-col" : undefined}
+        >
+          {node}
+        </div>
+      ))}
+    </>
   );
 }
