@@ -14,9 +14,40 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
 import { Steps, type Step } from "@viliha/vui-ui/steps";
+import { RequiredMark } from "@viliha/vui-ui/required-mark";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
-import { Field } from "@/app/_components/auth";
+
+/** Label + control on one row (label left), matching the RecordForm add-form. */
+function Field({
+  label,
+  htmlFor,
+  required,
+  hint,
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  required?: boolean;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="grid gap-1.5 sm:grid-cols-[140px_1fr] sm:items-center sm:gap-4">
+      <label
+        htmlFor={htmlFor}
+        className="flex items-center gap-1.5 text-sm text-muted-foreground"
+      >
+        {label}
+        {required && <RequiredMark />}
+      </label>
+      <div className="min-w-0">
+        {children}
+        {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      </div>
+    </div>
+  );
+}
 
 const STEPS: Step[] = [
   { label: "Organization", description: "Business details" },
@@ -73,10 +104,13 @@ function WizardDemo() {
     step === 0 ? name.trim() !== "" : step === 1 ? email.trim() !== "" : true;
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card">
-      <div className="space-y-6 p-4 md:p-6">
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
+      {/* Stepper — fixed at the top */}
+      <div className="shrink-0 border-b border-border p-4 md:p-6">
         <Steps steps={STEPS} current={step} />
-
+      </div>
+      {/* Scrollable form body — scrolls when the step has many fields */}
+      <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
         {done ? (
           <div className="flex flex-col items-center gap-2 py-8 text-center">
             <span className="grid size-11 place-items-center rounded-full bg-accent">
@@ -180,7 +214,7 @@ function WizardDemo() {
       </div>
 
       {!done && (
-        <div className="flex items-center justify-between border-t border-border bg-muted/40 px-4 py-3">
+        <div className="flex shrink-0 items-center justify-between border-t border-border bg-muted/40 px-4 py-3">
           <Button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>
             <ArrowLeftIcon className="size-4" />
             Back
@@ -219,8 +253,8 @@ export default function StepsPage() {
         </span>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
+      <div className="min-h-0 flex-1 overflow-hidden p-4">
+        <div className="mx-auto h-full w-full max-w-3xl">
           <WizardDemo />
         </div>
       </div>

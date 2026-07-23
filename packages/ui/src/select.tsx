@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import {
   CheckIcon as Check,
   ChevronDownIcon as ChevronDown,
@@ -13,10 +14,20 @@ export interface SelectOption {
   label: string;
 }
 
+type Placement = {
+  left: number;
+  width: number;
+  top?: number;
+  bottom?: number;
+  maxHeight: number;
+};
+
 /**
  * Custom single-select styled to match the app (Input-like trigger + popover
  * list), replacing the native `<select>`. Click-to-open, outside-click/Escape
- * to close, checkmark on the active option.
+ * to close, checkmark on the active option. The list is rendered in a portal
+ * with fixed positioning so it floats above any scrolling/overflow container
+ * (forms, dialogs, the tab-kept pages) instead of being clipped.
  */
 export function Select({
   value,
@@ -37,14 +48,47 @@ export function Select({
   className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
-  const ref = React.useRef<HTMLDivElement>(null);
+  const [pos, setPos] = React.useState<Placement | null>(null);
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
+
+  const place = React.useCallback(() => {
+    const el = triggerRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const below = window.innerHeight - r.bottom;
+    const above = r.top;
+    // Flip up when there isn't room below and there's more room above.
+    const openUp = below < 240 && above > below;
+    setPos({
+      left: r.left,
+      width: r.width,
+      top: openUp ? undefined : r.bottom + 4,
+      bottom: openUp ? window.innerHeight - r.top + 4 : undefined,
+      maxHeight: Math.min(240, (openUp ? above : below) - 8),
+    });
+  }, []);
+
+  React.useLayoutEffect(() => {
+    if (!open) return;
+    place();
+    const reflow = () => place();
+    // capture: catch scrolls inside any ancestor container, not just the window
+    window.addEventListener("scroll", reflow, true);
+    window.addEventListener("resize", reflow);
+    return () => {
+      window.removeEventListener("scroll", reflow, true);
+      window.removeEventListener("resize", reflow);
+    };
+  }, [open, place]);
 
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+      const t = e.target as Node;
+      if (rootRef.current?.contains(t) || listRef.current?.contains(t)) return;
+      setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -60,8 +104,9 @@ export function Select({
   const selected = options.find((o) => o.value === value);
 
   return (
-    <div className={cn("relative", className)} ref={ref}>
+    <div className={cn("relative", className)} ref={rootRef}>
       <button
+        ref={triggerRef}
         type="button"
         id={id}
         aria-haspopup="listbox"
@@ -84,39 +129,52 @@ export function Select({
           aria-hidden="true"
         />
       </button>
-      {open && (
-        <div
-          role="listbox"
-          aria-label={ariaLabel}
-          tabIndex={-1}
-          className="vui-pop-in absolute z-50 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md"
-        >
-          {options.map((o) => {
-            const active = o.value === value;
-            return (
-              <button
-                key={o.value}
-                type="button"
-                role="option"
-                aria-selected={active}
-                onClick={() => {
-                  onValueChange(o.value);
-                  setOpen(false);
-                }}
-                className={cn(
-                  "flex w-full items-center justify-between gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground",
-                  active && "bg-accent/60",
-                )}
-              >
-                <span className="truncate">{o.label}</span>
-                {active && (
-                  <Check className="size-3.5 shrink-0 text-[var(--button-primary)]" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {open &&
+        pos &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={listRef}
+            role="listbox"
+            aria-label={ariaLabel}
+            tabIndex={-1}
+            style={{
+              position: "fixed",
+              left: pos.left,
+              width: pos.width,
+              top: pos.top,
+              bottom: pos.bottom,
+              maxHeight: pos.maxHeight,
+            }}
+            className="vui-pop-in z-[200] overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md"
+          >
+            {options.map((o) => {
+              const active = o.value === value;
+              return (
+                <button
+                  key={o.value}
+                  type="button"
+                  role="option"
+                  aria-selected={active}
+                  onClick={() => {
+                    onValueChange(o.value);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "flex w-full items-center justify-between gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground",
+                    active && "bg-accent/60",
+                  )}
+                >
+                  <span className="truncate">{o.label}</span>
+                  {active && (
+                    <Check className="size-3.5 shrink-0 text-[var(--button-primary)]" />
+                  )}
+                </button>
+              );
+            })}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
