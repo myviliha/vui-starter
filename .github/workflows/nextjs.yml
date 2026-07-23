@@ -32,19 +32,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
       # pnpm via corepack (bundled with Node) — pnpm/action-setup still runs on
-      # the deprecated Node 20. First setup-node installs Node so corepack can put
-      # pnpm on PATH; the second enables the pnpm store cache.
+      # the deprecated Node 20. corepack enable AFTER setup-node puts pnpm on
+      # PATH; no setup-node `cache: pnpm` (its cache step resolves the store
+      # before corepack runs). The Next.js build cache below is unaffected.
       - name: Setup Node
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
       - name: Enable pnpm
         run: corepack enable
-      - name: Setup Node (with pnpm cache)
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-        with:
-          node-version: 22
-          cache: pnpm
       - name: Setup Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Restore Next.js cache

@@ -23,17 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
       # pnpm via corepack (bundled with Node) — pnpm/action-setup still runs on
-      # the deprecated Node 20. First setup-node installs Node so corepack can put
-      # pnpm on PATH; the second enables the pnpm store cache + npm registry auth.
+      # the deprecated Node 20. corepack enable AFTER setup-node puts pnpm on
+      # PATH; no setup-node `cache: pnpm` (its cache step resolves the store
+      # before corepack runs, so pnpm wouldn't be found yet).
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
-      - run: corepack enable
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-        with:
-          node-version: 22
-          cache: pnpm
           registry-url: "https://registry.npmjs.org"
+      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       # Gate the release on the same checks as local "done".
       - run: pnpm --filter @viliha/vui-ui check-types
