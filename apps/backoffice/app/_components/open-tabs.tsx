@@ -239,13 +239,15 @@ export function OpenTabsProvider({ children }: { children: React.ReactNode }) {
     const b = tabKey(to);
     if (a === b) return;
     setHrefs((prev) => {
+      const fromIdx = prev.indexOf(a);
+      const toIdx = prev.indexOf(b);
+      if (fromIdx === -1 || toIdx === -1) return prev;
       const next = [...prev];
-      const fi = next.indexOf(a);
-      if (fi === -1) return prev;
-      next.splice(fi, 1); // remove dragged tab
-      const ti = next.indexOf(b); // target position in the shortened array
-      if (ti === -1) return prev;
-      next.splice(ti, 0, a); // drop it before the target
+      next.splice(fromIdx, 1); // remove dragged tab
+      // Insert AFTER the target when moving right, BEFORE when moving left, so
+      // a rightward drag can actually pass the target (incl. reaching the end).
+      const at = next.indexOf(b) + (fromIdx < toIdx ? 1 : 0);
+      next.splice(at, 0, a);
       return next;
     });
   }, []);
