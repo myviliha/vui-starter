@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { CopyButton } from "@/components/copy-button";
+
 /** Lightweight documentation prose primitives (Tailwind typography not required). */
 
 export function PageTitle({
@@ -81,11 +83,12 @@ export function CodeBlock({
 }) {
   return (
     <div className="mb-5 overflow-hidden rounded-lg border border-border">
-      {title && (
-        <div className="border-b border-border bg-muted/40 px-4 py-2 font-mono text-[12px] text-muted-foreground">
+      <div className="flex items-center justify-between gap-2 border-b border-border bg-muted/40 px-4 py-1.5">
+        <span className="truncate font-mono text-[12px] text-muted-foreground">
           {title}
-        </div>
-      )}
+        </span>
+        <CopyButton text={children} className="shrink-0" />
+      </div>
       <pre className="overflow-x-auto bg-card p-4 font-mono text-[13px] leading-relaxed">
         <code>{children}</code>
       </pre>

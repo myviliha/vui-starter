@@ -43,6 +43,21 @@ export default function TemplatesPage() {
         acceptance checklist). Leave one out and the agent guesses.
       </Note>
 
+      <Note title="Copy any template">
+        Every code block below has a <strong>Copy</strong> button (top-right) —
+        copy a template, paste it to your agent, fill the blanks. For a full
+        CRUD entity there is a bigger, ready-to-save spec:{" "}
+        <a
+          href="/templates/feature-requirement.md"
+          download
+          className="font-medium text-foreground underline"
+        >
+          download <code>feature-requirement.md</code>
+        </a>{" "}
+        and drop it in your repo (Resource info → Screens/page-type → Fields →
+        API contract → Test matrix → Business rules → Definition of done).
+      </Note>
+
       <H2>1 · New component</H2>
       <P>For a reusable UI primitive that belongs in the library.</P>
       <CodeBlock title="requirement — component">{`Build a reusable component: <Name>
