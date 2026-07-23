@@ -7,7 +7,6 @@ import {
 } from "@/app/_components/app-sidebar";
 import { TopBar } from "@/app/_components/top-bar";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
-import { RouteProgress } from "@/app/_components/transitions";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
 import {
@@ -26,7 +25,6 @@ export default function AppLayout({
       <QuickActionsProvider>
        <GlobalSearchProvider>
         <OpenTabsProvider>
-        <RouteProgress />
         <div className="flex h-screen overflow-hidden">
           <AppSidebar />
           <PageChromeProvider titleLeading={<Breadcrumbs />}>
