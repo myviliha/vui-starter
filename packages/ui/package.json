@@ -33,7 +33,8 @@
     "src",
     "!src/**/*.test.ts",
     "!src/**/*.test.tsx",
-    "AGENT.md"
+    "AGENT.md",
+    "CLAUDE.template.md"
   ],
   "exports": {
     "./theme.css": "./src/theme.css",

@@ -1,10 +1,17 @@
 # Using VUI in your project (AI agent guide)
 
 > **Audience:** developers — and their AI agents — **consuming** `@viliha/vui-ui`
-> in a downstream app. This file ships with the npm package; point your agent at
-> `node_modules/@viliha/vui-ui/AGENT.md` (or copy it into your repo, e.g. rename
-> to `AGENTS.md` so agent tools auto-load it). To *contribute to* the theme
-> itself, see [CONTRIBUTING.md](https://github.com/myviliha/vui-starter/blob/main/CONTRIBUTING.md)
+> in a downstream app. This file ships with the npm package. To auto-load these
+> rules, copy the ready-made pointer to your project root — it `@`-imports this
+> file, so you never duplicate the rules:
+>
+> ```bash
+> cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md   # Claude Code
+> # or ./AGENTS.md for other agent tools
+> ```
+>
+> To *contribute to* the theme itself, see
+> [CONTRIBUTING.md](https://github.com/myviliha/vui-starter/blob/main/CONTRIBUTING.md)
 > and [AGENTS.md](https://github.com/myviliha/vui-starter/blob/main/AGENTS.md).
 
 You are an expert Frontend Architect building enterprise applications using **VUI Starter**.

@@ -181,6 +181,11 @@ Vite transpiles the package’s TypeScript automatically — no extra config.
 4. If you already define shadcn-style tokens (`--primary`, `--background`, …),
    `theme.css` will set them — remove your duplicates, or import it first and
    override after.
+5. **Using an AI agent?** Load the theme's design rules so it builds *with* VUI
+   instead of reinventing it:
+   `cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md`
+   (or `./AGENTS.md`). It `@`-imports the package's `AGENT.md` — the single
+   source of truth — so you never copy the rules by hand.
 
 ### 4 · Turborepo / monorepo
 
