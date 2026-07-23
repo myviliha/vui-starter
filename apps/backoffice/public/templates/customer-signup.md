@@ -17,5 +17,13 @@ Data model:        Customer { name, email }, Organization { name, domain,
 Building blocks:   AuthCard for steps 1-2 (copy app/_components/auth.tsx),
                    RecordForm formMode="page" for step 3.
 
-Done when: every step has loading/error/success, Zod validation, tokens,
-light + dark, a11y, lint + types + build pass.
+Test scenarios (happy / unhappy):
+  TC-1  Valid signup through all 3 steps    -> Customer + Organization created, land on /dashboard
+  TC-2  Step 1 invalid email / short password -> inline errors, Next blocked
+  TC-3  Step 2 wrong verify code             -> error, stays on code screen
+  TC-4  Step 3 missing Company name          -> inline error, Finish blocked
+  TC-5  Back from step 2 -> step 1           -> account input preserved
+  TC-6  Cancel at any step                   -> returns to /auth/signin, nothing created
+
+Done when: every step has loading/error/success, Zod validation, the scenarios
+above pass, tokens, light + dark, a11y, lint + types + build pass.

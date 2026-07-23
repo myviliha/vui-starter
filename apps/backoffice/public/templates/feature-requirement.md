@@ -25,16 +25,6 @@
 **Sidebar IA (drives breadcrumbs — add to `nav-config.ts`):** `<Home > Section > Group > Entities>`
 **Screens:** List, Create, Edit `<, View?>`.
 
-```
-┌─ <Entities> ─────────────────────────[ Bulk Add ][+ Add <Entity>]─┐
-│ [ Search <entities>… ]                                            │
-├───┬─────────┬───────────────┬──────────────────┬─────────────────┤
-│ ☐ │ <Col> ▲ │ <Col>         │ <Derived col>    │ Actions         │
-├───┼─────────┼───────────────┼──────────────────┼─────────────────┤
-│ ☐ │ …       │ …             │ …                │ View·Edit·Delete│
-└───┴─────────┴───────────────┴──────────────────┴─────────────────┘
-```
-
 - **Page type — pick one per screen (see the docs "Page types" catalog):**
   - **List → Data table** (`RecordView` + a `fields` array). Search, pagination, row selection, bulk actions in the header.
   - **Create / Edit → Record form** (`RecordForm`, same fields both times; Edit pre-fills):
@@ -96,6 +86,27 @@ Error body: `{ statusCode, code, message, details? }`.
 - **Derived values** are compute-on-read, never stored/entered.
 - **Concurrency:** `<last-save-wins · optimistic lock>`.
 - Client messages here must match the form's validation/error text.
+
+### Test Scenarios (Happy / Unhappy Path)
+
+> Illustrative example only — the actual scenarios must be generated from the real operations,
+> fields, and business rules above (§ 3–5), not copied verbatim from this example.
+
+#### Create
+
+##### Happy Path
+
+| ID | Scenario | Expected |
+|----|----------|----------|
+| TC-CRT-001 | Create with valid payload | 201 Created |
+
+##### Unhappy Path
+
+| ID | Scenario | Expected |
+|----|----------|----------|
+| TC-CRT-002 | Missing required field | 400 Bad Request |
+| TC-CRT-003 | Duplicate unique value | 409 Conflict |
+| TC-CRT-004 | Invalid foreign key | 409 Conflict |
 
 ## 6 · Definition of Done
 

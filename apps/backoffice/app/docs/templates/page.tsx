@@ -23,7 +23,7 @@ export default function TemplatesPage() {
       <PageTitle
         eyebrow="Guides"
         title="Requirement templates"
-        lead="How you brief the agent decides how close the first pass lands. Each template below has a Copy button and a Download button — grab the .md, drop it in your repo, fill the angle-bracket blanks, and paste it to an agent that has loaded the VUI guide."
+        lead="How you brief the agent decides how close the first pass lands. Each template below has a Copy button and a Download button — grab the .md, drop it in your repo, fill the angle-bracket blanks, and paste it to an agent that has loaded the VUI guide. Every template ends with happy/unhappy test scenarios so the agent builds the tests too."
       />
 
       <H2>Before you start</H2>
@@ -83,8 +83,10 @@ export default function TemplatesPage() {
       <H2>5 · Full feature (CRUD entity)</H2>
       <P>
         The complete brief for a full resource — screens, fields, API contract,
-        test matrix and business rules in one file. Generalized from a real PRD;
-        fill it in and an agent can design the UI/UX <em>and</em> implement it.
+        test matrix, business rules and happy/unhappy <strong>test scenarios</strong>{" "}
+        in one file. Generalized from a real PRD; fill it in and an agent can
+        design the UI/UX <em>and</em> implement it. Read it below, or copy /
+        download the <code>.md</code> straight into your repo.
       </P>
       <TemplateBlock
         filename="feature-requirement.md"
