@@ -37,6 +37,8 @@ Two add/edit layouts, both from the same `RecordForm` — **pick one, don't inve
 
 Rule: when asked to add a page, **state which layout you're using and default to slide-over.** Both inherit the blue Save, the header/body/footer separators, and token colors from `RecordForm` — you never copy those styles, you get them by using the component. See the consumer guide `packages/ui/AGENT.md` ("Add / edit form") for the same rule downstream.
 
+**From a field spec to a form — never style fields by hand.** A request like "Add Customer: Name (mandatory, text), Email (mandatory), Country" becomes a `RecordField[]` config, nothing more: `{ key, label, required: true }` per field. The component designs Add/Edit/View from that array — required renders the `*`, the label + icon + control are center-aligned on one baseline, and colors come from theme tokens. Do **not** add per-field className, padding, or color; if a field looks unstyled, you built a raw input instead of feeding `fields`.
+
 ## Breadcrumbs
 
 One trail, **route-derived, never hand-written per page.** Two layers:
