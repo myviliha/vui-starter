@@ -10,7 +10,36 @@ import { Checkbox } from "@viliha/vui-ui/checkbox";
 import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
+import { Steps } from "@viliha/vui-ui/steps";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
+
+const WIZARD_STEPS = [
+  { label: "Organization", description: "Business details" },
+  { label: "Account", description: "Your credentials" },
+  { label: "Review", description: "Confirm details" },
+];
+
+/** Interactive stepper so the reader can click through the states. */
+function StepsDemo() {
+  const [i, setI] = React.useState(0);
+  return (
+    <div className="w-full space-y-5">
+      <Steps steps={WIZARD_STEPS} current={i} />
+      <div className="flex justify-between">
+        <Button onClick={() => setI((v) => Math.max(0, v - 1))} disabled={i === 0}>
+          Back
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => setI((v) => Math.min(WIZARD_STEPS.length - 1, v + 1))}
+          disabled={i === WIZARD_STEPS.length - 1}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 function Demo({
   children,
@@ -186,6 +215,27 @@ export default function ComponentsPage() {
           <DropdownItem onSelect={() => {}}>Duplicate</DropdownItem>
           <DropdownItem onSelect={() => {}}>Archive</DropdownItem>
         </Dropdown>
+      </Demo>
+
+      <H2>Steps</H2>
+      <P>
+        A controlled, themed step indicator for multi-step forms and wizards.
+        Click through — completed steps fill with the primary color, the current
+        one is ringed, upcoming ones stay muted.
+      </P>
+      <Demo
+        code={`import { Steps } from "@viliha/vui-ui/steps";
+
+const steps = [
+  { label: "Organization", description: "Business details" },
+  { label: "Account", description: "Your credentials" },
+  { label: "Review", description: "Confirm details" },
+];
+
+const [i, setI] = useState(0);
+<Steps steps={steps} current={i} />`}
+      >
+        <StepsDemo />
       </Demo>
 
       <H2>RecordView</H2>
