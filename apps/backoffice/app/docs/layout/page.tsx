@@ -93,6 +93,9 @@ export default function MyPage() {
         <li>
           The trail is derived from the pathname and the nav config
           (<code>nav-config.ts</code>), so labels stay in sync with the sidebar.
+          It is always rooted at <strong>Home</strong> — the single landing page
+          at <code>/dashboard</code>; the last crumb is the current page
+          (non-interactive).
         </li>
         <li>
           <strong>Group parents resolve automatically.</strong> A section that

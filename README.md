@@ -61,6 +61,9 @@ with zero backend.
   page headers; light/dark theme.
 - **Ships as TypeScript source** — no build step, tree-shakeable, and your app’s
   bundler compiles only what you import.
+- **AI-agent ready** — the package ships an agent guide (`AGENT.md`) and a
+  copy-paste `CLAUDE.template.md`, so Claude Code / Cursor / Copilot build *with*
+  the design system (tokens, `RecordView`, layout) instead of reinventing it.
 
 ---
 
@@ -302,7 +305,7 @@ apps/
   backoffice/          # The app (:3000) — admin UI + docs at /docs
 packages/
   ui/                  # @viliha/vui-ui — the published component library
-                       #   (ships AGENT.md — an AI-agent usage guide)
+                       #   (ships AGENT.md + CLAUDE.template.md — the AI-agent guide)
   eslint-config/       # Shared ESLint config
   typescript-config/   # Shared tsconfig
 ```

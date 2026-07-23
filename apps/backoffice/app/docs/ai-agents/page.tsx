@@ -43,14 +43,21 @@ export default function AiAgentsPage() {
       <H2>Where the guide lives</H2>
       <P>
         The full guide is published <strong>inside the npm package</strong> at{" "}
-        <code>node_modules/@viliha/vui-ui/AGENT.md</code>. Point your agent at it,
-        or copy it into your repo as <code>AGENTS.md</code> — the filename that
-        Claude Code, Cursor and Copilot auto-load — so every session follows the
-        same standards.
+        <code>node_modules/@viliha/vui-ui/AGENT.md</code>. The quickest way to
+        wire it up is the ready-made <code>CLAUDE.template.md</code> the package
+        ships: copy it to your project root as <code>CLAUDE.md</code> (Claude
+        Code) or <code>AGENTS.md</code> (Cursor, Copilot). It is a one-line{" "}
+        <code>@import</code> of <code>AGENT.md</code>, so the rules stay in one
+        place — you never paste them by hand.
       </P>
-      <CodeBlock title="use the shipped guide">{`# after: npm install @viliha/vui-ui
-cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md
-# now your agent reads it automatically`}</CodeBlock>
+      <CodeBlock title="wire up the guide (recommended)">{`# after: npm install @viliha/vui-ui
+cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md
+# or ./AGENTS.md — now your agent reads it automatically`}</CodeBlock>
+      <P>
+        Prefer a self-contained copy instead of the <code>@import</code>? Copy{" "}
+        <code>AGENT.md</code> itself:
+      </P>
+      <CodeBlock title="or copy the guide verbatim">{`cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md`}</CodeBlock>
       <Note title="Also on GitHub">
         The repo keeps two companion files:{" "}
         <a

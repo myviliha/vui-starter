@@ -115,7 +115,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <Ul>
         <li><code>key</code> / <code>label</code> — the data key and column header.</li>
         <li><code>editable</code> — inline-editable cell + shows in the add/edit panel.</li>
-        <li><code>required</code> — marks the field with <code>*</code> and validates on save.</li>
+        <li><code>required</code> — marks the field with <code>*</code> (in the column header, including the primary Name column, and beside the form label) and validates on save.</li>
         <li><code>copyable</code> — a copy-to-clipboard button on hover.</li>
         <li><code>hideInTable</code> — keep it in the panel but not as a column.</li>
         <li><code>render(row)</code> — custom cell content (badges, formatted numbers…).</li>
@@ -141,8 +141,11 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <H2>Add &amp; edit form layouts</H2>
       <P>
         Every RecordView includes a buffered add/edit form — edits are held in a
-        draft and only committed on <strong>Save</strong>. It renders in one of
-        two layouts.
+        draft and only committed on <strong>Save</strong>. The form is{" "}
+        <strong>designed from your <code>fields</code> array</strong>: each row
+        centers the label, icon, required <code>*</code> and control on one
+        baseline, with all spacing and color from theme tokens — you never style
+        a field by hand. It renders in one of two layouts.
       </P>
 
       <H3>Slide-over panel (default)</H3>
