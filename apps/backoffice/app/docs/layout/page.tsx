@@ -168,8 +168,27 @@ export default function DepartmentsPage() {
         alt="Full-page record form — Create organization, with the documentation panel and Save/Cancel footer"
       />
       <P>
+        <strong>The Info panel beside the form is dynamic</strong> — nothing
+        there is hardcoded. It is built from the same config as the form:{" "}
+        <code>formDescription</code> fills the &quot;About&quot; intro, and every
+        field that has a <code>description</code> adds a labelled help entry.
+        Provide them in your requirement and the panel writes itself; omit them
+        and the panel disappears, leaving a full-width form. (It shows on{" "}
+        <code>lg</code> screens and up.)
+      </P>
+      <CodeBlock title="the Info panel is just more config">{`<RecordForm
+  formMode="page"
+  formDescription="Organizations are the top-level tenants…"   // → the "About" intro
+  fields={[
+    { key: "name", label: "Name", required: true,
+      description: "The legal or trading name, shown across the app." }, // → a help entry
+    { key: "code", label: "Code" },   // no description → not shown in the panel
+  ]}
+/>`}</CodeBlock>
+      <P>
         The slide-over variant renders the same fields in a right-hand panel over
-        the table (see the &quot;Form — slide-over&quot; thumbnail above).
+        the table (see the &quot;Form — slide-over&quot; thumbnail above); it has
+        no Info panel — use full-page mode when you want the help column.
       </P>
 
       <H3>3 · Dashboard page</H3>
