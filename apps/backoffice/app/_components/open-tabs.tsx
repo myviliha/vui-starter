@@ -380,54 +380,55 @@ export function TabStrip() {
               setMenu({ href: t.href, x: e.clientX, y: e.clientY });
             }}
             title="Drag to reorder · right-click to color"
-            className={cn(
-              "group flex h-7 shrink-0 cursor-grab items-center gap-1 rounded-md pl-1.5 pr-2 text-sm transition-colors active:cursor-grabbing",
-              active
-                ? "bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)]"
-                : "text-muted-foreground hover:bg-accent/50",
-            )}
+            className="group flex h-8 shrink-0 cursor-grab items-center gap-0.5 active:cursor-grabbing"
           >
+            {/* Grip — separate from the pill, constant muted color; the drag cue. */}
             <DragHandleDots2Icon
               aria-hidden="true"
-              className={cn(
-                "size-3.5 shrink-0",
-                active
-                  ? "text-[var(--button-primary-foreground)]"
-                  : "text-muted-foreground/50",
-              )}
+              className="size-3.5 shrink-0 text-muted-foreground/50"
             />
-            {dot && (
-              <span
-                aria-hidden="true"
-                className={cn("size-2 shrink-0 rounded-full", dot)}
-              />
-            )}
-            <button
-              type="button"
-              onClick={() => router.push(t.href)}
-              className="flex items-center gap-1.5"
-            >
-              <Icon
-                className={cn(
-                  "size-3.5 shrink-0",
-                  active ? "text-[var(--button-primary-foreground)]" : t.color,
-                )}
-              />
-              <span className="max-w-40 truncate">{t.label}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => close(t.href)}
-              aria-label={`Close ${t.label}`}
+            {/* Pill — the active/color background lives here (dot + icon + close). */}
+            <div
               className={cn(
-                "grid size-4 place-items-center rounded opacity-70 transition-colors group-hover:opacity-100",
+                "flex h-7 items-center gap-1.5 rounded-md pl-2 pr-1.5 text-sm transition-colors",
                 active
-                  ? "text-[var(--button-primary-foreground)] hover:bg-white/20"
-                  : "text-muted-foreground hover:bg-border hover:text-foreground",
+                  ? "bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)]"
+                  : "text-muted-foreground group-hover:bg-accent/50",
               )}
             >
-              <Cross2Icon className="size-3" />
-            </button>
+              {dot && (
+                <span
+                  aria-hidden="true"
+                  className={cn("size-2 shrink-0 rounded-full", dot)}
+                />
+              )}
+              <button
+                type="button"
+                onClick={() => router.push(t.href)}
+                className="flex items-center gap-1.5"
+              >
+                <Icon
+                  className={cn(
+                    "size-3.5 shrink-0",
+                    active ? "text-[var(--button-primary-foreground)]" : t.color,
+                  )}
+                />
+                <span className="max-w-40 truncate">{t.label}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => close(t.href)}
+                aria-label={`Close ${t.label}`}
+                className={cn(
+                  "grid size-4 place-items-center rounded opacity-70 transition-colors group-hover:opacity-100",
+                  active
+                    ? "text-[var(--button-primary-foreground)] hover:bg-white/20"
+                    : "text-muted-foreground hover:bg-border hover:text-foreground",
+                )}
+              >
+                <Cross2Icon className="size-3" />
+              </button>
+            </div>
           </div>
         );
       })}
