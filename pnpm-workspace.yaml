@@ -2,6 +2,12 @@ packages:
   - "apps/*"
   - "packages/*"
 
+# Force patched transitive deps (pnpm 10+ reads overrides here; pnpm 9 reads
+# the mirror in package.json). sharp <0.35.0 carries libvips CVEs and next only
+# declares ^0.34.5, so pin it forward.
+overrides:
+  sharp: "^0.35.0"
+
 onlyBuiltDependencies:
   - esbuild
   - sharp
