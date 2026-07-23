@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   BellIcon,
   GearIcon,
@@ -12,11 +11,11 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Input } from "@viliha/vui-ui/input";
 import { usePageChrome } from "@viliha/vui-ui/record-view";
 
 import { SidebarToggle } from "@/app/_components/app-sidebar";
 import { UserMenu } from "@/app/_components/user-menu";
+import { useGlobalSearch } from "@/app/_components/global-search";
 import { colorFor } from "@/app/_components/route-meta";
 import { Shortcut } from "@viliha/vui-ui/kbd";
 
@@ -31,21 +30,9 @@ export function TopBar() {
   const { page } = usePageChrome();
   const pathname = usePathname();
   const PageIcon = page?.icon;
-  const searchRef = React.useRef<HTMLInputElement>(null);
-
-  // ⌘⌥K / Ctrl+Alt+K focuses global search (⌘K is Quick Actions). Uses e.code
-  // because macOS Option remaps e.key to a composed character.
-  React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === "KeyK") {
-        e.preventDefault();
-        searchRef.current?.focus();
-        searchRef.current?.select();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  // Global search (records) lives in GlobalSearchProvider; the box below is its
+  // launcher. Quick actions (pages) is a separate ⌘K palette in the sidebar.
+  const { open: openSearch } = useGlobalSearch();
 
   return (
     <header className="relative flex h-12 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
@@ -62,25 +49,18 @@ export function TopBar() {
         )}
       </div>
 
-      {/* Center — global search */}
+      {/* Center — global search launcher (opens the records palette). */}
       <div className="absolute left-1/2 top-1/2 hidden w-full max-w-sm -translate-x-1/2 -translate-y-1/2 px-4 md:block">
-        <div className="relative">
-          <MagnifyingGlassIcon
-            className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
-            aria-hidden="true"
-          />
-          <Input
-            ref={searchRef}
-            type="search"
-            placeholder="Search…"
-            aria-label="Global search"
-            className="h-8 pl-9"
-          />
-          <Shortcut
-            keys={["⌘", "⌥", "K"]}
-            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2"
-          />
-        </div>
+        <button
+          type="button"
+          onClick={openSearch}
+          aria-label="Global search"
+          className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-2.5 text-muted-foreground transition-colors hover:bg-accent"
+        >
+          <MagnifyingGlassIcon className="size-3.5 shrink-0" aria-hidden="true" />
+          <span className="flex-1 text-left text-sm">Search…</span>
+          <Shortcut keys={["⌘", "⌥", "K"]} />
+        </button>
       </div>
 
       {/* Right — help, notifications, settings, profile.

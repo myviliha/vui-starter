@@ -9,6 +9,7 @@ import { TopBar } from "@/app/_components/top-bar";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { PageFade, RouteProgress } from "@/app/_components/transitions";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
+import { GlobalSearchProvider } from "@/app/_components/global-search";
 
 export default function AppLayout({
   children,
@@ -18,6 +19,7 @@ export default function AppLayout({
   return (
     <SidebarProvider>
       <QuickActionsProvider>
+       <GlobalSearchProvider>
         <RouteProgress />
         <div className="flex h-screen overflow-hidden">
           <AppSidebar />
@@ -38,6 +40,7 @@ export default function AppLayout({
           </PageChromeProvider>
           <MobileNav />
         </div>
+       </GlobalSearchProvider>
       </QuickActionsProvider>
     </SidebarProvider>
   );
