@@ -167,10 +167,28 @@ unused imports, and no dead code.
 
 ---
 
+# Changelog & docs are mandatory (never skip)
+
+Every feature, change, fix, or removal **must** update the docs in the same PR —
+this applies to everyone, humans and AI agents alike, no exceptions:
+
+- **`packages/ui/CHANGELOG.md`** — add an entry under the target version
+  (Added / Changed / Fixed / Removed). If the change ships in the npm package,
+  bump `packages/ui/package.json` per semver.
+- **Every doc that describes it** — keep them in sync: `packages/ui/README.md`,
+  `packages/ui/AGENT.md`, the docs site under `apps/backoffice/app/docs/**` (plus
+  the nav in `components/docs-shell.tsx` if you add a page), and the requirement
+  templates when a page/feature pattern changes.
+
+A change that touches code but not the changelog and docs is **incomplete** and
+will not be merged.
+
 # Pull Request Checklist
 
 Every Pull Request should:
 
+- **Update `CHANGELOG.md`** (and bump the `packages/ui` version if it ships in the package) — mandatory.
+- **Update all affected docs** (README, `AGENT.md`, `/docs`, templates) — mandatory.
 - Follow existing design patterns.
 - Use design tokens.
 - Support dark mode.
@@ -180,7 +198,6 @@ Every Pull Request should:
 - Avoid duplicated logic.
 - Avoid duplicated styling.
 - Preserve backward compatibility.
-- Update documentation when necessary.
 
 ---
 
@@ -198,7 +215,7 @@ A contribution is complete only when:
 - It passes accessibility requirements.
 - It is responsive.
 - It passes all validation checks.
-- It is fully documented.
+- It is fully documented, and the **`CHANGELOG.md` entry is added** (with a version bump if it ships in the package).
 - It is production ready.
 
 ---

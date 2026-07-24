@@ -100,6 +100,21 @@ To change the trail, edit `nav-config.ts` (structure/order) and the label/color 
 7. **Lists/menus:** use `Menu`/`MenuItem` (bordered-row standard) or the shared `Dropdown`/`Select`; don't hand-roll list borders.
 8. **Icons:** Radix Icons (`@radix-ui/react-icons`) for app chrome; leave shadcn's internal Lucide icons as-is.
 9. **Comment deliberate no-ops** (e.g. clipboard/storage `catch`). Never silently swallow errors elsewhere.
+10. **Changelog + docs on every change (mandatory — see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change.
+
+## Changelog & docs — mandatory on every change (never skip)
+
+Any change that adds, changes, removes, or fixes behaviour **must** update the docs in the **same commit/PR**. This is not optional and cannot be deferred:
+
+1. **`packages/ui/CHANGELOG.md`** — add an entry under the target version (Added / Changed / Fixed / Removed), Keep-a-Changelog style. If the change ships in the npm package (`packages/ui/**` — components, `theme.css`, `AGENT.md`, `README.md`, `bin/`, `template/`), also **bump `packages/ui/package.json`** per semver (patch = fix, minor = feature, major = breaking).
+2. **Every doc surface that describes the thing** — keep them in sync (they are single sources, don't let them drift):
+   - `packages/ui/README.md` (npm-facing) and `packages/ui/AGENT.md` (consumer agent guide) for anything user/consumer-facing.
+   - the docs site under `apps/backoffice/app/docs/**` (the matching page, and `components/docs-shell.tsx` nav + `DocPager` prev/next if you add a page).
+   - the reference/agent docs (`README.md`, `CONTRIBUTING.md`, this `AGENTS.md`) when the workflow or rules change.
+   - requirement templates in `apps/backoffice/public/templates/**` when a page/feature pattern changes.
+3. **A new `init` scaffolder feature or new demo page** must also be reflected in the shipped `template/` (it regenerates from `apps/backoffice` on publish) and documented in `AGENT.md` + the docs.
+
+If you're unsure whether a doc applies, it does — update it. A change that touches code but no docs/changelog is incomplete.
 
 ## Verify before "done" (must pass)
 
@@ -109,6 +124,8 @@ pnpm --filter backoffice lint            # eslint --max-warnings 0
 pnpm --filter backoffice build           # or the app you changed
 pnpm --filter @viliha/vui-ui test      # if you changed testable logic
 ```
+
+Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs" rule above, and a `packages/ui` version bump if the change ships in the package.
 
 ## Git conventions
 

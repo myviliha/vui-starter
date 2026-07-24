@@ -80,6 +80,17 @@ pnpm check-types    # type-check`}</CodeBlock>
         </li>
       </Ul>
 
+      <H2>Changelog &amp; docs (required)</H2>
+      <Note variant="warning" title="Every change updates the changelog and docs">
+        This is mandatory for everyone — humans and AI agents. In the same PR, add
+        an entry to <code>packages/ui/CHANGELOG.md</code> (and bump{" "}
+        <code>packages/ui/package.json</code> per semver if it ships in the
+        package), and update every doc that describes the change —{" "}
+        <code>README.md</code>, <code>AGENT.md</code>, the relevant{" "}
+        <code>/docs</code> page, and the requirement templates. A change with no
+        changelog or docs update is incomplete.
+      </Note>
+
       <H2>Pull requests</H2>
       <Ul>
         <li>Branch off <code>main</code>, keep changes focused.</li>
