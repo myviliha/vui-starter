@@ -1,12 +1,14 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeftIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@viliha/vui-ui/utils";
 import { Badge } from "@viliha/vui-ui/badge";
+import { Logo } from "@/app/_components/logo";
 import { Wordmark as BrandWordmark } from "@/app/_components/wordmark";
 
 type NavItem = { label: string; href: string };
@@ -107,30 +109,40 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
       {/* Top header */}
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-4 md:px-6">
         <Wordmark />
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="flex items-center gap-2 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
-            <ArrowLeftIcon className="size-3.5" />
+            <Logo className="size-4" />
             Back to app
           </Link>
           <a
             href="https://www.npmjs.com/package/@viliha/vui-ui"
             target="_blank"
             rel="noreferrer"
-            className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
+            aria-label="@viliha/vui-ui on npm"
+            title="View on npm"
+            className="grid size-8 place-items-center rounded-md transition-colors hover:bg-accent"
           >
-            @viliha/vui-ui
+            <Image
+              src="/npm-logo.png"
+              alt="npm"
+              width={20}
+              height={20}
+              className="size-5 object-contain"
+            />
           </a>
           <a
             href={REPO}
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub repository"
-            className="grid size-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            title="View on GitHub"
+            className="grid size-8 place-items-center rounded-md transition-colors hover:bg-accent"
           >
-            <GitHubLogoIcon className="size-4" />
+            {/* npm-red for visual consistency with the npm mark beside it */}
+            <GitHubLogoIcon className="size-5 text-[#CB3837]" />
           </a>
         </div>
       </header>
