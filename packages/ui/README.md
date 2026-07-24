@@ -48,32 +48,43 @@ pages** live in a one-shot scaffolder:
 npx @viliha/vui-ui init
 ```
 
-It's **interactive** — it asks whether this is a **fresh** or **existing**
-project and whether to include the **demo pages** (dashboard, CRM, calendar,
-chat, support, settings, auth). Files are copied into *your* repo, so you own and
-edit them. It's **non-destructive**: existing files are skipped.
+It's **interactive** — a short decision tree:
+
+1. **Fresh project?** (fresh vs existing)
+2. **Pre-built theme?** — the full shell + demo pages, or just the theme wiring
+   that you configure yourself.
+
+Files are copied into *your* repo, so you own and edit them.
+
+| | **Pre-built** (shell + demo) | **Theme-only** (you configure) |
+| --- | --- | --- |
+| **Fresh** | full runnable app: config + shell + demo pages | just the theme wiring (`globals.css`, `next.config`) — build your own pages |
+| **Existing** | shell + demo added; your config is **never** overwritten (prints merge steps) | nothing copied; prints the wiring steps |
 
 ```
 Flags (for CI / agents, skip the prompts):
-  --fresh | --existing    project type
-  --demo  | --no-demo     include demo pages (default: with demo)
-  --yes, -y               accept defaults (fresh, with demo)
-  --force                 overwrite existing files
-  --dry-run               preview without writing
+  --fresh | --existing        project type (Q1)
+  --prebuilt | --theme-only   pre-built shell + demo, or just the theme (Q2)
+  --yes, -y                   accept defaults (fresh, prebuilt)
+  --force                     overwrite existing files
+  --dry-run                   preview without writing
 ```
 
-After it runs, install the peer deps it prints, then `npm run dev` → `/dashboard`.
+After a **pre-built** run, install the peer deps it prints, then `npm run dev` →
+`/dashboard`.
 
-### Fresh project (recommended)
+### Fresh + pre-built (recommended for new apps)
 
-Start from a `create-next-app` base. `init --fresh` also writes `next.config.mjs`,
-`app/globals.css`, and the root layout, so the demo runs out of the box.
+Start from a `create-next-app` base. This writes `next.config.mjs`,
+`app/globals.css`, the shell, and the demo pages (overwriting the create-next-app
+boilerplate), so the demo runs out of the box.
 
 ### ⚠️ Existing project — read this first
 
 Adding VUI to an app you already have needs care. **`init --existing` never
-overwrites your config** — it adds the shell + pages under `app/(app)/` and
-`app/_components/`, then prints the four things to merge yourself:
+overwrites your config.** Pick pre-built to add the shell + pages under
+`app/(app)/` and `app/_components/`, or theme-only to copy nothing — either way it
+prints the four things to wire up:
 
 1. **`next.config`** — add `transpilePackages: ["@viliha/vui-ui"]`.
    (Optional, for the open-tabs *keep-alive*: `output: "export"`,
@@ -88,9 +99,9 @@ overwrites your config** — it adds the shell + pages under `app/(app)/` and
 4. **Root `app/layout.tsx`** — `import "./globals.css"` (and mount fonts to match
    the demo's look).
 
-Run **`npx @viliha/vui-ui init --existing --dry-run`** first to see exactly what
-it will add. If you only want the components (not the shell/pages), **skip `init`
-entirely** — the [Setup](#setup) above is all you need, then import from
+Run **`npx @viliha/vui-ui init --existing --prebuilt --dry-run`** first to see
+exactly what it will add. If you only want the components, choose **theme-only**
+(or skip `init` and follow the [Setup](#setup) above), then import from
 `@viliha/vui-ui/*`.
 
 > **Note on the theme in an existing app:** VUI owns its design tokens in

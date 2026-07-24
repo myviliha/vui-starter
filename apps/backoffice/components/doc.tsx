@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { cn } from "@viliha/vui-ui/utils";
 import { CopyButton } from "@/components/copy-button";
 
 /** Lightweight documentation prose primitives (Tailwind typography not required). */
@@ -100,13 +101,34 @@ export function CodeBlock({
 export function Note({
   title,
   children,
+  variant = "info",
 }: {
   title?: string;
   children: React.ReactNode;
+  /** "warning" renders an amber caution callout. */
+  variant?: "info" | "warning";
 }) {
+  const warn = variant === "warning";
   return (
-    <div className="mb-5 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm leading-relaxed">
-      {title && <p className="mb-1 font-medium">{title}</p>}
+    <div
+      className={cn(
+        "mb-5 rounded-lg border px-4 py-3 text-sm leading-relaxed",
+        warn
+          ? "border-amber-500/40 bg-amber-500/10"
+          : "border-border bg-muted/40",
+      )}
+    >
+      {title && (
+        <p
+          className={cn(
+            "mb-1 font-medium",
+            warn && "text-amber-700 dark:text-amber-400",
+          )}
+        >
+          {warn && "⚠️ "}
+          {title}
+        </p>
+      )}
       <div className="text-muted-foreground">{children}</div>
     </div>
   );
