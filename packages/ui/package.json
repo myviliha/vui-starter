@@ -36,6 +36,7 @@
     "bin",
     "template",
     "AGENT.md",
+    "CHANGELOG.md",
     "CLAUDE.template.md"
   ],
   "bin": {

@@ -150,6 +150,35 @@ Import the theme once. No extra transpilation needed.
 
 ---
 
+# Upgrading
+
+When you bump `@viliha/vui-ui`, follow these steps — the package version and the
+scaffolded files in the repo are two separate things.
+
+1. **Read the [CHANGELOG](./CHANGELOG.md) for the target version.** Note anything
+   under *Removed*, *Changed*, or *Breaking*, and any new peer dependency. The
+   project follows semver: patch/minor are backward-compatible, major may break.
+2. **Bump and install** with the project's package manager:
+   ```bash
+   npm i @viliha/vui-ui@latest      # or: pnpm up, yarn up, bun update
+   ```
+   In a monorepo, install in the specific app (or with a workspace filter, e.g.
+   `pnpm --filter <app> up @viliha/vui-ui`), never at the repo root.
+3. **No rebuild needed.** The package ships TypeScript source, so there's no
+   build/dts step — just restart the dev server. If a new version adds a peer
+   dependency, install it (the CHANGELOG and the "Module not found" error name it).
+4. **Scaffolded files are yours.** `init` copies the shell and demo pages into
+   the repo once; upgrading the package does **not** touch them. To pull
+   scaffolder improvements into an existing project, preview first with
+   `npx @viliha/vui-ui@latest init --dry-run`, then re-run with `--force` (commit
+   or stash your work first so you can review the diff) or copy in just the files
+   you want.
+5. **Re-check token overrides.** If you overrode any `theme.css` tokens, confirm
+   they still line up after the upgrade.
+6. **Verify** before you commit: run type-check, lint, and build.
+
+---
+
 # Design Tokens
 
 VUI is entirely token-driven. Never hardcode colors, spacing, radius, typography, shadows, or borders — reach for the semantic design token instead. For example: `--button-primary`, `--button-primary-hover`, `--background`, `--foreground`, `--border`, `--ring`, `--chart-1`, `--sidebar-primary`.
