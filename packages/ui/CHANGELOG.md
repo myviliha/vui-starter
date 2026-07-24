@@ -7,12 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
-## 1.5.2 — 2026-07-24
+## 1.5.3 — 2026-07-24
 
 ### Added
 
-- This changelog, and an **[Upgrading](./AGENT.md#upgrading)** section in the
-  agent guide covering how to bump the package safely.
+- The changelog and the **[Upgrading](./AGENT.md#upgrading)** guide now ship in
+  the npm package. (They were authored for 1.5.2 but missed that tarball, which
+  was published a moment before.)
+
+## 1.5.2 — 2026-07-24
 
 ### Changed
 
