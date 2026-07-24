@@ -16,6 +16,7 @@ import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
+import { execSync } from "node:child_process";
 
 const TEMPLATE = fileURLToPath(new URL("../template/", import.meta.url));
 const args = process.argv.slice(2);
@@ -121,6 +122,21 @@ function category(rel) {
   return "shell";
 }
 
+// Detect the package manager from lockfiles (falls back to npm).
+function detectPM(root) {
+  if (existsSync(join(root, "pnpm-lock.yaml"))) return "pnpm";
+  if (existsSync(join(root, "yarn.lock"))) return "yarn";
+  if (existsSync(join(root, "bun.lockb")) || existsSync(join(root, "bun.lock")))
+    return "bun";
+  return "npm";
+}
+const ADD_CMD = {
+  npm: "npm install",
+  pnpm: "pnpm add",
+  yarn: "yarn add",
+  bun: "bun add",
+};
+
 function allFiles(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const abs = join(dir, entry.name);
@@ -223,12 +239,46 @@ async function main() {
     `\nDone — ${created} file(s) ${dry ? "would be added" : "added"}, ${skipped} skipped.`,
   );
 
+  // Install dependencies. Turborepo installs are workspace-specific, so we only
+  // auto-install for a standalone Next.js app; turbo gets manual instructions.
+  const pm = detectPM(targetRoot);
+  const installList = `@viliha/vui-ui ${DEPS}`;
+  let installed = false;
+  if (!turbo) {
+    let doInstall = has("--no-install")
+      ? false
+      : has("--yes") || has("-y")
+        ? true
+        : null;
+    if (doInstall === null) {
+      const a = await ask(`Install dependencies now with ${pm}? [Y/n] `, "y");
+      doInstall = !a.startsWith("n");
+    }
+    if (doInstall && !dry) {
+      console.log(`\nInstalling dependencies with ${pm}…\n`);
+      try {
+        execSync(`${ADD_CMD[pm]} ${installList}`, {
+          cwd: targetRoot,
+          stdio: "inherit",
+        });
+        installed = true;
+      } catch {
+        console.error(
+          `\nInstall failed — run it manually:\n  ${ADD_CMD[pm]} ${installList}\n`,
+        );
+      }
+    }
+  }
+
   // Per-leaf next steps.
+  const installStep = installed
+    ? ""
+    : `  1. ${ADD_CMD[pm]} ${installList}\n`;
+  const devStepNum = installed ? "1" : "2";
   if (fresh && prebuilt) {
     console.log(`
 Next steps:
-  1. npm i @viliha/vui-ui ${DEPS}
-  2. npm run dev   ->   http://localhost:3000  (redirects to /dashboard)
+${installStep}  ${devStepNum}. ${pm === "npm" ? "npm run dev" : `${pm} dev`}   ->   http://localhost:3000  (redirects to /dashboard)
 
 Everything is in YOUR repo — edit app/_components/nav-config.ts, set your logo
 (NEXT_PUBLIC_LOGO_URL in .env), and delete demo pages you don't need.
@@ -238,8 +288,7 @@ Everything is in YOUR repo — edit app/_components/nav-config.ts, set your logo
 Theme wired (globals.css + next.config). No shell or demo pages — build your own.
 
 Next steps:
-  1. npm i @viliha/vui-ui ${DEPS}
-  2. Import components from @viliha/vui-ui/* in your pages, then: npm run dev
+${installStep}  ${devStepNum}. Import components from @viliha/vui-ui/* in your pages, then run dev.
 `);
   } else {
     // existing + prebuilt
@@ -258,10 +307,10 @@ The shell + demo were added under app/(app)/ and app/_components/ — review the
 
   if (turbo) {
     console.log(`Turborepo notes (target: ${appDir}):
-  • Add "@viliha/vui-ui" to ${appDir}/package.json dependencies.
+  • Add the deps to that app: ${ADD_CMD[pm]} ${installList}
+    (from the app dir, or with your PM's workspace filter).
   • Ensure your workspace globs include this app (pnpm-workspace.yaml / workspaces).
-  • Run install + dev from the repo root or with a filter, e.g.
-      pnpm --filter <app-name> dev
+  • Run dev with a filter, e.g. ${pm} --filter <app-name> dev
 `);
   }
 }

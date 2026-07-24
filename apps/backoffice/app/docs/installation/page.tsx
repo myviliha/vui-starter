@@ -43,10 +43,20 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
         nav config, logo) and the <strong>demo pages</strong>, run the scaffolder
         — it copies them into your repo so you own and edit them:
       </P>
-      <P>For a brand-new app, start from create-next-app (no <code>src</code> dir):</P>
-      <CodeBlock title="terminal">{`npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
-cd my-app
-npx @viliha/vui-ui init`}</CodeBlock>
+      <P>
+        For a brand-new app, start from create-next-app (no <code>src</code> dir),
+        then run <code>init</code> — it scaffolds and{" "}
+        <strong>auto-installs the deps</strong> with your package manager. Pick
+        one:
+      </P>
+      <CodeBlock title="npm">{`npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
+cd my-app && npx @viliha/vui-ui init && npm run dev`}</CodeBlock>
+      <CodeBlock title="pnpm">{`pnpm create next-app my-app --ts --tailwind --app --no-src-dir
+cd my-app && pnpm dlx @viliha/vui-ui init && pnpm dev`}</CodeBlock>
+      <CodeBlock title="yarn">{`yarn create next-app my-app --ts --tailwind --app --no-src-dir
+cd my-app && yarn dlx @viliha/vui-ui init && yarn dev`}</CodeBlock>
+      <CodeBlock title="bun">{`bun create next-app my-app --ts --tailwind --app --no-src-dir
+cd my-app && bunx @viliha/vui-ui init && bun dev`}</CodeBlock>
       <P>
         It&apos;s a short decision tree — (0) standalone{" "}
         <strong>Next.js</strong> or a <strong>Turborepo</strong> (which scaffolds
@@ -71,10 +81,11 @@ npx @viliha/vui-ui init`}</CodeBlock>
         <code>@/*</code> → <code>./*</code> and writes a TypeScript{" "}
         <code>next.config.ts</code>. Create the app{" "}
         <strong>without <code>--src-dir</code></strong> so there aren&apos;t two{" "}
-        <code>app/</code> dirs or two config files. After{" "}
-        <code>init</code>, install the peer deps it prints (including{" "}
-        <code>tw-animate-css</code>, which the theme&apos;s{" "}
-        <code>globals.css</code> imports).
+        <code>app/</code> dirs or two config files. <code>init</code>{" "}
+        <strong>auto-installs</strong> the dependencies with the package manager it
+        detects from your lockfile (npm / pnpm / yarn / bun) — pass{" "}
+        <code>--yes</code> to skip the prompt or <code>--no-install</code> to do it
+        yourself.
       </Note>
       <Ul>
         <li>

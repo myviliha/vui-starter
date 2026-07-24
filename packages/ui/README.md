@@ -75,25 +75,37 @@ Flags (for CI / agents, skip the prompts):
   --dry-run                   preview without writing
 ```
 
-After a **pre-built** run, install the peer deps it prints, then `npm run dev` →
-`/dashboard`.
+`init` **auto-installs the dependencies** with your package manager (detected
+from the lockfile — npm, pnpm, yarn, or bun). It prompts first; pass `--yes` to
+skip, or `--no-install` to do it yourself.
 
 ### Fresh + pre-built (recommended for new apps)
 
 Start from a `create-next-app` base **without `--src-dir`** (the scaffold uses a
-root `app/` + `@/*` → `./*`):
+root `app/` + `@/*` → `./*`), then run `init` — it scaffolds, installs deps, and
+you're ready for `dev`. Use whichever package manager you like:
 
 ```bash
+# npm
 npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
-cd my-app
-npx @viliha/vui-ui init --nextjs --fresh --prebuilt
-npm i @viliha/vui-ui   # + the peer deps the CLI prints (incl. tw-animate-css)
-npm run dev
+cd my-app && npx @viliha/vui-ui init && npm run dev
+
+# pnpm
+pnpm create next-app my-app --ts --tailwind --app --no-src-dir
+cd my-app && pnpm dlx @viliha/vui-ui init && pnpm dev
+
+# yarn
+yarn create next-app my-app --ts --tailwind --app --no-src-dir
+cd my-app && yarn dlx @viliha/vui-ui init && yarn dev
+
+# bun
+bun create next-app my-app --ts --tailwind --app --no-src-dir
+cd my-app && bunx @viliha/vui-ui init && bun dev
 ```
 
 `init` writes `next.config.ts`, `tsconfig.json`, `app/globals.css`, the shell,
-and the demo pages (overwriting the create-next-app boilerplate), so the demo
-runs out of the box.
+and the demo pages (overwriting the create-next-app boilerplate) and installs the
+deps, so the demo runs out of the box at `/dashboard`.
 
 ### ⚠️ Existing project — read this first
 

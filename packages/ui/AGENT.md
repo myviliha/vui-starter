@@ -84,7 +84,9 @@ Files land in the consumer's repo (they own them). Questions:
    the theme wiring you configure)
 
 For a fresh app, create it **without `--src-dir`** (the scaffold uses a root
-`app/` + `@/*` → `./*` and writes `next.config.ts`).
+`app/` + `@/*` → `./*` and writes `next.config.ts`). `init` **auto-installs the
+dependencies** with the package manager it detects from the lockfile (npm / pnpm
+/ yarn / bun); `--yes` skips the prompt, `--no-install` skips installing.
 
 - **fresh + prebuilt** → full runnable app (config + shell + demo).
 - **fresh + theme-only** → just `globals.css` + `next.config` wiring; build your own.
