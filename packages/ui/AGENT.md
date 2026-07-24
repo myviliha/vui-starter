@@ -73,16 +73,23 @@ The package ships the components; the **app shell** (layout, sidebar, open tabs,
 command palette, nav config, logo) and **demo pages** are scaffolded with:
 
 ```bash
-npx @viliha/vui-ui init          # interactive: fresh vs existing, with/without demo
+npx @viliha/vui-ui init          # interactive decision tree
 ```
 
-Files land in the consumer's repo (they own them). **Fresh project:** writes
-config too, runs out of the box. **Existing project:** `init --existing` never
-overwrites config — it adds the shell/pages and prints the merge steps
-(`transpilePackages`, the `theme.css` import, the `@/*` alias, `import
-"./globals.css"`). Flags: `--fresh` / `--existing` / `--demo` / `--no-demo` /
-`--yes` / `--force` / `--dry-run`. If you only need components, skip `init` and
-just do the setup below.
+Files land in the consumer's repo (they own them). Two questions:
+1. **Fresh project?** (`--fresh` / `--existing`)
+2. **Pre-built theme?** (`--prebuilt` = shell + demo pages / `--theme-only` = just
+   the theme wiring you configure)
+
+- **fresh + prebuilt** → full runnable app (config + shell + demo).
+- **fresh + theme-only** → just `globals.css` + `next.config` wiring; build your own.
+- **existing + prebuilt** → shell + demo added; config **never** overwritten —
+  prints the merge steps (`transpilePackages`, the `theme.css` import, the `@/*`
+  alias, `import "./globals.css"`).
+- **existing + theme-only** → nothing copied; prints the wiring steps.
+
+Other flags: `--yes` / `--force` / `--dry-run`. If you only need components, use
+`--theme-only` (or skip `init`) and do the setup below.
 
 VUI ships as TypeScript source.
 

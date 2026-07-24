@@ -45,25 +45,53 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
       </P>
       <CodeBlock title="terminal">{`npx @viliha/vui-ui init`}</CodeBlock>
       <P>
-        It asks whether this is a <strong>fresh</strong> or{" "}
-        <strong>existing</strong> project and whether to include the demo pages.
-        It&apos;s non-destructive (existing files are skipped). Flags for CI /
-        agents: <code className="font-mono text-[0.9em]">--fresh</code> ·{" "}
+        It&apos;s a short decision tree — (1) is this a{" "}
+        <strong>fresh</strong> or <strong>existing</strong> project, and (2) do
+        you want the <strong>pre-built</strong> theme (shell + demo pages) or{" "}
+        <strong>theme-only</strong> (just the wiring, you build your own)? Flags
+        for CI / agents:{" "}
+        <code className="font-mono text-[0.9em]">--fresh</code> ·{" "}
         <code className="font-mono text-[0.9em]">--existing</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--demo</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--no-demo</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--prebuilt</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--theme-only</code> ·{" "}
         <code className="font-mono text-[0.9em]">--yes</code> ·{" "}
         <code className="font-mono text-[0.9em]">--force</code> ·{" "}
         <code className="font-mono text-[0.9em]">--dry-run</code>.
       </P>
-      <Note title="Existing projects: run --dry-run first">
-        <code>init --existing</code> never overwrites your config — it adds the
-        shell/pages and prints the four things to merge (
-        <code>transpilePackages</code>, the <code>theme.css</code> import, the{" "}
+      <Ul>
+        <li>
+          <strong>Fresh + pre-built</strong> — full runnable app (config + shell +
+          demo pages).
+        </li>
+        <li>
+          <strong>Fresh + theme-only</strong> — just{" "}
+          <code className="font-mono text-[0.9em]">globals.css</code> +{" "}
+          <code className="font-mono text-[0.9em]">next.config</code> wiring; build
+          your own pages.
+        </li>
+        <li>
+          <strong>Existing + pre-built</strong> — shell + demo added; your config
+          is <strong>never</strong> overwritten.
+        </li>
+        <li>
+          <strong>Existing + theme-only</strong> — nothing copied; prints the
+          wiring steps.
+        </li>
+      </Ul>
+      <Note variant="warning" title="Installing into an existing project? Read this">
+        Always pass <code>--existing</code> — it <strong>never</strong> overwrites
+        your <code>next.config</code>, <code>globals.css</code>, or root layout.
+        Pre-built adds the shell/pages under <code>app/(app)/</code> and{" "}
+        <code>app/_components/</code> and prints the four things to merge yourself
+        (<code>transpilePackages</code>, the <code>theme.css</code> import, the{" "}
         <code>@/*</code> alias, and <code>import &quot;./globals.css&quot;</code>).
-        Preview with <code>npx @viliha/vui-ui init --existing --dry-run</code>. Want
-        only the components? Skip <code>init</code> and follow the manual setup
-        below.
+        <strong> Preview first</strong> with{" "}
+        <code>npx @viliha/vui-ui init --existing --prebuilt --dry-run</code> to see
+        exactly what lands. Only want the components?{" "}
+        <code>--theme-only</code> copies nothing — just prints the wiring, or skip{" "}
+        <code>init</code> entirely (Setup section 3 below).{" "}
+        <strong>Never run <code>--fresh</code> in an existing project</strong> — it
+        overwrites your config with the demo&apos;s.
       </Note>
 
       <H2>1 · New Next.js app</H2>
@@ -104,6 +132,12 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock
       <P>Vite transpiles the package's TypeScript automatically — no extra config.</P>
 
       <H2>3 · Existing project</H2>
+      <P>
+        This manual wiring is exactly what{" "}
+        <code className="font-mono text-[0.9em]">npx @viliha/vui-ui init --existing --theme-only</code>{" "}
+        prints — the <strong>safe path</strong> that copies no files and touches
+        no config. Do it by hand, or run that command and follow its output.
+      </P>
       <Ul>
         <li>
           Install the package, then confirm you're on <strong>Tailwind CSS v4</strong>.
