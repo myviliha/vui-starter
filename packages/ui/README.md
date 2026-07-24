@@ -1,11 +1,12 @@
 # @viliha/vui-ui
 
-A clean, **token-driven React admin/CRM component library** built on Tailwind
-CSS v4, shadcn-style patterns, and Radix Icons. Ships as **TypeScript source**
-(Just-in-Time) — your app's bundler compiles only what you import.
+A **token-driven React component library** for admin and CRM interfaces, built on
+Tailwind CSS v4, shadcn-style patterns, and Radix Icons. It ships as **TypeScript
+source** rather than a prebuilt bundle, so your app's bundler compiles only the
+components you actually import.
 
-Part of [**Vui Starter**](https://github.com/myviliha/vui-starter) — a free,
-open-source admin design system.
+It's part of [**Vui Starter**](https://github.com/myviliha/vui-starter), a free
+and open-source admin design system.
 
 - 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com)
 - 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
@@ -21,15 +22,15 @@ npm install -D tailwindcss @tailwindcss/postcss
 
 ## Setup
 
-**1. Import the theme** in your global stylesheet (design tokens, `@theme`
-mapping, base reset, and component scanning — all in one import):
+**1. Import the theme** in your global stylesheet. This one import brings in the
+design tokens, the `@theme` mapping, the base reset, and component scanning:
 
 ```css
 @import "tailwindcss";
 @import "@viliha/vui-ui/theme.css";
 ```
 
-**2. Next.js only** — transpile the source package in `next.config.ts`:
+**2. Next.js only.** Transpile the source package in `next.config.ts`:
 
 ```ts
 const nextConfig = { transpilePackages: ["@viliha/vui-ui"] };
@@ -40,29 +41,30 @@ export default nextConfig;
 
 ## Scaffold the full app + demo (`init`)
 
-The package ships the **components**; the **app shell** (layout, sidebar,
+The package itself ships the **components**. The **app shell** (layout, sidebar,
 browser-style **open tabs**, command palette, nav config, logo) and the **demo
-pages** live in a one-shot scaffolder:
+pages** come from a one-shot scaffolder:
 
 ```bash
 npx @viliha/vui-ui init
 ```
 
-It's **interactive** — a short decision tree:
+It's **interactive** and walks through a short decision tree:
 
-1. **Fresh project?** (fresh vs existing)
-2. **Pre-built theme?** — the full shell + demo pages, or just the theme wiring
-   that you configure yourself.
+1. **Fresh project?** (fresh vs. existing)
+2. **Pre-built theme?** — the full shell plus demo pages, or just the theme wiring
+   for you to build on.
 
-Files are copied into *your* repo, so you own and edit them.
+Everything it generates is copied into *your* repo, so you own and edit it.
 
 | | **Pre-built** (shell + demo) | **Theme-only** (you configure) |
 | --- | --- | --- |
 | **Fresh** | full runnable app: config + shell + demo pages | just the theme wiring (`globals.css`, `next.config`) — build your own pages |
 | **Existing** | shell + demo added; your config is **never** overwritten (prints merge steps) | nothing copied; prints the wiring steps |
 
-It first asks whether this is a standalone **Next.js** app or a **Turborepo**
-(for a monorepo it scaffolds into a target app dir, e.g. `apps/web`).
+Before that, it asks whether this is a standalone **Next.js** app or a
+**Turborepo**; for a monorepo it scaffolds into a target app dir, such as
+`apps/web`.
 
 ```
 Flags (for CI / agents, skip the prompts):
@@ -75,15 +77,15 @@ Flags (for CI / agents, skip the prompts):
   --dry-run                   preview without writing
 ```
 
-`init` **auto-installs the dependencies** with your package manager (detected
-from the lockfile — npm, pnpm, yarn, or bun). It prompts first; pass `--yes` to
-skip, or `--no-install` to do it yourself.
+`init` **installs the dependencies for you** using the package manager it detects
+from your lockfile (npm, pnpm, yarn, or bun). It prompts before doing so; pass
+`--yes` to skip the prompt, or `--no-install` to handle it yourself.
 
 ### Fresh + pre-built (recommended for new apps)
 
-Start from a `create-next-app` base **without `--src-dir`** (the scaffold uses a
-root `app/` + `@/*` → `./*`), then run `init` — it scaffolds, installs deps, and
-you're ready for `dev`. Use whichever package manager you like:
+Start from a `create-next-app` base **without `--src-dir`** — the scaffold expects
+a root `app/` with `@/*` → `./*` — then run `init`. It scaffolds the app, installs
+the dependencies, and leaves you ready to run `dev`. Any package manager works:
 
 ```bash
 # npm
@@ -103,16 +105,16 @@ bun create next-app my-app --ts --tailwind --app --no-src-dir
 cd my-app && bunx @viliha/vui-ui init && bun dev
 ```
 
-`init` writes `next.config.ts`, `tsconfig.json`, `app/globals.css`, the shell,
-and the demo pages (overwriting the create-next-app boilerplate) and installs the
-deps, so the demo runs out of the box at `/dashboard`.
+`init` writes `next.config.ts`, `tsconfig.json`, `app/globals.css`, the shell, and
+the demo pages, overwriting the create-next-app boilerplate, and installs the
+dependencies. The demo then runs out of the box at `/dashboard`.
 
 ### ⚠️ Existing project — read this first
 
-Adding VUI to an app you already have needs care. **`init --existing` never
-overwrites your config.** Pick pre-built to add the shell + pages under
-`app/(app)/` and `app/_components/`, or theme-only to copy nothing — either way it
-prints the four things to wire up:
+Adding VUI to an app you already have takes a little care. **`init --existing`
+never overwrites your config.** Choose pre-built to add the shell and pages under
+`app/(app)/` and `app/_components/`, or theme-only to copy nothing. Either way, it
+prints the four things you need to wire up:
 
 1. **`next.config`** — add `transpilePackages: ["@viliha/vui-ui"]`.
    (Optional, for the open-tabs *keep-alive*: `output: "export"`,
@@ -127,19 +129,19 @@ prints the four things to wire up:
 4. **Root `app/layout.tsx`** — `import "./globals.css"` (and mount fonts to match
    the demo's look).
 
-Run **`npx @viliha/vui-ui init --existing --prebuilt --dry-run`** first to see
+Run **`npx @viliha/vui-ui init --existing --prebuilt --dry-run`** first to preview
 exactly what it will add. If you only want the components, choose **theme-only**
-(or skip `init` and follow the [Setup](#setup) above), then import from
+(or skip `init` entirely and follow the [Setup](#setup) above), then import from
 `@viliha/vui-ui/*`.
 
-> **Note on the theme in an existing app:** VUI owns its design tokens in
-> `theme.css`. If your app already defines shadcn/ui or other CSS variables with
-> the same names, import `theme.css` **last** and remove the duplicates, or the
-> two token sets will fight. On a fresh project this never comes up.
+> **A note on theming an existing app:** VUI owns its design tokens in
+> `theme.css`. If your app already defines shadcn/ui or other CSS variables under
+> the same names, import `theme.css` **last** and remove the duplicates so the two
+> token sets don't collide. On a fresh project this never comes up.
 
 ## Usage
 
-Each component is its own entry point, so you only ship what you use:
+Every component has its own entry point, so you ship only what you use:
 
 ```tsx
 import { Button } from "@viliha/vui-ui/button";
@@ -158,11 +160,11 @@ export function Example() {
 
 ### Datatables & forms
 
-`RecordView` is a complete admin datatable from a single `fields` array —
-editable cells, sorting, filtering, pagination, row actions, bulk actions,
-CSV / JSON / Excel / PDF import & export, and a buffered **Add / Edit / View**
-form (slide-over or full-page). Required fields render a `*`, alignment and
-colors come from the tokens — you never style a field by hand.
+`RecordView` builds a complete admin datatable from a single `fields` array:
+editable cells, sorting, filtering, pagination, row and bulk actions,
+CSV / JSON / Excel / PDF import and export, and a buffered **Add / Edit / View**
+form (slide-over or full-page). Required fields render a `*`, and alignment and
+colors come from the tokens, so you never style a field by hand.
 
 ```tsx
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
@@ -183,9 +185,9 @@ const fields: RecordField<Customer>[] = [
 />;
 ```
 
-The same `fields` also drive `RecordForm` — the Add/Edit/View screen — and its
-Info panel (from `formDescription` + per-field `description`). See the
-[Data table docs](https://vui.viliha.com/docs/data-table).
+That same `fields` array also drives `RecordForm`, the Add/Edit/View screen, along
+with its Info panel (built from `formDescription` and each field's `description`).
+See the [Data table docs](https://vui.viliha.com/docs/data-table) for the details.
 
 ## Patterns
 
@@ -205,14 +207,14 @@ The reference app composes these primitives into the conventions documented at
 
 Copy them from the
 [backoffice demo](https://github.com/myviliha/vui-starter/tree/main/apps/backoffice)
-and adapt.
+and adapt them to your app.
 
 ## Building with an AI agent
 
 This package ships an **AI-agent usage guide** at
-`node_modules/@viliha/vui-ui/AGENT.md` — the standards to follow when generating
-UI with VUI (token discipline, reuse-first, page layout, RecordView, forms,
-a11y, dark mode). The quickest way to load it is the shipped
+`node_modules/@viliha/vui-ui/AGENT.md`. It captures the standards to follow when
+generating UI with VUI: token discipline, reuse-first, page layout, RecordView,
+forms, accessibility, and dark mode. The quickest way to load it is the shipped
 `CLAUDE.template.md`:
 
 ```bash
@@ -220,8 +222,9 @@ cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md   # Claude Code
 # or ./AGENTS.md for Cursor / Copilot
 ```
 
-It's a one-line `@import` of `AGENT.md`, so the rules stay in one place. Prefer a
-verbatim copy? `cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md`.
+That file is a one-line `@import` of `AGENT.md`, so the rules stay in a single
+place. If you'd rather keep a verbatim copy, run
+`cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md`.
 
 ## Components
 
@@ -234,9 +237,9 @@ wrapper) · `checkbox` · `command-palette` (⌘K launcher) · `dialog` ·
 
 ## Theming
 
-Every design decision lives in `@viliha/vui-ui/theme.css` as CSS variables
-(colors, radius, typography, dark mode). Override any token **after** the import
-to rebrand the whole system:
+Every design decision lives in `@viliha/vui-ui/theme.css` as CSS variables —
+colors, radius, typography, and dark mode. Override any token **after** the import
+to rebrand the entire system:
 
 ```css
 @import "@viliha/vui-ui/theme.css";

@@ -24,13 +24,13 @@ export default function AuthDocPage() {
       <PageTitle
         eyebrow="Guides"
         title="Auth screens"
-        lead="The starter ships complete authentication screens built on one small set of components. Every screen is a sectioned card — header, body, footer — matching the app's dialogs, so they're consistent and easy to extend."
+        lead="The starter ships complete authentication screens built on one small set of components. Every screen is a sectioned card — header, body, footer — that mirrors the app's dialogs, so the whole set stays consistent and easy to extend."
       />
 
       <H2>What's included</H2>
       <P>
-        Themed, client-side demo screens under <code>/auth</code> (swap the demo
-        handlers for your real auth calls):
+        Themed, client-side demo screens live under <code>/auth</code> — swap
+        the demo handlers for your real auth calls:
       </P>
       <Ul>
         <li><code>/auth/signin</code> — Google / passkey / SSO / magic-link, with 2FA and SSO sub-views</li>
@@ -43,9 +43,9 @@ export default function AuthDocPage() {
       <H2>The building blocks</H2>
       <P>
         The pieces live in <code>@/app/_components/auth</code>. An{" "}
-        <code>AuthCard</code> is a bordered card split into three sections — the
-        same treatment as the app&apos;s dialogs (muted header/footer, plain
-        body):
+        <code>AuthCard</code> is a bordered card split into three sections, using
+        the same treatment as the app&apos;s dialogs: muted header and footer
+        with a plain body.
       </P>
       <Ul>
         <li><code>AuthCard</code> — the bordered container</li>
@@ -58,8 +58,8 @@ export default function AuthDocPage() {
 
       <H2>Build a screen</H2>
       <P>
-        Compose the sections inside a <code>&lt;form&gt;</code> so the footer&apos;s
-        submit button drives it:
+        Compose the sections inside a <code>&lt;form&gt;</code> so the
+        footer&apos;s submit button drives the whole card:
       </P>
       <CodeBlock title="app/auth/signin/page.tsx">{`"use client";
 
@@ -96,8 +96,8 @@ export default function SignIn() {
 
       <H3>Confirmation states</H3>
       <P>
-        For &quot;check your email&quot; / success states, use a header with an{" "}
-        <code>icon</code> and a footer with the actions — no body needed:
+        For &quot;check your email&quot; and other success states, pair a header
+        carrying an <code>icon</code> with a footer of actions — no body needed:
       </P>
       <CodeBlock title="sent state">{`<AuthCard>
   <AuthCardHeader
@@ -111,15 +111,16 @@ export default function SignIn() {
 </AuthCard>`}</CodeBlock>
 
       <Note title="Layout">
-        Auth screens render inside <code>app/auth/layout.tsx</code> (centered,
-        with the logo and footer) — separate from the app shell. Add a new screen
-        as <code>app/auth/&lt;name&gt;/page.tsx</code> and it inherits the layout.
+        Auth screens render inside <code>app/auth/layout.tsx</code> — centered,
+        with the logo and footer, and separate from the app shell. Add a new
+        screen at <code>app/auth/&lt;name&gt;/page.tsx</code> and it inherits the
+        layout.
       </Note>
 
       <Note title="Required fields">
         <code>&lt;Field required&gt;</code> renders the same <code>*</code> marker
-        (<code>@viliha/vui-ui/required-mark</code>) the datatable uses — one
-        consistent mandatory-field cue across tables, forms and auth.
+        (<code>@viliha/vui-ui/required-mark</code>) the datatable uses, so you get
+        one consistent mandatory-field cue across tables, forms, and auth.
       </Note>
 
       <DocPager

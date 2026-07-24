@@ -40,11 +40,14 @@ export default function StepsDocPage() {
       <PageTitle
         eyebrow="Reference"
         title="Steps"
-        lead="A controlled, themed step indicator for multi-step forms and wizards. Pass the steps and the current index; completed steps fill with the primary color and a check, the current one is ringed, upcoming ones stay muted."
+        lead="A controlled, themed step indicator for multi-step forms and wizards. Pass the steps and the current index, and the rest follows: completed steps fill with the primary color and a check, the current step is ringed, and upcoming steps stay muted."
       />
 
       <H2>Try it</H2>
-      <P>Click through — every state comes from theme tokens (light and dark).</P>
+      <P>
+        Click through the states — each one is drawn entirely from theme tokens,
+        in both light and dark.
+      </P>
       <div className="my-6 overflow-hidden rounded-lg border border-border">
         <div className="bg-card p-6">
           <StepsDemo />
@@ -77,10 +80,10 @@ function Steps(props: {
 });`}</CodeBlock>
 
       <Note title="Build the wizard around it">
-        <code>Steps</code> is just the indicator — pair it with your own step
-        state and render each step&apos;s body from <code>Input</code> /{" "}
-        <code>Select</code> / the shared <code>Field</code> in a section card with
-        a Back/Next footer. A full example lives at{" "}
+        <code>Steps</code> is only the indicator. Pair it with your own step
+        state and render each step&apos;s body from <code>Input</code>,{" "}
+        <code>Select</code>, or the shared <code>Field</code> in a section card
+        with a Back/Next footer. A full example lives at{" "}
         <code>/register-business</code>; see the{" "}
         <a
           href="/docs/layout"

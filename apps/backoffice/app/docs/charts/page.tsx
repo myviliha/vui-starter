@@ -24,20 +24,20 @@ export default function ChartsPage() {
       <PageTitle
         eyebrow="Reference"
         title="Charts"
-        lead="Vui Starter uses Recharts for data visualisation, wrapped in a small themed ChartContainer that maps your data keys to the --chart-* tokens. Charts stay in sync with the theme and flip with dark mode — no per-chart styling."
+        lead="Vui Starter charts on Recharts, wrapped in a small themed ChartContainer that maps your data keys to the --chart-* tokens. Charts stay in sync with the theme and flip with dark mode, with no per-chart styling to maintain."
       />
 
       <H2>Why Recharts</H2>
       <P>
-        Recharts is the same charting layer shadcn/ui builds its charts on:
-        composable React components, SSR-friendly, and driven by CSS variables.
-        Because Vui already defines <code>--chart-1</code> through{" "}
-        <code>--chart-5</code> (light and dark) in{" "}
-        <code>theme.css</code>, charts adopt the palette with zero extra config.
+        Recharts is the same charting layer shadcn/ui builds on: composable React
+        components, SSR-friendly, and driven by CSS variables. Since Vui already
+        defines <code>--chart-1</code> through <code>--chart-5</code> for both
+        light and dark in <code>theme.css</code>, your charts pick up the palette
+        without any extra configuration.
       </P>
 
       <H2>Install</H2>
-      <P>Recharts ships with Vui UI. In a standalone app, add it once:</P>
+      <P>Recharts ships with Vui UI. In a standalone app, install it once:</P>
       <CodeBlock title="terminal">{`npm install recharts`}</CodeBlock>
       <Note title="Monorepo">
         In this repo Recharts is already a dependency of{" "}
@@ -46,9 +46,9 @@ export default function ChartsPage() {
 
       <H2>The wrapper</H2>
       <P>
-        Import the themed pieces from{" "}
-        <code>@viliha/vui-ui/chart</code> and the chart primitives (AreaChart,
-        Bar, XAxis, …) straight from <code>recharts</code>.
+        Import the themed pieces from <code>@viliha/vui-ui/chart</code>, and pull
+        the chart primitives (AreaChart, Bar, XAxis, …) straight from{" "}
+        <code>recharts</code>.
       </P>
       <Ul>
         <li>
@@ -69,7 +69,8 @@ export default function ChartsPage() {
       <H2>Area chart</H2>
       <P>
         Define a <code>config</code> keyed by your data keys, then reference the
-        generated variables with <code>fill=&quot;var(--color-revenue)&quot;</code>.
+        variables it generates, such as{" "}
+        <code>fill=&quot;var(--color-revenue)&quot;</code>.
       </P>
       <CodeBlock title="revenue-chart.tsx">{`"use client";
 
@@ -114,12 +115,12 @@ export function RevenueChart() {
 
       <H3>Bar, line, and pie</H3>
       <P>
-        The same wrapper works for every Recharts chart — swap{" "}
+        The same wrapper handles every Recharts chart. Swap{" "}
         <code>AreaChart</code>/<code>Area</code> for{" "}
         <code>BarChart</code>/<code>Bar</code>,{" "}
         <code>LineChart</code>/<code>Line</code>, or{" "}
         <code>PieChart</code>/<code>Pie</code>. For a pie, color each slice with a{" "}
-        <code>Cell</code> and key the config by slice name so the tooltip and
+        <code>Cell</code> and key the config by slice name, so the tooltip and
         legend pick up the labels.
       </P>
       <CodeBlock title="traffic-donut.tsx">{`import { Cell, Pie, PieChart } from "recharts";

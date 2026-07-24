@@ -71,10 +71,10 @@ export default function NavigationDocPage() {
       <P>
         A <InlineCode>NavGroup</InlineCode> is an <em>entry inside</em> a section
         that has <InlineCode>children</InlineCode>. It renders as a parent row with
-        a chevron that <strong>hides and unhides</strong> its nested links. It
-        auto-opens when one of its children is the active route. Use it for a
-        cluster of sub-pages under one parent (e.g. <em>Auth</em>, <em>CRM</em>,{" "}
-        <em>System</em>) to keep the sidebar short.
+        a chevron that <strong>hides and unhides</strong> its nested links, and it
+        opens automatically when one of those children is the active route. Reach
+        for it to tuck a cluster of sub-pages under one parent (e.g.{" "}
+        <em>Auth</em>, <em>CRM</em>, <em>System</em>) and keep the sidebar short.
       </P>
 
       <CodeBlock title="nav-config.ts">{`export const NAV: NavSection[] = [
@@ -126,12 +126,12 @@ export default function NavigationDocPage() {
 
       <H2>Open tabs (keep-alive)</H2>
       <P>
-        Enterprise users keep several pages open at once. The shell ships a
+        Admin users tend to keep several pages open at once, so the shell ships a
         browser-style <strong>tab strip</strong> under the top bar. It&apos;s{" "}
         <strong>keep-alive</strong>: every opened page stays mounted (inactive ones
         hidden), so switching tabs is instant — no remount, no flash — and each
-        page keeps its live state (scroll position, form input, filters). New
-        routes mount on first visit.
+        page keeps its live state, from scroll position to form input to active
+        filters. New routes mount on first visit.
       </P>
 
       <H3>Wiring (mount once in the app layout)</H3>

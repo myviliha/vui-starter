@@ -23,11 +23,11 @@ export default function ContributingPage() {
       <PageTitle
         eyebrow="Community"
         title="Contributing"
-        lead="Vui Starter is MIT-licensed and open to contributions — bug fixes, new components, docs, and demos are all welcome. This page is for changing the theme itself; to build your own app with VUI, see Building with AI agents."
+        lead="Vui Starter is MIT-licensed and open to contributions — bug fixes, new components, docs, and demos are all welcome. This page covers changing the theme itself; to build your own app with VUI, see Building with AI agents instead."
       />
 
       <Note title="Which guide do I need?">
-        Two scenarios, two homes.{" "}
+        Two scenarios, two homes for the rules.{" "}
         <strong>Contributing to the theme</strong> (this page) — humans follow{" "}
         <code>CONTRIBUTING.md</code>, agents follow <code>AGENTS.md</code>.{" "}
         <strong>Using the theme in your own app</strong> — see{" "}
@@ -50,12 +50,12 @@ pnpm dev            # backoffice + docs on :3000`}</CodeBlock>
       <H2>Contributing with an AI agent</H2>
       <P>
         The repo ships deterministic, machine-checkable rules for coding agents
-        in <code>AGENTS.md</code> — the filename Claude Code, Cursor and Copilot
-        auto-load. It states exactly where new components, pages, tokens and
+        in <code>AGENTS.md</code> — the filename Claude Code, Cursor, and Copilot
+        auto-load. It spells out where new components, pages, tokens, and
         navigation go, the hard rules (Server Components first, no <code>any</code>,
-        no hard-coded design values, reuse before create), and the commands a
+        no hard-coded design values, reuse before you create), and the commands a
         change must pass before it&apos;s &quot;done&quot;. Point your agent at
-        the repo and it will follow the same standards a human reviewer expects.
+        the repo and it holds to the same standards a human reviewer expects.
       </P>
       <CodeBlock title="verify before a PR">{`pnpm --filter @viliha/vui-ui check-types
 pnpm --filter backoffice lint     # eslint --max-warnings 0
@@ -75,7 +75,7 @@ pnpm check-types    # type-check`}</CodeBlock>
         </li>
         <li>
           <code>apps/backoffice</code> — the admin demo that dogfoods the
-          library, and hosts this documentation site under{" "}
+          library and hosts this documentation site under{" "}
           <code>app/docs</code>.
         </li>
       </Ul>
@@ -88,8 +88,8 @@ pnpm check-types    # type-check`}</CodeBlock>
           CI runs lint, types, build, and security scanning on every PR.
         </li>
         <li>
-          Match the surrounding code style; the design system is token-driven, so
-          prefer editing <code>theme.css</code> tokens over hard-coded values.
+          Match the surrounding code style. The design system is token-driven, so
+          reach for a <code>theme.css</code> token before any hard-coded value.
         </li>
         <li>
           See <code>CONTRIBUTING.md</code> and <code>CODE_OF_CONDUCT.md</code> in the repo.

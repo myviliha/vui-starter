@@ -25,7 +25,7 @@ export default function CalendarDocPage() {
       <PageTitle
         eyebrow="Reference"
         title="Calendar"
-        lead="A demo appointments calendar at /calendar. Three views (Month, Week, Day), an AM/PM hour grid with a live current-time line, events that span their duration, Google-style color labels, and an enterprise-clean add dialog — built entirely from Dialog, Input, Select, Checkbox and date-fns. No calendar dependency, no hand-rolled table or time picker."
+        lead="A demo appointments calendar at /calendar with three views — Month, Week, and Day. It has an AM/PM hour grid with a live current-time line, event blocks that span their own duration, Google-style color labels, and a clean add dialog, all built from Dialog, Input, Select, Checkbox and date-fns. No calendar dependency, no hand-rolled table, no custom time picker."
       />
 
       <H2>See it live</H2>
@@ -52,12 +52,13 @@ export default function CalendarDocPage() {
         </li>
       </Ul>
       <P>
-        Week and Day render AM/PM hour labels (<InlineCode>9 AM</InlineCode>), a
-        red <strong>current-time line</strong>, and <strong>auto-scroll</strong>{" "}
-        the current time into view when opened. Events are positioned by start and
-        sized by duration; <strong>overlapping events split into side-by-side
-        columns</strong> (a lane-assignment pass groups them into clusters and
-        divides the width evenly).
+        Week and Day render AM/PM hour labels (<InlineCode>9 AM</InlineCode>) and
+        a red <strong>current-time line</strong>, and they{" "}
+        <strong>auto-scroll</strong> the current hour into view when opened. Each
+        event is positioned by its start time and sized by its duration. When two
+        events overlap they <strong>split into side-by-side columns</strong> — a
+        lane-assignment pass groups them into clusters and divides the width
+        evenly.
       </P>
 
       <H2>Event model</H2>
@@ -82,11 +83,11 @@ export default function CalendarDocPage() {
 
       <H2>Color labels</H2>
       <P>
-        A Google-style palette (Blueberry, Tomato, Tangerine, Banana, Sage,
-        Peacock, Lavender, Grape, Graphite). These are content colors, so they use
-        static Tailwind classes — the same convention as the tab color labels
-        (<InlineCode>TAB_COLORS</InlineCode>). The chosen color drives the block
-        and chip color and a live dot next to the title.
+        A Google-style palette: Blueberry, Tomato, Tangerine, Banana, Sage,
+        Peacock, Lavender, Grape, and Graphite. Because these are content colors,
+        they use static Tailwind classes — the same convention as the tab color
+        labels (<InlineCode>TAB_COLORS</InlineCode>). The color you pick drives the
+        event block, its chip, and a live dot beside the title.
       </P>
       <CodeBlock title="color labels">{`const EVENT_COLORS = [
   { key: "blueberry", label: "Blueberry", chip: "bg-blue-600 text-white", dot: "bg-blue-600" },
@@ -96,8 +97,8 @@ export default function CalendarDocPage() {
 
       <H2>Add dialog</H2>
       <P>
-        Simple by default, complete on demand. Essentials are always visible;
-        everything else lives behind <strong>More options</strong>.
+        Simple by default, complete on demand. The essentials stay visible;
+        everything else tucks behind <strong>More options</strong>.
       </P>
       <H3>Always visible</H3>
       <Ul>
@@ -118,10 +119,11 @@ export default function CalendarDocPage() {
         </li>
       </Ul>
       <Note title="No native time picker">
-        Start/end use the styled <InlineCode>Select</InlineCode> with AM/PM
-        options instead of <InlineCode>&lt;input type=&quot;time&quot;&gt;</InlineCode>
-        {" "}— consistent across browsers, no clunky native clock panel. End
-        auto-corrects to start&nbsp;+&nbsp;1h if it isn&apos;t after start.
+        Start and end use the styled <InlineCode>Select</InlineCode> with AM/PM
+        options rather than <InlineCode>&lt;input type=&quot;time&quot;&gt;</InlineCode>
+        {" "}— it looks the same in every browser, with no native clock panel to
+        fight. If the end isn&apos;t after the start, it auto-corrects to
+        start&nbsp;+&nbsp;1h.
       </Note>
 
       <H2>Built from</H2>
@@ -129,8 +131,8 @@ export default function CalendarDocPage() {
         <InlineCode>Dialog</InlineCode>, <InlineCode>Input</InlineCode>,{" "}
         <InlineCode>Select</InlineCode>, <InlineCode>Checkbox</InlineCode>,{" "}
         <InlineCode>Button</InlineCode>, <InlineCode>Breadcrumbs</InlineCode>,{" "}
-        <InlineCode>cn</InlineCode>, and <InlineCode>date-fns</InlineCode>. There
-        is a copy-ready brief for it in the{" "}
+        <InlineCode>cn</InlineCode>, and <InlineCode>date-fns</InlineCode>. A
+        copy-ready brief for it lives in the{" "}
         <a
           href="/docs/templates"
           className="font-medium text-foreground underline"

@@ -24,7 +24,7 @@ export default function InstallationPage() {
       <PageTitle
         eyebrow="Getting started"
         title="Installation"
-        lead="@viliha/vui-ui ships as TypeScript source, so your app's bundler compiles it. Install the package, add Tailwind v4, import the theme, and go."
+        lead="@viliha/vui-ui ships as TypeScript source, so your bundler compiles it alongside your own code. Install the package, add Tailwind v4, import the theme, and you're ready."
       />
 
       <H2>Install the package</H2>
@@ -38,19 +38,19 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
 
       <H2>Scaffold the whole app + demo (<code>init</code>)</H2>
       <P>
-        The steps below wire up the <em>theme + components</em>. To also get the{" "}
-        <strong>app shell</strong> (layout, sidebar, open tabs, command palette,
-        nav config, logo) and the <strong>demo pages</strong>, run the scaffolder
-        in your project — it copies them into your repo (you own and edit them)
-        and installs the dependencies:
+        The steps below wire up the <em>theme and components</em>. To also get
+        the <strong>app shell</strong> (layout, sidebar, open tabs, command
+        palette, nav config, logo) and the <strong>demo pages</strong>, run the
+        scaffolder in your project. It copies everything into your repo — yours
+        to own and edit — and installs the dependencies:
       </P>
       <CodeBlock title="terminal">{`npx @viliha/vui-ui init
 # pnpm dlx @viliha/vui-ui init  ·  yarn dlx @viliha/vui-ui init  ·  bunx @viliha/vui-ui init`}</CodeBlock>
       <P>
-        For a brand-new app, start from create-next-app (no <code>src</code> dir),
-        then run <code>init</code> — it scaffolds and{" "}
-        <strong>auto-installs the deps</strong> with your package manager. Pick
-        one:
+        For a brand-new app, start from create-next-app (no <code>src</code>
+        dir), then run <code>init</code>. It scaffolds the project and{" "}
+        <strong>auto-installs the dependencies</strong> with your package
+        manager. Pick your tool:
       </P>
       <CodeBlock title="npm">{`npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
 cd my-app && npx @viliha/vui-ui init && npm run dev`}</CodeBlock>
@@ -61,13 +61,13 @@ cd my-app && yarn dlx @viliha/vui-ui init && yarn dev`}</CodeBlock>
       <CodeBlock title="bun">{`bun create next-app my-app --ts --tailwind --app --no-src-dir
 cd my-app && bunx @viliha/vui-ui init && bun dev`}</CodeBlock>
       <P>
-        It&apos;s a short decision tree — (0) standalone{" "}
+        The prompts form a short decision tree: (0) standalone{" "}
         <strong>Next.js</strong> or a <strong>Turborepo</strong> (which scaffolds
         into a target app dir like <code className="font-mono text-[0.9em]">apps/web</code>),
-        (1) <strong>fresh</strong> vs <strong>existing</strong>, and (2){" "}
-        <strong>pre-built</strong> (shell + demo pages) vs{" "}
-        <strong>theme-only</strong> (just the wiring, you build your own). Flags
-        for CI / agents:{" "}
+        (1) <strong>fresh</strong> or <strong>existing</strong>, and (2){" "}
+        <strong>pre-built</strong> (shell plus demo pages) or{" "}
+        <strong>theme-only</strong> (just the wiring, so you build your own
+        pages). For CI or agents, the flags map to each choice:{" "}
         <code className="font-mono text-[0.9em]">--nextjs</code> ·{" "}
         <code className="font-mono text-[0.9em]">--turbo</code> ·{" "}
         <code className="font-mono text-[0.9em]">--dir &lt;path&gt;</code> ·{" "}

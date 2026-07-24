@@ -1,10 +1,11 @@
 # Contributing to VUI Starter
 
-Thank you for contributing to **VUI Starter**.
+Thanks for contributing to **VUI Starter**.
 
-VUI is an **enterprise-first design system**, not simply a component library. Every contribution should improve the system without increasing complexity, inconsistency, or maintenance cost.
-
-As a contributor, your responsibility is to preserve the design language, architecture, and developer experience.
+VUI is an enterprise-first design system, not just a component library. A good
+contribution improves the system without adding complexity, inconsistency, or
+maintenance cost — and part of your job as a contributor is to protect the design
+language, the architecture, and the developer experience that are already here.
 
 > **Working with an AI agent?** This file is the *why* (philosophy + PR flow).
 > The machine-checkable *what* — exact file locations, hard rules, and the
@@ -15,7 +16,7 @@ As a contributor, your responsibility is to preserve the design language, archit
 
 # Core Philosophy
 
-When contributing to VUI, always prioritize:
+When you contribute to VUI, keep these priorities in order:
 
 1. Consistency over creativity.
 2. Reuse over duplication.
@@ -26,82 +27,59 @@ When contributing to VUI, always prioritize:
 7. Backward compatibility.
 8. Enterprise UX.
 
-A contribution should feel like it has always belonged in VUI.
+The goal is for your work to feel like it has always belonged in VUI.
 
 ---
 
 # Contributor Mindset
 
-Before writing code, ask yourself:
+Before you write any code, ask yourself a few questions.
 
 ## 1. Delete First
 
-Can this problem be solved by:
-
-- removing code
-- simplifying code
-- reusing an existing component
-- extending an existing component
-
-Deleting or reusing code is always preferred over creating something new.
+Can you solve the problem by removing code, simplifying what's there, or reusing
+or extending an existing component? Deleting or reusing almost always beats
+writing something new.
 
 ---
 
 ## 2. Extend Before Create
 
-Never create a new component simply because it is easier.
-
-Instead ask:
-
-- Can an existing component be extended?
-- Can this become a variant?
-- Can composition solve this?
-- Can an existing primitive be reused?
-
-New components should be the last option.
+Don't reach for a new component just because it's the easy path. First ask
+whether you can extend an existing component, add a variant, compose the behavior
+from parts you already have, or reuse an existing primitive. A brand-new component
+should be your last resort.
 
 ---
 
 ## 3. Blueprint Test
 
-Every new component should be good enough that it could be copied hundreds of times throughout the codebase.
-
-If it feels overly specific, simplify it.
+A new component should be solid enough to be copied hundreds of times across the
+codebase. If it feels too specific to the case in front of you, simplify it until
+it isn't.
 
 ---
 
 # Repository Structure
 
-VUI uses a Turborepo monorepo.
-
-Follow package boundaries strictly.
+VUI is a Turborepo monorepo, and its package boundaries are strict — respect them.
 
 ## packages/ui
 
-Contains:
-
-- reusable UI primitives
-- enterprise components
-- design tokens
-- theme.css
-
-Never place application-specific logic here.
+This package holds the reusable UI primitives, the enterprise components, the
+design tokens, and `theme.css`. Application-specific logic never belongs here.
 
 ---
 
 ## apps/backoffice
 
-Contains:
+This is where the application pages, business logic, demo implementations, and
+example integrations live — plus **the documentation site**, whose routes sit
+under `app/docs` and are served at `/docs`.
 
-- application pages
-- business logic
-- demo implementations
-- example integrations
-- **the documentation site** — routes under `app/docs`, served at `/docs`
-
-This is the only app; it demonstrates the design system **and** hosts the docs
-(there is no separate `apps/docs` package). Every public component should be
-documented under `app/docs`.
+It's the only app in the repo: it both demonstrates the design system and hosts
+the docs, so there is no separate `apps/docs` package. Document every public
+component under `app/docs`.
 
 ---
 
@@ -109,130 +87,74 @@ documented under `app/docs`.
 
 ## Tokens
 
-Everything must come from:
+Every design value comes from one place:
 
 ```css
 @import "@viliha/vui-ui/theme.css";
 ```
 
-Never hardcode:
-
-- colors
-- spacing
-- radius
-- shadows
-- typography
-- z-index
-
-Always use semantic tokens.
+Never hardcode colors, spacing, radius, shadows, typography, or z-index. Reach for
+the semantic token instead, every time.
 
 ---
 
 ## Components
 
-Components should be:
-
-- reusable
-- composable
-- predictable
-- focused
-- stateless whenever possible
-
-Avoid components with large configuration APIs.
-
-Prefer composition.
+Aim for components that are reusable, composable, predictable, focused, and
+stateless wherever you can manage it. Steer away from large configuration APIs and
+let composition do the work instead.
 
 ---
 
 ## Accessibility
 
-Every public component must support:
-
-- keyboard navigation
-- visible focus
-- screen readers
-- ARIA attributes
-- WCAG AA contrast
-
-Accessibility is mandatory.
+Accessibility is mandatory, not a nice-to-have. Every public component must support
+keyboard navigation, visible focus, screen readers, and the right ARIA attributes,
+and must meet WCAG AA contrast.
 
 ---
 
 ## Dark Mode
 
-Every component must work in:
-
-- Light Mode
-- Dark Mode
-
-Never create component-specific color overrides.
-
-Use design tokens.
+Every component has to work in both light and dark mode. Get there through the
+design tokens — never with component-specific color overrides.
 
 ---
 
 ## Responsiveness
 
-Design mobile first.
-
-Components should work across:
-
-- Mobile
-- Tablet
-- Desktop
-
-Avoid horizontal scrolling whenever possible.
+Design mobile first, and make sure components hold up across mobile, tablet, and
+desktop. Avoid horizontal scrolling wherever you can.
 
 ---
 
 # Code Standards
 
-Before creating anything:
-
-- Search for existing components.
-- Search for existing hooks.
-- Search for existing utilities.
-- Search for existing patterns.
-
-Never duplicate code.
-
-Never duplicate variants.
-
-Never duplicate utilities.
+Before you create anything, search the codebase for an existing component, hook,
+utility, or pattern that already does the job. Don't duplicate code, variants, or
+utilities.
 
 ---
 
 # Public APIs
 
-Public APIs are contracts.
-
-Avoid:
-
-- renaming props
-- changing variants
-- removing exports
-- breaking existing behavior
-
-Prefer extending APIs instead of replacing them.
+Treat public APIs as contracts. Don't rename props, change variants, remove
+exports, or break existing behavior. When an API needs to grow, extend it rather
+than replace it.
 
 ---
 
 # Documentation
 
-Every new public component should include:
-
-- Purpose
-- Props
-- Usage example
-- Accessibility notes
-
-Update documentation whenever public behavior changes.
+Document every new public component with its purpose, its props, a usage example,
+and its accessibility notes. Whenever public behavior changes, update the docs to
+match.
 
 ---
 
 # Validation
 
-Before opening a Pull Request, verify:
+Before you open a pull request, run:
 
 ```bash
 pnpm lint
@@ -240,12 +162,8 @@ pnpm check-types
 pnpm build
 ```
 
-The project must produce:
-
-- zero lint warnings
-- zero TypeScript errors
-- zero unused imports
-- zero dead code
+The project must come back clean: zero lint warnings, zero TypeScript errors, no
+unused imports, and no dead code.
 
 ---
 
@@ -287,8 +205,6 @@ A contribution is complete only when:
 
 # One Final Rule
 
-When in doubt:
-
-**Build the solution that makes VUI simpler, not larger.**
-
-Every contribution should reduce future maintenance, improve consistency, and strengthen the design system for everyone.
+When in doubt, **build the solution that makes VUI simpler, not larger.** Every
+contribution should cut future maintenance, sharpen consistency, and leave the
+design system stronger for everyone who builds on it.

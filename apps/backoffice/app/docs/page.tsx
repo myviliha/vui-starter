@@ -16,19 +16,19 @@ export const metadata: Metadata = {
 const features = [
   {
     title: "One-file design system",
-    body: "Colors, typography, radius, dark mode, selection and icon treatment all live in theme.css as CSS variables. Restyle everything from one place.",
+    body: "Colors, typography, radius, dark mode, selection, and icon treatment all live in theme.css as CSS variables, so you can restyle the whole app from one place.",
   },
   {
     title: "RecordView datatable",
-    body: "Editable cells, auto-sizing columns, sticky header, sort/filter, pagination, row actions, a buffered add/edit form, and CSV/JSON/Excel/PDF import & export.",
+    body: "Editable cells, auto-sizing columns, a sticky header, sort and filter, pagination, row actions, a buffered add/edit form, and import/export for CSV, JSON, Excel, and PDF.",
   },
   {
     title: "Ships as source",
-    body: "No build step. Your app's bundler compiles only what you import — tree-shakeable and easy to read or fork.",
+    body: "No build step. Your bundler compiles only what you import, so the code stays tree-shakeable and easy to read or fork.",
   },
   {
     title: "Tailwind v4 + Radix Icons",
-    body: "Built on the modern Tailwind v4 CSS-variable engine with shadcn-style patterns and the Radix icon set.",
+    body: "Built on the Tailwind v4 CSS-variable engine, with shadcn-style patterns and the Radix icon set.",
   },
 ];
 
@@ -57,19 +57,19 @@ export default function IntroductionPage() {
       <P>
         Vui Starter is both a <strong>library</strong> — published to npm as{" "}
         <code className="font-mono text-[0.9em]">@viliha/vui-ui</code> — and a{" "}
-        <strong>reference app</strong> that shows every component in a real admin
-        UI. Everything runs on in-memory mock data, so you can clone and run it
-        with zero backend.
+        <strong>reference app</strong> that shows every component in a working
+        admin UI. It all runs on in-memory mock data, so you can clone the repo
+        and have it running without a backend.
       </P>
 
       <H2>Install</H2>
       <CodeBlock title="terminal">{`npm install @viliha/vui-ui`}</CodeBlock>
       <P>
-        Then import the design tokens once and start using components. See{" "}
+        Import the design tokens once, and the components are ready to use. See{" "}
         <Link href="/docs/installation" className="font-medium underline underline-offset-4">
           Installation
         </Link>{" "}
-        for Next.js, Vite, existing projects and Turborepo.
+        for Next.js, Vite, existing projects, and Turborepo.
       </P>
 
       <H2>What's inside</H2>

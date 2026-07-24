@@ -25,7 +25,7 @@ export default function ChatDocPage() {
       <PageTitle
         eyebrow="Guides"
         title="Chat"
-        lead="A messaging demo at /chat: a searchable conversation list on the left, a message thread with sent/received bubbles on the right, and a composer that pins the thread to the newest message. No chat library — just Input, Button, cn and a little state."
+        lead="A messaging demo at /chat: a searchable conversation list on the left, a message thread with sent and received bubbles on the right, and a composer that keeps the thread pinned to the newest message. No chat library — just Input, Button, cn, and a little state."
       />
 
       <H2>See it live</H2>
@@ -43,9 +43,9 @@ export default function ChatDocPage() {
           time). The active row is tinted with <InlineCode>bg-accent</InlineCode>.
         </li>
         <li>
-          <strong>Thread</strong> — a header with the contact, then a scrolling
-          column of bubbles. Sent messages use the primary token and align right;
-          received ones use a bordered card and align left.
+          <strong>Thread</strong> — a header naming the contact, then a scrolling
+          column of bubbles. Messages you send use the primary token and align
+          right; the ones you receive use a bordered card and align left.
         </li>
         <li>
           <strong>Composer</strong> — an <InlineCode>Input</InlineCode> +{" "}
@@ -65,8 +65,8 @@ type Convo = {
 
       <H3>Auto-scroll</H3>
       <P>
-        A <InlineCode>ref</InlineCode> on the thread + an effect keyed on the
-        message count keeps it pinned to the latest bubble.
+        A <InlineCode>ref</InlineCode> on the thread, plus an effect keyed on the
+        message count, keeps the view pinned to the latest bubble.
       </P>
       <CodeBlock title="auto-scroll">{`React.useEffect(() => {
   const el = scrollRef.current;
@@ -74,10 +74,10 @@ type Convo = {
 }, [active.messages.length, activeId]);`}</CodeBlock>
 
       <Note title="Swap the demo state for your API">
-        Conversations and messages are local state here. Point{" "}
+        Conversations and messages live in local state here. Point{" "}
         <InlineCode>setConvos</InlineCode> at your backend (or a socket) and the
-        UI is unchanged. Avatar colors follow the same static-Tailwind convention
-        as the tab and calendar color labels.
+        UI stays exactly the same. Avatar colors follow the same static-Tailwind
+        convention as the tab and calendar color labels.
       </Note>
 
       <DocPager

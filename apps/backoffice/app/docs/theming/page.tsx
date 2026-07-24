@@ -45,7 +45,7 @@ export default function ThemingPage() {
       <PageTitle
         eyebrow="Customization"
         title="Theming"
-        lead="Every design decision lives in one stylesheet — @viliha/vui-ui/theme.css — as CSS variables. Change the tokens and the whole system follows."
+        lead="Every design decision lives in one stylesheet — @viliha/vui-ui/theme.css — as a CSS variable. Change the tokens and the whole system follows."
       />
 
       <H2>Token groups</H2>
@@ -74,9 +74,9 @@ export default function ThemingPage() {
 
       <H2>Color system</H2>
       <P>
-        The semantic colors you reach for most. Every component reads these, so
-        changing one token restyles the whole system. Each has a matching{" "}
-        <code>-foreground</code> where text sits on top.
+        These are the semantic colors you reach for most. Every component reads
+        them, so changing a single token restyles the whole system. Each pairs
+        with a matching <code>-foreground</code> for the text that sits on top.
       </P>
       <div className="mb-5 overflow-x-auto rounded-lg border border-border">
         <table className="w-full text-left text-sm">
@@ -110,13 +110,13 @@ export default function ThemingPage() {
         </table>
       </div>
       <Note title="Primary: neutral vs. action">
-        shadcn&apos;s <code>--primary</code> is the neutral (near-black) solid
-        used by the default button. The brand action color is{" "}
-        <code>--button-primary</code> (<code>#266DF0</code>) with{" "}
-        <code>--button-primary-hover</code> for its hover — used by{" "}
+        shadcn&apos;s <code>--primary</code> is the neutral, near-black solid the
+        default button uses. The brand action color is a separate token,{" "}
+        <code>--button-primary</code> (<code>#266DF0</code>), paired with{" "}
+        <code>--button-primary-hover</code> for its hover state. It drives{" "}
         <code>&lt;Button variant=&quot;primary&quot;&gt;</code>, checkboxes, and
-        active states. Hover surfaces (rows, items, ghost buttons) use{" "}
-        <code>--accent</code>.
+        active states, while hover surfaces (rows, items, ghost buttons) fall
+        back to <code>--accent</code>.
       </Note>
 
       <H2>Default tokens</H2>
@@ -142,16 +142,17 @@ export default function ThemingPage() {
 
       <H2>Dark mode</H2>
       <P>
-        The tokens ship a <code>.dark</code> block. Toggle by adding the{" "}
-        <code>dark</code> class to <code>&lt;html&gt;</code> (wire it to a theme
-        switch or the OS preference).
+        The tokens ship with a <code>.dark</code> block. Add the{" "}
+        <code>dark</code> class to <code>&lt;html&gt;</code> to switch, and wire
+        that class to a theme toggle or the OS preference.
       </P>
       <CodeBlock>{`<html class="dark">`}</CodeBlock>
 
       <Note title="Typography">
-        The baseline is Inter at 14px / medium with <code>#101112</code> text.
-        Provide the <code>--font-inter</code> and <code>--font-jetbrains-mono</code>{" "}
-        CSS variables (e.g. via <code>next/font</code>) to match the demo.
+        The baseline is Inter at 14px medium in <code>#101112</code>. To match
+        the demo, supply the <code>--font-inter</code> and{" "}
+        <code>--font-jetbrains-mono</code> CSS variables, for example through{" "}
+        <code>next/font</code>.
       </Note>
 
       <DocPager

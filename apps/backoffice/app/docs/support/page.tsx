@@ -25,14 +25,14 @@ export default function SupportDocPage() {
       <PageTitle
         eyebrow="Guides"
         title="Support & ticketing"
-        lead="A help-desk ticketing system at /support: a searchable, status-filtered ticket queue on the left; a detail pane with the original request and an activity timeline in the middle; and a properties rail (status, priority, requester, assignee) on the right. Not a chat — a ticket workspace."
+        lead="A help-desk ticketing system at /support: a searchable, status-filtered ticket queue on the left; a detail pane with the original request and its activity timeline in the middle; and a properties rail — status, priority, requester, assignee — on the right. This isn&apos;t a chat; it&apos;s a ticket workspace."
       />
 
       <H2>See it live</H2>
       <P>
         Open <a href="/support" className="font-medium text-foreground underline">/support</a>{" "}
         (sidebar → shadcn/ui → Support). Pick a ticket, change its status or
-        priority in the properties rail, and reply — replying flips the ticket to{" "}
+        priority in the properties rail, then reply — a reply flips the ticket to{" "}
         <em>Pending</em>.
       </P>
 
@@ -77,9 +77,9 @@ type Ticket = {
 
       <H3>Status & priority colors</H3>
       <P>
-        Badges and dots use static Tailwind classes keyed by value (same
-        convention as the calendar color labels), so they read consistently in
-        light and dark.
+        Badges and dots use static Tailwind classes keyed by value — the same
+        convention as the calendar color labels — so they read consistently in
+        both light and dark themes.
       </P>
       <CodeBlock title="badges">{`const STATUS_BADGE: Record<Status, string> = {
   open: "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
@@ -88,10 +88,11 @@ type Ticket = {
 };`}</CodeBlock>
 
       <Note title="Wire it to your backend">
-        Tickets are local state. Replace <InlineCode>setTickets</InlineCode> with
-        your API, and the queue/detail/timeline UI stays the same. Replying sets
-        the status to <em>Pending</em> — adjust that rule to your SLA workflow.
-        For sorting, columns, and bulk actions, swap the queue for{" "}
+        Tickets live in local state. Replace <InlineCode>setTickets</InlineCode>{" "}
+        with your API and the queue, detail, and timeline all keep working
+        unchanged. A reply sets the status to <em>Pending</em>; adjust that rule
+        to match your SLA workflow. When you need sorting, columns, or bulk
+        actions, swap the queue for{" "}
         <a href="/docs/data-table" className="font-medium text-foreground underline">RecordView</a>.
       </Note>
 

@@ -24,7 +24,7 @@ export default function DataTablePage() {
       <PageTitle
         eyebrow="Reference"
         title="Data table (RecordView)"
-        lead="RecordView is the one component shadcn/ui doesn't give you: a complete, themed admin data table driven by a single fields array. Point it at your data and you get editing, sorting, filtering, pagination, row actions, a buffered add/edit panel, bulk actions, and import/export — no wiring required."
+        lead="RecordView is the component shadcn/ui leaves you to build yourself: a complete, themed admin data table driven by a single fields array. Point it at your data and editing, sorting, filtering, pagination, row actions, a buffered add/edit panel, bulk actions, and import/export all come for free."
       />
 
       <H2>Import</H2>
@@ -39,8 +39,8 @@ export default function DataTablePage() {
 
       <H2>Full example</H2>
       <P>
-        Describe your columns with a <code>fields</code> array, pass your data,
-        and provide two small callbacks. That&apos;s the whole integration.
+        Describe your columns in a <code>fields</code> array, pass your data, and
+        wire up two small callbacks. That&apos;s the entire integration.
       </P>
       <CodeBlock title="organizations-table.tsx">{`"use client";
 
@@ -142,25 +142,25 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 
       <H2>Add &amp; edit form layouts</H2>
       <P>
-        Every RecordView includes a buffered add/edit form — edits are held in a
-        draft and only committed on <strong>Save</strong>. The form is{" "}
-        <strong>designed from your <code>fields</code> array</strong>: each row
-        centers the label, icon, required <code>*</code> and control on one
-        baseline, with all spacing and color from theme tokens — you never style
-        a field by hand. It renders in one of two layouts.
+        Every RecordView comes with a buffered add/edit form: edits stay in a
+        draft and commit only when you hit <strong>Save</strong>. The form is{" "}
+        <strong>designed from your <code>fields</code> array</strong> — each row
+        aligns the label, icon, required <code>*</code>, and control on one
+        baseline, and every bit of spacing and color comes from theme tokens, so
+        you never style a field by hand. It renders in one of two layouts.
       </P>
 
       <H3>Slide-over panel (default)</H3>
       <P>
-        By default the form opens as a right-hand slide-over panel over the
-        table — nothing to configure.
+        By default the form slides in from the right, over the table. There is
+        nothing to configure.
       </P>
 
       <H3>Full-page form</H3>
       <P>
         Set <code>formMode=&quot;page&quot;</code> to render the form as a full
-        page instead: a breadcrumb bar, a padded bordered card, and a fixed
-        Save/Cancel action bar. Use <code>formColumns</code> to lay the field
+        page instead, with a breadcrumb bar, a padded bordered card, and a fixed
+        Save/Cancel action bar. Use <code>formColumns</code> to arrange the field
         groups in one or two columns.
       </P>
       <CodeBlock title="page form">{`<RecordView formMode="page" formColumns={1} /* … */ />`}</CodeBlock>
@@ -168,8 +168,8 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <H3>Field documentation panel</H3>
       <P>
         In page mode, add a <code>formDescription</code> intro and a{" "}
-        <code>description</code> on any field to show an AWS-style help column
-        beside the form.
+        <code>description</code> on any field, and the form gains an AWS-style
+        help column alongside it.
       </P>
       <CodeBlock title="documentation panel">{`const fields = [
   { key: "email", label: "Email", editable: true,
@@ -185,12 +185,12 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 
       <H3>Dedicated routes</H3>
       <P>
-        To put the form on its own URL (e.g. <code>/organizations/new</code>),
-        render the exported <code>RecordForm</code> on the route and let the
-        table navigate to it. Pass <code>data</code> + <code>onDataChange</code>{" "}
-        so the table and form share one data source, and{" "}
-        <code>onCreate</code> / <code>onView</code> / <code>onEdit</code> to
-        navigate instead of opening the built-in overlay.
+        To give the form its own URL (say <code>/organizations/new</code>),
+        render the exported <code>RecordForm</code> on that route and have the
+        table navigate to it. Pass <code>data</code> and{" "}
+        <code>onDataChange</code> so the table and form share a single data
+        source, and use <code>onCreate</code> / <code>onView</code> /{" "}
+        <code>onEdit</code> to navigate rather than open the built-in overlay.
       </P>
       <CodeBlock title="routed create form">{`import { RecordForm } from "@viliha/vui-ui/record-view";
 
@@ -214,34 +214,35 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
   onCancel={() => router.push("/organizations")}
 />`}</CodeBlock>
       <Note title="Consistent breadcrumbs">
-        Both layouts and the app pages share one{" "}
+        Both layouts and the rest of the app pages share a single{" "}
         <code>@viliha/vui-ui/breadcrumbs</code> component, so the trail, chevron,
         and back button look identical everywhere.
       </Note>
 
       <H2>Bulk actions</H2>
       <P>
-        Select rows via the checkboxes and an <strong>Actions</strong> menu
-        appears in the toolbar (next to Filter): set any choice field
-        (&quot;Set status → …&quot;) across the selection, or delete the
-        selection with a confirm dialog. Give a field <code>options</code> to add
-        it to the &quot;Set …&quot; list.
+        Check a few rows and an <strong>Actions</strong> menu appears in the
+        toolbar, next to Filter. From there you can set any choice field across
+        the selection (&quot;Set status → …&quot;) or delete the whole selection
+        behind a confirm dialog. Any field with <code>options</code> joins the
+        &quot;Set …&quot; list automatically.
       </P>
 
       <H2>Import &amp; export</H2>
       <P>
-        The toolbar ships Import (CSV / JSON) and Export (CSV / JSON / Excel /
-        PDF) — no configuration, they read the same <code>fields</code>.
+        The toolbar includes Import (CSV / JSON) and Export (CSV / JSON / Excel /
+        PDF) out of the box. Both read the same <code>fields</code>, so there is
+        nothing to configure.
       </P>
 
       <Note title="Layout">
-        Drop <code>&lt;RecordView /&gt;</code> straight into a page — it renders
-        its own action header (with breadcrumbs), toolbar, and a padded, bordered
-        card, matching the{" "}
+        Drop <code>&lt;RecordView /&gt;</code> straight into a page. It renders
+        its own action header (with breadcrumbs), toolbar, and padded, bordered
+        card, following the{" "}
         <a href="/docs/layout" className="font-medium text-foreground underline">
           page layout
         </a>{" "}
-        conventions automatically.
+        conventions without any extra work.
       </Note>
 
       <DocPager

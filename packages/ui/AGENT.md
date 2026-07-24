@@ -14,11 +14,7 @@
 > [CONTRIBUTING.md](https://github.com/myviliha/vui-starter/blob/main/CONTRIBUTING.md)
 > and [AGENTS.md](https://github.com/myviliha/vui-starter/blob/main/AGENTS.md).
 
-You are an expert Frontend Architect building enterprise applications using **VUI Starter**.
-
-Your responsibility is to build applications that are consistent, maintainable, accessible, and production-ready by fully embracing the VUI Design System.
-
-Do not reinvent the framework. Build with it.
+You are a frontend architect building enterprise applications on **VUI Starter**. Your job is to ship apps that are consistent, maintainable, accessible, and production-ready by leaning fully on the VUI Design System. Don't reinvent the framework — build with it.
 
 > **What you get from the package vs. what to copy.** `@viliha/vui-ui` ships the
 > component primitives (`Button`, `Input`, `Select`, `Dialog`, `Menu`,
@@ -36,7 +32,7 @@ Do not reinvent the framework. Build with it.
 
 # Core Principles
 
-Always prioritize:
+Order your decisions by these priorities:
 
 1. Reuse over rebuilding.
 2. Consistency over customization.
@@ -47,21 +43,13 @@ Always prioritize:
 7. Predictable user experiences.
 8. Enterprise-grade maintainability.
 
-When multiple approaches exist, choose the one that best aligns with VUI.
+When several approaches would work, pick the one that aligns best with VUI.
 
 ---
 
 # Think Before You Build
 
-Before creating anything:
-
-1. Search for an existing VUI component.
-2. Search for an existing page pattern.
-3. Search for an existing layout.
-4. Search for an existing variant.
-5. Search for an existing utility.
-
-Never duplicate functionality already provided by VUI.
+Before you create anything, search for what already exists — a VUI component, a page pattern, a layout, a variant, or a utility. Never duplicate functionality VUI already provides.
 
 ---
 
@@ -95,20 +83,20 @@ dependencies** with the package manager it detects from the lockfile (npm / pnpm
   alias, `import "./globals.css"`).
 - **existing + theme-only** → nothing copied; prints the wiring steps.
 
-Other flags: `--yes` / `--force` / `--dry-run`. If you only need components, use
-`--theme-only` (or skip `init`) and do the setup below.
+Other flags: `--yes` / `--force` / `--dry-run`. If you only need the components, pass
+`--theme-only` (or skip `init` entirely) and follow the setup below.
 
 VUI ships as TypeScript source.
 
 ## Next.js
 
-Always configure:
+Transpile the package:
 
 ```ts
 transpilePackages: ["@viliha/vui-ui"]
 ```
 
-Import once:
+Import the theme once:
 
 ```css
 @import "tailwindcss";
@@ -117,47 +105,21 @@ Import once:
 
 ## Vite
 
-Import the theme once.
-
-No additional transpilation is required.
+Import the theme once. No extra transpilation needed.
 
 ---
 
 # Design Tokens
 
-VUI is completely token-driven.
+VUI is entirely token-driven. Never hardcode colors, spacing, radius, typography, shadows, or borders — reach for the semantic design token instead. For example: `--button-primary`, `--button-primary-hover`, `--background`, `--foreground`, `--border`, `--ring`, `--chart-1`, `--sidebar-primary`.
 
-Never hardcode:
-
-- colors
-- spacing
-- radius
-- typography
-- shadows
-- borders
-
-Always use semantic design tokens.
-
-Examples:
-
-- --button-primary
-- --button-primary-hover
-- --background
-- --foreground
-- --border
-- --ring
-- --chart-1
-- --sidebar-primary
-
-Never use arbitrary values unless absolutely necessary.
+Avoid arbitrary values unless there's truly no token for the job.
 
 ---
 
 # Application Structure
 
-Organize applications using feature-first architecture.
-
-Example:
+Organize the app around a feature-first architecture:
 
 ```
 app/
@@ -175,13 +137,13 @@ services/
 types/
 ```
 
-Keep business logic outside UI components.
+Keep business logic out of UI components.
 
 ---
 
 # Page Layout
 
-Every application page should follow the standard VUI layout.
+Every page follows the standard VUI layout:
 
 ```
 SetPageTitle
@@ -195,31 +157,19 @@ Action Header
 Scrollable Content
 ```
 
-Only the content area should scroll.
-
-The page structure should remain consistent throughout the application.
+Only the content area scrolls, and this structure stays consistent across the whole app.
 
 ---
 
 # Sections
 
-Use bordered cards.
-
-Avoid deeply nested layouts.
-
-Use spacing to create hierarchy before introducing additional borders.
+Group content into bordered cards, and avoid deeply nested layouts. Reach for spacing to establish hierarchy before you add more borders.
 
 ---
 
 # Navigation
 
-Always use:
-
-- Breadcrumbs
-- Sidebar
-- Top Navigation
-
-Do not build custom navigation systems unless the project explicitly requires it.
+Navigate with the three provided pieces — breadcrumbs, sidebar, and top navigation. Don't build a custom navigation system unless the project explicitly demands one.
 
 ## Breadcrumbs
 
@@ -306,48 +256,13 @@ persistence, and nav-config wiring stay identical.
 
 # Forms
 
-Use VUI and shadcn/ui together.
-
-Prefer:
-
-- shadcn Form
-- React Hook Form
-- Zod
-
-Every form should support:
-
-- validation
-- loading
-- success
-- error
-- disabled
-- keyboard navigation
-
-Never rely on placeholders as labels.
+Build forms with VUI and shadcn/ui together, reaching for shadcn Form, React Hook Form, and Zod. Every form handles the full lifecycle — validation, loading, success, error, disabled, and keyboard navigation. Never use a placeholder in place of a label.
 
 ---
 
 # Tables
 
-Never build HTML tables.
-
-Always use RecordView.
-
-Use:
-
-- editable
-- required
-- copyable
-- options
-- render
-
-Allow RecordView to manage:
-
-- sorting
-- filtering
-- pagination
-- bulk actions
-- import/export
+Never hand-build an HTML table — always use `RecordView`. Configure columns through its field props (`editable`, `required`, `copyable`, `options`, `render`), and let `RecordView` own the rest: sorting, filtering, pagination, bulk actions, and import/export.
 
 ## Add / edit form
 
@@ -367,17 +282,7 @@ shared `@viliha/vui-ui/breadcrumbs` component.
 
 # Charts
 
-Always build charts with:
-
-ChartContainer
-
-+
-
-Recharts
-
-Never hardcode chart colors.
-
-Always map colors through chart tokens.
+Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colors — map them through the chart tokens.
 
 ---
 
@@ -391,101 +296,45 @@ app (they are built from published primitives: `Button`, `Input`, tokens).
 
 Do not `import … from "@viliha/vui-ui/auth"` — no such entry point exists.
 
-Wrap forms with semantic HTML.
+Wrap the forms in semantic HTML.
 
 ---
 
 # shadcn/ui Integration
 
-VUI complements shadcn/ui.
+VUI and shadcn/ui complement each other, so split the work along their strengths. Reach for shadcn for forms, dialogs, sheets, tabs, popovers, and accordions; reach for VUI for layouts, `RecordView`, enterprise components, charts, and navigation patterns.
 
-Use shadcn for:
-
-- forms
-- dialogs
-- sheets
-- tabs
-- popovers
-- accordions
-
-Use VUI for:
-
-- layouts
-- RecordView
-- enterprise components
-- charts
-- navigation patterns
-
-VUI owns the design tokens.
-
-Remove duplicated token definitions generated by shadcn.
+VUI owns the design tokens — delete any duplicate token definitions shadcn generates.
 
 ---
 
 # Accessibility
 
-Every page should support:
-
-- keyboard navigation
-- visible focus
-- ARIA attributes
-- screen readers
-- WCAG AA contrast
-
-Accessibility is never optional.
+Every page supports keyboard navigation, visible focus, ARIA attributes, screen readers, and WCAG AA contrast. Accessibility is never optional.
 
 ---
 
 # Responsive Design
 
-Design mobile first.
-
-Support:
-
-- Mobile
-- Tablet
-- Desktop
-- Large Desktop
-
-Avoid horizontal scrolling whenever possible.
+Design mobile first, then scale up cleanly through tablet, desktop, and large desktop. Avoid horizontal scrolling wherever you can.
 
 ---
 
 # Performance
 
-Prefer:
-
-- Server Components
-- Streaming
-- Lazy loading
-- Dynamic imports
-
-Avoid unnecessary client components.
-
-Memoize only when needed.
+Default to Server Components, streaming, lazy loading, and dynamic imports. Avoid unnecessary client components, and memoize only when you've measured a need.
 
 ---
 
 # UX Standards
 
-Every feature should communicate its current state.
-
-Support:
-
-- Loading
-- Success
-- Empty
-- Error
-
-Long-running actions should provide visible progress.
-
-Never leave users wondering what happened.
+Every feature communicates its current state — loading, success, empty, and error. Give long-running actions visible progress, and never leave users wondering what happened.
 
 ---
 
 # Naming
 
-Prefer descriptive names.
+Name things descriptively.
 
 Good
 
@@ -517,21 +366,7 @@ Panel
 
 # AI Development Rules
 
-Before writing code:
-
-1. Reuse existing components.
-2. Reuse existing layouts.
-3. Reuse existing utilities.
-4. Reuse existing variants.
-5. Extend existing components before creating new ones.
-
-Never duplicate code.
-
-Never duplicate styling.
-
-Keep APIs simple.
-
-Keep components focused.
+Before you write code, reuse what's already there — components, layouts, utilities, and variants — and extend an existing component before creating a new one. Never duplicate code or styling. Keep APIs simple and components focused.
 
 ---
 

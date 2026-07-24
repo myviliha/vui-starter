@@ -40,11 +40,11 @@ export default function ComponentsPage() {
       <PageTitle
         eyebrow="Reference"
         title="Components"
-        lead="Every component imports from its own entry point — @viliha/vui-ui/<name> — so you only ship what you use. Live examples below."
+        lead="Every component imports from its own entry point — @viliha/vui-ui/<name> — so you ship only what you use. Live examples below."
       />
 
       <H2>Button</H2>
-      <P>Seven variants and four sizes. The primary variant uses the brand blue.</P>
+      <P>Seven variants and four sizes; the primary variant carries the brand blue.</P>
       <Demo
         code={`import { Button } from "@viliha/vui-ui/button";
 
@@ -190,11 +190,11 @@ export default function ComponentsPage() {
 
       <H2>RecordView</H2>
       <P>
-        The full datatable — editable cells, auto-sizing columns, sticky header,
-        sort/filter/pagination, row actions, a buffered add/edit form, and
-        CSV/JSON/Excel/PDF import &amp; export. Configure it with a{" "}
-        <code className="font-mono text-[0.9em]">fields</code> array and mock or real data.
-        See it live in the backoffice demo.
+        The full data table: editable cells, auto-sizing columns, a sticky
+        header, sort/filter/pagination, row actions, a buffered add/edit form,
+        and CSV/JSON/Excel/PDF import &amp; export. Configure it with a{" "}
+        <code className="font-mono text-[0.9em]">fields</code> array and mock or
+        real data, then see it live in the backoffice demo.
       </P>
       <CodeBlock title="organizations-table.tsx">{`import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 

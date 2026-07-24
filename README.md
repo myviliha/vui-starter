@@ -4,13 +4,13 @@
 [![npm](https://img.shields.io/npm/v/@viliha/vui-ui?color=266df0&label=%40viliha%2Fvui-ui)](https://www.npmjs.com/package/@viliha/vui-ui)
 [![license](https://img.shields.io/npm/l/@viliha/vui-ui)](./LICENSE)
 
-A free, **open-source admin/CRM design system** for React — a clean, token-driven
-component library (**`@viliha/vui-ui`**) plus a full-featured backoffice demo
-you can clone and run.
+A free, **open-source admin/CRM design system** for React: a clean, token-driven
+component library (**`@viliha/vui-ui`**) and a full backoffice demo you can clone
+and run in minutes.
 
-Built on **Next.js · React 19 · Tailwind CSS v4 · shadcn-style components ·
-Radix Icons**. Everything runs on in-memory mock data, so you can clone and run
-with zero backend.
+It's built on **Next.js · React 19 · Tailwind CSS v4 · shadcn-style components ·
+Radix Icons**, and everything runs on in-memory mock data — clone it and you have
+a working admin UI with no backend to stand up.
 
 > This repo is both the **library** (`packages/ui`, published to npm as
 > `@viliha/vui-ui`) and a **reference app** (`apps/backoffice`) that shows
@@ -43,28 +43,30 @@ with zero backend.
 
 ## Features
 
-- **Design system in one stylesheet** — colors, typography, radius, dark mode,
-  selection color and the icon treatment all live in `theme.css` as CSS
-  variables. Restyle the whole app by editing tokens in one place.
-- **RecordView datatable** — editable cells, auto-sizing columns (opt-in resize),
-  sticky header, sort/filter/column toggle, pagination, row actions
-  (view/edit/delete), required-field markers, a buffered Add/Edit form panel,
-  and **CSV / JSON / Excel / PDF import & export**.
-- **Themed charts** — area, bar, line and donut charts built on
-  [Recharts](https://recharts.org), driven by the `--chart-*` tokens so they
-  match your theme and dark mode with no per-chart styling.
-- **Drop-in shadcn/ui** — ~35 unmodified shadcn components adopt the theme
-  automatically (they read the same tokens). See them live at `/components`, and
-  a fully-validated shadcn Form (React Hook Form + Zod, every field type) at
-  `/forms`.
-- **App shell** — collapsible, colored-icon sidebar with nested groups; aligned
-  page headers; a ⌘K command palette (Quick actions) + ⌘⌥K global search; and a
-  **browser-style open-tabs strip** (⌘-click a nav item for a new tab); light/dark theme.
-- **Ships as TypeScript source** — no build step, tree-shakeable, and your app’s
+- **A design system in one stylesheet** — colors, typography, radius, dark mode,
+  selection color, and the icon treatment all live in `theme.css` as CSS
+  variables. Restyle the entire app by editing tokens in one place.
+- **The RecordView datatable** — editable cells, auto-sizing columns (with opt-in
+  resize), a sticky header, sort/filter/column toggle, pagination, row actions
+  (view/edit/delete), required-field markers, a buffered Add/Edit form panel, and
+  **CSV / JSON / Excel / PDF import and export**.
+- **Themed charts** — area, bar, line, and donut charts built on
+  [Recharts](https://recharts.org) and driven by the `--chart-*` tokens, so they
+  track your theme and dark mode without any per-chart styling.
+- **Drop-in shadcn/ui** — around 35 unmodified shadcn components pick up the theme
+  automatically because they read the same tokens. See them live at `/components`,
+  alongside a fully validated shadcn Form (React Hook Form + Zod, every field
+  type) at `/forms`.
+- **A complete app shell** — a collapsible, colored-icon sidebar with nested
+  groups, aligned page headers, a ⌘K command palette (Quick actions) and ⌘⌥K
+  global search, a **browser-style open-tabs strip** (⌘-click a nav item to open
+  one), and a light/dark theme toggle.
+- **Shipped as TypeScript source** — no build step, tree-shakeable, and your app's
   bundler compiles only what you import.
-- **AI-agent ready** — the package ships an agent guide (`AGENT.md`) and a
-  copy-paste `CLAUDE.template.md`, so Claude Code / Cursor / Copilot build *with*
-  the design system (tokens, `RecordView`, layout) instead of reinventing it.
+- **Ready for AI agents** — the package ships an agent guide (`AGENT.md`) and a
+  copy-paste `CLAUDE.template.md`, so Claude Code, Cursor, and Copilot build *with*
+  the design system (its tokens, `RecordView`, and layout) instead of reinventing
+  it.
 
 ---
 
@@ -79,13 +81,13 @@ pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-One Next.js app (`apps/backoffice`) on **http://localhost:3000** — the admin
-UI plus the docs, served at **`/docs`** (open it from the docs icon in the top
-bar).
+That runs a single Next.js app (`apps/backoffice`) on
+**http://localhost:3000** — the admin UI together with the docs, served at
+**`/docs`** and reachable from the docs icon in the top bar.
 
 ### Scaffold your own project from this template
 
-Grab a fresh copy (no git history) and start building:
+To grab a fresh copy without the git history and start building:
 
 ```bash
 npx degit myviliha/vui-starter my-app
@@ -96,8 +98,8 @@ pnpm dev
 
 Or click **“Use this template”** on the GitHub repo to create your own copy.
 
-> Just want the component library in an existing app? Install it from npm
-> instead — `npm install @viliha/vui-ui` — see
+> Only want the component library in an existing app? Install it from npm instead
+> with `npm install @viliha/vui-ui` — see
 > [Use the library in your project](#use-the-library-in-your-project).
 
 ---
@@ -111,9 +113,9 @@ npm install @viliha/vui-ui           # or: pnpm add / yarn add / bun add
 npm install -D tailwindcss @tailwindcss/postcss
 ```
 
-`react` and `react-dom` are peer dependencies (use your app’s versions).
-`@viliha/vui-ui` ships **TypeScript source**, so your app’s bundler compiles
-it — see the per-toolchain setup below.
+`react` and `react-dom` are peer dependencies, so your app's own versions are
+used. Because `@viliha/vui-ui` ships **TypeScript source**, your app's bundler
+compiles it — the per-toolchain setup is below.
 
 ### 1 · New Next.js app
 
@@ -144,7 +146,7 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-That’s it — `import { Button } from "@viliha/vui-ui/button"` and go.
+That's all it takes — `import { Button } from "@viliha/vui-ui/button"` and go.
 
 ### 2 · New Vite + React app
 
@@ -172,7 +174,7 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });
 @import "@viliha/vui-ui/theme.css";
 ```
 
-Vite transpiles the package’s TypeScript automatically — no extra config.
+Vite transpiles the package's TypeScript automatically, with no extra config.
 
 ### 3 · Existing project
 
@@ -183,18 +185,18 @@ Vite transpiles the package’s TypeScript automatically — no extra config.
    **Vite:** nothing extra. **Other bundlers:** ensure `node_modules/@viliha/vui-ui`
    is transpiled (e.g. include it in your Babel/SWC/ts-loader rule).
 4. If you already define shadcn-style tokens (`--primary`, `--background`, …),
-   `theme.css` will set them — remove your duplicates, or import it first and
-   override after.
-5. **Using an AI agent?** Load the theme's design rules so it builds *with* VUI
-   instead of reinventing it:
+   note that `theme.css` will set them too. Remove your duplicates, or import it
+   first and override afterward.
+5. **Using an AI agent?** Load the design rules so it builds *with* VUI instead of
+   reinventing it:
    `cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md`
-   (or `./AGENTS.md`). It `@`-imports the package's `AGENT.md` — the single
+   (or `./AGENTS.md`). That file `@`-imports the package's `AGENT.md` — the single
    source of truth — so you never copy the rules by hand.
 
 ### 4 · Turborepo / monorepo
 
-This is the package’s native pattern (it *is* a Turborepo). Add it to any app in
-your workspace:
+This is the package's native pattern — the repo *is* a Turborepo. Add it to any
+app in your workspace:
 
 ```jsonc
 // apps/web/package.json
@@ -207,8 +209,8 @@ your workspace:
 
 - Add `transpilePackages: ["@viliha/vui-ui"]` to each Next.js app that uses it.
 - Import `@viliha/vui-ui/theme.css` once in each app’s global stylesheet.
-- No build/`dts` step is required — the package is consumed as source
-  (“Just-in-Time”), so Turborepo caches your app build, not a library build.
+- No build or `dts` step is required. The package is consumed as source
+  (“just-in-time”), so Turborepo caches your app build rather than a library build.
 
 ---
 
@@ -229,8 +231,8 @@ export function Example() {
 }
 ```
 
-Each component is a separate entry point (`@viliha/vui-ui/<name>`), so you only
-pull in what you use.
+Every component is its own entry point (`@viliha/vui-ui/<name>`), so you only pull
+in what you actually use.
 
 ---
 
@@ -250,8 +252,8 @@ All design decisions live in **`@viliha/vui-ui/theme.css`** as CSS variables:
 }
 ```
 
-To customize, either edit the tokens (when vendored) or **override them after the
-import** in your own CSS:
+To customize, either edit the tokens directly (when vendored) or **override them
+after the import** in your own CSS:
 
 ```css
 @import "tailwindcss";
@@ -269,9 +271,9 @@ Dark mode: add the `dark` class to `<html>` (the tokens ship a `.dark` block).
 
 ## Configuration
 
-The demo app’s footer identity (company, year, license) is env-driven — no code
-edit needed to rebrand it. Copy `apps/backoffice/.env.example` to
-`apps/backoffice/.env.local` and set any of:
+The demo app's footer identity (company, year, license) is driven by environment
+variables, so you can rebrand it without touching code. Copy
+`apps/backoffice/.env.example` to `apps/backoffice/.env.local` and set any of:
 
 ```bash
 NEXT_PUBLIC_COMPANY_NAME="Acme Inc."
@@ -281,10 +283,10 @@ NEXT_PUBLIC_LICENSE="All rights reserved"
 NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
 ```
 
-All are optional; unset falls back to the current `© 2026 VILIHA PTE. LTD. ·
-MIT Licensed`. These are `NEXT_PUBLIC_` vars read at **build time** and inlined
-into the export — set them where your deploy runs `pnpm build`, not just at
-runtime.
+Each one is optional; anything left unset falls back to the default
+`© 2026 VILIHA PTE. LTD. · MIT Licensed`. These are `NEXT_PUBLIC_` variables read
+at **build time** and inlined into the export, so set them where your deploy runs
+`pnpm build` — setting them only at runtime won't take effect.
 
 ---
 
@@ -318,10 +320,10 @@ pnpm workspaces · Turborepo · TypeScript 5.9.
 
 ## Contributing
 
-Contributions are welcome! See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for dev
-setup, coding standards, and the PR flow, and
-**[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)**. All checks (lint, types, build,
-security) run in CI on every PR.
+Contributions are welcome. See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for dev
+setup, coding standards, and the PR flow, along with
+**[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)**. Every PR runs the full set of
+checks — lint, types, build, and security — in CI.
 
 ```bash
 pnpm install

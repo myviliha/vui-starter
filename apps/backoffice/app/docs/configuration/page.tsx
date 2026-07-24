@@ -28,10 +28,10 @@ export default function ConfigurationPage() {
 
       <H2>Footer identity</H2>
       <P>
-        The app shell renders a slim footer (the app and auth layouts both use
-        it) whose copyright line is env-driven. It resolves from a single{" "}
-        <code>FOOTER_NOTICE</code> in <code>lib/seo.ts</code>, so both layouts
-        stay in sync — set any of these and rebuild:
+        The app shell renders a slim footer, shared by the app and auth layouts,
+        and its copyright line is env-driven. Both layouts resolve it from a
+        single <code>FOOTER_NOTICE</code> in <code>lib/seo.ts</code>, so they
+        never drift out of sync. Set any of these and rebuild:
       </P>
       <CodeBlock title=".env.local">{`# All optional; unset falls back to the defaults.
 NEXT_PUBLIC_COMPANY_NAME="Acme Inc."
@@ -91,7 +91,8 @@ NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
 
       <H2>Logo &amp; branding</H2>
       <P>
-        Two ways to set your logo — no component code needed for the common case:
+        There are two ways to set your logo, and the common case needs no
+        component code at all:
       </P>
       <Ul>
         <li>
