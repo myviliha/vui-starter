@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
+import { SITE } from "@/lib/seo";
 
 type LogoProps = {
   /** Kept for call-site compatibility; the mark is the same either way. */
@@ -32,7 +33,7 @@ export function Logo({ className }: LogoProps) {
     <svg
       viewBox="0 0 24 24"
       role="img"
-      aria-label="Vui Starter"
+      aria-label={SITE.name}
       className={cn("h-6 w-6", className)}
     >
       <rect width="24" height="24" rx="6" fill="var(--brand-indigo)" />

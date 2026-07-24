@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import { SITE } from "@/lib/seo";
 import { Logo } from "./logo";
 
 /**
@@ -29,14 +30,14 @@ export function Wordmark({
           textClassName,
         )}
       >
-        Vui Starter
+        {SITE.name}
       </span>
     </>
   );
   const classes = cn("flex items-center gap-2", className);
 
   return href ? (
-    <Link href={href} aria-label="Vui Starter" className={classes}>
+    <Link href={href} aria-label={SITE.name} className={classes}>
       {content}
     </Link>
   ) : (

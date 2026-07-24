@@ -14,6 +14,9 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 - The changelog and the **[Upgrading](./AGENT.md#upgrading)** guide now ship in
   the npm package. (They were authored for 1.5.2 but missed that tarball, which
   was published a moment before.)
+- `NEXT_PUBLIC_APP_NAME` env var (in the scaffold) renames the app — the sidebar,
+  wordmark, auth screens, and page titles now read from one place (`SITE.name`)
+  instead of a hard-coded "Vui Starter".
 
 ### Fixed
 

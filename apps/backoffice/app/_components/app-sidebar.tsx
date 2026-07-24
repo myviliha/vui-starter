@@ -13,6 +13,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
+import { SITE } from "@/lib/seo";
 import { Menu as MenuPanel } from "@viliha/vui-ui/menu";
 import { Logo } from "./logo";
 import { QuickActionsLauncher } from "./quick-actions";
@@ -369,13 +370,13 @@ function SidebarBody({
             collapsed ? "w-9 shrink-0 justify-center px-0" : "flex-1",
           )}
           aria-label="Switch workspace"
-          title={collapsed ? "Vui Starter" : undefined}
+          title={collapsed ? SITE.name : undefined}
         >
           <Logo variant="mark" className="h-6 w-6 shrink-0" />
           {!collapsed && (
             <>
               <span className="min-w-0 flex-1 truncate text-lg font-bold tracking-tight text-foreground">
-                Vui Starter
+                {SITE.name}
               </span>
               <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
             </>
