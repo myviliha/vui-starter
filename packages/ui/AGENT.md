@@ -86,6 +86,47 @@ dependencies** with the package manager it detects from the lockfile (npm / pnpm
 Other flags: `--yes` / `--force` / `--dry-run`. If you only need the components, pass
 `--theme-only` (or skip `init` entirely) and follow the setup below.
 
+### Inside a Turborepo / monorepo
+
+**Never scaffold into the repo root** — a monorepo root has no `app/` and no Next
+app. Target the specific application, e.g. `apps/web`. Two equivalent ways:
+
+```bash
+# A) from the repo root, name the app dir
+npx @viliha/vui-ui init --turbo --dir apps/web
+
+# B) from inside the app (simplest to reason about)
+cd apps/web
+npx @viliha/vui-ui init
+```
+
+In turbo mode the CLI **does not auto-install** (installs are workspace-specific),
+so finish the setup yourself, scoped to that app:
+
+```bash
+cd apps/web                 # be inside the app, not the root
+pnpm add @viliha/vui-ui …   # or: pnpm --filter <app-name> add @viliha/vui-ui …
+```
+
+Then confirm the app is in your workspace globs (`pnpm-workspace.yaml` /
+`package.json` `workspaces`) and run it with a filter: `pnpm --filter <app-name>
+dev`. The theme import, `transpilePackages`, and the `@/*` alias all belong in
+**that app's** `globals.css` / `next.config` / `tsconfig`, not the root.
+
+### End-to-end walkthroughs
+
+- **New standalone app** — `npx create-next-app@latest my-app --ts --tailwind
+  --app --no-src-dir --use-npm`, then `cd my-app && npx @viliha/vui-ui init`
+  (fresh + prebuilt). It scaffolds config + shell + demo, installs deps, and you
+  run `npm run dev` → `/dashboard`.
+- **New app in a monorepo** — scaffold your app under `apps/<name>` (e.g. with
+  `create-next-app`), then from that app dir run `npx @viliha/vui-ui init` (or
+  `--turbo --dir apps/<name>` from the root) and install deps in that app.
+- **Existing app** — run `npx @viliha/vui-ui init --existing`. It never
+  overwrites your config; wire up the four things it prints (`transpilePackages`,
+  the `theme.css` import, the `@/*` alias, `import "./globals.css"`). Prefer only
+  the components? Use `--theme-only` (copies nothing) and follow the setup below.
+
 VUI ships as TypeScript source.
 
 ## Next.js

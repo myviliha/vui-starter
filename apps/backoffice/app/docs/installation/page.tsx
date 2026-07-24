@@ -191,18 +191,42 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock
       </Ul>
 
       <H2>4 · Turborepo / monorepo</H2>
-      <P>This is the package's native pattern (it is a Turborepo).</P>
-      <CodeBlock title="apps/web/package.json">{`{
-  "dependencies": {
-    "@viliha/vui-ui": "^0.1.0"
-  }
-}`}</CodeBlock>
+      <P>
+        This is the package&apos;s native pattern (Vui Starter is itself a
+        Turborepo). The one rule that matters:{" "}
+        <strong>
+          install and scaffold inside the target app (e.g.{" "}
+          <code className="font-mono text-[0.9em]">apps/web</code>), never at the
+          repo root
+        </strong>{" "}
+        — the root has no <code className="font-mono text-[0.9em]">app/</code> and
+        no Next.js app.
+      </P>
+      <Note variant="warning" title="Scaffold into the app, not the repo root">
+        Run <code>init</code> against the specific app — either from inside it, or
+        by naming it from the root. In monorepo mode the CLI does{" "}
+        <strong>not</strong> auto-install (installs are workspace-specific), so
+        install the deps in that app afterward.
+      </Note>
+      <CodeBlock title="scaffold into apps/web">{`# from inside the app (simplest)
+cd apps/web
+npx @viliha/vui-ui init
+
+# …or from the repo root, name the target app
+npx @viliha/vui-ui init --turbo --dir apps/web`}</CodeBlock>
+      <CodeBlock title="then install the deps in that app">{`cd apps/web
+pnpm add @viliha/vui-ui   # + the peer deps the CLI prints
+# or from the root:  pnpm --filter web add @viliha/vui-ui …
+pnpm --filter web dev`}</CodeBlock>
       <Ul>
         <li>
-          Add <code className="font-mono text-[0.9em]">transpilePackages: ["@viliha/vui-ui"]</code>{" "}
-          to each Next.js app that uses it.
+          Add <code className="font-mono text-[0.9em]">transpilePackages: ["@viliha/vui-ui"]</code>,
+          the <code className="font-mono text-[0.9em]">theme.css</code> import, and
+          the <code className="font-mono text-[0.9em]">@/*</code> alias to{" "}
+          <strong>that app</strong> — its <code>next.config</code>,{" "}
+          <code>globals.css</code>, and <code>tsconfig.json</code>, not the root.
         </li>
-        <li>Import the theme once per app's global stylesheet.</li>
+        <li>Confirm the app is covered by your workspace globs.</li>
         <li>
           No build/dts step — the package is consumed as source, so Turborepo
           caches your <em>app</em> build, not a library build.

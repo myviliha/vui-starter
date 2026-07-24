@@ -306,11 +306,17 @@ The shell + demo were added under app/(app)/ and app/_components/ — review the
   }
 
   if (turbo) {
-    console.log(`Turborepo notes (target: ${appDir}):
-  • Add the deps to that app: ${ADD_CMD[pm]} ${installList}
-    (from the app dir, or with your PM's workspace filter).
-  • Ensure your workspace globs include this app (pnpm-workspace.yaml / workspaces).
-  • Run dev with a filter, e.g. ${pm} --filter <app-name> dev
+    console.log(`Turborepo — finish inside the target app (${appDir}):
+  1. cd ${appDir}
+  2. Install the deps in THIS app (not the repo root):
+       ${ADD_CMD[pm]} ${installList}
+     (or from the root with your workspace filter, e.g.
+       ${pm} --filter <app-name> add ${installList})
+  3. Make sure your workspace globs include this app
+     (pnpm-workspace.yaml \`packages:\` or package.json \`workspaces\`).
+  4. Run it: ${pm} --filter <app-name> dev   (or \`cd ${appDir} && ${pm} dev\`)
+
+Deps were NOT auto-installed for a monorepo — installs are workspace-specific.
 `);
   }
 }

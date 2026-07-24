@@ -109,6 +109,26 @@ cd my-app && bunx @viliha/vui-ui init && bun dev
 the demo pages, overwriting the create-next-app boilerplate, and installs the
 dependencies. The demo then runs out of the box at `/dashboard`.
 
+### Turborepo / monorepo
+
+Scaffold **inside the target app** (e.g. `apps/web`), never at the repo root —
+the root has no `app/` and no Next.js app. Run `init` from the app, or name it
+from the root with `--dir`:
+
+```bash
+# from inside the app (simplest)
+cd apps/web && npx @viliha/vui-ui init
+
+# …or from the repo root
+npx @viliha/vui-ui init --turbo --dir apps/web
+```
+
+In monorepo mode `init` does **not** auto-install (installs are
+workspace-specific), so add the deps to that app afterward — `cd apps/web && pnpm
+add @viliha/vui-ui …`, or from the root `pnpm --filter web add @viliha/vui-ui …`.
+The `transpilePackages` entry, the `theme.css` import, and the `@/*` alias all
+belong to **that app**, not the root.
+
 ### ⚠️ Existing project — read this first
 
 Adding VUI to an app you already have takes a little care. **`init --existing`
