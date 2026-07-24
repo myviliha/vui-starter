@@ -124,15 +124,17 @@ export function QuickActionsLauncher({ collapsed = false }: { collapsed?: boolea
       aria-label="Quick actions"
       title="Quick actions (⌘K)"
       className={cn(
-        "flex items-center gap-2 rounded-md border border-sidebar-border bg-background text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground",
-        collapsed ? "size-9 justify-center px-0" : "w-full px-2.5 py-2",
+        "flex h-9 items-center gap-2 whitespace-nowrap rounded-md border border-sidebar-border bg-background text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground",
+        collapsed ? "w-9 justify-center px-0" : "w-full px-2.5",
       )}
     >
       <LightningBoltIcon className="size-4 shrink-0 text-amber-500" aria-hidden="true" />
       {!collapsed && (
         <>
-          <span className="flex-1 text-left text-sm font-medium">Quick actions</span>
-          <Shortcut keys={["⌘", "K"]} />
+          <span className="min-w-0 flex-1 truncate text-left text-sm font-medium">
+            Quick actions
+          </span>
+          <Shortcut keys={["⌘", "K"]} className="shrink-0" />
         </>
       )}
     </button>

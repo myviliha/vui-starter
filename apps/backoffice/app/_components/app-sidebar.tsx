@@ -13,6 +13,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
+import { Menu as MenuPanel } from "@viliha/vui-ui/menu";
 import { Logo } from "./logo";
 import { QuickActionsLauncher } from "./quick-actions";
 import { useOpenTabs } from "./open-tabs";
@@ -28,6 +29,25 @@ function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
+
+/** How a collapsed-rail group with sub-items reveals its children. Set via
+ *  `NEXT_PUBLIC_SIDEBAR_GROUP_MODE` (build-time) — see .env.example. */
+type CollapsedGroupMode = "inline" | "flyout-click" | "flyout-hover";
+const COLLAPSED_GROUP_MODES: readonly CollapsedGroupMode[] = [
+  "inline",
+  "flyout-click",
+  "flyout-hover",
+];
+function readCollapsedGroupMode(): CollapsedGroupMode {
+  const raw = process.env.NEXT_PUBLIC_SIDEBAR_GROUP_MODE;
+  return (COLLAPSED_GROUP_MODES as readonly string[]).includes(raw ?? "")
+    ? (raw as CollapsedGroupMode)
+    : "flyout-hover";
+}
+const GROUP_MODE = readCollapsedGroupMode();
+/** Delay before a hover-flyout closes, so the cursor can travel diagonally
+ *  from the trigger into the panel without it disappearing mid-move. */
+const FLYOUT_HOVER_CLOSE_DELAY_MS = 150;
 
 /** Nav glyph. All icons share one size for a consistent left-aligned column.
     Top-level icons are bordered chips (from the global icon rule): inactive keep
@@ -95,17 +115,109 @@ function SidebarBody({
     }
     return open;
   });
+  const usesFlyout = collapsed && GROUP_MODE !== "inline";
+
   const toggleGroup = (label: string) =>
     setOpenGroups((prev) => {
+      // Flyout modes show one group at a time (menu-style); inline mode lets
+      // several collapsed groups stay expanded at once, like the expanded rail.
+      if (usesFlyout) return prev.has(label) ? new Set() : new Set([label]);
       const next = new Set(prev);
       if (next.has(label)) next.delete(label);
       else next.add(label);
       return next;
     });
 
+  // flyout-hover: open on enter, close on leave after a short delay so the
+  // cursor can travel from the trigger into the panel. A pending close is
+  // cancelled if the pointer re-enters the trigger or the panel first.
+  const hoverCloseTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelHoverClose = () => {
+    if (hoverCloseTimer.current) {
+      clearTimeout(hoverCloseTimer.current);
+      hoverCloseTimer.current = null;
+    }
+  };
+  const scheduleHoverClose = () => {
+    cancelHoverClose();
+    hoverCloseTimer.current = setTimeout(() => {
+      setOpenGroups(new Set());
+    }, FLYOUT_HOVER_CLOSE_DELAY_MS);
+  };
+  const openGroupOnHover = (label: string) => {
+    cancelHoverClose();
+    setOpenGroups(new Set([label]));
+  };
+  React.useEffect(() => () => cancelHoverClose(), []);
+
+  // Flyout modes: the open group's panel renders `position: fixed` at a rect
+  // computed from its trigger button, so it escapes the nav's
+  // `overflow-y-auto` clipping instead of being cut off at the rail edge.
+  const navRef = React.useRef<HTMLElement | null>(null);
+  const flyoutRef = React.useRef<HTMLDivElement | null>(null);
+  const groupButtonRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
+  const [flyoutPos, setFlyoutPos] = React.useState<{ top: number; left: number } | null>(null);
+  const openGroupLabel = usesFlyout ? Array.from(openGroups)[0] : undefined;
+
+  React.useLayoutEffect(() => {
+    if (!openGroupLabel) {
+      setFlyoutPos(null);
+      return;
+    }
+    const btn = groupButtonRefs.current.get(openGroupLabel);
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    setFlyoutPos({ top: rect.top, left: rect.right + 4 });
+  }, [openGroupLabel]);
+
+  // Clamp the panel to the viewport once its real height is known — a group
+  // near the bottom of the rail would otherwise render partly (or fully)
+  // below the fold and be invisible.
+  React.useLayoutEffect(() => {
+    if (!flyoutPos || !flyoutRef.current) return;
+    const margin = 8;
+    const rect = flyoutRef.current.getBoundingClientRect();
+    const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
+    if (rect.top > maxTop) {
+      setFlyoutPos((prev) => (prev ? { ...prev, top: maxTop } : prev));
+    }
+  }, [flyoutPos]);
+
+  React.useEffect(() => {
+    if (!openGroupLabel) return;
+    const close = () => setOpenGroups(new Set());
+    const onPointerDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (navRef.current?.contains(target)) return;
+      if (flyoutRef.current?.contains(target)) return;
+      close();
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", close);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", close);
+    };
+  }, [openGroupLabel]);
+
+  const openGroupEntry = React.useMemo(() => {
+    if (!openGroupLabel) return undefined;
+    for (const section of NAV) {
+      for (const entry of section.items) {
+        if (isGroup(entry) && entry.label === openGroupLabel) return entry;
+      }
+    }
+    return undefined;
+  }, [openGroupLabel]);
+
   const { openTab } = useOpenTabs();
 
-  const renderLink = (item: NavLink, sub = false) => {
+  const renderLink = (item: NavLink, sub = false, inFlyout = false) => {
     const active = isActive(pathname, item.href);
     const onClick = (e: React.MouseEvent) => {
       // ⌘/Ctrl+click → open in a background tab (stay on the current page),
@@ -115,27 +227,30 @@ function SidebarBody({
         openTab(item.href, { background: true });
         return;
       }
+      setOpenGroups((prev) => (collapsed && prev.size ? new Set() : prev));
       onNavigate?.();
     };
+    const showLabel = inFlyout || !collapsed;
     return (
       <Link
         key={item.href}
         href={item.href}
         onClick={onClick}
         aria-current={active ? "page" : undefined}
-        title={collapsed ? `${item.label} — ⌘-click for a new tab` : undefined}
+        title={collapsed && !inFlyout ? `${item.label} — ⌘-click for a new tab` : undefined}
         className={cn(
-          "group/nav flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
+          "group/nav flex h-9 items-center rounded-md transition-colors",
+          collapsed && !inFlyout ? "w-9 justify-center px-0" : "gap-2.5 px-2",
           active
             ? "bg-sidebar-accent text-sidebar-foreground"
             : cn(
                 "hover:bg-sidebar-accent hover:text-sidebar-foreground",
-                sub ? "text-muted-foreground" : "text-sidebar-foreground",
+                sub && !inFlyout ? "text-muted-foreground" : "text-sidebar-foreground",
               ),
         )}
       >
-        <NavIcon icon={item.icon} active={active} color={item.color} plain={sub} />
-        {!collapsed && <span className="truncate">{item.label}</span>}
+        <NavIcon icon={item.icon} active={active} color={item.color} plain={sub && !inFlyout} />
+        {showLabel && <span className="truncate">{item.label}</span>}
       </Link>
     );
   };
@@ -147,9 +262,10 @@ function SidebarBody({
     const anyActive = entry.children.some((c) => isActive(pathname, c.href));
     const GroupIcon = entry.icon;
 
-    // Collapsed rail: show the PARENT icon with an expand chevron beside it;
-    // its children reveal inline (indented, smaller) when toggled open.
-    if (collapsed)
+    // Collapsed rail — inline mode: the icon plus a small corner chevron
+    // badge (not inline beside it, so it never overflows the icon's own box);
+    // children reveal indented underneath when toggled open.
+    if (collapsed && GROUP_MODE === "inline")
       return (
         <div key={entry.label} className="space-y-1">
           <button
@@ -158,16 +274,14 @@ function SidebarBody({
             aria-expanded={open}
             title={entry.label}
             className={cn(
-              "group/nav flex w-full items-center gap-0.5 rounded-md px-2 py-1.5 transition-colors",
-              anyActive
-                ? "text-sidebar-foreground"
-                : "hover:bg-sidebar-accent",
+              "group/nav relative flex size-9 items-center justify-center rounded-md transition-colors",
+              anyActive ? "text-sidebar-foreground" : "hover:bg-sidebar-accent",
             )}
           >
             <NavIcon icon={GroupIcon} active={anyActive} color={entry.color} />
             <ChevronRight
               className={cn(
-                "size-3 shrink-0 text-muted-foreground transition-transform",
+                "absolute right-0.5 top-1/2 size-2.5 shrink-0 -translate-y-1/2 text-muted-foreground transition-transform",
                 open && "rotate-90",
               )}
               aria-hidden="true"
@@ -181,6 +295,37 @@ function SidebarBody({
         </div>
       );
 
+    // Collapsed rail — flyout modes: the icon alone represents the group
+    // (matching the leaf icons around it, no overlapping chevron); opening
+    // its children panel (rendered separately, fixed-positioned) is either
+    // click- or hover-triggered depending on GROUP_MODE.
+    if (collapsed)
+      return (
+        <button
+          key={entry.label}
+          ref={(el) => {
+            if (el) groupButtonRefs.current.set(entry.label, el);
+            else groupButtonRefs.current.delete(entry.label);
+          }}
+          type="button"
+          onClick={() => toggleGroup(entry.label)}
+          onMouseEnter={
+            GROUP_MODE === "flyout-hover" ? () => openGroupOnHover(entry.label) : undefined
+          }
+          onMouseLeave={GROUP_MODE === "flyout-hover" ? scheduleHoverClose : undefined}
+          aria-expanded={open}
+          aria-haspopup="menu"
+          title={entry.label}
+          className={cn(
+            "group/nav flex size-9 items-center justify-center rounded-md transition-colors",
+            open && "bg-sidebar-accent",
+            anyActive ? "text-sidebar-foreground" : "hover:bg-sidebar-accent",
+          )}
+        >
+          <NavIcon icon={GroupIcon} active={anyActive} color={entry.color} />
+        </button>
+      );
+
     return (
       <div key={entry.label} className="space-y-1">
         <button
@@ -188,7 +333,7 @@ function SidebarBody({
           onClick={() => toggleGroup(entry.label)}
           aria-expanded={open}
           className={cn(
-            "group/nav flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors",
+            "group/nav flex h-9 w-full items-center gap-2.5 rounded-md px-2 transition-colors",
             anyActive
               ? "text-sidebar-foreground"
               : "text-sidebar-foreground hover:bg-sidebar-accent",
@@ -220,8 +365,8 @@ function SidebarBody({
         <button
           type="button"
           className={cn(
-            "flex min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-sidebar-accent",
-            collapsed && "justify-center px-0",
+            "flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-sidebar-accent",
+            collapsed ? "w-9 shrink-0 justify-center px-0" : "flex-1",
           )}
           aria-label="Switch workspace"
           title={collapsed ? "Vui Starter" : undefined}
@@ -241,17 +386,12 @@ function SidebarBody({
 
       {/* Quick actions — fixed above the scrolling nav, with a full-width
           divider and comfortable top/bottom padding. */}
-      <div
-        className={cn(
-          "border-b border-sidebar-border px-3 py-3",
-          collapsed && "flex justify-center",
-        )}
-      >
+      <div className="border-b border-sidebar-border px-3 py-3">
         <QuickActionsLauncher collapsed={collapsed} />
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-3">
+      <nav ref={navRef} className="flex-1 space-y-4 overflow-y-auto px-3 py-3">
         {NAV.map((section, index) => (
           <React.Fragment key={section.title ?? `section-${index}`}>
             {/* Collapsed group separator — a nav-level sibling so the nav's
@@ -274,6 +414,28 @@ function SidebarBody({
         ))}
       </nav>
 
+      {/* Collapsed-group flyout: fixed-positioned beside its trigger so it
+          escapes the nav's overflow-y-auto clipping instead of the old
+          inline-expand, which overflowed the rail and clipped the chevron. */}
+      {openGroupEntry && flyoutPos && (
+        <div
+          ref={flyoutRef}
+          style={{ top: flyoutPos.top, left: flyoutPos.left }}
+          onMouseEnter={GROUP_MODE === "flyout-hover" ? cancelHoverClose : undefined}
+          onMouseLeave={GROUP_MODE === "flyout-hover" ? scheduleHoverClose : undefined}
+          className="fixed z-50 min-w-44"
+        >
+          <MenuPanel
+            tabIndex={-1}
+            className="space-y-0.5 border-sidebar-border bg-sidebar p-1 shadow-lg"
+          >
+            <p className="truncate px-2 pb-1 pt-1 text-xs font-medium text-muted-foreground">
+              {openGroupEntry.label}
+            </p>
+            {openGroupEntry.children.map((child) => renderLink(child, false, true))}
+          </MenuPanel>
+        </div>
+      )}
     </>
   );
 }

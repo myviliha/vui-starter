@@ -45,7 +45,11 @@ NEXT_PUBLIC_LOGO_URL="/logo.svg"             # your logo from /public; else buil
 NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
 
 # Max pages kept open in the tab strip (default 5, min 1):
-NEXT_PUBLIC_MAX_TABS="5"`}</CodeBlock>
+NEXT_PUBLIC_MAX_TABS="5"
+
+# How a collapsed sidebar rail reveals a group's sub-items — inline,
+# flyout-click, or flyout-hover (default flyout-hover):
+NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
       <Ul>
         <li>
           <code>NEXT_PUBLIC_COMPANY_NAME</code> — company shown in the footer.
@@ -72,6 +76,12 @@ NEXT_PUBLIC_MAX_TABS="5"`}</CodeBlock>
         <li>
           <code>NEXT_PUBLIC_MAX_TABS</code> — how many pages the tab strip keeps
           open before evicting the oldest (default 5).
+        </li>
+        <li>
+          <code>NEXT_PUBLIC_SIDEBAR_GROUP_MODE</code> — how a collapsed sidebar
+          rail reveals a group&apos;s sub-items: <code>inline</code> (expands
+          in the rail), <code>flyout-click</code> (click opens a floating
+          panel), or <code>flyout-hover</code> (hover opens it; default).
         </li>
       </Ul>
       <P>
