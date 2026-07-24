@@ -41,8 +41,11 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
         The steps below wire up the <em>theme + components</em>. To also get the{" "}
         <strong>app shell</strong> (layout, sidebar, open tabs, command palette,
         nav config, logo) and the <strong>demo pages</strong>, run the scaffolder
-        — it copies them into your repo so you own and edit them:
+        in your project — it copies them into your repo (you own and edit them)
+        and installs the dependencies:
       </P>
+      <CodeBlock title="terminal">{`npx @viliha/vui-ui init
+# pnpm dlx @viliha/vui-ui init  ·  yarn dlx @viliha/vui-ui init  ·  bunx @viliha/vui-ui init`}</CodeBlock>
       <P>
         For a brand-new app, start from create-next-app (no <code>src</code> dir),
         then run <code>init</code> — it scaffolds and{" "}
