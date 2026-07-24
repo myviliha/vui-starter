@@ -7,13 +7,10 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
-## 1.5.3 — 2026-07-24
+## 1.5.4 — 2026-07-24
 
 ### Added
 
-- The changelog and the **[Upgrading](./AGENT.md#upgrading)** guide now ship in
-  the npm package. (They were authored for 1.5.2 but missed that tarball, which
-  was published a moment before.)
 - `NEXT_PUBLIC_APP_NAME` env var (in the scaffold) renames the app — the sidebar,
   wordmark, auth screens, and page titles now read from one place (`SITE.name`)
   instead of a hard-coded "Vui Starter".
@@ -24,6 +21,14 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
   be greater than 0" warning when it renders inside a hidden container (e.g. a
   kept-alive inactive tab). It waits for a measured size before mounting the
   `ResponsiveContainer`.
+
+## 1.5.3 — 2026-07-24
+
+### Added
+
+- The changelog and the **[Upgrading](./AGENT.md#upgrading)** guide now ship in
+  the npm package. (They were authored for 1.5.2 but missed that tarball, which
+  was published a moment before.)
 
 ## 1.5.2 — 2026-07-24
 
