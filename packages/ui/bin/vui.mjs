@@ -42,11 +42,13 @@ const DEPS = [
   "recharts",
   "sonner",
   "tailwind-merge",
+  // theme's globals.css imports these:
+  "tw-animate-css",
   "zod",
 ].join(" ");
 
 const WIRING_STEPS = `  1. Install peer deps (those your components use):
-       npm i ${DEPS}
+       npm i @viliha/vui-ui ${DEPS}
   2. app/globals.css:
        @import "tailwindcss";
        @import "@viliha/vui-ui/theme.css";
@@ -64,9 +66,11 @@ Usage:
   init            Set up the VUI theme in this project (interactive).
 
 Options:
+  --nextjs | --turbo          standalone Next.js app, or a Turborepo (Q0)
+  --dir <path>                Turborepo target app dir (default apps/web)
   --fresh | --existing        project type (Q1)
   --prebuilt | --theme-only   pre-built shell + demo, or just the theme (Q2)
-  --yes, -y                   accept defaults (fresh, prebuilt)
+  --yes, -y                   accept defaults (nextjs, fresh, prebuilt)
   --force                     overwrite existing files
   --dry-run                   preview without writing
 `);
@@ -94,7 +98,7 @@ async function ask(question, def) {
 
 // Theme wiring config an existing project already has — never clobbered there.
 const WIRING = new Set([
-  "next.config.mjs",
+  "next.config.ts",
   "postcss.config.mjs",
   ".env.example",
   "app/globals.css",
@@ -129,6 +133,27 @@ function allFiles(dir, out = []) {
 }
 
 async function main() {
+  const cwd = process.cwd();
+
+  // Q0 — standalone Next.js vs Turborepo (decides WHERE files land).
+  let turbo = has("--turbo") ? true : has("--nextjs") ? false : null;
+  if (turbo === null) {
+    const a = await ask(
+      "Is this a standalone Next.js app or a Turborepo? [N/t] ",
+      "n",
+    );
+    turbo = a.startsWith("t");
+  }
+  let appDir = ".";
+  if (turbo) {
+    const di = args.indexOf("--dir");
+    const flagDir = di >= 0 ? args[di + 1] : null;
+    appDir =
+      flagDir ||
+      (await ask("Target app directory inside the repo? [apps/web] ", "apps/web"));
+  }
+  const targetRoot = join(cwd, appDir);
+
   // Q1 — fresh vs existing.
   let fresh = has("--fresh") ? true : has("--existing") ? false : null;
   if (fresh === null) {
@@ -155,14 +180,13 @@ async function main() {
     return;
   }
 
-  const cwd = process.cwd();
   const files = allFiles(TEMPLATE);
   let created = 0;
   let skipped = 0;
   const configSkipped = [];
 
-  const label = `${fresh ? "fresh" : "existing"}, ${prebuilt ? "prebuilt" : "theme-only"}`;
-  console.log(`\nScaffolding VUI (${label}) into ${cwd}${dry ? "  [dry run]" : ""}\n`);
+  const label = `${turbo ? "turbo" : "nextjs"}, ${fresh ? "fresh" : "existing"}, ${prebuilt ? "prebuilt" : "theme-only"}`;
+  console.log(`\nScaffolding VUI (${label}) into ${targetRoot}${dry ? "  [dry run]" : ""}\n`);
 
   for (const abs of files) {
     const rel = relative(TEMPLATE, abs);
@@ -183,7 +207,7 @@ async function main() {
     // Fresh overwrites boilerplate (create-next-app defaults); existing is
     // non-destructive so we never clobber the user's own files.
     const force = forceFlag || fresh;
-    const dest = join(cwd, rel);
+    const dest = join(targetRoot, rel);
     if (existsSync(dest) && !force) {
       skipped++;
       console.log(`  skip      ${rel}`);
@@ -205,7 +229,7 @@ async function main() {
   if (fresh && prebuilt) {
     console.log(`
 Next steps:
-  1. npm i ${DEPS}
+  1. npm i @viliha/vui-ui ${DEPS}
   2. npm run dev   ->   http://localhost:3000  (redirects to /dashboard)
 
 Everything is in YOUR repo — edit app/_components/nav-config.ts, set your logo
@@ -216,7 +240,7 @@ Everything is in YOUR repo — edit app/_components/nav-config.ts, set your logo
 Theme wired (globals.css + next.config). No shell or demo pages — build your own.
 
 Next steps:
-  1. npm i ${DEPS}
+  1. npm i @viliha/vui-ui ${DEPS}
   2. Import components from @viliha/vui-ui/* in your pages, then: npm run dev
 `);
   } else {
@@ -231,6 +255,15 @@ The shell + demo were added under app/(app)/ and app/_components/ — review the
         ? `\nSkipped config: ${configSkipped.join(", ")}`
         : ""
     }
+`);
+  }
+
+  if (turbo) {
+    console.log(`Turborepo notes (target: ${appDir}):
+  • Add "@viliha/vui-ui" to ${appDir}/package.json dependencies.
+  • Ensure your workspace globs include this app (pnpm-workspace.yaml / workspaces).
+  • Run install + dev from the repo root or with a filter, e.g.
+      pnpm --filter <app-name> dev
 `);
   }
 }

@@ -76,10 +76,15 @@ command palette, nav config, logo) and **demo pages** are scaffolded with:
 npx @viliha/vui-ui init          # interactive decision tree
 ```
 
-Files land in the consumer's repo (they own them). Two questions:
+Files land in the consumer's repo (they own them). Questions:
+0. **Next.js or Turborepo?** (`--nextjs` / `--turbo` + `--dir <path>`, default
+   `apps/web` — turbo scaffolds into that app directory)
 1. **Fresh project?** (`--fresh` / `--existing`)
 2. **Pre-built theme?** (`--prebuilt` = shell + demo pages / `--theme-only` = just
    the theme wiring you configure)
+
+For a fresh app, create it **without `--src-dir`** (the scaffold uses a root
+`app/` + `@/*` → `./*` and writes `next.config.ts`).
 
 - **fresh + prebuilt** → full runnable app (config + shell + demo).
 - **fresh + theme-only** → just `globals.css` + `next.config` wiring; build your own.

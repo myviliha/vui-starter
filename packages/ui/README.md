@@ -61,11 +61,16 @@ Files are copied into *your* repo, so you own and edit them.
 | **Fresh** | full runnable app: config + shell + demo pages | just the theme wiring (`globals.css`, `next.config`) — build your own pages |
 | **Existing** | shell + demo added; your config is **never** overwritten (prints merge steps) | nothing copied; prints the wiring steps |
 
+It first asks whether this is a standalone **Next.js** app or a **Turborepo**
+(for a monorepo it scaffolds into a target app dir, e.g. `apps/web`).
+
 ```
 Flags (for CI / agents, skip the prompts):
+  --nextjs | --turbo          standalone app, or a Turborepo (Q0)
+  --dir <path>                Turborepo target app dir (default apps/web)
   --fresh | --existing        project type (Q1)
   --prebuilt | --theme-only   pre-built shell + demo, or just the theme (Q2)
-  --yes, -y                   accept defaults (fresh, prebuilt)
+  --yes, -y                   accept defaults (nextjs, fresh, prebuilt)
   --force                     overwrite existing files
   --dry-run                   preview without writing
 ```
@@ -75,9 +80,20 @@ After a **pre-built** run, install the peer deps it prints, then `npm run dev` �
 
 ### Fresh + pre-built (recommended for new apps)
 
-Start from a `create-next-app` base. This writes `next.config.mjs`,
-`app/globals.css`, the shell, and the demo pages (overwriting the create-next-app
-boilerplate), so the demo runs out of the box.
+Start from a `create-next-app` base **without `--src-dir`** (the scaffold uses a
+root `app/` + `@/*` → `./*`):
+
+```bash
+npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
+cd my-app
+npx @viliha/vui-ui init --nextjs --fresh --prebuilt
+npm i @viliha/vui-ui   # + the peer deps the CLI prints (incl. tw-animate-css)
+npm run dev
+```
+
+`init` writes `next.config.ts`, `tsconfig.json`, `app/globals.css`, the shell,
+and the demo pages (overwriting the create-next-app boilerplate), so the demo
+runs out of the box.
 
 ### ⚠️ Existing project — read this first
 

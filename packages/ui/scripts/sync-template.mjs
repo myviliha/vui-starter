@@ -61,11 +61,14 @@ for (const f of [".env.example", "postcss.config.mjs"]) {
 }
 
 // A clean, consumer-ready Next config (backoffice's is monorepo / GH-Pages
-// specific). Static export is what makes the open-tabs keep-alive work.
+// specific). TypeScript (.ts) to match create-next-app so a fresh scaffold
+// overwrites its config instead of leaving two config files. Static export is
+// what makes the open-tabs keep-alive work.
 writeFileSync(
-  join(out, "next.config.mjs"),
-  `/** @type {import('next').NextConfig} */
-const nextConfig = {
+  join(out, "next.config.ts"),
+  `import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   // VUI ships as TypeScript source — Next must transpile it.
   transpilePackages: ["@viliha/vui-ui"],
@@ -78,6 +81,38 @@ const nextConfig = {
 
 export default nextConfig;
 `,
+);
+
+// A standalone tsconfig with the "@/*" -> project-root alias the scaffold's
+// files import through (backoffice's extends a monorepo base, so it can't be
+// copied verbatim). Written to the app root so `@/lib/...` etc. resolve.
+writeFileSync(
+  join(out, "tsconfig.json"),
+  JSON.stringify(
+    {
+      compilerOptions: {
+        target: "ES2022",
+        lib: ["dom", "dom.iterable", "esnext"],
+        allowJs: true,
+        skipLibCheck: true,
+        strict: true,
+        noEmit: true,
+        esModuleInterop: true,
+        module: "esnext",
+        moduleResolution: "bundler",
+        resolveJsonModule: true,
+        isolatedModules: true,
+        jsx: "preserve",
+        incremental: true,
+        plugins: [{ name: "next" }],
+        paths: { "@/*": ["./*"] },
+      },
+      include: ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+      exclude: ["node_modules"],
+    },
+    null,
+    2,
+  ) + "\n",
 );
 
 console.log(`sync-template: wrote ${out}`);

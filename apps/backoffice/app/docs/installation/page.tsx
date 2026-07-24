@@ -43,13 +43,21 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
         nav config, logo) and the <strong>demo pages</strong>, run the scaffolder
         — it copies them into your repo so you own and edit them:
       </P>
-      <CodeBlock title="terminal">{`npx @viliha/vui-ui init`}</CodeBlock>
+      <P>For a brand-new app, start from create-next-app (no <code>src</code> dir):</P>
+      <CodeBlock title="terminal">{`npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
+cd my-app
+npx @viliha/vui-ui init`}</CodeBlock>
       <P>
-        It&apos;s a short decision tree — (1) is this a{" "}
-        <strong>fresh</strong> or <strong>existing</strong> project, and (2) do
-        you want the <strong>pre-built</strong> theme (shell + demo pages) or{" "}
-        <strong>theme-only</strong> (just the wiring, you build your own)? Flags
+        It&apos;s a short decision tree — (0) standalone{" "}
+        <strong>Next.js</strong> or a <strong>Turborepo</strong> (which scaffolds
+        into a target app dir like <code className="font-mono text-[0.9em]">apps/web</code>),
+        (1) <strong>fresh</strong> vs <strong>existing</strong>, and (2){" "}
+        <strong>pre-built</strong> (shell + demo pages) vs{" "}
+        <strong>theme-only</strong> (just the wiring, you build your own). Flags
         for CI / agents:{" "}
+        <code className="font-mono text-[0.9em]">--nextjs</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--turbo</code> ·{" "}
+        <code className="font-mono text-[0.9em]">--dir &lt;path&gt;</code> ·{" "}
         <code className="font-mono text-[0.9em]">--fresh</code> ·{" "}
         <code className="font-mono text-[0.9em]">--existing</code> ·{" "}
         <code className="font-mono text-[0.9em]">--prebuilt</code> ·{" "}
@@ -58,6 +66,16 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
         <code className="font-mono text-[0.9em]">--force</code> ·{" "}
         <code className="font-mono text-[0.9em]">--dry-run</code>.
       </P>
+      <Note title="Fresh projects: skip --src-dir">
+        The scaffold uses a root <code>app/</code> with{" "}
+        <code>@/*</code> → <code>./*</code> and writes a TypeScript{" "}
+        <code>next.config.ts</code>. Create the app{" "}
+        <strong>without <code>--src-dir</code></strong> so there aren&apos;t two{" "}
+        <code>app/</code> dirs or two config files. After{" "}
+        <code>init</code>, install the peer deps it prints (including{" "}
+        <code>tw-animate-css</code>, which the theme&apos;s{" "}
+        <code>globals.css</code> imports).
+      </Note>
       <Ul>
         <li>
           <strong>Fresh + pre-built</strong> — full runnable app (config + shell +
