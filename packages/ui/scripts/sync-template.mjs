@@ -8,6 +8,7 @@ import {
   cpSync,
   existsSync,
   mkdirSync,
+  readFileSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -51,6 +52,21 @@ cpSync(join(app, "components"), join(out, "components"), {
   recursive: true,
   filter: (src) => !COMP_SKIP.has(src.split(sep).pop()),
 });
+
+// Drop the optional `tw-animate-css` import so the scaffold needs no extra CSS
+// dependency (VUI's own animations live in theme.css; only shadcn component
+// entrance animations are affected). This is the recurring "Can't resolve
+// tw-animate-css" install error — remove the requirement at the source.
+const gcss = join(out, "app", "globals.css");
+if (existsSync(gcss)) {
+  writeFileSync(
+    gcss,
+    readFileSync(gcss, "utf8").replace(
+      /^@import\s+["']tw-animate-css["'];?[ \t]*\r?\n/m,
+      "",
+    ),
+  );
+}
 
 // lib/** — mock data, utils, seo config.
 cpSync(join(app, "lib"), join(out, "lib"), { recursive: true });

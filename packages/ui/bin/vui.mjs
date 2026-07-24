@@ -42,8 +42,6 @@ const DEPS = [
   "recharts",
   "sonner",
   "tailwind-merge",
-  // theme's globals.css imports these:
-  "tw-animate-css",
   "zod",
 ].join(" ");
 
