@@ -3,8 +3,6 @@
 import * as React from "react";
 import {
   CalendarIcon as CalendarDays,
-  CheckIcon as Check,
-  Cross2Icon as X,
   CubeIcon as Building2,
   DragHandleDots2Icon as GripVertical,
   MagnifyingGlassIcon as Search,
@@ -20,15 +18,40 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@viliha/vui-ui/badge";
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
+import { RecordFormPanel, type RecordField } from "@viliha/vui-ui/record-view";
 import {
   OPPORTUNITY_STAGES,
   opportunities as initialOpportunities,
   type Opportunity,
   type OpportunityStage,
 } from "@/lib/crm-data";
-import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
+
+/** The Add/Edit slide-over is designed from this array — never hand-rolled. */
+const OPPORTUNITY_FIELDS: RecordField<Opportunity>[] = [
+  { key: "name", label: "Name", icon: Target, editable: true, required: true },
+  { key: "company", label: "Company", icon: Building2, editable: true },
+  { key: "amount", label: "Amount", icon: Coins, editable: true, input: "number" },
+  {
+    key: "stage",
+    label: "Stage",
+    icon: ListFilter,
+    editable: true,
+    options: OPPORTUNITY_STAGES.map((s) => ({ value: s, label: s })),
+  },
+  { key: "owner", label: "Owner", icon: User, editable: true },
+  { key: "closeDate", label: "Close date", icon: CalendarDays, editable: true, input: "date" },
+];
+
+const initials = (name: string) =>
+  name
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "?";
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -205,6 +228,7 @@ export function OpportunitiesBoard() {
                       item={item}
                       dragging={dragId === item.id}
                       onOpen={() => setActiveId(item.id)}
+                      onDelete={() => deleteItem(item.id)}
                       onDragStart={() => setDragId(item.id)}
                       onDragEnd={() => {
                         setDragId(null);
@@ -233,17 +257,26 @@ export function OpportunitiesBoard() {
       </div>
 
       {activeItem && (
-        <OpportunityDetailPanel
-          item={activeItem}
+        <RecordFormPanel<Opportunity>
+          fields={OPPORTUNITY_FIELDS}
+          row={activeItem}
+          singular="Opportunity"
+          title="Opportunities"
+          icon={Target}
           isNew={activeItem.id === newId}
+          getPrimary={(o) => ({
+            title: o.name || "Untitled opportunity",
+            initials: initials(o.name || "Opportunity"),
+            subtitle: o.company || undefined,
+          })}
           onSave={(draft) => {
-            updateItem(activeItem.id, draft);
+            // The panel edits values as strings; coerce the numeric field back.
+            updateItem(activeItem.id, {
+              ...draft,
+              amount: Number(draft.amount) || 0,
+            });
             setNewId(null);
             setActiveId(null);
-          }}
-          onDelete={() => {
-            deleteItem(activeItem.id);
-            setNewId(null);
           }}
           onCancel={() => {
             // Discard a never-saved new card entirely.
@@ -261,12 +294,14 @@ function OpportunityCard({
   item,
   dragging,
   onOpen,
+  onDelete,
   onDragStart,
   onDragEnd,
 }: {
   item: Opportunity;
   dragging: boolean;
   onOpen: () => void;
+  onDelete: () => void;
   onDragStart: () => void;
   onDragEnd: () => void;
 }) {
@@ -280,11 +315,23 @@ function OpportunityCard({
       }}
       onDragEnd={onDragEnd}
       className={cn(
-        "group cursor-grab rounded-md border border-border bg-card p-3 shadow-sm transition-colors hover:border-ring/40 active:cursor-grabbing",
+        "group relative cursor-grab rounded-md border border-border bg-card p-3 shadow-sm transition-colors hover:border-ring/40 active:cursor-grabbing",
         dragging && "opacity-40",
       )}
     >
-      <div className="flex items-start gap-1.5">
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+        aria-label={`Delete ${item.name || "opportunity"}`}
+        title="Delete"
+        className="absolute right-1 top-1 grid size-6 place-items-center rounded text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive focus-visible:opacity-100 group-hover:opacity-100"
+      >
+        <Trash2 className="size-3.5" />
+      </button>
+      <div className="flex items-start gap-1.5 pr-5">
         <GripVertical className="mt-0.5 size-3.5 shrink-0 text-muted-foreground/50" />
         <button
           type="button"
@@ -308,177 +355,5 @@ function OpportunityCard({
         </span>
       </div>
     </article>
-  );
-}
-
-interface DetailProps {
-  item: Opportunity;
-  /** New (unsaved) card — hides Delete; Cancel drops the card. */
-  isNew: boolean;
-  /** Commit the buffered draft to the board. */
-  onSave: (draft: Opportunity) => void;
-  onDelete: () => void;
-  /** Discard the draft (and the card if it was never saved). */
-  onCancel: () => void;
-}
-
-function OpportunityDetailPanel({
-  item,
-  isNew,
-  onSave,
-  onDelete,
-  onCancel,
-}: DetailProps) {
-  // Buffer edits locally; the board only changes on Save (like organizations).
-  const [draft, setDraft] = React.useState<Opportunity>(item);
-  React.useEffect(() => {
-    setDraft(item);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item.id]);
-  const patch = (p: Partial<Opportunity>) => setDraft((d) => ({ ...d, ...p }));
-
-  return (
-    <>
-      <div
-        className="vui-overlay-in fixed inset-0 z-[55] bg-foreground/25"
-        onClick={onCancel}
-        aria-hidden="true"
-      />
-      <aside
-        aria-label="Opportunity details"
-        className="vui-panel-in fixed inset-y-0 right-0 z-[60] flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[380px] sm:max-w-[90vw]"
-      >
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
-        <Target className="size-4 shrink-0 text-muted-foreground" />
-        <span className="truncate font-semibold">
-          {draft.name || "Untitled opportunity"}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onCancel}
-          aria-label="Close"
-          className="ml-auto"
-        >
-          <X className="size-4" />
-        </Button>
-      </div>
-
-      <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
-        <div className="space-y-3">
-          <p className="font-medium uppercase tracking-wide text-muted-foreground">
-            Fields
-          </p>
-
-          <Field label="Name">
-            <Input
-              value={draft.name}
-              onChange={(e) => patch({ name: e.target.value })}
-              aria-label="Name"
-              className="h-8"
-            />
-          </Field>
-
-          <Field label="Company" icon={Building2}>
-            <Input
-              value={draft.company}
-              onChange={(e) => patch({ company: e.target.value })}
-              aria-label="Company"
-              className="h-8"
-            />
-          </Field>
-
-          <Field label="Amount" icon={Coins}>
-            <Input
-              type="number"
-              min={0}
-              value={draft.amount}
-              onChange={(e) => patch({ amount: Number(e.target.value) || 0 })}
-              aria-label="Amount"
-              className="h-8 tabular-nums"
-            />
-          </Field>
-
-          <Field label="Stage" icon={ListFilter}>
-            <Dropdown label={draft.stage} align="start" active>
-              <DropdownLabel>Move to stage</DropdownLabel>
-              {OPPORTUNITY_STAGES.map((s) => (
-                <DropdownItem
-                  key={s}
-                  checked={draft.stage === s}
-                  onSelect={() => patch({ stage: s })}
-                >
-                  {s}
-                </DropdownItem>
-              ))}
-            </Dropdown>
-          </Field>
-
-          <Field label="Owner" icon={User}>
-            <Input
-              value={draft.owner}
-              onChange={(e) => patch({ owner: e.target.value })}
-              aria-label="Owner"
-              className="h-8"
-            />
-          </Field>
-
-          <Field label="Close date" icon={CalendarDays}>
-            <Input
-              type="date"
-              value={draft.closeDate}
-              onChange={(e) => patch({ closeDate: e.target.value })}
-              aria-label="Close date"
-              className="h-8"
-            />
-          </Field>
-        </div>
-      </div>
-
-      {/* Footer — Add shows Cancel/Save; Edit adds a leading Delete.
-          Save uses the primary color; Delete uses the destructive (red) token. */}
-      <div className="flex shrink-0 items-center justify-end gap-2 border-y border-border bg-muted/40 px-4 py-3">
-        {!isNew && (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={onDelete}
-            className="mr-auto"
-          >
-            <Trash2 className="size-4" />
-            Delete
-          </Button>
-        )}
-        <Button size="sm" onClick={onCancel}>
-          <X className="size-4" />
-          Cancel
-        </Button>
-        <Button variant="primary" size="sm" onClick={() => onSave(draft)}>
-          <Check className="size-4" />
-          Save
-        </Button>
-      </div>
-      </aside>
-    </>
-  );
-}
-
-function Field({
-  label,
-  icon: Icon,
-  children,
-}: {
-  label: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1">
-      <span className="flex items-center gap-1.5 text-muted-foreground">
-        {Icon && <Icon className="size-3.5" />}
-        {label}
-      </span>
-      {children}
-    </div>
   );
 }

@@ -37,6 +37,7 @@ import { Breadcrumbs, type Crumb } from "./breadcrumbs";
 import { Button } from "./button";
 import { Checkbox } from "./checkbox";
 import { Input } from "./input";
+import { Select } from "./select";
 import {
   Table,
   TableBody,
@@ -191,9 +192,13 @@ export interface RecordField<T> {
   hideInTable?: boolean;
   /** Custom, non-editable cell/value renderer. */
   render?: (row: T) => React.ReactNode;
-  /** If set, the field becomes a choice field: the selection toolbar offers a
-   *  "Set {label}" bulk action listing these values. */
+  /** If set, the field becomes a choice field: the Add/Edit form renders a
+   *  `Select`, and the selection toolbar offers a "Set {label}" bulk action. */
   options?: { value: string; label: string }[];
+  /** Form control for the Add/Edit panel/page. Default `"text"` (auto-growing
+   *  textarea). `"number"`/`"date"` render the matching native input; a field
+   *  with `options` always renders a `Select` regardless of this. */
+  input?: "text" | "number" | "date";
 }
 
 /**
@@ -1575,21 +1580,45 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {f.render ? (
                   <div>{f.render(draft)}</div>
                 ) : !readOnly && f.editable ? (
-                  <textarea
-                    value={String(draft[f.key as keyof T] ?? "")}
-                    onChange={(e) => setField(f.key as keyof T, e.target.value)}
-                    aria-label={f.label}
-                    aria-invalid={errors.has(f.key) || undefined}
-                    placeholder={`Add ${f.label.toLowerCase()}`}
-                    rows={1}
-                    // field-sizing grows the box to fit long/wrapped text
-                    className={cn(
-                      "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
-                      errors.has(f.key)
-                        ? "border-destructive focus-visible:ring-destructive"
-                        : "border-input focus-visible:ring-ring",
-                    )}
-                  />
+                  f.options ? (
+                    <Select
+                      value={String(draft[f.key as keyof T] ?? "")}
+                      onValueChange={(v) => setField(f.key as keyof T, v)}
+                      options={f.options}
+                      ariaLabel={f.label}
+                      placeholder={`Select ${f.label.toLowerCase()}…`}
+                      className="w-full"
+                    />
+                  ) : f.input === "number" || f.input === "date" ? (
+                    <Input
+                      type={f.input}
+                      value={String(draft[f.key as keyof T] ?? "")}
+                      onChange={(e) => setField(f.key as keyof T, e.target.value)}
+                      aria-label={f.label}
+                      aria-invalid={errors.has(f.key) || undefined}
+                      className={cn(
+                        "w-full",
+                        errors.has(f.key) &&
+                          "border-destructive focus-visible:ring-destructive",
+                      )}
+                    />
+                  ) : (
+                    <textarea
+                      value={String(draft[f.key as keyof T] ?? "")}
+                      onChange={(e) => setField(f.key as keyof T, e.target.value)}
+                      aria-label={f.label}
+                      aria-invalid={errors.has(f.key) || undefined}
+                      placeholder={`Add ${f.label.toLowerCase()}`}
+                      rows={1}
+                      // field-sizing grows the box to fit long/wrapped text
+                      className={cn(
+                        "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
+                        errors.has(f.key)
+                          ? "border-destructive focus-visible:ring-destructive"
+                          : "border-input focus-visible:ring-ring",
+                      )}
+                    />
+                  )
                 ) : (
                   <span className="block whitespace-pre-wrap break-words px-2 py-1.5">
                     {String(draft[f.key as keyof T] ?? "") || (
@@ -1789,4 +1818,17 @@ export function RecordForm<T extends { id: RowId }>(
   props: Omit<DetailPanelProps<T>, "layout">,
 ) {
   return <RecordDetailPanel layout="page" {...props} />;
+}
+
+/**
+ * Standalone **slide-over** record form — the standard Add / Edit / View panel
+ * used outside a table (e.g. on a Kanban board). Same overlay, `fields`-driven
+ * layout, blue Save, header/body/footer separators, and auto-width as the
+ * add/edit panel `RecordView` opens. Feed it a `fields` array; never hand-roll
+ * an add/edit form.
+ */
+export function RecordFormPanel<T extends { id: RowId }>(
+  props: Omit<DetailPanelProps<T>, "layout">,
+) {
+  return <RecordDetailPanel layout="panel" {...props} />;
 }
