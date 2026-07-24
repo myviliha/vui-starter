@@ -15,6 +15,13 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
   the npm package. (They were authored for 1.5.2 but missed that tarball, which
   was published a moment before.)
 
+### Fixed
+
+- `ChartContainer` no longer triggers Recharts' "width(0) and height(0) … should
+  be greater than 0" warning when it renders inside a hidden container (e.g. a
+  kept-alive inactive tab). It waits for a measured size before mounting the
+  `ResponsiveContainer`.
+
 ## 1.5.2 — 2026-07-24
 
 ### Changed

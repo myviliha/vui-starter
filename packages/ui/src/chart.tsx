@@ -35,18 +35,38 @@ export function ChartContainer({
     Object.entries(config).map(([key, v]) => [`--color-${key}`, v.color]),
   ) as React.CSSProperties;
 
+  // Only mount the ResponsiveContainer once the wrapper has a real size.
+  // Keep-alive tabs render inactive pages with `display:none` (0×0), which makes
+  // Recharts warn "width(0) and height(0) … should be greater than 0"; gating on
+  // an observed size avoids that and mounts the chart the moment the tab shows.
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [sized, setSized] = React.useState(false);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const r = entry?.contentRect;
+      setSized(!!r && r.width > 0 && r.height > 0);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <ChartConfigContext.Provider value={config}>
       <div
+        ref={ref}
         style={cssVars}
         className={cn(
           "aspect-video w-full text-xs [&_.recharts-cartesian-grid_line]:stroke-border/60 [&_.recharts-text]:fill-muted-foreground",
           className,
         )}
       >
-        <ResponsiveContainer width="100%" height="100%">
-          {children}
-        </ResponsiveContainer>
+        {sized && (
+          <ResponsiveContainer width="100%" height="100%">
+            {children}
+          </ResponsiveContainer>
+        )}
       </div>
     </ChartConfigContext.Provider>
   );
