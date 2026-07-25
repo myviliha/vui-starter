@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/calendar/" },
   title: "Calendar",
   description:
-    "A Google-style appointments calendar with Month / Week / Day views, AM/PM hour grid, a current-time line, duration-spanning event blocks, color labels, and a progressive-disclosure add dialog — all from existing VUI blocks.",
+    "A Google-style appointments calendar with Month / Week / Day views, AM/PM hour grid, a current-time line, duration-spanning event blocks, color labels, and a progressive-disclosure add dialog, all from existing VUI blocks.",
 };
 
 export default function CalendarDocPage() {
@@ -25,7 +25,7 @@ export default function CalendarDocPage() {
       <PageTitle
         eyebrow="Reference"
         title="Calendar"
-        lead="A demo appointments calendar at /calendar with three views — Month, Week, and Day. It has an AM/PM hour grid with a live current-time line, event blocks that span their own duration, Google-style color labels, and a clean add dialog, all built from Dialog, Input, Select, Checkbox and date-fns. No calendar dependency, no hand-rolled table, no custom time picker."
+        lead="A demo appointments calendar at /calendar with three views: Month, Week, and Day. It has an AM/PM hour grid with a live current-time line, event blocks that span their own duration, Google-style color labels, and a clean add dialog, all built from Dialog, Input, Select, Checkbox and date-fns. No calendar dependency, no hand-rolled table, no custom time picker."
       />
 
       <H2>See it live</H2>
@@ -39,16 +39,16 @@ export default function CalendarDocPage() {
       <H2>Views</H2>
       <Ul>
         <li>
-          <strong>Month</strong> — a 6-week grid. Each day shows up to three event
+          <strong>Month</strong> is a 6-week grid. Each day shows up to three event
           chips with a <InlineCode>+N more</InlineCode> overflow; hover a day for
           its add (<InlineCode>+</InlineCode>) button.
         </li>
         <li>
-          <strong>Week</strong> — seven day columns over a scrollable 24-hour
+          <strong>Week</strong> is seven day columns over a scrollable 24-hour
           grid.
         </li>
         <li>
-          <strong>Day</strong> — a single day column over the same hour grid.
+          <strong>Day</strong> is a single day column over the same hour grid.
         </li>
       </Ul>
       <P>
@@ -56,7 +56,7 @@ export default function CalendarDocPage() {
         a red <strong>current-time line</strong>, and they{" "}
         <strong>auto-scroll</strong> the current hour into view when opened. Each
         event is positioned by its start time and sized by its duration. When two
-        events overlap they <strong>split into side-by-side columns</strong> — a
+        events overlap they <strong>split into side-by-side columns</strong>: a
         lane-assignment pass groups them into clusters and divides the width
         evenly.
       </P>
@@ -85,7 +85,7 @@ export default function CalendarDocPage() {
       <P>
         A Google-style palette: Blueberry, Tomato, Tangerine, Banana, Sage,
         Peacock, Lavender, Grape, and Graphite. Because these are content colors,
-        they use static Tailwind classes — the same convention as the tab color
+        they use static Tailwind classes, the same convention as the tab color
         labels (<InlineCode>TAB_COLORS</InlineCode>). The color you pick drives the
         event block, its chip, and a live dot beside the title.
       </P>
@@ -105,7 +105,7 @@ export default function CalendarDocPage() {
         <li>Borderless title with a live color accent.</li>
         <li>Event / Task / Appointment segmented tabs.</li>
         <li>
-          Date + start–end time via the app <InlineCode>Select</InlineCode>{" "}
+          Date plus start and end time via the app <InlineCode>Select</InlineCode>{" "}
           (15-minute slots, <InlineCode>9:00 AM</InlineCode> labels).
         </li>
         <li>A color swatch picker.</li>
@@ -120,8 +120,8 @@ export default function CalendarDocPage() {
       </Ul>
       <Note title="No native time picker">
         Start and end use the styled <InlineCode>Select</InlineCode> with AM/PM
-        options rather than <InlineCode>&lt;input type=&quot;time&quot;&gt;</InlineCode>
-        {" "}— it looks the same in every browser, with no native clock panel to
+        options rather than <InlineCode>&lt;input type=&quot;time&quot;&gt;</InlineCode>.
+        It looks the same in every browser, with no native clock panel to
         fight. If the end isn&apos;t after the start, it auto-corrects to
         start&nbsp;+&nbsp;1h.
       </Note>

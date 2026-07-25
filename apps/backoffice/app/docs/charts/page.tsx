@@ -41,7 +41,8 @@ export default function ChartsPage() {
       <CodeBlock title="terminal">{`npm install recharts`}</CodeBlock>
       <Note title="Monorepo">
         In this repo Recharts is already a dependency of{" "}
-        <code>@viliha/vui-ui</code> and the backoffice app — no install needed.
+        <code>@viliha/vui-ui</code> and the backoffice app, so no install is
+        needed.
       </Note>
 
       <H2>The wrapper</H2>
@@ -52,16 +53,16 @@ export default function ChartsPage() {
       </P>
       <Ul>
         <li>
-          <strong>ChartContainer</strong> — sets a{" "}
+          <strong>ChartContainer</strong>: sets a{" "}
           <code>--color-&lt;key&gt;</code> CSS variable for every entry in your{" "}
           <code>config</code> and wraps a responsive container.
         </li>
         <li>
-          <strong>ChartTooltip</strong> / <strong>ChartTooltipContent</strong> —
+          <strong>ChartTooltip</strong> / <strong>ChartTooltipContent</strong>:
           a styled tooltip that reads labels and colors from the config.
         </li>
         <li>
-          <strong>ChartLegend</strong> / <strong>ChartLegendContent</strong> — a
+          <strong>ChartLegend</strong> / <strong>ChartLegendContent</strong>: a
           styled legend.
         </li>
       </Ul>

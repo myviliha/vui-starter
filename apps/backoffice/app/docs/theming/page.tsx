@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/theming/" },
   title: "Theming",
   description:
-    "Customize Vui Starter with CSS-variable design tokens — colors, radius, dark mode and typography — all from one theme.css.",
+    "Customize Vui Starter with CSS-variable design tokens (colors, radius, dark mode and typography), all from one theme.css.",
 };
 
 /** Semantic colors of the theme — the ones you reach for most. */
@@ -45,28 +45,28 @@ export default function ThemingPage() {
       <PageTitle
         eyebrow="Customization"
         title="Theming"
-        lead="Every design decision lives in one stylesheet — @viliha/vui-ui/theme.css — as a CSS variable. Change the tokens and the whole system follows."
+        lead="Every design decision lives in one stylesheet, @viliha/vui-ui/theme.css, as a CSS variable. Change the tokens and the whole system follows."
       />
 
       <H2>Token groups</H2>
       <Ul>
         <li>
-          <strong>Surfaces &amp; text</strong> — <code>--background</code>,{" "}
+          <strong>Surfaces &amp; text</strong>: <code>--background</code>,{" "}
           <code>--foreground</code>, <code>--card</code>, <code>--popover</code>,{" "}
           <code>--muted</code>, <code>--accent</code>.
         </li>
         <li>
-          <strong>Actions</strong> — <code>--primary</code>,{" "}
+          <strong>Actions</strong>: <code>--primary</code>,{" "}
           <code>--destructive</code>, and the brand{" "}
           <code>--button-primary</code> / <code>--button-primary-hover</code> /{" "}
           <code>--button-shadow</code>.
         </li>
         <li>
-          <strong>Lines &amp; focus</strong> — <code>--border</code>,{" "}
+          <strong>Lines &amp; focus</strong>: <code>--border</code>,{" "}
           <code>--input</code>, <code>--ring</code>.
         </li>
         <li>
-          <strong>Sidebar, charts, radius, selection</strong> —{" "}
+          <strong>Sidebar, charts, radius, selection</strong>:{" "}
           <code>--sidebar-*</code>, <code>--chart-1..5</code>,{" "}
           <code>--radius</code>, <code>--selection</code>.
         </li>

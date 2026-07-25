@@ -47,6 +47,7 @@ const COMP_SKIP = new Set([
   "doc.tsx",
   "template-block.tsx",
   "copy-button.tsx",
+  "pm-tabs.tsx",
 ]);
 cpSync(join(app, "components"), join(out, "components"), {
   recursive: true,

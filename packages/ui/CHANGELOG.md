@@ -9,6 +9,12 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
 ## 1.6.0 — 2026-07-25
 
+### Changed
+
+- Documentation polish: package-manager commands in the docs now use tabs
+  (npm / pnpm / yarn / bun), and the prose across the README, `AGENT.md`, and the
+  docs site was cleaned of em-dashes for a more natural read.
+
 ### Added
 
 - **Runtime branding via `BrandProvider` / `useBrand()`** (in the scaffold) — for

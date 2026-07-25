@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/support/" },
   title: "Support & ticketing",
   description:
-    "A support-desk page — ticket list with status/priority, a detail pane with a reply thread, and status/priority controls — built from Input, Select, Button and cn on VUI tokens.",
+    "A support-desk page with a ticket list (status/priority), a detail pane with a reply thread, and status/priority controls, built from Input, Select, Button and cn on VUI tokens.",
 };
 
 export default function SupportDocPage() {
@@ -25,34 +25,34 @@ export default function SupportDocPage() {
       <PageTitle
         eyebrow="Guides"
         title="Support & ticketing"
-        lead="A help-desk ticketing system at /support: a searchable, status-filtered ticket queue on the left; a detail pane with the original request and its activity timeline in the middle; and a properties rail — status, priority, requester, assignee — on the right. This isn&apos;t a chat; it&apos;s a ticket workspace."
+        lead="A help-desk ticketing system at /support: a searchable, status-filtered ticket queue on the left; a detail pane with the original request and its activity timeline in the middle; and a properties rail (status, priority, requester, assignee) on the right. This isn&apos;t a chat; it&apos;s a ticket workspace."
       />
 
       <H2>See it live</H2>
       <P>
         Open <a href="/support" className="font-medium text-foreground underline">/support</a>{" "}
         (sidebar → shadcn/ui → Support). Pick a ticket, change its status or
-        priority in the properties rail, then reply — a reply flips the ticket to{" "}
+        priority in the properties rail, then reply. A reply flips the ticket to{" "}
         <em>Pending</em>.
       </P>
 
       <H2>Anatomy</H2>
       <Ul>
         <li>
-          <strong>Ticket queue</strong> — a search <InlineCode>Input</InlineCode>{" "}
+          <strong>Ticket queue</strong>: a search <InlineCode>Input</InlineCode>{" "}
           (matches subject, ref, or requester) + a status filter{" "}
           <InlineCode>Select</InlineCode> over a scrollable list. Each row shows a
           status badge, priority dot, ref, requester, and last-updated.
         </li>
         <li>
-          <strong>Detail + activity</strong> — a header (status badge, ref,
+          <strong>Detail and activity</strong>: a header (status badge, ref,
           subject), then the original request followed by a stacked{" "}
           <strong>activity timeline</strong> (avatar + author + role + time +
           text). A reply <InlineCode>textarea</InlineCode> with a Send button sits
           at the bottom.
         </li>
         <li>
-          <strong>Properties rail</strong> — editable status &amp; priority{" "}
+          <strong>Properties rail</strong>: editable status &amp; priority{" "}
           <InlineCode>Select</InlineCode>s plus requester, assignee, and last
           updated (hidden below <InlineCode>lg</InlineCode>).
         </li>
@@ -77,8 +77,8 @@ type Ticket = {
 
       <H3>Status & priority colors</H3>
       <P>
-        Badges and dots use static Tailwind classes keyed by value — the same
-        convention as the calendar color labels — so they read consistently in
+        Badges and dots use static Tailwind classes keyed by value, the same
+        convention as the calendar color labels, so they read consistently in
         both light and dark themes.
       </P>
       <CodeBlock title="badges">{`const STATUS_BADGE: Record<Status, string> = {

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/chat/" },
   title: "Chat",
   description:
-    "A two-pane messaging page — conversation list, message thread, and composer — composed entirely from Input, Button and cn. A shadcn/ui-style feature built on VUI tokens.",
+    "A two-pane messaging page (conversation list, message thread, and composer) composed entirely from Input, Button and cn. A shadcn/ui-style feature built on VUI tokens.",
 };
 
 export default function ChatDocPage() {
@@ -25,7 +25,7 @@ export default function ChatDocPage() {
       <PageTitle
         eyebrow="Guides"
         title="Chat"
-        lead="A messaging demo at /chat: a searchable conversation list on the left, a message thread with sent and received bubbles on the right, and a composer that keeps the thread pinned to the newest message. No chat library — just Input, Button, cn, and a little state."
+        lead="A messaging demo at /chat: a searchable conversation list on the left, a message thread with sent and received bubbles on the right, and a composer that keeps the thread pinned to the newest message. No chat library, just Input, Button, cn, and a little state."
       />
 
       <H2>See it live</H2>
@@ -38,17 +38,17 @@ export default function ChatDocPage() {
       <H2>Anatomy</H2>
       <Ul>
         <li>
-          <strong>Conversation list</strong> — a search <InlineCode>Input</InlineCode>{" "}
+          <strong>Conversation list</strong>: a search <InlineCode>Input</InlineCode>{" "}
           plus one button per conversation (avatar initials, name, last message,
           time). The active row is tinted with <InlineCode>bg-accent</InlineCode>.
         </li>
         <li>
-          <strong>Thread</strong> — a header naming the contact, then a scrolling
+          <strong>Thread</strong>: a header naming the contact, then a scrolling
           column of bubbles. Messages you send use the primary token and align
           right; the ones you receive use a bordered card and align left.
         </li>
         <li>
-          <strong>Composer</strong> — an <InlineCode>Input</InlineCode> +{" "}
+          <strong>Composer</strong>: an <InlineCode>Input</InlineCode> plus a{" "}
           primary Send. Enter sends; empty messages are blocked.
         </li>
       </Ul>

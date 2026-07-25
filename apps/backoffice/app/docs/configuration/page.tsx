@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/configuration/" },
   title: "Configuration",
   description:
-    "Configure the Vui Starter app per deployment with environment variables — rebrand the footer (company, year, license) with no code changes.",
+    "Configure the Vui Starter app per deployment with environment variables: rebrand the footer (company, year, license) with no code changes.",
 };
 
 export default function ConfigurationPage() {
@@ -24,7 +24,7 @@ export default function ConfigurationPage() {
       <PageTitle
         eyebrow="Getting started"
         title="Configuration"
-        lead="Per-deployment settings live in environment variables, so you can rebrand a clone without editing code. Copy apps/backoffice/.env.example to .env.local and set what you need — everything is optional and falls back to sensible defaults."
+        lead="Per-deployment settings live in environment variables, so you can rebrand a clone without editing code. Copy apps/backoffice/.env.example to .env.local and set what you need; everything is optional and falls back to sensible defaults."
       />
 
       <H2>Footer identity</H2>
@@ -53,33 +53,33 @@ NEXT_PUBLIC_MAX_TABS="5"
 NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
       <Ul>
         <li>
-          <code>NEXT_PUBLIC_COMPANY_NAME</code> — company shown in the footer.
+          <code>NEXT_PUBLIC_COMPANY_NAME</code> sets the company shown in the footer.
         </li>
         <li>
-          <code>NEXT_PUBLIC_COMPANY_URL</code> — optional; links the company name.
+          <code>NEXT_PUBLIC_COMPANY_URL</code> is optional and links the company name.
         </li>
         <li>
-          <code>NEXT_PUBLIC_LICENSE</code> — the license/rights text.
+          <code>NEXT_PUBLIC_LICENSE</code> sets the license/rights text.
         </li>
         <li>
-          <strong>Copyright year</strong> — automatic (always the current /
+          <strong>Copyright year</strong> is automatic (always the current /
           build year); there is no env var for it.
         </li>
         <li>
-          <code>NEXT_PUBLIC_LOGO_URL</code> — your logo image from{" "}
+          <code>NEXT_PUBLIC_LOGO_URL</code> is your logo image from{" "}
           <code>/public</code> (e.g. <code>/logo.svg</code>); falls back to the
           built-in mark.
         </li>
         <li>
-          <code>NEXT_PUBLIC_FOOTER_NOTICE</code> — replaces the entire footer
+          <code>NEXT_PUBLIC_FOOTER_NOTICE</code> replaces the entire footer
           line, taking precedence over the vars above.
         </li>
         <li>
-          <code>NEXT_PUBLIC_MAX_TABS</code> — how many pages the tab strip keeps
+          <code>NEXT_PUBLIC_MAX_TABS</code> sets how many pages the tab strip keeps
           open before evicting the oldest (default 5).
         </li>
         <li>
-          <code>NEXT_PUBLIC_SIDEBAR_GROUP_MODE</code> — how a collapsed sidebar
+          <code>NEXT_PUBLIC_SIDEBAR_GROUP_MODE</code> sets how a collapsed sidebar
           rail reveals a group&apos;s sub-items: <code>inline</code> (expands
           in the rail), <code>flyout-click</code> (click opens a floating
           panel), or <code>flyout-hover</code> (hover opens it; default).
@@ -92,7 +92,7 @@ NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
 
       <H2>Logo &amp; branding</H2>
       <P>
-        Rename the app with a few env vars — they drive the brand name shown in
+        Rename the app with a few env vars. They drive the brand name shown in
         the sidebar, the wordmark, the auth/onboarding screens, and the{" "}
         <strong>browser-tab metadata</strong> (the tab title is{" "}
         <code>&lt;name&gt; — &lt;tagline&gt;</code>):
@@ -102,14 +102,14 @@ NEXT_PUBLIC_APP_TAGLINE="Operations Platform"
 NEXT_PUBLIC_APP_DESCRIPTION="Acme's internal operations console."`}</CodeBlock>
       <Note title="Rebuild after changing env">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>.
-        Restart <code>dev</code> (or rebuild) after editing them — a running server
+        Restart <code>dev</code> (or rebuild) after editing them; a running server
         won&apos;t pick up the change.
       </Note>
 
       <H3>Runtime branding from an API (white-label / multi-tenant)</H3>
       <P>
-        When branding has to come from a backend at runtime — a different name,
-        logo, and tagline per tenant — the env vars are only the defaults.{" "}
+        When branding has to come from a backend at runtime (a different name,
+        logo, and tagline per tenant), the env vars are only the defaults.{" "}
         <code>BrandProvider</code> (wrapping the app in the root layout) layers a
         runtime override on top, and everything (headers, wordmark, and the
         browser-tab title) reads from it. Three ways to feed it:
@@ -117,8 +117,8 @@ NEXT_PUBLIC_APP_DESCRIPTION="Acme's internal operations console."`}</CodeBlock>
       <Ul>
         <li>
           Set <code>NEXT_PUBLIC_BRAND_URL</code> to a JSON endpoint returning any
-          of <code>{"{ name, tagline, description, logoUrl, company, companyUrl }"}</code>{" "}
-          — the provider fetches it on load and applies it.
+          of <code>{"{ name, tagline, description, logoUrl, company, companyUrl }"}</code>.
+          The provider fetches it on load and applies it.
         </li>
         <li>
           Seed it from a loader/server response:{" "}
@@ -150,21 +150,21 @@ useEffect(() => {
         <li>
           <strong>Leave it unset</strong> → the built-in rounded badge with a
           stylised &ldquo;V&rdquo; shows instead. Its color is the{" "}
-          <code>--brand-indigo</code> token — change it in{" "}
+          <code>--brand-indigo</code> token; change it in{" "}
           <a href="/docs/theming" className="font-medium text-foreground underline">theme.css</a>{" "}
           to recolor the fallback.
         </li>
       </Ul>
       <P>
-        For more control — a separate wordmark, a dark-mode variant, or custom
-        sizing — edit <code>app/_components/logo.tsx</code> directly (it takes a{" "}
+        For more control (a separate wordmark, a dark-mode variant, or custom
+        sizing), edit <code>app/_components/logo.tsx</code> directly (it takes a{" "}
         <code>variant</code> and <code>className</code>).
       </P>
 
       <H2>Open tabs</H2>
       <P>
         <code>NEXT_PUBLIC_MAX_TABS</code> (above) caps how many pages the tab strip
-        keeps open. The strip itself is an app-shell pattern you wire in — see{" "}
+        keeps open. The strip itself is an app-shell pattern you wire in. See{" "}
         <a href="/docs/navigation" className="font-medium text-foreground underline">
           Navigation &amp; tabs
         </a>{" "}
@@ -173,7 +173,7 @@ useEffect(() => {
 
       <Note title="Build-time values">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>{" "}
-        into the static export — set them where your deploy runs{" "}
+        into the static export, so set them where your deploy runs{" "}
         <code>pnpm build</code>, not just at runtime. Changing one means a
         rebuild, not a restart.
       </Note>

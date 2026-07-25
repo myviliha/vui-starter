@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/shadcn-ui/" },
   title: "Using shadcn/ui",
   description:
-    "Use shadcn/ui components with Vui Starter — they adopt the same design tokens automatically. Use shadcn for general UI and RecordView for datatables.",
+    "Use shadcn/ui components with Vui Starter; they adopt the same design tokens automatically. Use shadcn for general UI and RecordView for datatables.",
 };
 
 export default function ShadcnPage() {
@@ -24,7 +24,7 @@ export default function ShadcnPage() {
       <PageTitle
         eyebrow="Guides"
         title="Using shadcn/ui"
-        lead="Vui Starter is built to pair with shadcn/ui. Lean on shadcn's large, accessible component set for everyday UI — forms, dialogs, tabs, and the rest — and keep Vui's RecordView for datatables. Because they share the same tokens, shadcn components adopt the Vui look with nothing extra to configure."
+        lead="Vui Starter is built to pair with shadcn/ui. Lean on shadcn's large, accessible component set for everyday UI (forms, dialogs, tabs, and the rest), and keep Vui's RecordView for datatables. Because they share the same tokens, shadcn components adopt the Vui look with nothing extra to configure."
       />
 
       <H2>Why this works</H2>
@@ -38,7 +38,7 @@ export default function ShadcnPage() {
         component renders in the Vui style with no restyling and no overrides.
       </P>
       <Note title="Division of labor">
-        Reach for <strong>shadcn/ui</strong> on general UI — buttons, inputs,
+        Reach for <strong>shadcn/ui</strong> on general UI: buttons, inputs,
         forms, dialogs, tabs, popovers, and so on. Reach for{" "}
         <strong>@viliha/vui-ui</strong>&apos;s <code>RecordView</code> on the
         datatable, with its editable cells, import/export, and add/edit form.
@@ -47,7 +47,7 @@ export default function ShadcnPage() {
       <Note title="See it live">
         The backoffice demo shows roughly 35 unmodified shadcn components at{" "}
         <code>/components</code> and a fully validated shadcn Form (every field
-        type, backed by Zod) at <code>/forms</code> — all themed by{" "}
+        type, backed by Zod) at <code>/forms</code>, all themed by{" "}
         <code>theme.css</code> with zero overrides.
       </Note>
 
@@ -73,7 +73,7 @@ export default function ShadcnPage() {
         <li>
           <strong>Icon library:</strong> Lucide (shadcn&apos;s{" "}
           <code className="font-mono text-[0.9em]">new-york</code> components ship
-          with Lucide icons baked in — see the Icons note below)
+          with Lucide icons baked in; see the Icons note below)
         </li>
       </Ul>
       <P>
@@ -101,7 +101,7 @@ export default function ShadcnPage() {
         <code className="font-mono text-[0.9em]">.dark</code> token block into your
         CSS. Since Vui&apos;s{" "}
         <code className="font-mono text-[0.9em]">theme.css</code> already defines
-        those, <strong>delete the block shadcn added</strong> — or keep the{" "}
+        those, <strong>delete the block shadcn added</strong>, or keep the{" "}
         <code className="font-mono text-[0.9em]">@import</code> after it so Vui
         wins. One source of truth for tokens means one consistent look.
       </P>
@@ -109,7 +109,7 @@ export default function ShadcnPage() {
       <H3>4. Add components</H3>
       <CodeBlock title="terminal">{`npx shadcn@latest add button input label form dialog dropdown-menu tabs`}</CodeBlock>
       <P>
-        They render in the Vui style right away — same radius, colors, borders,
+        They render in the Vui style right away, with the same radius, colors, borders,
         and focus rings.
       </P>
 
@@ -168,7 +168,7 @@ export function SignupForm() {
         </li>
         <li>
           <strong>Icons:</strong> shadcn&apos;s <code className="font-mono text-[0.9em]">new-york</code>{" "}
-          components ship with <strong>Lucide</strong> icons internally — the
+          components ship with <strong>Lucide</strong> icons internally: the
           chevron in Select, the check in Checkbox, and so on. Leave those as-is.
           Vui&apos;s global &quot;icon chip&quot; rule targets{" "}
           <code className="font-mono text-[0.9em]">svg[width=&quot;15&quot;]</code>{" "}

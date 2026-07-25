@@ -52,14 +52,14 @@ npx @viliha/vui-ui init
 It's **interactive** and walks through a short decision tree:
 
 1. **Fresh project?** (fresh vs. existing)
-2. **Pre-built theme?** — the full shell plus demo pages, or just the theme wiring
+2. **Pre-built theme?** The full shell plus demo pages, or just the theme wiring
    for you to build on.
 
 Everything it generates is copied into *your* repo, so you own and edit it.
 
 | | **Pre-built** (shell + demo) | **Theme-only** (you configure) |
 | --- | --- | --- |
-| **Fresh** | full runnable app: config + shell + demo pages | just the theme wiring (`globals.css`, `next.config`) — build your own pages |
+| **Fresh** | full runnable app: config + shell + demo pages | just the theme wiring (`globals.css`, `next.config`). Build your own pages |
 | **Existing** | shell + demo added; your config is **never** overwritten (prints merge steps) | nothing copied; prints the wiring steps |
 
 Before that, it asks whether this is a standalone **Next.js** app or a
@@ -83,8 +83,8 @@ from your lockfile (npm, pnpm, yarn, or bun). It prompts before doing so; pass
 
 ### Fresh + pre-built (recommended for new apps)
 
-Start from a `create-next-app` base **without `--src-dir`** — the scaffold expects
-a root `app/` with `@/*` → `./*` — then run `init`. It scaffolds the app, installs
+Start from a `create-next-app` base **without `--src-dir`** (the scaffold expects
+a root `app/` with `@/*` → `./*`), then run `init`. It scaffolds the app, installs
 the dependencies, and leaves you ready to run `dev`. Any package manager works:
 
 ```bash
@@ -111,8 +111,8 @@ dependencies. The demo then runs out of the box at `/dashboard`.
 
 ### Turborepo / monorepo
 
-Scaffold **inside the target app** (e.g. `apps/web`), never at the repo root —
-the root has no `app/` and no Next.js app. Run `init` from the app, or name it
+Scaffold **inside the target app** (e.g. `apps/web`), never at the repo root; the
+root has no `app/` and no Next.js app. Run `init` from the app, or name it
 from the root with `--dir`:
 
 ```bash
@@ -124,29 +124,29 @@ npx @viliha/vui-ui init --turbo --dir apps/web
 ```
 
 In monorepo mode `init` does **not** auto-install (installs are
-workspace-specific), so add the deps to that app afterward — `cd apps/web && pnpm
+workspace-specific), so add the deps to that app afterward: `cd apps/web && pnpm
 add @viliha/vui-ui …`, or from the root `pnpm --filter web add @viliha/vui-ui …`.
 The `transpilePackages` entry, the `theme.css` import, and the `@/*` alias all
 belong to **that app**, not the root.
 
-### ⚠️ Existing project — read this first
+### ⚠️ Existing project: read this first
 
 Adding VUI to an app you already have takes a little care. **`init --existing`
 never overwrites your config.** Choose pre-built to add the shell and pages under
 `app/(app)/` and `app/_components/`, or theme-only to copy nothing. Either way, it
 prints the four things you need to wire up:
 
-1. **`next.config`** — add `transpilePackages: ["@viliha/vui-ui"]`.
+1. **`next.config`**: add `transpilePackages: ["@viliha/vui-ui"]`.
    (Optional, for the open-tabs *keep-alive*: `output: "export"`,
    `images: { unoptimized: true }`, `trailingSlash: true`.)
-2. **`app/globals.css`** — add:
+2. **`app/globals.css`**: add:
    ```css
    @import "tailwindcss";
    @import "@viliha/vui-ui/theme.css";
    ```
-3. **`tsconfig.json`** — the scaffold imports via `@/*`; map it to your root:
+3. **`tsconfig.json`**: the scaffold imports via `@/*`; map it to your root:
    `"compilerOptions": { "paths": { "@/*": ["./*"] } }`.
-4. **Root `app/layout.tsx`** — `import "./globals.css"` (and mount fonts to match
+4. **Root `app/layout.tsx`**: `import "./globals.css"` (and mount fonts to match
    the demo's look).
 
 Run **`npx @viliha/vui-ui init --existing --prebuilt --dry-run`** first to preview
@@ -214,15 +214,15 @@ See the [Data table docs](https://vui.viliha.com/docs/data-table) for the detail
 The reference app composes these primitives into the conventions documented at
 [vui.viliha.com/docs/layout](https://vui.viliha.com/docs/layout):
 
-- **Five page types** — data table, record form (Add / Edit / View), dashboard,
+- **Five page types**: data table, record form (Add / Edit / View), dashboard,
   settings, and kanban board.
-- **Command palette** — Quick actions (`⌘K`, navigate pages) and Global search
+- **Command palette**: Quick actions (`⌘K`, navigate pages) and Global search
   (`⌘⌥K`, find records), both built on the exported `CommandPalette`.
-- **Open tabs** — a browser-style strip of opened pages under the top bar
+- **Open tabs**: a browser-style strip of opened pages under the top bar
   (⌘-click a nav item for a background tab), persisted across reloads.
-- **Multi-step wizard** — the exported `Steps` indicator + your step state for
+- **Multi-step wizard**: the exported `Steps` indicator + your step state for
   guided flows (see the `/register-business` demo).
-- **Breadcrumbs** — the exported `Breadcrumbs` component fed a route-derived
+- **Breadcrumbs**: the exported `Breadcrumbs` component fed a route-derived
   trail.
 
 Copy them from the
@@ -257,7 +257,7 @@ wrapper) · `checkbox` · `command-palette` (⌘K launcher) · `dialog` ·
 
 ## Theming
 
-Every design decision lives in `@viliha/vui-ui/theme.css` as CSS variables —
+Every design decision lives in `@viliha/vui-ui/theme.css` as CSS variables:
 colors, radius, typography, and dark mode. Override any token **after** the import
 to rebrand the entire system:
 

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/data-table/" },
   title: "Data table (RecordView)",
   description:
-    "RecordView is Vui Starter's batteries-included data table: editable cells, sorting, filtering, pagination, row actions, a buffered add/edit panel, bulk actions, CSV/JSON/Excel/PDF import & export, and auto-aligned columns — all from one fields array.",
+    "RecordView is Vui Starter's batteries-included data table: editable cells, sorting, filtering, pagination, row actions, a buffered add/edit panel, bulk actions, CSV/JSON/Excel/PDF import & export, and auto-aligned columns, all from one fields array.",
 };
 
 export default function DataTablePage() {
@@ -98,34 +98,34 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 
       <H2>Props</H2>
       <Ul>
-        <li><code>title</code> — plural page title (e.g. &quot;Organizations&quot;).</li>
-        <li><code>singular</code> — used on the add button and dialogs (&quot;Organization&quot;).</li>
-        <li><code>fields</code> — the column/field definitions (see below).</li>
-        <li><code>initialData</code> — the rows (any array of objects with an <code>id</code>).</li>
-        <li><code>makeEmptyRow</code> — returns a blank row for &quot;+ Add&quot;.</li>
-        <li><code>getPrimary(row)</code> — returns <code>{`{ title, subtitle?, initials }`}</code> for the row&apos;s identity (avatar + panel header).</li>
-        <li><code>icon</code> — optional page icon.</li>
-        <li><code>formMode</code> — <code>&quot;panel&quot;</code> (default, slide-over) or <code>&quot;page&quot;</code> (full-page form). See form layouts below.</li>
-        <li><code>formColumns</code> — <code>1</code> (default) or <code>2</code> field-group columns, in page mode.</li>
-        <li><code>formDescription</code> — intro text for the page-form documentation panel.</li>
-        <li><code>resizableColumns</code> — <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
-        <li><code>persistKey</code> — a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
+        <li><code>title</code>: plural page title (e.g. &quot;Organizations&quot;).</li>
+        <li><code>singular</code>: used on the add button and dialogs (&quot;Organization&quot;).</li>
+        <li><code>fields</code>: the column/field definitions (see below).</li>
+        <li><code>initialData</code>: the rows (any array of objects with an <code>id</code>).</li>
+        <li><code>makeEmptyRow</code>: returns a blank row for &quot;+ Add&quot;.</li>
+        <li><code>getPrimary(row)</code>: returns <code>{`{ title, subtitle?, initials }`}</code> for the row&apos;s identity (avatar + panel header).</li>
+        <li><code>icon</code>: optional page icon.</li>
+        <li><code>formMode</code>: <code>&quot;panel&quot;</code> (default, slide-over) or <code>&quot;page&quot;</code> (full-page form). See form layouts below.</li>
+        <li><code>formColumns</code>: <code>1</code> (default) or <code>2</code> field-group columns, in page mode.</li>
+        <li><code>formDescription</code>: intro text for the page-form documentation panel.</li>
+        <li><code>resizableColumns</code>: <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
+        <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
       </Ul>
 
       <H2>Field options</H2>
       <P>Each entry in <code>fields</code> is a <code>RecordField</code>:</P>
       <Ul>
-        <li><code>key</code> / <code>label</code> — the data key and column header.</li>
-        <li><code>editable</code> — inline-editable cell + shows in the add/edit panel.</li>
-        <li><code>required</code> — marks the field with <code>*</code> (in the column header, including the primary Name column, and beside the form label) and validates on save.</li>
-        <li><code>copyable</code> — a copy-to-clipboard button on hover.</li>
-        <li><code>hideInTable</code> — keep it in the panel but not as a column.</li>
-        <li><code>render(row)</code> — custom cell content (badges, formatted numbers…).</li>
-        <li><code>description</code> — help text shown in the page-form documentation panel.</li>
-        <li><code>options</code> — makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action.</li>
-        <li><code>icon</code> — column-header icon.</li>
-        <li><code>width</code> — initial column width (px). Columns auto-size by default; pass <code>resizableColumns</code> on <code>RecordView</code> to let users drag-resize them.</li>
-        <li><code>align</code> — <code>&quot;left&quot;</code> / <code>&quot;center&quot;</code> / <code>&quot;right&quot;</code> (see below).</li>
+        <li><code>key</code> / <code>label</code>: the data key and column header.</li>
+        <li><code>editable</code>: inline-editable cell + shows in the add/edit panel.</li>
+        <li><code>required</code>: marks the field with <code>*</code> (in the column header, including the primary Name column, and beside the form label) and validates on save.</li>
+        <li><code>copyable</code>: a copy-to-clipboard button on hover.</li>
+        <li><code>hideInTable</code>: keep it in the panel but not as a column.</li>
+        <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
+        <li><code>description</code>: help text shown in the page-form documentation panel.</li>
+        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action.</li>
+        <li><code>icon</code>: column-header icon.</li>
+        <li><code>width</code>: initial column width (px). Columns auto-size by default; pass <code>resizableColumns</code> on <code>RecordView</code> to let users drag-resize them.</li>
+        <li><code>align</code>: <code>&quot;left&quot;</code> / <code>&quot;center&quot;</code> / <code>&quot;right&quot;</code> (see below).</li>
       </Ul>
 
       <H3>Auto-aligned columns</H3>
@@ -144,7 +144,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <P>
         Every RecordView comes with a buffered add/edit form: edits stay in a
         draft and commit only when you hit <strong>Save</strong>. The form is{" "}
-        <strong>designed from your <code>fields</code> array</strong> — each row
+        <strong>designed from your <code>fields</code> array</strong>. Each row
         aligns the label, icon, required <code>*</code>, and control on one
         baseline, and every bit of spacing and color comes from theme tokens, so
         you never style a field by hand. It renders in one of two layouts.

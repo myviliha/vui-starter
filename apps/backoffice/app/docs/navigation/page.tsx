@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/navigation/" },
   title: "Navigation, sections & tabs",
   description:
-    "The sidebar, its two section types (titled sections vs collapsible groups), and the browser-style keep-alive open-tabs strip — all driven by one nav config. Copy these reference-app patterns when consuming @viliha/vui-ui.",
+    "The sidebar, its two section types (titled sections vs collapsible groups), and the browser-style keep-alive open-tabs strip, all driven by one nav config. Copy these reference-app patterns when consuming @viliha/vui-ui.",
 };
 
 export default function NavigationDocPage() {
@@ -25,7 +25,7 @@ export default function NavigationDocPage() {
       <PageTitle
         eyebrow="Customization"
         title="Navigation, sections & tabs"
-        lead="One config drives the whole shell: the sidebar, the breadcrumb trail, and the open-tabs strip all read from nav-config.ts. This page covers the two ways to group sidebar items and the browser-style keep-alive tabs — two upgrades that are easy to miss because they live in the app shell, not the component package."
+        lead="One config drives the whole shell: the sidebar, the breadcrumb trail, and the open-tabs strip all read from nav-config.ts. This page covers the two ways to group sidebar items and the browser-style keep-alive tabs, two upgrades that are easy to miss because they live in the app shell, not the component package."
       />
 
       <Note title="These are reference-app patterns">
@@ -40,7 +40,7 @@ export default function NavigationDocPage() {
         >
           backoffice demo
         </a>{" "}
-        and adapt. When you install the package fresh, you must wire these in — they
+        and adapt. When you install the package fresh, you must wire these in; they
         won&apos;t appear automatically.
       </Note>
 
@@ -54,7 +54,7 @@ export default function NavigationDocPage() {
 
       <H2>Two ways to group sidebar items</H2>
       <P>
-        There are exactly two grouping shapes — pick the one the structure calls
+        There are exactly two grouping shapes. Pick the one the structure calls
         for; don&apos;t hand-roll a third.
       </P>
 
@@ -62,7 +62,7 @@ export default function NavigationDocPage() {
       <P>
         A <InlineCode>NavSection</InlineCode> is a top-level band with an optional{" "}
         <InlineCode>title</InlineCode> heading. Its items are{" "}
-        <strong>always visible</strong> — there is no collapse. Use it to cluster
+        <strong>always visible</strong>; there is no collapse. Use it to cluster
         related pages under a label (e.g. <em>Records</em>, <em>System</em>). The
         first section usually has no title (Home, Charts, …).
       </P>
@@ -112,7 +112,7 @@ export default function NavigationDocPage() {
           links and toggles them open/closed.
         </li>
         <li>
-          A group parent has <strong>no page of its own</strong> — its breadcrumb
+          A group parent has <strong>no page of its own</strong>; its breadcrumb
           links to its first child (see{" "}
           <a href="/docs/layout" className="font-medium text-foreground underline">breadcrumbs</a>).
         </li>
@@ -129,7 +129,7 @@ export default function NavigationDocPage() {
         Admin users tend to keep several pages open at once, so the shell ships a
         browser-style <strong>tab strip</strong> under the top bar. It&apos;s{" "}
         <strong>keep-alive</strong>: every opened page stays mounted (inactive ones
-        hidden), so switching tabs is instant — no remount, no flash — and each
+        hidden), so switching tabs is instant (no remount, no flash) and each
         page keeps its live state, from scroll position to form input to active
         filters. New routes mount on first visit.
       </P>
@@ -149,7 +149,7 @@ export default function NavigationDocPage() {
       <Ul>
         <li>
           Labels, icons, and colors derive from <InlineCode>nav-config.ts</InlineCode>{" "}
-          + <InlineCode>route-meta.ts</InlineCode> — no per-tab wiring.
+          + <InlineCode>route-meta.ts</InlineCode>, with no per-tab wiring.
         </li>
         <li>
           The open list persists in <InlineCode>sessionStorage</InlineCode>, capped
@@ -173,13 +173,13 @@ export default function NavigationDocPage() {
         Keep-alive works because the reference app is a static export (all client
         at runtime). If your app uses server components per route, either adopt the
         static-export shell from the demo or fall back to a lighter
-        navigation-tab model (a plain router push per tab) — but the strip,
+        navigation-tab model (a plain router push per tab), but the strip,
         persistence, and nav-config wiring stay the same.
       </Note>
 
       <P>
-        Env config for the shell — <InlineCode>NEXT_PUBLIC_MAX_TABS</InlineCode>,
-        your <InlineCode>NEXT_PUBLIC_LOGO_URL</InlineCode>, and footer branding —
+        Env config for the shell (<InlineCode>NEXT_PUBLIC_MAX_TABS</InlineCode>,
+        your <InlineCode>NEXT_PUBLIC_LOGO_URL</InlineCode>, and footer branding)
         lives in{" "}
         <a
           href="/docs/configuration"

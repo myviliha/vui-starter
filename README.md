@@ -9,16 +9,16 @@ component library (**`@viliha/vui-ui`**) and a full backoffice demo you can clon
 and run in minutes.
 
 It's built on **Next.js · React 19 · Tailwind CSS v4 · shadcn-style components ·
-Radix Icons**, and everything runs on in-memory mock data — clone it and you have
+Radix Icons**, and everything runs on in-memory mock data. Clone it and you have
 a working admin UI with no backend to stand up.
 
 > This repo is both the **library** (`packages/ui`, published to npm as
 > `@viliha/vui-ui`) and a **reference app** (`apps/backoffice`) that shows
 > every component in a real admin UI.
 
-![Vui Starter — datatable](./.github/screenshots/organizations.png)
+![Vui Starter: datatable](./.github/screenshots/organizations.png)
 
-![Vui Starter — dashboard](./.github/screenshots/home.png)
+![Vui Starter: dashboard](./.github/screenshots/home.png)
 
 ---
 
@@ -43,27 +43,27 @@ a working admin UI with no backend to stand up.
 
 ## Features
 
-- **A design system in one stylesheet** — colors, typography, radius, dark mode,
+- **A design system in one stylesheet:** colors, typography, radius, dark mode,
   selection color, and the icon treatment all live in `theme.css` as CSS
   variables. Restyle the entire app by editing tokens in one place.
-- **The RecordView datatable** — editable cells, auto-sizing columns (with opt-in
+- **The RecordView datatable:** editable cells, auto-sizing columns (with opt-in
   resize), a sticky header, sort/filter/column toggle, pagination, row actions
   (view/edit/delete), required-field markers, a buffered Add/Edit form panel, and
   **CSV / JSON / Excel / PDF import and export**.
-- **Themed charts** — area, bar, line, and donut charts built on
+- **Themed charts:** area, bar, line, and donut charts built on
   [Recharts](https://recharts.org) and driven by the `--chart-*` tokens, so they
   track your theme and dark mode without any per-chart styling.
-- **Drop-in shadcn/ui** — around 35 unmodified shadcn components pick up the theme
+- **Drop-in shadcn/ui:** around 35 unmodified shadcn components pick up the theme
   automatically because they read the same tokens. See them live at `/components`,
   alongside a fully validated shadcn Form (React Hook Form + Zod, every field
   type) at `/forms`.
-- **A complete app shell** — a collapsible, colored-icon sidebar with nested
+- **A complete app shell:** a collapsible, colored-icon sidebar with nested
   groups, aligned page headers, a ⌘K command palette (Quick actions) and ⌘⌥K
   global search, a **browser-style open-tabs strip** (⌘-click a nav item to open
   one), and a light/dark theme toggle.
-- **Shipped as TypeScript source** — no build step, tree-shakeable, and your app's
+- **Shipped as TypeScript source:** no build step, tree-shakeable, and your app's
   bundler compiles only what you import.
-- **Ready for AI agents** — the package ships an agent guide (`AGENT.md`) and a
+- **Ready for AI agents:** the package ships an agent guide (`AGENT.md`) and a
   copy-paste `CLAUDE.template.md`, so Claude Code, Cursor, and Copilot build *with*
   the design system (its tokens, `RecordView`, and layout) instead of reinventing
   it.
@@ -82,7 +82,7 @@ pnpm dev          # http://localhost:3000
 ```
 
 That runs a single Next.js app (`apps/backoffice`) on
-**http://localhost:3000** — the admin UI together with the docs, served at
+**http://localhost:3000**, the admin UI together with the docs, served at
 **`/docs`** and reachable from the docs icon in the top bar.
 
 ### Scaffold your own project from this template
@@ -99,7 +99,7 @@ pnpm dev
 Or click **“Use this template”** on the GitHub repo to create your own copy.
 
 > Only want the component library in an existing app? Install it from npm instead
-> with `npm install @viliha/vui-ui` — see
+> with `npm install @viliha/vui-ui`. See
 > [Use the library in your project](#use-the-library-in-your-project).
 
 ---
@@ -115,7 +115,7 @@ npm install -D tailwindcss @tailwindcss/postcss
 
 `react` and `react-dom` are peer dependencies, so your app's own versions are
 used. Because `@viliha/vui-ui` ships **TypeScript source**, your app's bundler
-compiles it — the per-toolchain setup is below.
+compiles it. The per-toolchain setup is below.
 
 ### 1 · New Next.js app
 
@@ -125,7 +125,7 @@ cd my-app
 npm install @viliha/vui-ui
 ```
 
-**a. Tailwind v4** — in your global stylesheet (e.g. `app/globals.css`):
+**a. Tailwind v4:** in your global stylesheet (e.g. `app/globals.css`):
 
 ```css
 @import "tailwindcss";
@@ -134,7 +134,7 @@ npm install @viliha/vui-ui
 @import "@viliha/vui-ui/theme.css";
 ```
 
-**b. Transpile the source package** — in `next.config.ts`:
+**b. Transpile the source package:** in `next.config.ts`:
 
 ```ts
 import type { NextConfig } from "next";
@@ -146,7 +146,7 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-That's all it takes — `import { Button } from "@viliha/vui-ui/button"` and go.
+That's all it takes: `import { Button } from "@viliha/vui-ui/button"` and go.
 
 ### 2 · New Vite + React app
 
@@ -190,12 +190,12 @@ Vite transpiles the package's TypeScript automatically, with no extra config.
 5. **Using an AI agent?** Load the design rules so it builds *with* VUI instead of
    reinventing it:
    `cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md`
-   (or `./AGENTS.md`). That file `@`-imports the package's `AGENT.md` — the single
-   source of truth — so you never copy the rules by hand.
+   (or `./AGENTS.md`). That file `@`-imports the package's `AGENT.md` (the single
+   source of truth), so you never copy the rules by hand.
 
 ### 4 · Turborepo / monorepo
 
-This is the package's native pattern — the repo *is* a Turborepo. Add it to any
+This is the package's native pattern: the repo *is* a Turborepo. Add it to any
 app in your workspace:
 
 ```jsonc
@@ -286,7 +286,7 @@ NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
 Each one is optional; anything left unset falls back to the default
 `© 2026 VILIHA PTE. LTD. · MIT Licensed`. These are `NEXT_PUBLIC_` variables read
 at **build time** and inlined into the export, so set them where your deploy runs
-`pnpm build` — setting them only at runtime won't take effect.
+`pnpm build`. Setting them only at runtime won't take effect.
 
 ---
 
@@ -323,7 +323,7 @@ pnpm workspaces · Turborepo · TypeScript 5.9.
 Contributions are welcome. See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for dev
 setup, coding standards, and the PR flow, along with
 **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)**. Every PR runs the full set of
-checks — lint, types, build, and security — in CI.
+checks (lint, types, build, and security) in CI.
 
 ```bash
 pnpm install

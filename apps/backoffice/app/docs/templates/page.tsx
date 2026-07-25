@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/templates/" },
   title: "Requirement templates",
   description:
-    "Copy- or download-ready requirement templates for briefing an AI agent to build with Vui Starter — component, page, feature, multi-step workflow, and a full CRUD entity — so the first pass lands on the design system instead of around it.",
+    "Copy- or download-ready requirement templates for briefing an AI agent to build with Vui Starter (component, page, feature, multi-step workflow, and a full CRUD entity) so the first pass lands on the design system instead of around it.",
 };
 
 /** Read a template file at build time so the .md stays the single source. */
@@ -23,17 +23,17 @@ export default function TemplatesPage() {
       <PageTitle
         eyebrow="Guides"
         title="Requirement templates"
-        lead="How you brief the agent decides how close the first pass lands. Each template below has a Copy button and a Download button — grab the .md, drop it in your repo, fill in the angle-bracket blanks, and paste it to an agent that has loaded the VUI guide. Every template ends with happy and unhappy test scenarios, so the agent builds the tests alongside the feature."
+        lead="How you brief the agent decides how close the first pass lands. Each template below has a Copy button and a Download button. Grab the .md, drop it in your repo, fill in the angle-bracket blanks, and paste it to an agent that has loaded the VUI guide. Every template ends with happy and unhappy test scenarios, so the agent builds the tests alongside the feature."
       />
 
       <H2>Before you start</H2>
       <P>
-        Point your agent at the shipped guide first — it encodes the rules these
+        Point your agent at the shipped guide first. It encodes the rules these
         templates lean on. Copy{" "}
         <code>node_modules/@viliha/vui-ui/CLAUDE.template.md</code> into your repo
         as <code>CLAUDE.md</code> or <code>AGENTS.md</code>. With that in place,
         every template below can stay short: you name <em>what</em> and{" "}
-        <em>where</em>, and the guide supplies the <em>how</em> — tokens, page
+        <em>where</em>, and the guide supplies the <em>how</em>: tokens, page
         types, RecordView, and accessibility.
       </P>
       <Note title="The six things every good requirement names">
@@ -56,14 +56,14 @@ export default function TemplatesPage() {
           className="font-medium text-foreground underline"
         >
           page type
-        </a>{" "}
-        — that choice drives everything else.
+        </a>
+        , since that choice drives everything else.
       </P>
       <TemplateBlock filename="page.md" content={tmpl("page.md")} />
 
       <H2>3 · New feature / functionality</H2>
       <P>
-        For a capability that spans more than a single page — a command palette,
+        For a capability that spans more than a single page: a command palette,
         a bulk importer, a notifications tray.
       </P>
       <TemplateBlock filename="feature.md" content={tmpl("feature.md")} />
@@ -74,8 +74,8 @@ export default function TemplatesPage() {
         agent turns each step into a screen built from existing blocks.
       </P>
       <TemplateBlock filename="workflow.md" content={tmpl("workflow.md")} />
-      <H3>Worked example — customer signup</H3>
-      <P>The same template, filled in — this is the level of detail to aim for.</P>
+      <H3>Worked example: customer signup</H3>
+      <P>The same template, filled in. This is the level of detail to aim for.</P>
       <TemplateBlock
         filename="customer-signup.md"
         content={tmpl("customer-signup.md")}
@@ -83,7 +83,7 @@ export default function TemplatesPage() {
 
       <H2>5 · Full feature (CRUD entity)</H2>
       <P>
-        The complete brief for a full resource — screens, fields, API contract,
+        The complete brief for a full resource: screens, fields, API contract,
         test matrix, business rules, and happy and unhappy{" "}
         <strong>test scenarios</strong>, all in one file. It&apos;s generalized
         from a real PRD: fill it in and an agent can design the UI/UX{" "}
@@ -95,7 +95,7 @@ export default function TemplatesPage() {
         content={tmpl("feature-requirement.md")}
       />
 
-      <H2>6 · Worked example — Calendar page</H2>
+      <H2>6 · Worked example: Calendar page</H2>
       <P>
         A filled-in <a href="/docs/layout" className="font-medium text-foreground underline">page</a>{" "}
         brief for the appointments{" "}
@@ -105,26 +105,26 @@ export default function TemplatesPage() {
       </P>
       <TemplateBlock filename="calendar.md" content={tmpl("calendar.md")} />
 
-      <H2>7 · Worked example — Chat (ChatGPT-style)</H2>
+      <H2>7 · Worked example: Chat (ChatGPT-style)</H2>
       <P>
         A filled-in brief for the{" "}
         <a href="/docs/chat" className="font-medium text-foreground underline">Chat</a>{" "}
-        assistant — centered thread, auto-growing composer, and image/file
+        assistant: centered thread, auto-growing composer, and image/file
         attachments with preview and remove.
       </P>
       <TemplateBlock filename="chat.md" content={tmpl("chat.md")} />
 
-      <H2>8 · Worked example — Support &amp; ticketing</H2>
+      <H2>8 · Worked example: Support &amp; ticketing</H2>
       <P>
         A filled-in brief for the{" "}
         <a href="/docs/support" className="font-medium text-foreground underline">Support</a>{" "}
-        desk — a ticket queue with status/priority, a detail pane, and a reply
+        desk: a ticket queue with status/priority, a detail pane, and a reply
         thread.
       </P>
       <TemplateBlock filename="support.md" content={tmpl("support.md")} />
 
       <Note title="Specificity beats length">
-        You don&apos;t need long prose — you need the blanks filled. A field
+        You don&apos;t need long prose; you need the blanks filled. A field
         list, a page type, and a done-when checklist get you a first pass that
         already looks like VUI. Vague requirements get you vague components.
       </Note>

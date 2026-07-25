@@ -48,8 +48,8 @@ export default function InstallationPage() {
         The steps below wire up the <em>theme and components</em>. To also get
         the <strong>app shell</strong> (layout, sidebar, open tabs, command
         palette, nav config, logo) and the <strong>demo pages</strong>, run the
-        scaffolder in your project. It copies everything into your repo — yours
-        to own and edit — and installs the dependencies:
+        scaffolder in your project. It copies everything into your repo (yours
+        to own and edit) and installs the dependencies:
       </P>
       <PackageManagerTabs
         commands={{
@@ -99,32 +99,32 @@ export default function InstallationPage() {
         <strong>without <code>--src-dir</code></strong> so there aren&apos;t two{" "}
         <code>app/</code> dirs or two config files. <code>init</code>{" "}
         <strong>auto-installs</strong> the dependencies with the package manager it
-        detects from your lockfile (npm / pnpm / yarn / bun) — pass{" "}
+        detects from your lockfile (npm / pnpm / yarn / bun). Pass{" "}
         <code>--yes</code> to skip the prompt or <code>--no-install</code> to do it
         yourself.
       </Note>
       <Ul>
         <li>
-          <strong>Fresh + pre-built</strong> — full runnable app (config + shell +
+          <strong>Fresh + pre-built:</strong> full runnable app (config + shell +
           demo pages).
         </li>
         <li>
-          <strong>Fresh + theme-only</strong> — just{" "}
+          <strong>Fresh + theme-only:</strong> just{" "}
           <code className="font-mono text-[0.9em]">globals.css</code> +{" "}
           <code className="font-mono text-[0.9em]">next.config</code> wiring; build
           your own pages.
         </li>
         <li>
-          <strong>Existing + pre-built</strong> — shell + demo added; your config
+          <strong>Existing + pre-built:</strong> shell + demo added; your config
           is <strong>never</strong> overwritten.
         </li>
         <li>
-          <strong>Existing + theme-only</strong> — nothing copied; prints the
+          <strong>Existing + theme-only:</strong> nothing copied; prints the
           wiring steps.
         </li>
       </Ul>
       <Note variant="warning" title="Installing into an existing project? Read this">
-        Always pass <code>--existing</code> — it <strong>never</strong> overwrites
+        Always pass <code>--existing</code>; it <strong>never</strong> overwrites
         your <code>next.config</code>, <code>globals.css</code>, or root layout.
         Pre-built adds the shell/pages under <code>app/(app)/</code> and{" "}
         <code>app/_components/</code> and prints the four things to merge yourself
@@ -133,9 +133,9 @@ export default function InstallationPage() {
         <strong> Preview first</strong> with{" "}
         <code>npx @viliha/vui-ui init --existing --prebuilt --dry-run</code> to see
         exactly what lands. Only want the components?{" "}
-        <code>--theme-only</code> copies nothing — just prints the wiring, or skip{" "}
+        <code>--theme-only</code> copies nothing and just prints the wiring, or skip{" "}
         <code>init</code> entirely (Setup section 3 below).{" "}
-        <strong>Never run <code>--fresh</code> in an existing project</strong> — it
+        <strong>Never run <code>--fresh</code> in an existing project:</strong> it
         overwrites your config with the demo&apos;s.
       </Note>
 
@@ -174,13 +174,13 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock>
       <CodeBlock title="src/index.css">{`@import "tailwindcss";
 @import "@viliha/vui-ui/theme.css";`}</CodeBlock>
-      <P>Vite transpiles the package's TypeScript automatically — no extra config.</P>
+      <P>Vite transpiles the package's TypeScript automatically, with no extra config.</P>
 
       <H2>3 · Existing project</H2>
       <P>
         This manual wiring is exactly what{" "}
         <code className="font-mono text-[0.9em]">npx @viliha/vui-ui init --existing --theme-only</code>{" "}
-        prints — the <strong>safe path</strong> that copies no files and touches
+        prints. It is the <strong>safe path</strong> that copies no files and touches
         no config. Do it by hand, or run that command and follow its output.
       </P>
       <Ul>
@@ -211,12 +211,12 @@ export default defineConfig({ plugins: [react(), tailwindcss()] });`}</CodeBlock
           install and scaffold inside the target app (e.g.{" "}
           <code className="font-mono text-[0.9em]">apps/web</code>), never at the
           repo root
-        </strong>{" "}
-        — the root has no <code className="font-mono text-[0.9em]">app/</code> and
+        </strong>. The root has no{" "}
+        <code className="font-mono text-[0.9em]">app/</code> and
         no Next.js app.
       </P>
       <Note variant="warning" title="Scaffold into the app, not the repo root">
-        Run <code>init</code> against the specific app — either from inside it, or
+        Run <code>init</code> against the specific app, either from inside it, or
         by naming it from the root. In monorepo mode the CLI does{" "}
         <strong>not</strong> auto-install (installs are workspace-specific), so
         install the deps in that app afterward.
@@ -236,12 +236,12 @@ pnpm --filter web dev`}</CodeBlock>
           Add <code className="font-mono text-[0.9em]">transpilePackages: ["@viliha/vui-ui"]</code>,
           the <code className="font-mono text-[0.9em]">theme.css</code> import, and
           the <code className="font-mono text-[0.9em]">@/*</code> alias to{" "}
-          <strong>that app</strong> — its <code>next.config</code>,{" "}
+          <strong>that app</strong>: its <code>next.config</code>,{" "}
           <code>globals.css</code>, and <code>tsconfig.json</code>, not the root.
         </li>
         <li>Confirm the app is covered by your workspace globs.</li>
         <li>
-          No build/dts step — the package is consumed as source, so Turborepo
+          No build/dts step; the package is consumed as source, so Turborepo
           caches your <em>app</em> build, not a library build.
         </li>
       </Ul>

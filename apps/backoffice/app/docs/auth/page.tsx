@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/auth/" },
   title: "Auth screens",
   description:
-    "Ready-made authentication screens — sign in, sign up, forgot/reset password, verify code — built on a reusable sectioned AuthCard so every screen is consistent.",
+    "Ready-made authentication screens (sign in, sign up, forgot/reset password, verify code) built on a reusable sectioned AuthCard so every screen stays consistent.",
 };
 
 export default function AuthDocPage() {
@@ -24,20 +24,20 @@ export default function AuthDocPage() {
       <PageTitle
         eyebrow="Guides"
         title="Auth screens"
-        lead="The starter ships complete authentication screens built on one small set of components. Every screen is a sectioned card — header, body, footer — that mirrors the app's dialogs, so the whole set stays consistent and easy to extend."
+        lead="The starter ships complete authentication screens built on one small set of components. Every screen is a sectioned card (header, body, footer) that mirrors the app's dialogs, so the whole set stays consistent and easy to extend."
       />
 
       <H2>What's included</H2>
       <P>
-        Themed, client-side demo screens live under <code>/auth</code> — swap
+        Themed, client-side demo screens live under <code>/auth</code>. Swap
         the demo handlers for your real auth calls:
       </P>
       <Ul>
-        <li><code>/auth/signin</code> — Google / passkey / SSO / magic-link, with 2FA and SSO sub-views</li>
-        <li><code>/auth/signup</code> — work-email sign-up with a reCAPTCHA-style gate</li>
-        <li><code>/auth/forgot-password</code> — request a reset link</li>
-        <li><code>/auth/reset-password</code> — set a new password</li>
-        <li><code>/auth/verify</code> — 6-digit verification code (OTP)</li>
+        <li><code>/auth/signin</code>: Google / passkey / SSO / magic-link, with 2FA and SSO sub-views</li>
+        <li><code>/auth/signup</code>: work-email sign-up with a reCAPTCHA-style gate</li>
+        <li><code>/auth/forgot-password</code>: request a reset link</li>
+        <li><code>/auth/reset-password</code>: set a new password</li>
+        <li><code>/auth/verify</code>: 6-digit verification code (OTP)</li>
       </Ul>
 
       <H2>The building blocks</H2>
@@ -48,12 +48,12 @@ export default function AuthDocPage() {
         with a plain body.
       </P>
       <Ul>
-        <li><code>AuthCard</code> — the bordered container</li>
-        <li><code>AuthCardHeader</code> — <code>title</code>, optional <code>description</code> and <code>icon</code> (muted background)</li>
-        <li><code>AuthCardBody</code> — the fields (roomy, consistent spacing)</li>
-        <li><code>AuthCardFooter</code> — the primary action(s) (muted background)</li>
-        <li><code>AuthCardAside</code> — secondary nav (e.g. &quot;Create an account&quot;), set off by its own divider</li>
-        <li><code>Field</code> — a labelled field; pass <code>required</code> for the <code>*</code> marker, <code>error</code> for inline errors</li>
+        <li><code>AuthCard</code>: the bordered container</li>
+        <li><code>AuthCardHeader</code>: <code>title</code>, optional <code>description</code> and <code>icon</code> (muted background)</li>
+        <li><code>AuthCardBody</code>: the fields (roomy, consistent spacing)</li>
+        <li><code>AuthCardFooter</code>: the primary action(s) (muted background)</li>
+        <li><code>AuthCardAside</code>: secondary nav (e.g. &quot;Create an account&quot;), set off by its own divider</li>
+        <li><code>Field</code>: a labelled field; pass <code>required</code> for the <code>*</code> marker, <code>error</code> for inline errors</li>
       </Ul>
 
       <H2>Build a screen</H2>
@@ -97,7 +97,7 @@ export default function SignIn() {
       <H3>Confirmation states</H3>
       <P>
         For &quot;check your email&quot; and other success states, pair a header
-        carrying an <code>icon</code> with a footer of actions — no body needed:
+        carrying an <code>icon</code> with a footer of actions, no body needed:
       </P>
       <CodeBlock title="sent state">{`<AuthCard>
   <AuthCardHeader
@@ -111,7 +111,7 @@ export default function SignIn() {
 </AuthCard>`}</CodeBlock>
 
       <Note title="Layout">
-        Auth screens render inside <code>app/auth/layout.tsx</code> — centered,
+        Auth screens render inside <code>app/auth/layout.tsx</code>: centered,
         with the logo and footer, and separate from the app shell. Add a new
         screen at <code>app/auth/&lt;name&gt;/page.tsx</code> and it inherits the
         layout.

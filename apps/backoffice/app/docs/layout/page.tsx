@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/layout/" },
   title: "Layout & patterns",
   description:
-    "The standard page template and the five page types (data table, record form, dashboard, settings, kanban board), plus breadcrumbs, the ⌘K command palette (Quick actions & Global search), section cards, bordered lists and dialogs — the conventions every new page in Vui Starter follows.",
+    "The standard page template and the five page types (data table, record form, dashboard, settings, kanban board), plus breadcrumbs, the ⌘K command palette (Quick actions & Global search), section cards, bordered lists and dialogs, the conventions every new page in Vui Starter follows.",
 };
 
 export default function LayoutPage() {
@@ -26,7 +26,7 @@ export default function LayoutPage() {
       <PageTitle
         eyebrow="Customization"
         title="Layout & patterns"
-        lead="These are the structural conventions of the theme. Follow them for every page, section, dialog and list, and the app stays consistent on its own — you never design a one-off layout per screen."
+        lead="These are the structural conventions of the theme. Follow them for every page, section, dialog and list, and the app stays consistent on its own; you never design a one-off layout per screen."
       />
 
       <H2>Page template</H2>
@@ -74,25 +74,25 @@ export default function MyPage() {
       <P>
         Every page shares the frame above; only the content region changes. The
         theme gives you <strong>five page types</strong>. When you add a page,
-        decide which one the requirement calls for and fill in its content —
-        don&apos;t invent a sixth shape.
+        decide which one the requirement calls for and fill in its content.
+        Don&apos;t invent a sixth shape.
       </P>
 
       <PageTypeGallery />
 
       <H3>1 · Data table page</H3>
       <P>
-        Use this for any list of records — <strong>Organizations, Branches,
+        Use this for any list of records: <strong>Organizations, Branches,
         Departments, Employees, Markets</strong>, and the System and CRM lists.
         The route is a thin server <code>page.tsx</code> that renders a client{" "}
         <code>*-table.tsx</code>, and that file is a single{" "}
         <code>RecordView</code> fed a <code>fields</code> array. RecordView brings
         its own action header, breadcrumbs, padded card, sorting, filtering,
-        pagination, row actions, the add/edit form and import/export — you
+        pagination, row actions, the add/edit form and import/export. You
         configure it rather than lay it out. Every data table page runs on this
         one layout; only the <code>fields</code> config changes.
       </P>
-      <CodeBlock title="app/(app)/departments/ — server page + client table">{`// page.tsx — server component: metadata + the table, nothing else
+      <CodeBlock title="app/(app)/departments/ (server page + client table)">{`// page.tsx — server component: metadata + the table, nothing else
 export const metadata = pageMeta("/departments");
 export default function DepartmentsPage() {
   return <main className="h-full"><DepartmentsTable /></main>;
@@ -118,10 +118,10 @@ export default function DepartmentsPage() {
       </P>
       <Shot
         src="/page-types/data-table.png"
-        alt="Data table page — the Organizations list (RecordView)"
+        alt="Data table page: the Organizations list (RecordView)"
       />
 
-      <H3>2 · Record form — Add / Edit / View</H3>
+      <H3>2 · Record form: Add / Edit / View</H3>
       <P>
         The Add, Edit and View screens for a record are <strong>one form</strong>
         , rendered by <code>RecordView</code>/<code>RecordForm</code> from the
@@ -132,14 +132,14 @@ export default function DepartmentsPage() {
       </P>
       <Ul>
         <li>
-          <strong>Slide-over overlay (default)</strong> — Branches, Departments.
+          <strong>Slide-over overlay (default):</strong> Branches, Departments.
           Render <code>&lt;RecordView&gt;</code> with no <code>formMode</code> and
           Add/Edit/View open in a right-hand panel over the table. It&apos;s
-          uncontrolled — you pass <code>initialData</code>. Reach for it on short
+          uncontrolled; you pass <code>initialData</code>. Reach for it on short
           forms and quick edits.
         </li>
         <li>
-          <strong>Full-page routes</strong> — Organizations. Set{" "}
+          <strong>Full-page routes:</strong> Organizations. Set{" "}
           <code>formMode=&quot;page&quot;</code> and route the actions to
           dedicated URLs (<code>/new</code>, <code>/edit</code>). The form then
           takes over the whole page with a breadcrumb bar, an optional
@@ -166,10 +166,10 @@ export default function DepartmentsPage() {
 <RecordForm isNew fields={fields} row={draft} onSave={…} onCancel={…} />`}</CodeBlock>
       <Shot
         src="/page-types/form-full-page.png"
-        alt="Full-page record form — Create organization, with the documentation panel and Save/Cancel footer"
+        alt="Full-page record form: Create organization, with the documentation panel and Save/Cancel footer"
       />
       <P>
-        <strong>The Info panel beside the form is dynamic</strong> — nothing in
+        <strong>The Info panel beside the form is dynamic.</strong> Nothing in
         it is hardcoded. It reads from the same config as the form:{" "}
         <code>formDescription</code> fills the &quot;About&quot; intro, and each
         field with a <code>description</code> adds a labelled help entry. Provide
@@ -188,14 +188,14 @@ export default function DepartmentsPage() {
 />`}</CodeBlock>
       <P>
         The slide-over variant renders the same fields in a right-hand panel over
-        the table (see the &quot;Form — slide-over&quot; thumbnail above). It has
+        the table (see the &quot;Form: slide-over&quot; thumbnail above). It has
         no Info panel, so switch to full-page mode whenever you want the help
         column.
       </P>
 
       <H3>3 · Dashboard page</H3>
       <P>
-        An overview screen — the Home page at <code>/dashboard</code>. A row of{" "}
+        An overview screen: the Home page at <code>/dashboard</code>. A row of{" "}
         <code>StatCard</code>s sits at the top, followed by a grid of
         bordered-card sections holding tables, progress bars and lists. It uses
         the standard scrolling content region: the stat grid first, then a
@@ -214,15 +214,15 @@ export default function DepartmentsPage() {
 
       <Shot
         src="/page-types/dashboard.png"
-        alt="Dashboard page — the Home overview with stat cards and content sections"
+        alt="Dashboard page: the Home overview with stat cards and content sections"
       />
 
       <H3>4 · Settings (single-form) page</H3>
       <P>
-        One long form on its own page — Settings. Rather than a scrolling column
+        One long form on its own page: Settings. Rather than a scrolling column
         of sections, the content is a <strong>single bordered card</strong>: it
         holds scrollable <code>Section</code> cards, with a{" "}
-        <strong>fixed footer action bar</strong> (Save) pinned to the bottom —
+        <strong>fixed footer action bar</strong> (Save) pinned to the bottom,
         the same footer the full-page record form uses. Reach for this whenever a
         page is &quot;a form with a Save button,&quot; not a list.
       </P>
@@ -240,12 +240,12 @@ export default function DepartmentsPage() {
 
       <Shot
         src="/page-types/settings.png"
-        alt="Settings page — a single card of Section blocks with a fixed Save footer"
+        alt="Settings page: a single card of Section blocks with a fixed Save footer"
       />
 
       <H3>5 · Board (Kanban) page</H3>
       <P>
-        A horizontally-scrolling column board — the Opportunities pipeline. The
+        A horizontally scrolling column board: the Opportunities pipeline. The
         content region scrolls on the <em>x</em> axis and holds fixed-width
         (<code>w-72</code>) columns, each a dashed, droppable card list you can
         drag cards between. Use it for stage or status pipelines; flat lists
@@ -266,7 +266,7 @@ export default function DepartmentsPage() {
 
       <Shot
         src="/page-types/board.png"
-        alt="Board page — the Opportunities pipeline with drag-and-drop stage columns"
+        alt="Board page: the Opportunities pipeline with drag-and-drop stage columns"
       />
 
       <Note title="Client pages need a layout.tsx for metadata">
@@ -281,7 +281,7 @@ export default function DepartmentsPage() {
 
       <H2>Sections</H2>
       <P>
-        A section is a bordered, rounded card — a muted header bar with a bottom
+        A section is a bordered, rounded card: a muted header bar with a bottom
         border, then the content. Stack them in the <code>gap-4</code> column and
         they space themselves.
       </P>
@@ -322,7 +322,7 @@ export default function DepartmentsPage() {
         card all come for free.
       </Note>
 
-      <H2>Command palette — Quick actions &amp; Global search</H2>
+      <H2>Command palette: Quick actions &amp; Global search</H2>
       <P>
         Two ⌘K-style palettes ship in the shell, both built on the same headless{" "}
         <code>CommandPalette</code> from <code>@viliha/vui-ui</code>. The only
@@ -337,18 +337,18 @@ export default function DepartmentsPage() {
         </li>
         <li>
           <strong>Global search</strong> (<code>⌘⌥K</code>) searches{" "}
-          <strong>records</strong> — organizations, people, opportunities,
+          <strong>records</strong>: organizations, people, opportunities,
           reference data. It opens from the top-bar search box, and each result
           navigates to where the record lives.
         </li>
       </Ul>
       <Shot
         src="/page-types/quick-actions.png"
-        alt="Quick actions (⌘K) — jump to any page, grouped like the sidebar"
+        alt="Quick actions (⌘K): jump to any page, grouped like the sidebar"
       />
       <Shot
         src="/page-types/global-search.png"
-        alt="Global search (⌘⌥K) — find records across the app, grouped by type"
+        alt="Global search (⌘⌥K): find records across the app, grouped by type"
       />
 
       <H3>How to implement one</H3>
@@ -403,7 +403,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         <code>{`{ id, label, group?, icon?, keywords?, onSelect }`}</code>:{" "}
         <code>group</code> renders a heading, <code>keywords</code> widen the
         match, and <code>onSelect</code> does the work. Global search&apos;s
-        record index is the demo&apos;s stand-in for a backend — swap it for your
+        record index is the demo&apos;s stand-in for a backend. Swap it for your
         API results and everything else stays the same.
       </P>
       <Note title="Two shortcuts, no clash">
@@ -421,8 +421,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         one; <code>⌘</code>/<code>Ctrl</code>-clicking a sidebar item opens it in
         a <strong>background tab</strong> without leaving the current page; and
         the <code>✕</code> closes one. You can{" "}
-        <strong>drag tabs to reorder them</strong> — each shows a grip handle and
-        the shift animates via FLIP — and{" "}
+        <strong>drag tabs to reorder them</strong> (each shows a grip handle and
+        the shift animates via FLIP) and{" "}
         <strong>right-click to tag one with any of seven color labels</strong>.
         The open list, its order and the colors all persist across reloads via{" "}
         <code>sessionStorage</code>, capped by{" "}
@@ -431,7 +431,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
       </P>
       <Shot
         src="/page-types/open-tabs.png"
-        alt="Open tabs — a labelled strip under the top bar with the active tab in the primary color"
+        alt="Open tabs: a labelled strip under the top bar with the active tab in the primary color"
       />
       <P>
         It&apos;s <code>OpenTabsProvider</code> + <code>&lt;TabStrip /&gt;</code>{" "}
@@ -440,7 +440,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         <code>(app)/layout.tsx</code>, and it&apos;s{" "}
         <strong>keep-alive</strong>: every open page stays mounted with the
         inactive ones hidden. Switching tabs is therefore{" "}
-        <strong>instant — no remount, no flash</strong>, and each page holds its
+        <strong>instant: no remount, no flash</strong>, and each page holds its
         live state (scroll, inputs, in-progress work). New menu items mount on
         first visit. Tab labels, icons and colors derive from the same{" "}
         <code>nav-config.ts</code> / <code>route-meta.ts</code> source as the
@@ -457,10 +457,10 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
       <H2>Multi-step wizard</H2>
       <P>
-        For a guided flow — registration, onboarding, checkout — pair the
+        For a guided flow (registration, onboarding, checkout), pair the
         exported <code>Steps</code> indicator with your own step state.{" "}
         <code>Steps</code> is controlled and presentational: you pass the steps
-        and the current index, and it renders the state — completed steps fill
+        and the current index, and it renders the state: completed steps fill
         with the primary color and a check, the current one is ringed, and
         upcoming ones stay muted. Build each step&apos;s body from the usual
         primitives (<code>Input</code>, <code>Select</code>, the shared{" "}
@@ -491,7 +491,7 @@ function Wizard() {
 }`}</CodeBlock>
       <Shot
         src="/page-types/wizard.png"
-        alt="Register Your Business — a three-step wizard built with the Steps indicator"
+        alt="Register Your Business: a three-step wizard built with the Steps indicator"
       />
       <P>
         See the{" "}
@@ -506,8 +506,8 @@ function Wizard() {
 
       <H2>Bordered list components</H2>
       <P>
-        Any component that renders a list of records — dropdown menus, selects,
-        the account menu, searchable comboboxes — uses{" "}
+        Any component that renders a list of records (dropdown menus, selects,
+        the account menu, searchable comboboxes) uses{" "}
         <strong>bottom-border dividers between items</strong> by default. Instead
         of memorizing the classes, build lists from the <code>Menu</code>{" "}
         primitive: it bakes in the divider, hover and last-row handling, so a
@@ -534,8 +534,8 @@ function Wizard() {
         Dialogs are sectioned like everything else: a bordered{" "}
         <strong>header</strong>, a scrollable <strong>body</strong>, and a
         bordered <strong>footer</strong> for actions. The <code>Dialog</code>{" "}
-        primitive gives you the shell — centered panel, dimmed backdrop, entrance
-        animation, Escape and backdrop-click to close — along with those three
+        primitive gives you the shell (centered panel, dimmed backdrop, entrance
+        animation, Escape and backdrop-click to close) along with those three
         placeholders, so all you supply is content.
       </P>
       <CodeBlock title="invite-dialog.tsx">{`import {
@@ -645,7 +645,7 @@ function PageTypeGallery() {
         </div>
       </Thumb>
 
-      <Thumb label="2 · Form — full page">
+      <Thumb label="2 · Form: full page">
         <div className="flex h-full gap-1.5">
           <div className="flex flex-1 flex-col gap-1">
             <Field />
@@ -661,7 +661,7 @@ function PageTypeGallery() {
         </div>
       </Thumb>
 
-      <Thumb label="2 · Form — slide-over">
+      <Thumb label="2 · Form: slide-over">
         <div className="flex h-full gap-1.5">
           <div className="flex flex-1 flex-col gap-1.5 opacity-40">
             <span className="h-2 w-full rounded bg-muted/70" />

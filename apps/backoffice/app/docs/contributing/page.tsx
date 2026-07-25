@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/contributing/" },
   title: "Contributing",
   description:
-    "Contribute to Vui Starter — local setup, the agent-assisted workflow (AGENTS.md), where things live, and the pull-request workflow.",
+    "Contribute to Vui Starter: local setup, the agent-assisted workflow (AGENTS.md), where things live, and the pull-request workflow.",
 };
 
 export default function ContributingPage() {
@@ -23,14 +23,14 @@ export default function ContributingPage() {
       <PageTitle
         eyebrow="Community"
         title="Contributing"
-        lead="Vui Starter is MIT-licensed and open to contributions — bug fixes, new components, docs, and demos are all welcome. This page covers changing the theme itself; to build your own app with VUI, see Building with AI agents instead."
+        lead="Vui Starter is MIT-licensed and open to contributions: bug fixes, new components, docs, and demos are all welcome. This page covers changing the theme itself; to build your own app with VUI, see Building with AI agents instead."
       />
 
       <Note title="Which guide do I need?">
         Two scenarios, two homes for the rules.{" "}
-        <strong>Contributing to the theme</strong> (this page) — humans follow{" "}
+        <strong>Contributing to the theme</strong> (this page): humans follow{" "}
         <code>CONTRIBUTING.md</code>, agents follow <code>AGENTS.md</code>.{" "}
-        <strong>Using the theme in your own app</strong> — see{" "}
+        <strong>Using the theme in your own app</strong>: see{" "}
         <a
           href="/docs/ai-agents"
           className="font-medium text-foreground underline"
@@ -50,7 +50,7 @@ pnpm dev            # backoffice + docs on :3000`}</CodeBlock>
       <H2>Contributing with an AI agent</H2>
       <P>
         The repo ships deterministic, machine-checkable rules for coding agents
-        in <code>AGENTS.md</code> — the filename Claude Code, Cursor, and Copilot
+        in <code>AGENTS.md</code>, the filename Claude Code, Cursor, and Copilot
         auto-load. It spells out where new components, pages, tokens, and
         navigation go, the hard rules (Server Components first, no <code>any</code>,
         no hard-coded design values, reuse before you create), and the commands a
@@ -70,11 +70,11 @@ pnpm check-types    # type-check`}</CodeBlock>
       <H2>Where things live</H2>
       <Ul>
         <li>
-          <code>packages/ui</code> — the <code>@viliha/vui-ui</code> library
+          <code>packages/ui</code>: the <code>@viliha/vui-ui</code> library
           (edit components + <code>theme.css</code> here).
         </li>
         <li>
-          <code>apps/backoffice</code> — the admin demo that dogfoods the
+          <code>apps/backoffice</code>: the admin demo that dogfoods the
           library and hosts this documentation site under{" "}
           <code>app/docs</code>.
         </li>
@@ -82,10 +82,10 @@ pnpm check-types    # type-check`}</CodeBlock>
 
       <H2>Changelog &amp; docs (required)</H2>
       <Note variant="warning" title="Every change updates the changelog and docs">
-        This is mandatory for everyone — humans and AI agents. In the same PR, add
+        This is mandatory for everyone, humans and AI agents. In the same PR, add
         an entry to <code>packages/ui/CHANGELOG.md</code> (and bump{" "}
         <code>packages/ui/package.json</code> per semver if it ships in the
-        package), and update every doc that describes the change —{" "}
+        package), and update every doc that describes the change:{" "}
         <code>README.md</code>, <code>AGENT.md</code>, the relevant{" "}
         <code>/docs</code> page, and the requirement templates. A change with no
         changelog or docs update is incomplete.
@@ -95,7 +95,7 @@ pnpm check-types    # type-check`}</CodeBlock>
       <Ul>
         <li>Branch off <code>main</code>, keep changes focused.</li>
         <li>
-          Run <code>pnpm lint</code> and <code>pnpm check-types</code> before pushing —
+          Run <code>pnpm lint</code> and <code>pnpm check-types</code> before pushing;
           CI runs lint, types, build, and security scanning on every PR.
         </li>
         <li>

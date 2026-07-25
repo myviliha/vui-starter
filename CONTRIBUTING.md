@@ -4,12 +4,12 @@ Thanks for contributing to **VUI Starter**.
 
 VUI is an enterprise-first design system, not just a component library. A good
 contribution improves the system without adding complexity, inconsistency, or
-maintenance cost — and part of your job as a contributor is to protect the design
+maintenance cost, and part of your job as a contributor is to protect the design
 language, the architecture, and the developer experience that are already here.
 
 > **Working with an AI agent?** This file is the *why* (philosophy + PR flow).
-> The machine-checkable *what* — exact file locations, hard rules, and the
-> verify commands agents must pass — lives in [`AGENTS.md`](./AGENTS.md), which
+> The machine-checkable *what* (exact file locations, hard rules, and the
+> verify commands agents must pass) lives in [`AGENTS.md`](./AGENTS.md), which
 > agent tools auto-load. Read both.
 
 ---
@@ -62,7 +62,7 @@ it isn't.
 
 # Repository Structure
 
-VUI is a Turborepo monorepo, and its package boundaries are strict — respect them.
+VUI is a Turborepo monorepo, and its package boundaries are strict, so respect them.
 
 ## packages/ui
 
@@ -74,7 +74,7 @@ design tokens, and `theme.css`. Application-specific logic never belongs here.
 ## apps/backoffice
 
 This is where the application pages, business logic, demo implementations, and
-example integrations live — plus **the documentation site**, whose routes sit
+example integrations live, plus **the documentation site**, whose routes sit
 under `app/docs` and are served at `/docs`.
 
 It's the only app in the repo: it both demonstrates the design system and hosts
@@ -117,7 +117,7 @@ and must meet WCAG AA contrast.
 ## Dark Mode
 
 Every component has to work in both light and dark mode. Get there through the
-design tokens — never with component-specific color overrides.
+design tokens, never with component-specific color overrides.
 
 ---
 
@@ -169,13 +169,13 @@ unused imports, and no dead code.
 
 # Changelog & docs are mandatory (never skip)
 
-Every feature, change, fix, or removal **must** update the docs in the same PR —
-this applies to everyone, humans and AI agents alike, no exceptions:
+Every feature, change, fix, or removal **must** update the docs in the same PR.
+This applies to everyone, humans and AI agents alike, no exceptions:
 
-- **`packages/ui/CHANGELOG.md`** — add an entry under the target version
+- **`packages/ui/CHANGELOG.md`**: add an entry under the target version
   (Added / Changed / Fixed / Removed). If the change ships in the npm package,
   bump `packages/ui/package.json` per semver.
-- **Every doc that describes it** — keep them in sync: `packages/ui/README.md`,
+- **Every doc that describes it**, keep them in sync: `packages/ui/README.md`,
   `packages/ui/AGENT.md`, the docs site under `apps/backoffice/app/docs/**` (plus
   the nav in `components/docs-shell.tsx` if you add a page), and the requirement
   templates when a page/feature pattern changes.
@@ -187,8 +187,8 @@ will not be merged.
 
 Every Pull Request should:
 
-- **Update `CHANGELOG.md`** (and bump the `packages/ui` version if it ships in the package) — mandatory.
-- **Update all affected docs** (README, `AGENT.md`, `/docs`, templates) — mandatory.
+- **Update `CHANGELOG.md`** (and bump the `packages/ui` version if it ships in the package). Mandatory.
+- **Update all affected docs** (README, `AGENT.md`, `/docs`, templates). Mandatory.
 - Follow existing design patterns.
 - Use design tokens.
 - Support dark mode.

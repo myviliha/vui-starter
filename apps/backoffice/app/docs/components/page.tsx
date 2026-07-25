@@ -40,7 +40,7 @@ export default function ComponentsPage() {
       <PageTitle
         eyebrow="Reference"
         title="Components"
-        lead="Every component imports from its own entry point — @viliha/vui-ui/<name> — so you ship only what you use. Live examples below."
+        lead="Every component imports from its own entry point (@viliha/vui-ui/<name>), so you ship only what you use. Live examples below."
       />
 
       <H2>Button</H2>

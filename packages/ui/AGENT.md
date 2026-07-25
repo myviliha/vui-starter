@@ -1,8 +1,8 @@
 # Using VUI in your project (AI agent guide)
 
-> **Audience:** developers — and their AI agents — **consuming** `@viliha/vui-ui`
+> **Audience:** developers (and their AI agents) **consuming** `@viliha/vui-ui`
 > in a downstream app. This file ships with the npm package. To auto-load these
-> rules, copy the ready-made pointer to your project root — it `@`-imports this
+> rules, copy the ready-made pointer to your project root; it `@`-imports this
 > file, so you never duplicate the rules:
 >
 > ```bash
@@ -14,13 +14,13 @@
 > [CONTRIBUTING.md](https://github.com/myviliha/vui-starter/blob/main/CONTRIBUTING.md)
 > and [AGENTS.md](https://github.com/myviliha/vui-starter/blob/main/AGENTS.md).
 
-You are a frontend architect building enterprise applications on **VUI Starter**. Your job is to ship apps that are consistent, maintainable, accessible, and production-ready by leaning fully on the VUI Design System. Don't reinvent the framework — build with it.
+You are a frontend architect building enterprise applications on **VUI Starter**. Your job is to ship apps that are consistent, maintainable, accessible, and production-ready by leaning fully on the VUI Design System. Don't reinvent the framework; build with it.
 
 > **What you get from the package vs. what to copy.** `@viliha/vui-ui` ships the
 > component primitives (`Button`, `Input`, `Select`, `Dialog`, `Menu`,
 > `RecordView`, `ChartContainer`, `Breadcrumbs`, `theme.css`, …). App-shell
-> patterns referenced below — `SetPageTitle`, the sidebar, and the `AuthCard*`
-> auth screens — are **reference-app patterns**, not package exports.
+> patterns referenced below (`SetPageTitle`, the sidebar, and the `AuthCard*`
+> auth screens) are **reference-app patterns**, not package exports.
 > The breadcrumb *trail-building logic* (`crumbsFor` + `nav-config` +
 > `route-meta`) is also a reference-app pattern: the package exports the
 > presentational `Breadcrumbs` component; the app derives the trail from the
@@ -49,7 +49,7 @@ When several approaches would work, pick the one that aligns best with VUI.
 
 # Think Before You Build
 
-Before you create anything, search for what already exists — a VUI component, a page pattern, a layout, a variant, or a utility. Never duplicate functionality VUI already provides.
+Before you create anything, search for what already exists: a VUI component, a page pattern, a layout, a variant, or a utility. Never duplicate functionality VUI already provides.
 
 ---
 
@@ -66,7 +66,7 @@ npx @viliha/vui-ui init          # interactive decision tree
 
 Files land in the consumer's repo (they own them). Questions:
 0. **Next.js or Turborepo?** (`--nextjs` / `--turbo` + `--dir <path>`, default
-   `apps/web` — turbo scaffolds into that app directory)
+   `apps/web`; turbo scaffolds into that app directory)
 1. **Fresh project?** (`--fresh` / `--existing`)
 2. **Pre-built theme?** (`--prebuilt` = shell + demo pages / `--theme-only` = just
    the theme wiring you configure)
@@ -78,8 +78,8 @@ dependencies** with the package manager it detects from the lockfile (npm / pnpm
 
 - **fresh + prebuilt** → full runnable app (config + shell + demo).
 - **fresh + theme-only** → just `globals.css` + `next.config` wiring; build your own.
-- **existing + prebuilt** → shell + demo added; config **never** overwritten —
-  prints the merge steps (`transpilePackages`, the `theme.css` import, the `@/*`
+- **existing + prebuilt** → shell + demo added; config **never** overwritten, and
+  it prints the merge steps (`transpilePackages`, the `theme.css` import, the `@/*`
   alias, `import "./globals.css"`).
 - **existing + theme-only** → nothing copied; prints the wiring steps.
 
@@ -88,7 +88,7 @@ Other flags: `--yes` / `--force` / `--dry-run`. If you only need the components,
 
 ### Inside a Turborepo / monorepo
 
-**Never scaffold into the repo root** — a monorepo root has no `app/` and no Next
+**Never scaffold into the repo root**; a monorepo root has no `app/` and no Next
 app. Target the specific application, e.g. `apps/web`. Two equivalent ways:
 
 ```bash
@@ -115,14 +115,14 @@ dev`. The theme import, `transpilePackages`, and the `@/*` alias all belong in
 
 ### End-to-end walkthroughs
 
-- **New standalone app** — `npx create-next-app@latest my-app --ts --tailwind
+- **New standalone app**: `npx create-next-app@latest my-app --ts --tailwind
   --app --no-src-dir --use-npm`, then `cd my-app && npx @viliha/vui-ui init`
   (fresh + prebuilt). It scaffolds config + shell + demo, installs deps, and you
   run `npm run dev` → `/dashboard`.
-- **New app in a monorepo** — scaffold your app under `apps/<name>` (e.g. with
+- **New app in a monorepo**: scaffold your app under `apps/<name>` (e.g. with
   `create-next-app`), then from that app dir run `npx @viliha/vui-ui init` (or
   `--turbo --dir apps/<name>` from the root) and install deps in that app.
-- **Existing app** — run `npx @viliha/vui-ui init --existing`. It never
+- **Existing app**: run `npx @viliha/vui-ui init --existing`. It never
   overwrites your config; wire up the four things it prints (`transpilePackages`,
   the `theme.css` import, the `@/*` alias, `import "./globals.css"`). Prefer only
   the components? Use `--theme-only` (copies nothing) and follow the setup below.
@@ -152,7 +152,7 @@ Import the theme once. No extra transpilation needed.
 
 # Upgrading
 
-When you bump `@viliha/vui-ui`, follow these steps — the package version and the
+When you bump `@viliha/vui-ui`, follow these steps. The package version and the
 scaffolded files in the repo are two separate things.
 
 1. **Read the [CHANGELOG](./CHANGELOG.md) for the target version.** Note anything
@@ -165,7 +165,7 @@ scaffolded files in the repo are two separate things.
    In a monorepo, install in the specific app (or with a workspace filter, e.g.
    `pnpm --filter <app> up @viliha/vui-ui`), never at the repo root.
 3. **No rebuild needed.** The package ships TypeScript source, so there's no
-   build/dts step — just restart the dev server. If a new version adds a peer
+   build/dts step; just restart the dev server. If a new version adds a peer
    dependency, install it (the CHANGELOG and the "Module not found" error name it).
 4. **Scaffolded files are yours.** `init` copies the shell and demo pages into
    the repo once; upgrading the package does **not** touch them. To pull
@@ -181,7 +181,7 @@ scaffolded files in the repo are two separate things.
 
 # Design Tokens
 
-VUI is entirely token-driven. Never hardcode colors, spacing, radius, typography, shadows, or borders — reach for the semantic design token instead. For example: `--button-primary`, `--button-primary-hover`, `--background`, `--foreground`, `--border`, `--ring`, `--chart-1`, `--sidebar-primary`.
+VUI is entirely token-driven. Never hardcode colors, spacing, radius, typography, shadows, or borders; reach for the semantic design token instead. For example: `--button-primary`, `--button-primary-hover`, `--background`, `--foreground`, `--border`, `--ring`, `--chart-1`, `--sidebar-primary`.
 
 Avoid arbitrary values unless there's truly no token for the job.
 
@@ -239,11 +239,11 @@ Group content into bordered cards, and avoid deeply nested layouts. Reach for sp
 
 # Navigation
 
-Navigate with the three provided pieces — breadcrumbs, sidebar, and top navigation. Don't build a custom navigation system unless the project explicitly demands one.
+Navigate with the three provided pieces: breadcrumbs, sidebar, and top navigation. Don't build a custom navigation system unless the project explicitly demands one.
 
 ## Breadcrumbs
 
-One trail, **derived from the route — never hand-written per page.**
+One trail, **derived from the route, never hand-written per page.**
 
 - Render with the shared `Breadcrumbs` component (`@viliha/vui-ui/breadcrumbs`):
   last crumb is the current page (bold, non-interactive), earlier crumbs are
@@ -251,7 +251,7 @@ One trail, **derived from the route — never hand-written per page.**
 - Build the trail from the URL against a single nav config (copy `crumbsFor` +
   `nav-config` + `route-meta` from the reference app). Root it at **Home**
   (your dashboard route). A section/group parent has no page of its own, so its
-  crumb links to its **first child** — clicking a section lands on that
+  crumb links to its **first child**; clicking a section lands on that
   section's first page.
 - Ship **one** landing page, labeled "Home". Don't split "Home" and "Dashboard"
   into two routes.
@@ -261,17 +261,17 @@ To reorder or rename, edit the nav config; the trail follows automatically.
 ## Sidebar: sections & collapsible groups
 
 The sidebar is driven by one `NAV` config (copy `nav-config.ts`). There are
-**two grouping shapes — use them, don't invent a third:**
+**two grouping shapes: use them, don't invent a third:**
 
-- **Section** (`NavSection`, `{ title?, items }`) — a top-level band with an
+- **Section** (`NavSection`, `{ title?, items }`): a top-level band with an
   optional `title` heading. Items are **always visible** (no collapse). Use it to
   cluster related pages under a label (e.g. *Records*, *System*). The first
   section usually has no title.
-- **Collapsible group** (`NavGroup`, an entry with `children`) — a parent row with
+- **Collapsible group** (`NavGroup`, an entry with `children`): a parent row with
   a chevron that **hides/unhides** its nested links; it auto-opens when a child is
   the active route. Use it for a set of sub-pages under one parent (e.g. *Auth*,
   *CRM*, *System*) to keep the sidebar short. A group parent has no page of its
-  own — its breadcrumb points at its first child.
+  own; its breadcrumb points at its first child.
 
 ```ts
 export const NAV: NavSection[] = [
@@ -288,14 +288,14 @@ export const NAV: NavSection[] = [
 ```
 
 When adding a page, always add it to `NAV` and mirror its color in
-`route-meta.ts` — the sidebar, breadcrumbs, and tabs all derive from these.
+`route-meta.ts`; the sidebar, breadcrumbs, and tabs all derive from these.
 
 ## Open tabs (keep-alive)
 
 Enterprise apps keep several pages open at once. The reference app ships a
-browser-style **tab strip** under the top bar — a reference-app pattern (copy
+browser-style **tab strip** under the top bar, a reference-app pattern (copy
 `open-tabs.tsx`), not a package export. **This is a first-class feature; wire it
-in — a fresh install won't have it.**
+in, because a fresh install won't have it.**
 
 It is **keep-alive**: every opened page stays mounted (inactive ones hidden), so
 switching is instant (no remount/flash) and each page keeps its live state
@@ -309,7 +309,7 @@ switching is instant (no remount/flash) and each page keeps its live state
 </OpenTabsProvider>
 ```
 
-- Labels/icons/colors derive from `nav-config.ts` + `route-meta.ts` — no per-tab wiring.
+- Labels/icons/colors derive from `nav-config.ts` + `route-meta.ts`, with no per-tab wiring.
 - The list persists in `sessionStorage`, capped by `NEXT_PUBLIC_MAX_TABS`
   (default 5; oldest FIFO-evicted with a warning).
 - Tabs are drag-reorderable and right-click-taggable with one of seven colors.
@@ -319,27 +319,27 @@ switching is instant (no remount/flash) and each page keeps its live state
 
 Keep-alive relies on a static-export (all-client) shell. If your app renders
 server components per route, either adopt the demo's static-export shell or fall
-back to a plain navigation-tab model (router push per tab) — the strip,
+back to a plain navigation-tab model (router push per tab); the strip,
 persistence, and nav-config wiring stay identical.
 
 ---
 
 # Forms
 
-Build forms with VUI and shadcn/ui together, reaching for shadcn Form, React Hook Form, and Zod. Every form handles the full lifecycle — validation, loading, success, error, disabled, and keyboard navigation. Never use a placeholder in place of a label.
+Build forms with VUI and shadcn/ui together, reaching for shadcn Form, React Hook Form, and Zod. Every form handles the full lifecycle: validation, loading, success, error, disabled, and keyboard navigation. Never use a placeholder in place of a label.
 
 ---
 
 # Tables
 
-Never hand-build an HTML table — always use `RecordView`. Configure columns through its field props (`editable`, `required`, `copyable`, `options`, `render`), and let `RecordView` own the rest: sorting, filtering, pagination, bulk actions, and import/export.
+Never hand-build an HTML table; always use `RecordView`. Configure columns through its field props (`editable`, `required`, `copyable`, `options`, `render`), and let `RecordView` own the rest: sorting, filtering, pagination, bulk actions, and import/export.
 
 ## Add / edit form
 
 The buffered add/edit form renders in one of two layouts:
 
-- **Slide-over panel** — the default; nothing to configure.
-- **Full-page form** — set `formMode="page"` (with `formColumns={1 | 2}`). Add
+- **Slide-over panel**: the default; nothing to configure.
+- **Full-page form**: set `formMode="page"` (with `formColumns={1 | 2}`). Add
   `formDescription` and a per-field `description` to show an AWS-style help
   panel beside the form.
 
@@ -352,7 +352,7 @@ shared `@viliha/vui-ui/breadcrumbs` component.
 
 # Charts
 
-Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colors — map them through the chart tokens.
+Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colors; map them through the chart tokens.
 
 ---
 
@@ -361,10 +361,10 @@ Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colo
 The auth screens are a **demo pattern in the reference app**, not exports of the
 `@viliha/vui-ui` package. `AuthCard`, `AuthCardHeader`, `AuthCardBody`,
 `AuthCardFooter` and `AuthCardAside` live in
-`apps/backoffice/app/_components/auth.tsx` — **copy and adapt them** into your
+`apps/backoffice/app/_components/auth.tsx`; **copy and adapt them** into your
 app (they are built from published primitives: `Button`, `Input`, tokens).
 
-Do not `import … from "@viliha/vui-ui/auth"` — no such entry point exists.
+Do not `import … from "@viliha/vui-ui/auth"`; no such entry point exists.
 
 Wrap the forms in semantic HTML.
 
@@ -374,7 +374,7 @@ Wrap the forms in semantic HTML.
 
 VUI and shadcn/ui complement each other, so split the work along their strengths. Reach for shadcn for forms, dialogs, sheets, tabs, popovers, and accordions; reach for VUI for layouts, `RecordView`, enterprise components, charts, and navigation patterns.
 
-VUI owns the design tokens — delete any duplicate token definitions shadcn generates.
+VUI owns the design tokens, so delete any duplicate token definitions shadcn generates.
 
 ---
 
@@ -398,7 +398,7 @@ Default to Server Components, streaming, lazy loading, and dynamic imports. Avoi
 
 # UX Standards
 
-Every feature communicates its current state — loading, success, empty, and error. Give long-running actions visible progress, and never leave users wondering what happened.
+Every feature communicates its current state: loading, success, empty, and error. Give long-running actions visible progress, and never leave users wondering what happened.
 
 ---
 
@@ -436,7 +436,7 @@ Panel
 
 # AI Development Rules
 
-Before you write code, reuse what's already there — components, layouts, utilities, and variants — and extend an existing component before creating a new one. Never duplicate code or styling. Keep APIs simple and components focused.
+Before you write code, reuse what's already there (components, layouts, utilities, and variants), and extend an existing component before creating a new one. Never duplicate code or styling. Keep APIs simple and components focused.
 
 ---
 

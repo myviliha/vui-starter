@@ -45,7 +45,7 @@ export default function StepsDocPage() {
 
       <H2>Try it</H2>
       <P>
-        Click through the states — each one is drawn entirely from theme tokens,
+        Click through the states. Each one is drawn entirely from theme tokens,
         in both light and dark.
       </P>
       <div className="my-6 overflow-hidden rounded-lg border border-border">

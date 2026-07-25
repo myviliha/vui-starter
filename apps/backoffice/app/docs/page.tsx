@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/" },
   title: "Introduction",
   description:
-    "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
+    "Vui Starter is a free, open-source React admin & CRM design system: a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
 };
 
 const features = [
@@ -38,7 +38,7 @@ export default function IntroductionPage() {
       <PageTitle
         eyebrow="Getting started"
         title="Vui Starter"
-        lead="A free, open-source admin & CRM design system for React — a clean, token-driven component library (@viliha/vui-ui) plus a full backoffice demo you can clone and run."
+        lead="A free, open-source admin & CRM design system for React: a clean, token-driven component library (@viliha/vui-ui) plus a full backoffice demo you can clone and run."
       />
 
       <div className="mb-10 flex flex-wrap gap-3">
@@ -55,8 +55,8 @@ export default function IntroductionPage() {
 
       <H2>Overview</H2>
       <P>
-        Vui Starter is both a <strong>library</strong> — published to npm as{" "}
-        <code className="font-mono text-[0.9em]">@viliha/vui-ui</code> — and a{" "}
+        Vui Starter is both a <strong>library</strong> (published to npm as{" "}
+        <code className="font-mono text-[0.9em]">@viliha/vui-ui</code>) and a{" "}
         <strong>reference app</strong> that shows every component in a working
         admin UI. It all runs on in-memory mock data, so you can clone the repo
         and have it running without a backend.

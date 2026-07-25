@@ -118,9 +118,9 @@ cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md
         The package ships the primitives: <code>Button</code>,{" "}
         <code>Input</code>, <code>Select</code>, <code>Dialog</code>,{" "}
         <code>Menu</code>, <code>RecordView</code>, <code>ChartContainer</code>,
-        and <code>theme.css</code>. The app-shell pieces the guide references —{" "}
+        and <code>theme.css</code>. The app-shell pieces the guide references{" "}(
         <code>SetPageTitle</code>, <code>Breadcrumbs</code>, the sidebar and{" "}
-        <code>nav-config</code>, and the <code>AuthCard*</code> auth screens — are{" "}
+        <code>nav-config</code>, and the <code>AuthCard*</code> auth screens) are{" "}
         <strong>reference-app patterns to copy</strong> from the backoffice demo
         rather than package exports. The shipped <code>AGENT.md</code> makes this
         distinction explicit so your agent won&apos;t invent imports.
