@@ -9,7 +9,9 @@ export const SITE = {
   name: process.env.NEXT_PUBLIC_APP_NAME ?? "Vui Starter",
   tagline:
     process.env.NEXT_PUBLIC_APP_TAGLINE ?? "React Admin & CRM Design System",
-  url: "https://vui.viliha.com",
+  // Deploy origin — drives metadataBase, canonical URLs, and OG image URLs.
+  // Set NEXT_PUBLIC_APP_URL to your domain (no trailing slash) per deployment.
+  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://vui.viliha.com",
   description:
     process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
     "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",

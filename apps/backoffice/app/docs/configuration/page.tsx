@@ -99,7 +99,13 @@ NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
       </P>
       <CodeBlock title=".env.local">{`NEXT_PUBLIC_APP_NAME="Acme Console"
 NEXT_PUBLIC_APP_TAGLINE="Operations Platform"
-NEXT_PUBLIC_APP_DESCRIPTION="Acme's internal operations console."`}</CodeBlock>
+NEXT_PUBLIC_APP_DESCRIPTION="Acme's internal operations console."
+NEXT_PUBLIC_APP_URL="https://console.acme.com"`}</CodeBlock>
+      <P>
+        <code>NEXT_PUBLIC_APP_URL</code> is your deploy origin (no trailing
+        slash). It drives <code>metadataBase</code>, so canonical and Open Graph
+        URLs resolve against your domain instead of the default demo host.
+      </P>
       <Note title="Rebuild after changing env">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>.
         Restart <code>dev</code> (or rebuild) after editing them; a running server

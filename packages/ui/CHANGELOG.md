@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.6.1 — 2026-07-25
+
+### Added
+
+- `NEXT_PUBLIC_APP_URL` sets the deploy origin (`SITE.url`), so `metadataBase`,
+  canonical URLs, and Open Graph URLs resolve against your domain instead of the
+  hard-coded demo host. Falls back to the demo URL when unset. Completes the
+  env-driven brand set (`APP_NAME` / `APP_TAGLINE` / `APP_DESCRIPTION` / `APP_URL`).
+
 ## 1.6.0 — 2026-07-25
 
 ### Changed
