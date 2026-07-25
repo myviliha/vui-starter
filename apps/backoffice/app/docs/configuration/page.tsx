@@ -4,6 +4,7 @@ import {
   CodeBlock,
   DocPager,
   H2,
+  H3,
   Note,
   P,
   PageTitle,

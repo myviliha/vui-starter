@@ -10,6 +10,7 @@ import {
   PageTitle,
   Ul,
 } from "@/components/doc";
+import { PackageManagerTabs } from "@/components/pm-tabs";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/installation/" },
@@ -28,12 +29,18 @@ export default function InstallationPage() {
       />
 
       <H2>Install the package</H2>
-      <CodeBlock title="terminal">{`npm install @viliha/vui-ui
-npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
+      <PackageManagerTabs
+        commands={{
+          npm: "npm install @viliha/vui-ui\nnpm install -D tailwindcss @tailwindcss/postcss",
+          pnpm: "pnpm add @viliha/vui-ui\npnpm add -D tailwindcss @tailwindcss/postcss",
+          yarn: "yarn add @viliha/vui-ui\nyarn add -D tailwindcss @tailwindcss/postcss",
+          bun: "bun add @viliha/vui-ui\nbun add -d tailwindcss @tailwindcss/postcss",
+        }}
+      />
       <P>
         <code className="font-mono text-[0.9em]">react</code> and{" "}
         <code className="font-mono text-[0.9em]">react-dom</code> are peer
-        dependencies — your app's versions are used (React 18 or 19).
+        dependencies, so your app&apos;s versions are used (React 18 or 19).
       </P>
 
       <H2>Scaffold the whole app + demo (<code>init</code>)</H2>
@@ -44,22 +51,28 @@ npm install -D tailwindcss @tailwindcss/postcss`}</CodeBlock>
         scaffolder in your project. It copies everything into your repo — yours
         to own and edit — and installs the dependencies:
       </P>
-      <CodeBlock title="terminal">{`npx @viliha/vui-ui init
-# pnpm dlx @viliha/vui-ui init  ·  yarn dlx @viliha/vui-ui init  ·  bunx @viliha/vui-ui init`}</CodeBlock>
+      <PackageManagerTabs
+        commands={{
+          npm: "npx @viliha/vui-ui init",
+          pnpm: "pnpm dlx @viliha/vui-ui init",
+          yarn: "yarn dlx @viliha/vui-ui init",
+          bun: "bunx @viliha/vui-ui init",
+        }}
+      />
       <P>
         For a brand-new app, start from create-next-app (no <code>src</code>
         dir), then run <code>init</code>. It scaffolds the project and{" "}
         <strong>auto-installs the dependencies</strong> with your package
         manager. Pick your tool:
       </P>
-      <CodeBlock title="npm">{`npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm
-cd my-app && npx @viliha/vui-ui init && npm run dev`}</CodeBlock>
-      <CodeBlock title="pnpm">{`pnpm create next-app my-app --ts --tailwind --app --no-src-dir
-cd my-app && pnpm dlx @viliha/vui-ui init && pnpm dev`}</CodeBlock>
-      <CodeBlock title="yarn">{`yarn create next-app my-app --ts --tailwind --app --no-src-dir
-cd my-app && yarn dlx @viliha/vui-ui init && yarn dev`}</CodeBlock>
-      <CodeBlock title="bun">{`bun create next-app my-app --ts --tailwind --app --no-src-dir
-cd my-app && bunx @viliha/vui-ui init && bun dev`}</CodeBlock>
+      <PackageManagerTabs
+        commands={{
+          npm: "npx create-next-app@latest my-app --ts --tailwind --app --no-src-dir --use-npm\ncd my-app && npx @viliha/vui-ui init && npm run dev",
+          pnpm: "pnpm create next-app my-app --ts --tailwind --app --no-src-dir\ncd my-app && pnpm dlx @viliha/vui-ui init && pnpm dev",
+          yarn: "yarn create next-app my-app --ts --tailwind --app --no-src-dir\ncd my-app && yarn dlx @viliha/vui-ui init && yarn dev",
+          bun: "bun create next-app my-app --ts --tailwind --app --no-src-dir\ncd my-app && bunx @viliha/vui-ui init && bun dev",
+        }}
+      />
       <P>
         The prompts form a short decision tree: (0) standalone{" "}
         <strong>Next.js</strong> or a <strong>Turborepo</strong> (which scaffolds
