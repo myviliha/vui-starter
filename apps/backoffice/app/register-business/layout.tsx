@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { Logo } from "@/app/_components/logo";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
-import { SITE } from "@/lib/seo";
+import { BrandName } from "@/app/_components/brand";
 
 export const metadata: Metadata = {
   title: "Register your business",
@@ -20,7 +20,7 @@ export default function RegisterBusinessLayout({
         <div className="flex items-center gap-2">
           <Logo className="h-7 w-7" />
           <span className="bg-gradient-to-r from-brand-indigo to-brand-violet bg-clip-text text-sm font-bold tracking-tight text-transparent">
-            {SITE.name}
+            <BrandName />
           </span>
         </div>
         <ThemeToggle />

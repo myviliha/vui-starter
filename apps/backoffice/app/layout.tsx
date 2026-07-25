@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
 import { themeInitScript } from "./_components/theme-toggle";
+import { BrandProvider } from "./_components/brand";
 import { SITE } from "@/lib/seo";
 
 const inter = Inter({
@@ -96,7 +97,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        {children}
+        <BrandProvider>{children}</BrandProvider>
       </body>
     </html>
   );

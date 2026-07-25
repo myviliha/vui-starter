@@ -1,7 +1,9 @@
+"use client";
+
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
-import { SITE } from "@/lib/seo";
+import { useBrand } from "./brand";
 
 type LogoProps = {
   /** Kept for call-site compatibility; the mark is the same either way. */
@@ -9,19 +11,18 @@ type LogoProps = {
   className?: string;
 };
 
-/** Optional custom logo: drop an image in /public and set NEXT_PUBLIC_LOGO_URL
- *  (e.g. "/logo.svg"). Unset falls back to the built-in mark below. */
-const LOGO_URL = process.env.NEXT_PUBLIC_LOGO_URL;
-
 /**
- * App logo — your image via NEXT_PUBLIC_LOGO_URL, else a self-contained rounded
- * blue badge with a stylised "V". Scales with the `className` size (default 24px).
+ * App logo. Uses the runtime brand's `logoUrl` (from an API or
+ * NEXT_PUBLIC_LOGO_URL, via BrandProvider); when unset, falls back to a
+ * self-contained rounded blue badge with a stylised "V". Scales with the
+ * `className` size (default 24px).
  */
 export function Logo({ className }: LogoProps) {
-  if (LOGO_URL) {
+  const { brand } = useBrand();
+  if (brand.logoUrl) {
     return (
       <Image
-        src={LOGO_URL}
+        src={brand.logoUrl}
         alt="Logo"
         width={24}
         height={24}
@@ -33,7 +34,7 @@ export function Logo({ className }: LogoProps) {
     <svg
       viewBox="0 0 24 24"
       role="img"
-      aria-label={SITE.name}
+      aria-label={brand.name}
       className={cn("h-6 w-6", className)}
     >
       <rect width="24" height="24" rx="6" fill="var(--brand-indigo)" />

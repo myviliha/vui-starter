@@ -13,7 +13,7 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
-import { SITE } from "@/lib/seo";
+import { BrandName } from "@/app/_components/brand";
 import {
   AuthCard,
   AuthCardAside,
@@ -213,7 +213,7 @@ export default function SignInPage() {
             Email me a magic link
           </Button>
           <AuthCardAside>
-            New to {SITE.name}?{" "}
+            New to <BrandName />?{" "}
             <Link href="/auth/signup" className="font-medium text-primary hover:underline">
               Create an account
             </Link>

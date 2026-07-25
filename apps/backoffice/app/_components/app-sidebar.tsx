@@ -13,7 +13,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { SITE } from "@/lib/seo";
+import { useBrand } from "./brand";
 import { Menu as MenuPanel } from "@viliha/vui-ui/menu";
 import { Logo } from "./logo";
 import { QuickActionsLauncher } from "./quick-actions";
@@ -102,6 +102,7 @@ function SidebarBody({
   headerAction?: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { brand } = useBrand();
   const [openGroups, setOpenGroups] = React.useState<Set<string>>(() => {
     const open = new Set<string>();
     for (const section of NAV) {
@@ -370,13 +371,13 @@ function SidebarBody({
             collapsed ? "w-9 shrink-0 justify-center px-0" : "flex-1",
           )}
           aria-label="Switch workspace"
-          title={collapsed ? SITE.name : undefined}
+          title={collapsed ? brand.name : undefined}
         >
           <Logo variant="mark" className="h-6 w-6 shrink-0" />
           {!collapsed && (
             <>
               <span className="min-w-0 flex-1 truncate text-lg font-bold tracking-tight text-foreground">
-                {SITE.name}
+                {brand.name}
               </span>
               <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
             </>

@@ -7,14 +7,23 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
-## 1.5.4 — 2026-07-24
+## 1.6.0 — 2026-07-25
+
+Rolls up the unpublished 1.5.4 (chart fix + env rebrand) and adds runtime
+branding.
 
 ### Added
 
-- `NEXT_PUBLIC_APP_NAME` env var (in the scaffold) renames the app — the sidebar,
-  wordmark, auth/onboarding screens, and browser-tab metadata now read from one
-  place (`SITE.name`) instead of a hard-coded "Vui Starter". `NEXT_PUBLIC_APP_TAGLINE`
-  and `NEXT_PUBLIC_APP_DESCRIPTION` complete the tab-title/meta rebrand.
+- **Runtime branding via `BrandProvider` / `useBrand()`** (in the scaffold) — for
+  white-label / multi-tenant apps that get their branding from an API. Env vars
+  are the defaults; override them live from a `NEXT_PUBLIC_BRAND_URL` JSON
+  endpoint, a `<BrandProvider initial={…}>` seed, or `useBrand().setBrand(…)`.
+  The name, tagline, description, logo, and the browser-tab title all update at
+  runtime — no rebuild.
+- `NEXT_PUBLIC_APP_NAME` renames the app — the sidebar, wordmark, auth/onboarding
+  screens, and browser-tab metadata now read from one place instead of a
+  hard-coded "Vui Starter". `NEXT_PUBLIC_APP_TAGLINE` and
+  `NEXT_PUBLIC_APP_DESCRIPTION` complete the tab-title/meta rebrand.
 
 ### Fixed
 

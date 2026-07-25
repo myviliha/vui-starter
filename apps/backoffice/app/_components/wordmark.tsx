@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { SITE } from "@/lib/seo";
+import { useBrand } from "./brand";
 import { Logo } from "./logo";
 
 /**
@@ -21,6 +23,7 @@ export function Wordmark({
   logoClassName?: string;
   textClassName?: string;
 }) {
+  const { brand } = useBrand();
   const content = (
     <>
       <Logo className={cn("h-6 w-6 shrink-0", logoClassName)} />
@@ -30,14 +33,14 @@ export function Wordmark({
           textClassName,
         )}
       >
-        {SITE.name}
+        {brand.name}
       </span>
     </>
   );
   const classes = cn("flex items-center gap-2", className);
 
   return href ? (
-    <Link href={href} aria-label={SITE.name} className={classes}>
+    <Link href={href} aria-label={brand.name} className={classes}>
       {content}
     </Link>
   ) : (

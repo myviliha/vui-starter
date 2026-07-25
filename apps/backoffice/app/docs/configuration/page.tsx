@@ -104,6 +104,36 @@ NEXT_PUBLIC_APP_DESCRIPTION="Acme's internal operations console."`}</CodeBlock>
         Restart <code>dev</code> (or rebuild) after editing them — a running server
         won&apos;t pick up the change.
       </Note>
+
+      <H3>Runtime branding from an API (white-label / multi-tenant)</H3>
+      <P>
+        When branding has to come from a backend at runtime — a different name,
+        logo, and tagline per tenant — the env vars are only the defaults.{" "}
+        <code>BrandProvider</code> (wrapping the app in the root layout) layers a
+        runtime override on top, and everything (headers, wordmark, and the
+        browser-tab title) reads from it. Three ways to feed it:
+      </P>
+      <Ul>
+        <li>
+          Set <code>NEXT_PUBLIC_BRAND_URL</code> to a JSON endpoint returning any
+          of <code>{"{ name, tagline, description, logoUrl, company, companyUrl }"}</code>{" "}
+          — the provider fetches it on load and applies it.
+        </li>
+        <li>
+          Seed it from a loader/server response:{" "}
+          <code>&lt;BrandProvider initial={"{brandFromApi}"}&gt;</code>.
+        </li>
+        <li>
+          Push it imperatively after your own API call:{" "}
+          <code>useBrand().setBrand({"{ name, logoUrl }"})</code>.
+        </li>
+      </Ul>
+      <CodeBlock title="apply an API response at runtime">{`const { setBrand } = useBrand();
+useEffect(() => {
+  fetch("/api/tenant/branding")
+    .then((r) => r.json())
+    .then(setBrand); // { name, tagline, logoUrl, … }
+}, [setBrand]);`}</CodeBlock>
       <P>
         There are two ways to set your logo, and the common case needs no
         component code at all:
