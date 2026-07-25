@@ -12,8 +12,9 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 ### Added
 
 - `NEXT_PUBLIC_APP_NAME` env var (in the scaffold) renames the app — the sidebar,
-  wordmark, auth screens, and page titles now read from one place (`SITE.name`)
-  instead of a hard-coded "Vui Starter".
+  wordmark, auth/onboarding screens, and browser-tab metadata now read from one
+  place (`SITE.name`) instead of a hard-coded "Vui Starter". `NEXT_PUBLIC_APP_TAGLINE`
+  and `NEXT_PUBLIC_APP_DESCRIPTION` complete the tab-title/meta rebrand.
 
 ### Fixed
 

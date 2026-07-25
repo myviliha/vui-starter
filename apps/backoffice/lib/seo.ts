@@ -3,12 +3,15 @@ import type { Metadata } from "next";
 /** Single source of truth for site-wide SEO. Deployed as a static export to a
  * custom domain (see ../CNAME), so URLs are absolute against SITE.url. */
 export const SITE = {
-  // App/brand name shown in the sidebar, wordmark, auth screens, and page
-  // titles. Override per deployment via env (NEXT_PUBLIC_ = inlined at build).
+  // App/brand identity shown in the sidebar, wordmark, auth screens, and the
+  // browser-tab metadata (title/description). Override per deployment via env
+  // (NEXT_PUBLIC_ = inlined at build). The tab title is `${name} — ${tagline}`.
   name: process.env.NEXT_PUBLIC_APP_NAME ?? "Vui Starter",
-  tagline: "React Admin & CRM Design System",
+  tagline:
+    process.env.NEXT_PUBLIC_APP_TAGLINE ?? "React Admin & CRM Design System",
   url: "https://vui.viliha.com",
   description:
+    process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
     "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
   ogImage: "/brand/pulse-wordmark.png",
   author: "Suman Bonakurthi",

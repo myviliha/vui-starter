@@ -91,11 +91,19 @@ NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
 
       <H2>Logo &amp; branding</H2>
       <P>
-        Rename the app with one env var — <code>NEXT_PUBLIC_APP_NAME</code> sets
-        the brand name shown in the sidebar, the wordmark, the auth screens, and
-        page titles (it defaults to <code>Vui Starter</code>):
+        Rename the app with a few env vars — they drive the brand name shown in
+        the sidebar, the wordmark, the auth/onboarding screens, and the{" "}
+        <strong>browser-tab metadata</strong> (the tab title is{" "}
+        <code>&lt;name&gt; — &lt;tagline&gt;</code>):
       </P>
-      <CodeBlock title=".env.local">{`NEXT_PUBLIC_APP_NAME="Acme Console"`}</CodeBlock>
+      <CodeBlock title=".env.local">{`NEXT_PUBLIC_APP_NAME="Acme Console"
+NEXT_PUBLIC_APP_TAGLINE="Operations Platform"
+NEXT_PUBLIC_APP_DESCRIPTION="Acme's internal operations console."`}</CodeBlock>
+      <Note title="Rebuild after changing env">
+        <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>.
+        Restart <code>dev</code> (or rebuild) after editing them — a running server
+        won&apos;t pick up the change.
+      </Note>
       <P>
         There are two ways to set your logo, and the common case needs no
         component code at all:
