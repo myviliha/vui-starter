@@ -76,22 +76,21 @@ export default function InstallationPage() {
       <P>
         The prompts form a short decision tree: (0) standalone{" "}
         <strong>Next.js</strong> or a <strong>Turborepo</strong> (which scaffolds
-        into a target app dir like <code className="font-mono text-[0.9em]">apps/web</code>),
-        (1) <strong>fresh</strong> or <strong>existing</strong>, and (2){" "}
+        into a target app dir like{" "}
+        <code className="font-mono text-[0.9em]">apps/web</code>), (1){" "}
+        <strong>fresh</strong> or <strong>existing</strong>, and (2){" "}
         <strong>pre-built</strong> (shell plus demo pages) or{" "}
         <strong>theme-only</strong> (just the wiring, so you build your own
-        pages). For CI or agents, the flags map to each choice:{" "}
-        <code className="font-mono text-[0.9em]">--nextjs</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--turbo</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--dir &lt;path&gt;</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--fresh</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--existing</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--prebuilt</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--theme-only</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--yes</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--force</code> ·{" "}
-        <code className="font-mono text-[0.9em]">--dry-run</code>.
+        pages).
       </P>
+      <P>For CI or agents, a flag maps to each choice:</P>
+      <CodeBlock title="flags">{`--nextjs | --turbo          standalone app, or a Turborepo (Q0)
+--dir <path>                Turborepo target app dir (default apps/web)
+--fresh | --existing        project type (Q1)
+--prebuilt | --theme-only   pre-built shell + demo, or just the theme (Q2)
+--yes, -y                   accept the defaults with no prompts
+--force                     overwrite existing files
+--dry-run                   preview without writing`}</CodeBlock>
       <Note title="Fresh projects: skip --src-dir">
         The scaffold uses a root <code>app/</code> with{" "}
         <code>@/*</code> → <code>./*</code> and writes a TypeScript{" "}
