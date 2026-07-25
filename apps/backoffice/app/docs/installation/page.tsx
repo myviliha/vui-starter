@@ -152,6 +152,9 @@ export default function InstallationPage() {
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@viliha/vui-ui"],
+  // Pin the workspace root to this app so Next doesn't infer it from a
+  // stray lockfile higher up the tree (a home-dir bun.lock, an outer monorepo).
+  turbopack: { root: __dirname },
 };
 
 export default nextConfig;`}</CodeBlock>

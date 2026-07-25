@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.6.2 — 2026-07-25
+
+### Fixed
+
+- The scaffolded `next.config.ts` now pins `turbopack.root` to the app dir, so
+  Next.js no longer infers the workspace root from a stray lockfile higher up the
+  tree (a home-dir `bun.lock`, or an outer monorepo) and emits the "inferred your
+  workspace root, but it may not be correct" warning.
+
 ## 1.6.1 — 2026-07-25
 
 ### Added

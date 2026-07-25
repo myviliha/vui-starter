@@ -87,6 +87,9 @@ writeFileSync(
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Pin the workspace root to this app so Next doesn't infer it from a stray
+  // lockfile higher up the tree (e.g. a home-dir bun.lock or an outer monorepo).
+  turbopack: { root: __dirname },
   // VUI ships as TypeScript source — Next must transpile it.
   transpilePackages: ["@viliha/vui-ui"],
   // Static export makes the open-tabs keep-alive work (all client at runtime).
