@@ -7,6 +7,18 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.6.3 — 2026-07-25
+
+### Fixed
+
+- `RecordForm` no longer loses in-progress input when switching tabs **in dev**.
+  The draft persistence (`persistKey`) used a first-write flag that React
+  StrictMode's effect double-invoke defeated: the second pass wrote the empty
+  initial value over the draft the restore effect was about to bring back. The
+  writer now skips the untouched seed by identity, so it never clobbers a stored
+  draft. (Production builds, which don't run StrictMode's double-invoke, were
+  unaffected.)
+
 ## 1.6.2 — 2026-07-25
 
 ### Fixed

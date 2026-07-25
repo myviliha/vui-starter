@@ -214,7 +214,13 @@ function usePersistentState<T>(
   initial: T,
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [state, setState] = React.useState<T>(initial);
-  const firstWrite = React.useRef(true);
+  // Stable reference to the seeded value. The writer skips it by identity (not a
+  // first-write flag) so the write is StrictMode-safe: dev double-invokes the
+  // write effect while `state` is still `initial`, and a flag flips on the first
+  // pass so the second pass would persist `initial` OVER a draft the restore
+  // effect is about to bring back. Comparing to this ref never writes `initial`,
+  // so it can't clobber the stored draft.
+  const initialRef = React.useRef(initial);
   React.useEffect(() => {
     if (!key) return;
     try {
@@ -226,10 +232,9 @@ function usePersistentState<T>(
   }, [key]);
   React.useEffect(() => {
     if (!key) return;
-    if (firstWrite.current) {
-      firstWrite.current = false; // don't overwrite stored value with `initial`
-      return;
-    }
+    // Nothing to save while still the untouched seed; only a restore or a user
+    // edit diverges `state` from it, and both should persist.
+    if (state === initialRef.current) return;
     try {
       sessionStorage.setItem(key, JSON.stringify(state));
     } catch {
