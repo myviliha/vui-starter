@@ -117,13 +117,13 @@ NEXT_PUBLIC_APP_URL="https://console.acme.com"`}</CodeBlock>
         When branding has to come from a backend at runtime (a different name,
         logo, and tagline per tenant), the env vars are only the defaults.{" "}
         <code>BrandProvider</code> (wrapping the app in the root layout) layers a
-        runtime override on top, and everything (headers, wordmark, and the
-        browser-tab title) reads from it. Three ways to feed it:
+        runtime override on top, and everything (headers, wordmark, the
+        browser-tab title, and the favicon) reads from it. Three ways to feed it:
       </P>
       <Ul>
         <li>
           Set <code>NEXT_PUBLIC_BRAND_URL</code> to a JSON endpoint returning any
-          of <code>{"{ name, tagline, description, logoUrl, company, companyUrl }"}</code>.
+          of <code>{"{ name, tagline, description, logoUrl, faviconUrl, company, companyUrl }"}</code>.
           The provider fetches it on load and applies it.
         </li>
         <li>
@@ -166,6 +166,32 @@ useEffect(() => {
         sizing), edit <code>app/_components/logo.tsx</code> directly (it takes a{" "}
         <code>variant</code> and <code>className</code>).
       </P>
+
+      <H3>Favicon (browser-tab icon)</H3>
+      <P>
+        The static icons in <code>app/</code> (<code>icon.svg</code>,{" "}
+        <code>icon.png</code>, <code>apple-icon.png</code>) are the default —
+        replace those files to change the icon at build time. To make it{" "}
+        <strong>configurable</strong> the same way as the rest of the brand, set a
+        favicon URL and <code>BrandProvider</code> swaps the tab icon:
+      </P>
+      <CodeBlock title=".env.local">{`NEXT_PUBLIC_FAVICON_URL="/favicon.png"`}</CodeBlock>
+      <Ul>
+        <li>
+          <strong>From env</strong> — drop the file in <code>public/</code> and set{" "}
+          <code>NEXT_PUBLIC_FAVICON_URL</code>, then rebuild.
+        </li>
+        <li>
+          <strong>From an API / database</strong> (per tenant) — return{" "}
+          <code>faviconUrl</code> in your branding JSON (or call{" "}
+          <code>useBrand().setBrand({"{ faviconUrl }"})</code>). The tab icon
+          updates live, no rebuild.
+        </li>
+        <li>
+          <strong>Unset</strong> → the static <code>app/icon.*</code> files are
+          used.
+        </li>
+      </Ul>
 
       <H2>Open tabs</H2>
       <P>

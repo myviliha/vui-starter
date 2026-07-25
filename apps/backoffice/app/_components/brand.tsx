@@ -26,6 +26,9 @@ export type Brand = {
   description: string;
   /** Overrides NEXT_PUBLIC_LOGO_URL at runtime; unset → the built-in mark. */
   logoUrl?: string;
+  /** Browser-tab icon. Overrides NEXT_PUBLIC_FAVICON_URL at runtime; unset →
+   *  the static app/icon.* file convention. */
+  faviconUrl?: string;
   company: string;
   companyUrl: string;
 };
@@ -35,6 +38,7 @@ const DEFAULT_BRAND: Brand = {
   tagline: SITE.tagline,
   description: SITE.description,
   logoUrl: process.env.NEXT_PUBLIC_LOGO_URL || undefined,
+  faviconUrl: process.env.NEXT_PUBLIC_FAVICON_URL || undefined,
   company: SITE.company,
   companyUrl: SITE.companyUrl,
 };
@@ -105,6 +109,32 @@ export function BrandProvider({
     });
     return () => cancelAnimationFrame(id);
   }, [pathname, brand.name, brand.tagline]);
+
+  // Swap the browser-tab icon when the brand provides one (env default or API).
+  // The static app/icon.* links are the pre-JS fallback; here we point every
+  // icon <link> at the brand favicon and restore them if it changes/unmounts.
+  React.useEffect(() => {
+    const href = brand.faviconUrl;
+    if (!href) return; // no override — keep the static file-convention icons
+    const links = Array.from(
+      document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']"),
+    );
+    if (links.length === 0) {
+      const link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+      links.push(link);
+    }
+    const prev = links.map((l) => l.getAttribute("href"));
+    links.forEach((l) => l.setAttribute("href", href));
+    return () => {
+      links.forEach((l, i) => {
+        const p = prev[i];
+        if (p == null) l.remove(); // was created/absent → drop it
+        else l.setAttribute("href", p);
+      });
+    };
+  }, [brand.faviconUrl]);
 
   return (
     <BrandContext.Provider value={{ brand, setBrand }}>

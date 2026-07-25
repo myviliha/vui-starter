@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.7.0 — 2026-07-25
+
+### Added
+
+- **Configurable favicon** via the runtime brand system. `BrandProvider` gains a
+  `faviconUrl` field (alongside `logoUrl`): set `NEXT_PUBLIC_FAVICON_URL` for a
+  build-time default, return `faviconUrl` from your `NEXT_PUBLIC_BRAND_URL` JSON
+  (or call `useBrand().setBrand({ faviconUrl })`) to change the browser-tab icon
+  live per tenant, no rebuild. The static `app/icon.*` files remain the fallback.
+
 ## 1.6.3 — 2026-07-25
 
 ### Fixed
