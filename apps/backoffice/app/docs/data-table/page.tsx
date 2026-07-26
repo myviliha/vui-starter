@@ -147,9 +147,12 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 
       <H2>Sorting</H2>
       <P>
-        Click a column header or use the Sort dropdown. By default a field is
-        sortable when it&apos;s a visible column; <code>sortable</code> decouples
-        the two, so your sort set can differ from your column set.
+        Click a column header or use the Sort dropdown. Every sortable column
+        shows a caret indicator — a muted up/down caret by default, then a solid
+        caret for the active direction (up = ascending, down = descending). By
+        default a field is sortable when it&apos;s a visible column;{" "}
+        <code>sortable</code> decouples the two, so your sort set can differ from
+        your column set (a non-sortable column shows no caret).
       </P>
       <CodeBlock title="sortable, independent of columns">{`{ key: "name", hideInTable: true, sortable: true }  // sorted, but no column
 { key: "code", label: "Code" }                      // column + sortable (default)

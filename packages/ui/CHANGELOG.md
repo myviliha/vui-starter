@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.11.1 — 2026-07-26
+
+### Changed
+
+- **Sort indicators are now carets, and every sortable column shows one.** A
+  sortable column header shows a muted up/down caret (`CaretSort`) by default —
+  so sortability is discoverable — and a solid caret for the active direction:
+  `CaretUp` = ascending, `CaretDown` = descending (all Radix icons). The Sort
+  dropdown matches. Non-sortable columns (`sortable: false`) show no indicator.
+
 ## 1.11.0 — 2026-07-26
 
 ### Added

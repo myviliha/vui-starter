@@ -8,10 +8,10 @@ import {
   ReaderIcon as Reader,
   TableIcon as SheetIcon,
   UploadIcon as Upload,
-  ArrowDownIcon as ArrowDown,
   ArrowTopRightIcon as ArrowUpRight,
-  ArrowUpIcon as ArrowUp,
-  CaretSortIcon as ArrowUpDown,
+  CaretDownIcon as CaretDown,
+  CaretSortIcon as CaretSort,
+  CaretUpIcon as CaretUp,
   CheckIcon as Check,
   ChevronLeftIcon as ChevronLeft,
   ChevronRightIcon as ChevronRight,
@@ -1274,7 +1274,7 @@ export function RecordView<T extends { id: RowId }>({
             )}
           </Dropdown>
 
-          <Dropdown label="Sort" icon={<ArrowUpDown className="size-3.5 text-blue-500" />}>
+          <Dropdown label="Sort" icon={<CaretSort className="size-3.5 text-blue-500" />}>
             <DropdownLabel>Sort by</DropdownLabel>
             {sortFields.map((f) => (
               <DropdownItem
@@ -1283,9 +1283,9 @@ export function RecordView<T extends { id: RowId }>({
                 icon={
                   sort?.key === f.key ? (
                     sort.dir === "asc" ? (
-                      <ArrowUp className="size-3.5" />
+                      <CaretUp className="size-3.5" />
                     ) : (
-                      <ArrowDown className="size-3.5" />
+                      <CaretDown className="size-3.5" />
                     )
                   ) : undefined
                 }
@@ -1402,11 +1402,18 @@ export function RecordView<T extends { id: RowId }>({
                       {f.label}
                       {f.required && <RequiredMark />}
                     </span>
-                    {sort?.key === f.key &&
-                      (sort.dir === "asc" ? (
-                        <ArrowUp className="size-3 shrink-0" />
+                    {/* Sortable columns always show an indicator: a muted
+                        up/down caret by default, a solid caret for the active
+                        direction (up = ascending, down = descending). */}
+                    {sortable &&
+                      (sort?.key === f.key ? (
+                        sort.dir === "asc" ? (
+                          <CaretUp className="size-3.5 shrink-0" />
+                        ) : (
+                          <CaretDown className="size-3.5 shrink-0" />
+                        )
                       ) : (
-                        <ArrowDown className="size-3 shrink-0" />
+                        <CaretSort className="size-3.5 shrink-0 text-muted-foreground/50" />
                       ))}
                   </>
                 );
