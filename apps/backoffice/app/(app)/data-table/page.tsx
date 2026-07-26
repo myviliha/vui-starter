@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
 import {
   BackpackIcon as TeamIcon,
   PersonIcon as RoleIcon,
@@ -38,18 +37,11 @@ const ALL: Member[] = Array.from({ length: 213 }, (_, i) => ({
   commits: (i * 7) % 500,
 }));
 
-// In-memory cache of already-fetched pages, keyed by the query. Lives at module
-// scope so it survives component remounts (a tab switch that remounts the page
-// still finds the page instantly — no reload). A real app would use its data
-// layer's cache (React Query, SWR, RTK Query) the same way.
-type PageResult = { rows: Member[]; total: number };
-const pageCache = new Map<string, PageResult>();
-const queryKey = (q: ServerQuery<Member>) =>
-  JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters]);
-
 // Simulated server endpoint: filter + sort + paginate, returning just the page
-// (plus the total). Swap this for a real `fetch` to your API.
-function fetchPage(q: ServerQuery<Member>): Promise<PageResult> {
+// (plus the total). Swap this for a real `fetch(url, { signal })` to your API.
+function fetchPage(
+  q: ServerQuery<Member>,
+): Promise<{ rows: Member[]; total: number }> {
   return new Promise((resolve) => {
     setTimeout(() => {
       let out = ALL;
@@ -107,70 +99,36 @@ const fields: RecordField<Member>[] = [
   },
 ];
 
-function ServerDataTable() {
-  // Server-side mode: RecordView reports the query; we fetch the page and feed
-  // back `data` + `rowCount` + `loading`. It never filters/sorts/paginates here.
-  const [data, setData] = useState<Member[]>([]);
-  const [rowCount, setRowCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const reqId = useRef(0);
-
-  const handleQuery = useCallback((q: ServerQuery<Member>) => {
-    // Already fetched this query? Serve it from memory — instant, no shimmer,
-    // no round-trip. This is what makes returning to the tab feel persisted.
-    const cached = pageCache.get(queryKey(q));
-    if (cached) {
-      setData(cached.rows);
-      setRowCount(cached.total);
-      setLoading(false);
-      return;
-    }
-    const id = ++reqId.current;
-    setLoading(true);
-    void fetchPage(q).then((res) => {
-      if (id !== reqId.current) return; // ignore out-of-order responses
-      pageCache.set(queryKey(q), res);
-      setData(res.rows);
-      setRowCount(res.total);
-      setLoading(false);
-    });
-  }, []);
-
-  return (
-    <RecordView
-      title="Data Table"
-      singular="Member"
-      icon={TableIcon}
-      manual
-      persistKey="/data-table"
-      rowCount={rowCount}
-      loading={loading}
-      onQueryChange={handleQuery}
-      fields={fields}
-      initialData={data}
-      data={data}
-      onDataChange={setData}
-      getPrimary={(row) => ({
-        title: row.name,
-        subtitle: `${row.team} · ${row.role}`,
-        initials: row.name.slice(0, 2).toUpperCase(),
-      })}
-      makeEmptyRow={() => ({
-        id: Date.now(),
-        name: "",
-        team: "",
-        role: "",
-        location: "",
-        commits: 0,
-      })}
-    />
-  );
-}
-
 export default function DataTablePage() {
+  // `fetcher` gives RecordView ownership of the read path: it calls the endpoint
+  // on every query change, manages data / rowCount / loading, and caches
+  // responses under `cacheKey`. With `persistKey`, returning to the tab restores
+  // the same page/sort/filters and hits the cache — instant, no refetch.
   return (
     <main className="h-full">
-      <ServerDataTable />
+      <RecordView
+        title="Data Table"
+        singular="Member"
+        icon={TableIcon}
+        persistKey="/data-table"
+        cacheKey="data-table"
+        fetcher={fetchPage}
+        fields={fields}
+        initialData={[]}
+        getPrimary={(row) => ({
+          title: row.name,
+          subtitle: `${row.team} · ${row.role}`,
+          initials: row.name.slice(0, 2).toUpperCase(),
+        })}
+        makeEmptyRow={() => ({
+          id: Date.now(),
+          name: "",
+          team: "",
+          role: "",
+          location: "",
+          commits: 0,
+        })}
+      />
     </main>
   );
 }

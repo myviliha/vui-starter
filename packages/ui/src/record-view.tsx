@@ -352,6 +352,48 @@ function resolveOptions<T>(
   return typeof opts === "function" ? opts(draft) : (opts ?? []);
 }
 
+// Module-scoped response cache for RecordView's `fetcher` mode. Namespaced by
+// `cacheKey` and living outside any component, so a cached page survives a
+// remount / tab switch — the return is instant with no refetch. LRU per
+// namespace (insertion order = recency), optional TTL.
+type RvCacheEntry = { rows: unknown[]; total: number; at: number };
+const RV_CACHE = new Map<string, Map<string, RvCacheEntry>>();
+
+function rvQueryKey<T>(q: ServerQuery<T>): string {
+  return JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters]);
+}
+function rvCacheGet(
+  ns: string,
+  key: string,
+  ttlMs: number,
+): RvCacheEntry | null {
+  const bucket = RV_CACHE.get(ns);
+  const hit = bucket?.get(key);
+  if (!hit) return null;
+  if (ttlMs > 0 && Date.now() - hit.at > ttlMs) {
+    bucket!.delete(key);
+    return null;
+  }
+  // Refresh recency.
+  bucket!.delete(key);
+  bucket!.set(key, hit);
+  return hit;
+}
+function rvCacheSet(ns: string, key: string, entry: RvCacheEntry, max: number) {
+  let bucket = RV_CACHE.get(ns);
+  if (!bucket) {
+    bucket = new Map();
+    RV_CACHE.set(ns, bucket);
+  }
+  bucket.delete(key);
+  bucket.set(key, entry);
+  while (bucket.size > max) {
+    const oldest = bucket.keys().next().value;
+    if (oldest === undefined) break;
+    bucket.delete(oldest);
+  }
+}
+
 interface RecordViewProps<T extends { id: RowId }> {
   title: string;
   singular: string;
@@ -413,6 +455,25 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  update `data` + `rowCount` + `loading` in response. Fires once on mount for
    *  the initial load; debounce inside if keyword changes are chatty. */
   onQueryChange?: (query: ServerQuery<T>) => void;
+  /** Server data source. Providing it turns on `manual` and hands RecordView
+   *  ownership of the read path: it calls this on every query change and manages
+   *  `data` / `rowCount` / `loading` + caching itself — so you don't wire those
+   *  or `onQueryChange`. Return the current page plus the server total. The
+   *  `signal` aborts superseded requests. Mutually exclusive with the
+   *  consumer-managed props above (if both are set, `fetcher` wins). */
+  fetcher?: (
+    query: ServerQuery<T>,
+    signal: AbortSignal,
+  ) => Promise<{ rows: T[]; total: number }>;
+  /** Namespaces the `fetcher` response cache (like `persistKey`). Responses are
+   *  cached per query and survive remounts / tab switches, so returning to a tab
+   *  is instant with no refetch. Omit → no caching (always refetch). */
+  cacheKey?: string;
+  /** `fetcher` cache tuning. Default `{ max: 50, ttlMs: 0 }` (LRU, no expiry). */
+  cache?: { max?: number; ttlMs?: number };
+  /** Called when a `fetcher` request rejects (non-abort). RecordView keeps the
+   *  previously loaded data and clears the loading state. */
+  onError?: (error: unknown, query: ServerQuery<T>) => void;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -439,16 +500,89 @@ export function RecordView<T extends { id: RowId }>({
   manual = false,
   rowCount,
   onQueryChange,
+  fetcher,
+  cacheKey,
+  cache,
+  onError,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
   usePageTitle(title, TitleIcon);
-  // Rows are either controlled (data + onDataChange) or held internally.
+  // Rows: `fetcher`-owned (server), controlled (data + onDataChange), or held
+  // internally. `fetcher` implies manual mode.
+  const fetching = fetcher !== undefined;
+  const isManual = manual || fetching;
   const [internalRows, setInternalRows] = React.useState<T[]>(initialData);
   const controlled = data !== undefined;
-  const rows = controlled ? data : internalRows;
+
+  // Fetcher-managed state (only used when `fetcher` is set).
+  const [fetchedData, setFetchedData] = React.useState<T[]>([]);
+  const [fetchedTotal, setFetchedTotal] = React.useState(0);
+  const [fetchedLoading, setFetchedLoading] = React.useState(fetching);
+  const reqIdRef = React.useRef(0);
+  const abortRef = React.useRef<AbortController | null>(null);
+  const queryRef = React.useRef<ServerQuery<T> | null>(null);
+  const ttlMs = cache?.ttlMs ?? 0;
+  const cacheMax = cache?.max ?? 50;
+
+  const runFetch = React.useCallback(
+    (q: ServerQuery<T>, opts?: { background?: boolean }) => {
+      if (!fetcher) return;
+      // Foreground: serve from cache if present (instant, no shimmer).
+      if (!opts?.background && cacheKey) {
+        const hit = rvCacheGet(cacheKey, rvQueryKey(q), ttlMs);
+        if (hit) {
+          setFetchedData(hit.rows as T[]);
+          setFetchedTotal(hit.total);
+          setFetchedLoading(false);
+          return;
+        }
+      }
+      const id = ++reqIdRef.current;
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+      if (!opts?.background) setFetchedLoading(true);
+      fetcher(q, controller.signal)
+        .then((res) => {
+          if (id !== reqIdRef.current) return; // superseded
+          if (cacheKey)
+            rvCacheSet(
+              cacheKey,
+              rvQueryKey(q),
+              { rows: res.rows, total: res.total, at: Date.now() },
+              cacheMax,
+            );
+          setFetchedData(res.rows);
+          setFetchedTotal(res.total);
+          setFetchedLoading(false);
+        })
+        .catch((err) => {
+          if (controller.signal.aborted || id !== reqIdRef.current) return;
+          setFetchedLoading(false);
+          onError?.(err, q);
+        });
+    },
+    [fetcher, cacheKey, ttlMs, cacheMax, onError],
+  );
+  // Abort any in-flight request on unmount.
+  React.useEffect(() => () => abortRef.current?.abort(), []);
+
+  const rows = fetching ? fetchedData : controlled ? data : internalRows;
   const setRows = React.useCallback(
     (updater: React.SetStateAction<T[]>) => {
+      if (fetching) {
+        // Optimistic local update, then invalidate the cache and refetch the
+        // current query in the background so the table reflects server truth.
+        setFetchedData((prev) =>
+          typeof updater === "function"
+            ? (updater as (p: T[]) => T[])(prev)
+            : updater,
+        );
+        if (cacheKey) RV_CACHE.delete(cacheKey);
+        if (queryRef.current) runFetch(queryRef.current, { background: true });
+        return;
+      }
       if (controlled) {
         const next =
           typeof updater === "function"
@@ -459,7 +593,7 @@ export function RecordView<T extends { id: RowId }>({
         setInternalRows(updater);
       }
     },
-    [controlled, data, onDataChange],
+    [fetching, cacheKey, runFetch, controlled, data, onDataChange],
   );
   const [filter, setFilter] = usePersistentState(
     persistKey ? `${persistKey}::filter` : undefined,
@@ -588,7 +722,7 @@ export function RecordView<T extends { id: RowId }>({
   const processed = React.useMemo(() => {
     // Server mode: `rows` is already the filtered/sorted current page — render
     // it verbatim (no client-side filter/sort).
-    if (manual) return rows;
+    if (isManual) return rows;
     let out = rows;
     const q = filter.trim().toLowerCase();
     if (q) {
@@ -617,7 +751,7 @@ export function RecordView<T extends { id: RowId }>({
       });
     }
     return out;
-  }, [manual, rows, filter, sort, fields, getPrimary]);
+  }, [isManual, rows, filter, sort, fields, getPrimary]);
 
   const activeRow = rows.find((r) => r.id === activeId) ?? null;
   const deleteTarget =
@@ -628,18 +762,32 @@ export function RecordView<T extends { id: RowId }>({
   // Pagination (derived; `page` is clamped so it never points past the last page).
   // Server mode: totals come from `rowCount`, and `data` is already this page —
   // so render it whole (no slice) and size the range to what the server returned.
-  const total = manual ? (rowCount ?? processed.length) : processed.length;
+  const total = isManual
+    ? fetching
+      ? fetchedTotal
+      : (rowCount ?? processed.length)
+    : processed.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(Math.max(1, page), totalPages);
   const rangeStart = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
-  const rangeEnd = manual
+  const rangeEnd = isManual
     ? total === 0
       ? 0
       : Math.min(rangeStart + processed.length - 1, total)
     : Math.min(safePage * pageSize, total);
-  const paged = manual
+  const paged = isManual
     ? processed
     : processed.slice((safePage - 1) * pageSize, safePage * pageSize);
+  // Loading state comes from the fetcher when it owns the data.
+  const effectiveLoading = fetching ? fetchedLoading : loading;
+  // Keep the current query fresh for post-mutation background refetches.
+  queryRef.current = {
+    page: safePage,
+    pageSize,
+    sort,
+    search: filter,
+    filters: filterValues,
+  };
 
   // Reset to the first page when the filter or page size changes.
   React.useEffect(() => {
@@ -652,16 +800,19 @@ export function RecordView<T extends { id: RowId }>({
   // apply on demand, not per keystroke. `filterValues` is read fresh here but
   // deliberately left out of the deps for that reason.
   React.useEffect(() => {
-    if (!manual) return;
-    onQueryChange?.({
+    if (!isManual) return;
+    const query: ServerQuery<T> = {
       page: safePage,
       pageSize,
       sort,
       search: filter,
       filters: filterValues,
-    });
+    };
+    // `fetcher` owns the fetch; otherwise hand the query to the consumer.
+    if (fetching) runFetch(query);
+    else onQueryChange?.(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [manual, safePage, pageSize, sort, filter, onQueryChange]);
+  }, [isManual, fetching, safePage, pageSize, sort, filter, onQueryChange, runFetch]);
 
   // Cascading filter options: when the values change, drop any filter value no
   // longer valid once its options recompute (e.g. changing Region invalidates a
@@ -1308,14 +1459,15 @@ export function RecordView<T extends { id: RowId }>({
                         setFilterValues({});
                         onFilter?.({});
                         setPage(1);
-                        if (manual)
-                          onQueryChange?.({
-                            page: 1,
-                            pageSize,
-                            sort,
-                            search: filter,
-                            filters: {},
-                          });
+                        const q: ServerQuery<T> = {
+                          page: 1,
+                          pageSize,
+                          sort,
+                          search: filter,
+                          filters: {},
+                        };
+                        if (fetching) runFetch(q);
+                        else if (manual) onQueryChange?.(q);
                       }}
                     >
                       Clear
@@ -1325,14 +1477,15 @@ export function RecordView<T extends { id: RowId }>({
                       onClick={() => {
                         onFilter?.(filterValues);
                         setPage(1);
-                        if (manual)
-                          onQueryChange?.({
-                            page: 1,
-                            pageSize,
-                            sort,
-                            search: filter,
-                            filters: filterValues,
-                          });
+                        const q: ServerQuery<T> = {
+                          page: 1,
+                          pageSize,
+                          sort,
+                          search: filter,
+                          filters: filterValues,
+                        };
+                        if (fetching) runFetch(q);
+                        else if (manual) onQueryChange?.(q);
                       }}
                     >
                       <Search className="size-3.5" />
@@ -1544,7 +1697,7 @@ export function RecordView<T extends { id: RowId }>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {effectiveLoading ? (
               // Animated skeleton rows while data loads from the server.
               Array.from({ length: Math.min(pageSize, 8) }).map((_, i) => (
                 <TableRow key={`skeleton-${i}`} className="hover:bg-transparent">

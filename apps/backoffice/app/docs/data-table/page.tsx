@@ -112,7 +112,8 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
         <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
         <li><code>loading</code>: while <code>true</code>, the table body shows shimmering skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
-        <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: server-side mode (see Server-side data). RecordView stops filtering/sorting/paginating <code>data</code> and reports the query so your backend does the work.</li>
+        <li><code>fetcher</code> + <code>cacheKey</code>: server-side mode where RecordView owns the fetch, caching, and loading (see Server-side data). Optional <code>cache</code> (LRU tuning) and <code>onError</code>.</li>
+        <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode — RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
       </Ul>
 
       <H2>Field options</H2>
@@ -237,9 +238,48 @@ useEffect(() => {
       <P>
         By default RecordView does filtering, sorting, and pagination in the
         browser over the <code>data</code> you pass. For large tables that live on
-        a server, set <code>manual</code>: RecordView stops processing{" "}
-        <code>data</code> (it renders it as the current page verbatim) and instead
-        <strong> reports the query</strong> via <code>onQueryChange</code> so your
+        a server, there are two ways to go manual.
+      </P>
+
+      <H3>Let RecordView own the fetch (recommended)</H3>
+      <P>
+        Pass a <code>fetcher</code> and RecordView owns the whole read path: it
+        calls your endpoint on every query change, manages{" "}
+        <code>data</code> / <code>rowCount</code> / <code>loading</code>, and{" "}
+        <strong>caches responses</strong> under <code>cacheKey</code> — so
+        returning to a tab is instant with no refetch. Add <code>persistKey</code>{" "}
+        and the page/sort/filters restore on remount and hit that cache. No{" "}
+        <code>data</code>/<code>onQueryChange</code>/<code>loading</code> wiring.
+      </P>
+      <CodeBlock title="fetcher + cacheKey">{`<RecordView
+  fetcher={(query, signal) => fetch(url(query), { signal }).then((r) => r.json())}
+  //     → resolves { rows, total }
+  cacheKey="members"        // caches responses per query, survives tab switches
+  persistKey="/members"     // restores page/sort/filters on return
+  fields={fields}
+  initialData={[]}
+  /* … */
+/>`}</CodeBlock>
+      <Ul>
+        <li>
+          Superseded requests are aborted via the <code>signal</code>, and stale
+          responses are ignored — no out-of-order flicker to handle yourself.
+        </li>
+        <li>
+          Edits/adds/deletes update optimistically, invalidate the cache, and
+          refetch the current query in the background.
+        </li>
+        <li>
+          <code>cache=&#123;&#123; max, ttlMs &#125;&#125;</code> tunes the LRU;{" "}
+          <code>onError</code> is called if a fetch rejects (the last data stays).
+        </li>
+      </Ul>
+
+      <H3>Or manage it yourself (onQueryChange)</H3>
+      <P>
+        For full control, set <code>manual</code> instead: RecordView stops
+        processing <code>data</code> (renders it as the current page verbatim) and{" "}
+        <strong>reports the query</strong> via <code>onQueryChange</code> so your
         backend does the work. Pair it with <code>rowCount</code> (for the totals
         and page count) and <code>loading</code> (for the shimmer).
       </P>

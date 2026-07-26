@@ -7,6 +7,27 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.14.0 — 2026-07-26
+
+### Added
+
+- **Built-in server data source for `RecordView`: `fetcher` + query cache.** Pass
+  `fetcher={(query, signal) => Promise<{ rows, total }>}` and RecordView owns the
+  whole read path — it fetches on every query change, manages `data` / `rowCount`
+  / `loading`, aborts superseded requests via the `signal`, and (with `cacheKey`)
+  caches responses so returning to a tab is instant with no refetch. Combine with
+  `persistKey` to restore page/sort/filters on remount and hit the cache. New
+  props: `fetcher`, `cacheKey`, `cache` (`{ max, ttlMs }` LRU), `onError`.
+  Mutations are optimistic → invalidate → background refetch. This replaces the
+  hand-wired `data`/`onQueryChange`/`loading` + `Map` boilerplate (still supported
+  as the lower-level API). The Data Table demo now uses it.
+- **Changelog on the docs site** at `/docs/changelog`, rendered straight from this
+  file at build time (single source, never drifts). Linked in the docs nav.
+
+  **For agents:** for a server-backed table, prefer `fetcher` + `cacheKey` +
+  `persistKey` over wiring `onQueryChange`/`data`/`loading` + a cache yourself.
+  Docs: `/docs/data-table` (Server-side data → "Let RecordView own the fetch").
+
 ## 1.13.2 — 2026-07-26
 
 ### Fixed

@@ -173,6 +173,18 @@ scaffolded files in the repo are two separate things.
    `npx @viliha/vui-ui@latest init --dry-run`, then re-run with `--force` (commit
    or stash your work first so you can review the diff) or copy in just the files
    you want.
+   - **Keep-alive tab cache (1.13.1) lives in a scaffolded file**, so an upgrade
+     won't bring it. In `app/_components/open-tabs.tsx`, inside `KeepAliveTabs`,
+     make sure the cache is written **once per route**, not on every render:
+     ```ts
+     // ✅ preserves the mounted page across tab switches (no remount, no refetch)
+     if (!cache.current.has(active)) cache.current.set(active, children);
+     // ❌ old: cache.current.set(active, children)  // remounts on re-activation
+     ```
+     Re-pull the file with `init --force`, or apply this one-liner by hand.
+   - **Server tables that shouldn't refetch on tab switch:** use RecordView's
+     `fetcher` + `cacheKey` + `persistKey` (all in the package, so they arrive
+     with the upgrade) — see the Filtering/Tables notes above.
 5. **Re-check token overrides.** If you overrode any `theme.css` tokens, confirm
    they still line up after the upgrade.
 6. **Verify** before you commit: run type-check, lint, and build.
@@ -340,7 +352,12 @@ Form controls come from the field: `options` → `Select`, `input: "combobox"` �
 
 Loading from a server: pass `loading` to `RecordView` while the fetch is in flight — it shows shimmering skeleton rows (matched to the columns) instead of an empty-state flash; clear it when the data arrives. Don't build your own spinner overlay.
 
-Server-side (large tables): set `manual` and RecordView stops filtering/sorting/paginating `data` — it renders it as the current page and reports the query via `onQueryChange({ page, pageSize, sort, search, filters })`. Pair with `rowCount` (totals) and `loading`. In your handler, fetch and set `data` + `rowCount` + `loading`; guard out-of-order responses with a request-id ref and debounce chatty keyword changes. Don't reimplement pagination/sort yourself. For an **instant return** when switching tabs (keep-alive can remount an async page under the App Router), cache responses in a module-scoped `Map` (or your data-layer cache) keyed by the query and serve hits synchronously (skip `loading`), and pass `persistKey` so the page/sort/filters restore on remount. Reference: the Data Table demo page (shadcn/ui section) hits a simulated backend and does exactly this.
+Server-side (large tables) — two ways:
+
+1. **`fetcher` (preferred).** Pass `fetcher={(query, signal) => Promise<{ rows, total }>}` and RecordView owns the read path: it fetches on every query change, manages `data`/`rowCount`/`loading`, aborts superseded requests, and — with `cacheKey` — caches responses so returning to a tab is instant with no refetch. Add `persistKey` so page/sort/filters restore on remount and hit the cache. Optional `cache={{ max, ttlMs }}` and `onError`. Mutations are optimistic + invalidate + background refetch. Don't wire `data`/`onQueryChange`/`loading` yourself in this mode.
+2. **`manual` + `onQueryChange` (lower-level).** RecordView reports the query; you fetch and set `data` + `rowCount` + `loading`, guarding out-of-order responses and caching yourself.
+
+Either way, don't reimplement pagination/sort. Reference: the Data Table demo page (shadcn/ui section) uses `fetcher` + `cacheKey` + `persistKey` against a simulated backend.
 
 Dependent/cascading options: make `options` (form) or `filterable.options` (filter) a function — `(draft) => …` in the form, `(values) => …` in the filter — and one field's choices depend on another; RecordView clears the child when the parent change invalidates it. Keep `options` a static array for the bulk "Set {label}" action. If a field has both a function `options` and `renderInput`, guard with `Array.isArray(field.options)` before mapping (renderInput doesn't get the draft to resolve it).
 
