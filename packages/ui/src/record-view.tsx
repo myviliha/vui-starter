@@ -38,6 +38,7 @@ import { Button } from "./button";
 import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
+import { Combobox } from "./combobox";
 import {
   Table,
   TableBody,
@@ -238,9 +239,21 @@ export interface RecordField<T> {
    *  `Select`, and the selection toolbar offers a "Set {label}" bulk action. */
   options?: { value: string; label: string }[];
   /** Form control for the Add/Edit panel/page. Default `"text"` (auto-growing
-   *  textarea). `"number"`/`"date"` render the matching native input; a field
-   *  with `options` always renders a `Select` regardless of this. */
-  input?: "text" | "number" | "date";
+   *  textarea). `"number"`/`"date"` render the matching native input. For a
+   *  field with `options`: default renders a `Select`, and `"combobox"` renders
+   *  a searchable `Combobox` (type-to-filter) — use it for long option lists. */
+  input?: "text" | "number" | "date" | "combobox";
+  /** Render a custom Add/Edit control — a checkbox, a radio group, a color
+   *  picker, anything. Overrides the default control entirely (and takes
+   *  priority over `options`/`input`). You get the current string value and an
+   *  `onChange` to write it back; the surrounding label, required mark, and Save
+   *  validation still come from the field. Read-only View uses `render`. */
+  renderInput?: (props: {
+    value: string;
+    onChange: (value: string) => void;
+    field: RecordField<T>;
+    invalid?: boolean;
+  }) => React.ReactNode;
   /** Expose this field in the Filter panel. When ANY field is filterable, the
    *  panel switches from the single keyword box to a labeled control per field
    *  plus Search / Clear. `true` = a text input; pass a {@link FieldFilter} to
@@ -1098,7 +1111,18 @@ export function RecordView<T extends { id: RowId }>({
                         <label className="text-xs font-medium text-muted-foreground">
                           {label}
                         </label>
-                        {control === "select" || control === "combobox" ? (
+                        {control === "combobox" ? (
+                          <Combobox
+                            value={typeof raw === "string" ? raw : ""}
+                            onValueChange={setVal}
+                            options={opts}
+                            ariaLabel={label}
+                            placeholder={
+                              cfg.placeholder ?? `Any ${label.toLowerCase()}`
+                            }
+                            className="w-full"
+                          />
+                        ) : control === "select" ? (
                           <Select
                             value={typeof raw === "string" ? raw : ""}
                             onValueChange={setVal}
@@ -1767,15 +1791,34 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {f.render ? (
                   <div>{f.render(draft)}</div>
                 ) : !readOnly && f.editable ? (
-                  f.options ? (
-                    <Select
-                      value={String(draft[f.key as keyof T] ?? "")}
-                      onValueChange={(v) => setField(f.key as keyof T, v)}
-                      options={f.options}
-                      ariaLabel={f.label}
-                      placeholder={`Select ${f.label.toLowerCase()}…`}
-                      className="w-full"
-                    />
+                  f.renderInput ? (
+                    // Consumer-supplied control (checkbox, radio, custom widget).
+                    f.renderInput({
+                      value: String(draft[f.key as keyof T] ?? ""),
+                      onChange: (v) => setField(f.key as keyof T, v),
+                      field: f,
+                      invalid: errors.has(f.key),
+                    })
+                  ) : f.options ? (
+                    f.input === "combobox" ? (
+                      <Combobox
+                        value={String(draft[f.key as keyof T] ?? "")}
+                        onValueChange={(v) => setField(f.key as keyof T, v)}
+                        options={f.options}
+                        ariaLabel={f.label}
+                        placeholder={`Select ${f.label.toLowerCase()}…`}
+                        className="w-full"
+                      />
+                    ) : (
+                      <Select
+                        value={String(draft[f.key as keyof T] ?? "")}
+                        onValueChange={(v) => setField(f.key as keyof T, v)}
+                        options={f.options}
+                        ariaLabel={f.label}
+                        placeholder={`Select ${f.label.toLowerCase()}…`}
+                        className="w-full"
+                      />
+                    )
                   ) : f.input === "number" || f.input === "date" ? (
                     <Input
                       type={f.input}

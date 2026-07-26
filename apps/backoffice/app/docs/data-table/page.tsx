@@ -124,7 +124,9 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
-        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action.</li>
+        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists).</li>
+        <li><code>input</code>: form control — <code>&quot;text&quot;</code> (default), <code>&quot;number&quot;</code>, <code>&quot;date&quot;</code>, or <code>&quot;combobox&quot;</code> (searchable, needs <code>options</code>).</li>
+        <li><code>renderInput</code>: render a custom Add/Edit control (checkbox, radio group, anything). Overrides the default; you get <code>{`{ value, onChange, field, invalid }`}</code>.</li>
         <li><code>filterable</code>: expose the field in the Filter panel as a labeled control (see Filtering). <code>true</code> = text input; pass a config to choose the control.</li>
         <li><code>icon</code>: column-header icon.</li>
         <li><code>width</code>: initial column width (px). Columns auto-size by default; pass <code>resizableColumns</code> on <code>RecordView</code> to let users drag-resize them.</li>
@@ -178,7 +180,9 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <P>
         <code>control</code> is one of{" "}
         <code>&quot;text&quot; | &quot;number&quot; | &quot;date&quot; | &quot;select&quot; | &quot;combobox&quot; | &quot;checkbox&quot;</code>{" "}
-        (unknown or omitted → text). <code>options</code> falls back to the
+        (unknown or omitted → text). <code>combobox</code> is a searchable
+        single-select (type-to-filter) for long option lists; <code>select</code>{" "}
+        is the plain dropdown. <code>options</code> falls back to the
         field&apos;s own <code>options</code>. The exported types are{" "}
         <code>FilterControl</code>, <code>FieldFilter</code>, and{" "}
         <code>FilterValues&lt;T&gt;</code>.
@@ -211,6 +215,39 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         baseline, and every bit of spacing and color comes from theme tokens, so
         you never style a field by hand. It renders in one of two layouts.
       </P>
+
+      <H3>Form controls</H3>
+      <P>
+        Each field picks its control from the same <code>fields</code> array:{" "}
+        <code>options</code> → a <code>Select</code>, plus{" "}
+        <code>input: &quot;combobox&quot;</code> for a searchable{" "}
+        <code>Combobox</code>, <code>input: &quot;number&quot; | &quot;date&quot;</code>{" "}
+        for native inputs, else an auto-growing text area.
+      </P>
+      <P>
+        Need something the built-ins don&apos;t cover — a checkbox, a radio group,
+        a slider, a date-range, your own widget? Use <code>renderInput</code> to
+        drop in <strong>any component</strong>. It overrides the default control;
+        the field still owns the label, required mark, and Save validation. The
+        Organizations form uses it to render Status as a radio group.
+      </P>
+      <CodeBlock title="custom control via renderInput">{`{
+  key: "status",
+  label: "Status",
+  options: STATUS,                    // still used for View + bulk actions
+  renderInput: ({ value, onChange, field }) => (
+    <div role="radiogroup" aria-label={field.label} className="flex gap-4">
+      {(field.options ?? []).map((o) => (
+        <label key={o.value} className="flex items-center gap-1.5">
+          <input type="radio" name={field.key}
+            checked={value === o.value}
+            onChange={() => onChange(o.value)} />
+          {o.label}
+        </label>
+      ))}
+    </div>
+  ),
+}`}</CodeBlock>
 
       <H3>Slide-over panel (default)</H3>
       <P>

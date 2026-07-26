@@ -249,9 +249,10 @@ place. If you'd rather keep a verbatim copy, run
 ## Components
 
 `avatar` · `badge` · `breadcrumbs` · `button` · `card` · `chart` (themed Recharts
-wrapper) · `checkbox` · `command-palette` (⌘K launcher) · `dialog` ·
-`confirm-dialog` · `dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) ·
-`menu` · `required-mark` · `select` · `steps` (multi-step wizard indicator) ·
+wrapper) · `checkbox` · `combobox` (searchable single-select) · `command-palette`
+(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `input` · `kbd`
+(key caps + `Shortcut`) · `menu` · `required-mark` · `select` · `steps`
+(multi-step wizard indicator) ·
 `table` · `record-view` (the full datatable + `RecordForm`) · plus the `utils`
 (`cn`) helper and the `theme.css` design tokens.
 

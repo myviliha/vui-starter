@@ -7,6 +7,7 @@ import { Badge } from "@viliha/vui-ui/badge";
 import { Button } from "@viliha/vui-ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@viliha/vui-ui/card";
 import { Checkbox } from "@viliha/vui-ui/checkbox";
+import { Combobox } from "@viliha/vui-ui/combobox";
 import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
@@ -34,6 +35,7 @@ function Demo({
 export default function ComponentsPage() {
   const [checked, setChecked] = React.useState(true);
   const [fruit, setFruit] = React.useState("apple");
+  const [country, setCountry] = React.useState("");
 
   return (
     <article>
@@ -152,6 +154,43 @@ export default function ComponentsPage() {
             { value: "apple", label: "Apple" },
             { value: "banana", label: "Banana" },
             { value: "cherry", label: "Cherry" },
+          ]}
+        />
+      </Demo>
+
+      <H2>Combobox</H2>
+      <P>
+        A searchable single-select — same API as <code>Select</code>, but the
+        popover leads with a type-to-filter input. Use it for long option lists
+        (an FK / country picker) where scrolling a Select is painful.
+      </P>
+      <Demo
+        code={`import { Combobox } from "@viliha/vui-ui/combobox";
+
+<Combobox
+  value={value}
+  onValueChange={setValue}
+  options={countries}          // [{ value, label }, …]
+  placeholder="Select country…"
+  searchPlaceholder="Search countries…"
+/>`}
+      >
+        <Combobox
+          className="w-52"
+          value={country}
+          onValueChange={setCountry}
+          ariaLabel="Country"
+          placeholder="Select country…"
+          searchPlaceholder="Search countries…"
+          options={[
+            { value: "au", label: "Australia" },
+            { value: "br", label: "Brazil" },
+            { value: "ca", label: "Canada" },
+            { value: "de", label: "Germany" },
+            { value: "in", label: "India" },
+            { value: "jp", label: "Japan" },
+            { value: "sg", label: "Singapore" },
+            { value: "us", label: "United States" },
           ]}
         />
       </Demo>

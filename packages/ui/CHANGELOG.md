@@ -7,6 +7,29 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.10.0 — 2026-07-26
+
+### Added
+
+- **`Combobox`** (`@viliha/vui-ui/combobox`) — a searchable single-select. Same
+  API as `Select` (drop-in) but the popover leads with a type-to-filter input, so
+  it scales to long option lists (an FK / country picker). Keyboard: type to
+  filter, ↑/↓ to move, Enter to pick, Esc to close.
+- **`RecordView` choice fields can use the Combobox.** In the Add/Edit form set
+  `input: "combobox"` on an `options` field for a searchable control (default
+  stays `Select`). In the Filter panel, `control: "combobox"` now renders the
+  real searchable Combobox (previously it fell back to a plain Select).
+- **`RecordField.renderInput`** — an escape hatch to render **any** Add/Edit
+  control (checkbox, radio group, slider, date-range, a custom widget). It
+  overrides the default control and receives `{ value, onChange, field, invalid }`;
+  the field still owns the label, required mark, and Save validation. The
+  Organizations form demonstrates it (Status as a radio group).
+
+  **For agents:** for a long choice list use `input: "combobox"`; for a control
+  the built-ins don't cover use `renderInput` — never hand-build a `<form>`.
+  New demo: Organizations Status (radio via `renderInput`); Combobox is also in
+  the components gallery. Docs: `/docs/components`, `/docs/data-table`.
+
 ## 1.9.0 — 2026-07-26
 
 ### Added

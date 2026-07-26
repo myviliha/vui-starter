@@ -65,6 +65,26 @@ export const fields: RecordField<DemoOrganization>[] = [
       { value: "trial", label: "Trial" },
       { value: "suspended", label: "Suspended" },
     ],
+    // `renderInput` drops ANY component into the Add/Edit form — here a radio
+    // group instead of the default Select. Swap it for a checkbox, a slider, a
+    // color picker… the field still owns the label, required mark and Save
+    // validation. (View still shows the Badge via `render`.)
+    renderInput: ({ value, onChange, field }) => (
+      <div role="radiogroup" aria-label={field.label} className="flex flex-wrap gap-4">
+        {(field.options ?? []).map((o) => (
+          <label key={o.value} className="flex items-center gap-1.5 text-sm">
+            <input
+              type="radio"
+              name={`org-${field.key}`}
+              checked={value === o.value}
+              onChange={() => onChange(o.value)}
+              className="accent-[var(--button-primary)]"
+            />
+            {o.label}
+          </label>
+        ))}
+      </div>
+    ),
     render: (row) => {
       const status = statusBadge[row.status];
       return <Badge variant={status.variant}>{status.label}</Badge>;
