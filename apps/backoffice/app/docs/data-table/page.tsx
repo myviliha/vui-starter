@@ -124,7 +124,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
-        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists).</li>
+        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
         <li><code>input</code>: form control — <code>&quot;text&quot;</code> (default), <code>&quot;number&quot;</code>, <code>&quot;date&quot;</code>, or <code>&quot;combobox&quot;</code> (searchable, needs <code>options</code>).</li>
         <li><code>renderInput</code>: render a custom Add/Edit control (checkbox, radio group, anything). Overrides the default; you get <code>{`{ value, onChange, field, invalid }`}</code>.</li>
         <li><code>filterable</code>: expose the field in the Filter panel as a labeled control (see Filtering). <code>true</code> = text input; pass a config to choose the control.</li>
@@ -182,8 +182,10 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <code>&quot;text&quot; | &quot;number&quot; | &quot;date&quot; | &quot;select&quot; | &quot;combobox&quot; | &quot;checkbox&quot;</code>{" "}
         (unknown or omitted → text). <code>combobox</code> is a searchable
         single-select (type-to-filter) for long option lists; <code>select</code>{" "}
-        is the plain dropdown. <code>options</code> falls back to the
-        field&apos;s own <code>options</code>. The exported types are{" "}
+        is the plain dropdown. <code>options</code> is a static array or a{" "}
+        <strong>function of the current filter values</strong> (cascading — see
+        Cascading options), and falls back to the field&apos;s own{" "}
+        <code>options</code>. The exported types are{" "}
         <code>FilterControl</code>, <code>FieldFilter</code>, and{" "}
         <code>FilterValues&lt;T&gt;</code>.
       </P>
@@ -248,6 +250,35 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
     </div>
   ),
 }`}</CodeBlock>
+
+      <H3>Cascading (dependent) options</H3>
+      <P>
+        Make <code>options</code> a <strong>function</strong> and one field&apos;s
+        choices depend on another. In the form it receives the live draft; in the
+        filter it receives the current filter values. When the parent changes and
+        the child&apos;s value is no longer valid, RecordView <strong>clears the
+        child</strong> automatically — both in the Add/Edit form and the Filter.
+        The Cities demo derives State from the selected Country in both.
+      </P>
+      <CodeBlock title="Country → State cascade">{`const statesFor = (country) =>
+  [...new Set(cities.filter((c) => c.country === country).map((c) => c.state))]
+    .map((s) => ({ value: s, label: s }));
+
+const fields = [
+  { key: "country", input: "combobox", options: COUNTRIES,
+    filterable: { control: "select", options: COUNTRIES } },
+  { key: "state", input: "combobox",
+    options: (draft) => statesFor(draft.country),                 // form: from draft
+    filterable: { control: "combobox",
+      options: (values) => statesFor(values.country) } },         // filter: from values
+];`}</CodeBlock>
+      <Note title="renderInput + function options">
+        If a field uses both a function <code>options</code> and{" "}
+        <code>renderInput</code>, guard with{" "}
+        <code>Array.isArray(field.options)</code> before mapping — inside{" "}
+        <code>renderInput</code> you only get the field, not the draft, so a
+        function isn&apos;t resolved for you there.
+      </Note>
 
       <H3>Slide-over panel (default)</H3>
       <P>

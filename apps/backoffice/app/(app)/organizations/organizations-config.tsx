@@ -71,7 +71,7 @@ export const fields: RecordField<DemoOrganization>[] = [
     // validation. (View still shows the Badge via `render`.)
     renderInput: ({ value, onChange, field }) => (
       <div role="radiogroup" aria-label={field.label} className="flex flex-wrap gap-4">
-        {(field.options ?? []).map((o) => (
+        {(Array.isArray(field.options) ? field.options : []).map((o) => (
           <label key={o.value} className="flex items-center gap-1.5 text-sm">
             <input
               type="radio"

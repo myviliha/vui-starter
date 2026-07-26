@@ -7,6 +7,29 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.11.0 — 2026-07-26
+
+### Added
+
+- **Dependent (cascading) options in `RecordView`** — a choice field&apos;s
+  options can now depend on another field&apos;s current value, in both the
+  Add/Edit form and the Filter panel. Opt-in, backward compatible.
+  - Form: `RecordField.options` may be a **function of the draft** —
+    `((draft) => { value, label }[])` — recomputed as the draft changes.
+  - Filter: `FieldFilter.options` may be a **function of the current filter
+    values** — `((values) => { value, label }[])`. `FieldFilter` is now generic
+    (`FieldFilter<T>`).
+  - **Auto-clear:** when the parent changes and the child&apos;s value is no
+    longer a valid option, RecordView clears it (form and filter). Static-array
+    options are unchanged; the bulk "Set {label}" action only lists static-option
+    fields (no single draft to resolve a function against).
+
+  **For agents:** for a dependent picker (e.g. Country → State) pass a function
+  to `options` / `filterable.options`; don&apos;t manually reset the child. If a
+  field uses a function `options` *and* `renderInput`, guard with
+  `Array.isArray(field.options)` before mapping. Demo: `system/cities`
+  (Country → State) in both form and filter. Docs: `/docs/data-table`.
+
 ## 1.10.0 — 2026-07-26
 
 ### Added

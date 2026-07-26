@@ -187,16 +187,21 @@ export type FilterControl =
  *  `{ control: "text" }`; pass an object to pick the control and shape it, so
  *  the front end can compose a different filter form per request (Name + Code as
  *  text for one screen, a status dropdown + tag checkboxes for another). */
-export interface FieldFilter {
+export interface FieldFilter<T = Record<string, unknown>> {
   /** Which control to render. Default `"text"`. */
   control?: FilterControl;
   /** Label above the control. Defaults to the field's `label`. */
   label?: string;
   /** Placeholder for text / number / combobox inputs. */
   placeholder?: string;
-  /** Choices for `select` / `combobox` / `checkbox`. Falls back to the field's
-   *  own `options` when omitted. */
-  options?: { value: string; label: string }[];
+  /** Choices for `select` / `combobox` / `checkbox`. A static array, or a
+   *  function of the current filter values for cascading filters (e.g. Country
+   *  options derived from the selected Region) — the panel recomputes it on every
+   *  change and clears a value that's no longer valid. Falls back to the field's
+   *  own (static) `options` when omitted. */
+  options?:
+    | { value: string; label: string }[]
+    | ((values: FilterValues<T>) => { value: string; label: string }[]);
 }
 
 /** Values collected by the Filter panel, keyed by field. Single-value controls
@@ -236,8 +241,15 @@ export interface RecordField<T> {
   /** Custom, non-editable cell/value renderer. */
   render?: (row: T) => React.ReactNode;
   /** If set, the field becomes a choice field: the Add/Edit form renders a
-   *  `Select`, and the selection toolbar offers a "Set {label}" bulk action. */
-  options?: { value: string; label: string }[];
+   *  `Select` (or `Combobox`), and the selection toolbar offers a "Set {label}"
+   *  bulk action. A static array, or a function of the current draft for
+   *  dependent/cascading options (e.g. Country choices derived from the selected
+   *  Region) — the form recomputes it as the draft changes and clears the field
+   *  when its value is no longer a valid option. (Bulk "Set {label}" only lists
+   *  static-array option fields, since it has no single draft to resolve against.) */
+  options?:
+    | { value: string; label: string }[]
+    | ((draft: Partial<T>) => { value: string; label: string }[]);
   /** Form control for the Add/Edit panel/page. Default `"text"` (auto-growing
    *  textarea). `"number"`/`"date"` render the matching native input. For a
    *  field with `options`: default renders a `Select`, and `"combobox"` renders
@@ -260,7 +272,7 @@ export interface RecordField<T> {
    *  choose the control (dropdown, checkbox, combobox, number, date …) so the
    *  filter form is composed per request. The panel only gathers values — wire
    *  matching through RecordView's `onFilter`. Omit to leave the field out. */
-  filterable?: boolean | FieldFilter;
+  filterable?: boolean | FieldFilter<T>;
 }
 
 /**
@@ -314,6 +326,15 @@ function clearPersisted(key: string | undefined) {
   } catch {
     // ignore
   }
+}
+
+/** Resolve a choice field's form options against the current draft: a static
+ *  array, or a function of the draft (cascading pickers). */
+function resolveOptions<T>(
+  opts: RecordField<T>["options"],
+  draft: Partial<T>,
+): { value: string; label: string }[] {
+  return typeof opts === "function" ? opts(draft) : (opts ?? []);
 }
 
 interface RecordViewProps<T extends { id: RowId }> {
@@ -576,6 +597,32 @@ export function RecordView<T extends { id: RowId }>({
     setPage(1);
   }, [filter, pageSize, setPage]);
 
+  // Cascading filter options: when the values change, drop any filter value no
+  // longer valid once its options recompute (e.g. changing Region invalidates a
+  // Country filter). Only function-options filters cascade. Strings clear; multi
+  // (checkbox) arrays keep the still-valid entries.
+  React.useEffect(() => {
+    let changed = false;
+    const next: FilterValues<T> = { ...filterValues };
+    for (const f of fields) {
+      const cfg = typeof f.filterable === "object" ? f.filterable : null;
+      if (!cfg || typeof cfg.options !== "function") continue;
+      const valid = new Set(cfg.options(filterValues).map((o) => o.value));
+      const v = filterValues[f.key];
+      if (typeof v === "string" && v && !valid.has(v)) {
+        next[f.key] = "";
+        changed = true;
+      } else if (Array.isArray(v)) {
+        const kept = v.filter((x) => valid.has(x));
+        if (kept.length !== v.length) {
+          next[f.key] = kept;
+          changed = true;
+        }
+      }
+    }
+    if (changed) setFilterValues(next);
+  }, [filterValues, fields, setFilterValues]);
+
   function startEdit(row: T, key: string) {
     setEditing({ id: row.id, key });
     setDraft(String(row[key as keyof T] ?? ""));
@@ -818,7 +865,11 @@ export function RecordView<T extends { id: RowId }>({
   const allSelected =
     processed.length > 0 && selected.size === processed.length;
   // Choice fields (with `options`) power the "Set …" bulk actions.
-  const bulkFields = fields.filter((f) => f.options && f.options.length > 0);
+  // Only static-array option fields — bulk "Set {label}" has no single draft to
+  // resolve a function-options field against.
+  const bulkFields = fields.filter(
+    (f) => Array.isArray(f.options) && f.options.length > 0,
+  );
   // Per-column alignment (auto: numbers + short codes center).
   const columnAligns = React.useMemo(
     () => computeColumnAligns(fields, initialData),
@@ -1072,7 +1123,7 @@ export function RecordView<T extends { id: RowId }>({
               {bulkFields.map((f) => (
                 <React.Fragment key={f.key}>
                   <DropdownLabel>Set {f.label}</DropdownLabel>
-                  {f.options?.map((o) => (
+                  {(Array.isArray(f.options) ? f.options : []).map((o) => (
                     <DropdownItem
                       key={o.value}
                       onSelect={() => bulkSetField(f.key, o.value)}
@@ -1098,11 +1149,18 @@ export function RecordView<T extends { id: RowId }>({
                 <DropdownLabel>Filter</DropdownLabel>
                 <div className="flex max-h-80 w-72 flex-col gap-3 overflow-y-auto p-3">
                   {filterFields.map((f) => {
-                    const cfg: FieldFilter =
+                    const cfg: FieldFilter<T> =
                       typeof f.filterable === "object" ? f.filterable : {};
                     const control = cfg.control ?? "text";
                     const label = cfg.label ?? f.label;
-                    const opts = cfg.options ?? f.options ?? [];
+                    // Options: cfg's static array or function of the current
+                    // filter values (cascading); fall back to the field's static
+                    // options (a draft-function can't resolve here).
+                    const opts =
+                      typeof cfg.options === "function"
+                        ? cfg.options(filterValues)
+                        : (cfg.options ??
+                          (Array.isArray(f.options) ? f.options : []));
                     const raw = filterValues[f.key];
                     const setVal = (v: string | string[]) =>
                       setFilterValues((prev) => ({ ...prev, [f.key]: v }));
@@ -1704,6 +1762,25 @@ function RecordDetailPanel<T extends { id: RowId }>({
     setDraft(row);
   }, [row, setDraft]);
 
+  // Cascading options: after the draft changes, clear any choice field whose
+  // value is no longer valid once its options recompute (e.g. changing Region
+  // drops a now-invalid Country). Only function-options fields cascade; static
+  // ones never invalidate. Settles in one pass — cleared values are "" and skip.
+  React.useEffect(() => {
+    const stale = fields.filter((f) => {
+      if (typeof f.options !== "function") return false;
+      const v = draft[f.key as keyof T];
+      if (v == null || v === "") return false;
+      return !f.options(draft).some((o) => o.value === String(v));
+    });
+    if (stale.length === 0) return;
+    setDraft((d) => {
+      let next = d;
+      for (const f of stale) next = { ...next, [f.key]: "" };
+      return next;
+    });
+  }, [draft, fields, setDraft]);
+
   const primary = getPrimary(draft);
   const HeaderIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
 
@@ -1804,7 +1881,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
                       <Combobox
                         value={String(draft[f.key as keyof T] ?? "")}
                         onValueChange={(v) => setField(f.key as keyof T, v)}
-                        options={f.options}
+                        options={resolveOptions(f.options, draft)}
                         ariaLabel={f.label}
                         placeholder={`Select ${f.label.toLowerCase()}…`}
                         className="w-full"
@@ -1813,7 +1890,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
                       <Select
                         value={String(draft[f.key as keyof T] ?? "")}
                         onValueChange={(v) => setField(f.key as keyof T, v)}
-                        options={f.options}
+                        options={resolveOptions(f.options, draft)}
                         ariaLabel={f.label}
                         placeholder={`Select ${f.label.toLowerCase()}…`}
                         className="w-full"
