@@ -110,6 +110,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>formDescription</code>: intro text for the page-form documentation panel.</li>
         <li><code>resizableColumns</code>: <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
         <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
+        <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
       </Ul>
 
       <H2>Field options</H2>
@@ -123,6 +124,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
         <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action.</li>
+        <li><code>filterable</code>: expose the field in the Filter panel as a labeled control (see Filtering). <code>true</code> = text input; pass a config to choose the control.</li>
         <li><code>icon</code>: column-header icon.</li>
         <li><code>width</code>: initial column width (px). Columns auto-size by default; pass <code>resizableColumns</code> on <code>RecordView</code> to let users drag-resize them.</li>
         <li><code>align</code>: <code>&quot;left&quot;</code> / <code>&quot;center&quot;</code> / <code>&quot;right&quot;</code> (see below).</li>
@@ -139,6 +141,55 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 { key: "code", label: "Code" }                   // "USD","EUR" → centered
 { key: "name", label: "Name" }                   // long text → left
 { key: "total", label: "Total", align: "right" } // explicit override`}</CodeBlock>
+
+      <H2>Filtering</H2>
+      <P>
+        By default the toolbar&apos;s Filter panel is a single keyword box that
+        matches across every field (built in, nothing to wire). For a labeled
+        control per field, mark fields <code>filterable</code>. When any field is
+        filterable the panel switches to a control per field plus{" "}
+        <strong>Search</strong> and <strong>Clear</strong>.
+      </P>
+      <P>
+        The control is dynamic, so the front end composes a different filter form
+        per screen: <code>filterable: true</code> is a text input, or pass a
+        config to pick the control.
+      </P>
+      <CodeBlock title="per-field filters">{`const fields: RecordField<Region>[] = [
+  { key: "name", label: "Name", filterable: true },                    // text input
+  { key: "code", label: "Code", filterable: { control: "text",
+                                              placeholder: "e.g. APAC" } },
+  { key: "status", label: "Status", options: STATUS,                   // reuses options
+    filterable: { control: "select" } },
+  { key: "tags", label: "Tags",
+    filterable: { control: "checkbox", options: TAGS } },              // → string[]
+];`}</CodeBlock>
+      <P>
+        <code>control</code> is one of{" "}
+        <code>&quot;text&quot; | &quot;number&quot; | &quot;date&quot; | &quot;select&quot; | &quot;combobox&quot; | &quot;checkbox&quot;</code>{" "}
+        (unknown or omitted → text). <code>options</code> falls back to the
+        field&apos;s own <code>options</code>. The exported types are{" "}
+        <code>FilterControl</code>, <code>FieldFilter</code>, and{" "}
+        <code>FilterValues&lt;T&gt;</code>.
+      </P>
+      <Note variant="warning" title="Per-field mode doesn't match rows for you">
+        The panel <strong>collects</strong> values; it does not filter the table
+        in per-field mode. Handle <code>onFilter(values)</code> to run a query or
+        your own client-side filter (Search and Clear both call it). The built-in
+        keyword matching only applies when no field is <code>filterable</code>.
+      </Note>
+      <CodeBlock title="wire onFilter (server or client)">{`<RecordView
+  fields={fields}
+  data={rows}
+  onDataChange={setRows}
+  // values = { name: "asia", code: "AP", tags: ["eu","us"] }
+  onFilter={(values) => refetch(values)}   // or filter client-side
+/>`}</CodeBlock>
+      <P>
+        Live example: <code>system/regions</code> filters Name and Code
+        client-side. To add a control kind not listed, extend the{" "}
+        <code>FilterControl</code> union in the component.
+      </P>
 
       <H2>Add &amp; edit form layouts</H2>
       <P>

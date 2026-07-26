@@ -171,6 +171,42 @@ export function usePageTitle(title: string, icon?: IconType) {
   }, [title]);
 }
 
+/** Control kinds the Filter panel can render for a `filterable` field. Omitted
+ *  or unknown kinds render a text input — extend this union as you add controls
+ *  (e.g. `"daterange"`, `"multiselect"`). */
+export type FilterControl =
+  | "text"
+  | "number"
+  | "date"
+  | "select"
+  | "combobox"
+  | "checkbox";
+
+/** Per-field Filter-panel config. `filterable: true` is shorthand for
+ *  `{ control: "text" }`; pass an object to pick the control and shape it, so
+ *  the front end can compose a different filter form per request (Name + Code as
+ *  text for one screen, a status dropdown + tag checkboxes for another). */
+export interface FieldFilter {
+  /** Which control to render. Default `"text"`. */
+  control?: FilterControl;
+  /** Label above the control. Defaults to the field's `label`. */
+  label?: string;
+  /** Placeholder for text / number / combobox inputs. */
+  placeholder?: string;
+  /** Choices for `select` / `combobox` / `checkbox`. Falls back to the field's
+   *  own `options` when omitted. */
+  options?: { value: string; label: string }[];
+}
+
+/** Values collected by the Filter panel, keyed by field. Single-value controls
+ *  yield a `string`; multi-select `checkbox` yields a `string[]`. This object is
+ *  the contract you hand to your own query / refetch via {@link RecordView}'s
+ *  `onFilter` — in per-field mode the panel gathers values but does not match
+ *  rows itself, so the search is yours (client-side or server-side). */
+export type FilterValues<T> = Partial<
+  Record<Extract<keyof T, string>, string | string[]>
+>;
+
 export interface RecordField<T> {
   key: Extract<keyof T, string>;
   label: string;
@@ -199,6 +235,13 @@ export interface RecordField<T> {
    *  textarea). `"number"`/`"date"` render the matching native input; a field
    *  with `options` always renders a `Select` regardless of this. */
   input?: "text" | "number" | "date";
+  /** Expose this field in the Filter panel. When ANY field is filterable, the
+   *  panel switches from the single keyword box to a labeled control per field
+   *  plus Search / Clear. `true` = a text input; pass a {@link FieldFilter} to
+   *  choose the control (dropdown, checkbox, combobox, number, date …) so the
+   *  filter form is composed per request. The panel only gathers values — wire
+   *  matching through RecordView's `onFilter`. Omit to leave the field out. */
+  filterable?: boolean | FieldFilter;
 }
 
 /**
@@ -292,6 +335,11 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Allow dragging column edges to resize them. Off by default — columns
    *  auto-size, and no resize handle appears on hover. */
   resizableColumns?: boolean;
+  /** Called from the Filter panel's Search (and Clear) when fields are
+   *  `filterable`. Receives the collected per-field values; run your own query
+   *  or client-side filtering here. In per-field mode the panel does not match
+   *  rows itself, so the behavior is entirely yours. */
+  onFilter?: (values: FilterValues<T>) => void;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -313,6 +361,7 @@ export function RecordView<T extends { id: RowId }>({
   onEdit,
   persistKey,
   resizableColumns = false,
+  onFilter,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -338,6 +387,12 @@ export function RecordView<T extends { id: RowId }>({
   const [filter, setFilter] = usePersistentState(
     persistKey ? `${persistKey}::filter` : undefined,
     "",
+  );
+  // Per-field Filter-panel values (opt-in via `field.filterable`). Kept apart
+  // from the single-keyword `filter`; persisted like the rest of the view.
+  const [filterValues, setFilterValues] = usePersistentState<FilterValues<T>>(
+    persistKey ? `${persistKey}::filterValues` : undefined,
+    {},
   );
   const [sort, setSort] = usePersistentState<{
     key: string;
@@ -405,6 +460,9 @@ export function RecordView<T extends { id: RowId }>({
 
   const tableFields = fields.filter((f) => !f.hideInTable);
   const visibleFields = tableFields.filter((f) => !hidden.has(f.key));
+  // Fields opted into per-field filtering. Non-empty → the Filter panel renders
+  // a control per field instead of the single keyword box.
+  const filterFields = fields.filter((f) => f.filterable);
 
   // The primary "Name" column renders the record's name field, which is hidden
   // as a regular column (hideInTable) because it shows here. Mirror its
@@ -1007,19 +1065,119 @@ export function RecordView<T extends { id: RowId }>({
             </Dropdown>
           )}
           <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
-            <DropdownLabel>Filter by keyword</DropdownLabel>
-            <div className="p-3">
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  placeholder="Contains…"
-                  aria-label="Filter"
-                  className="h-8 pl-9"
-                />
-              </div>
-            </div>
+            {filterFields.length > 0 ? (
+              // Per-field mode: a labeled control per `filterable` field, plus
+              // Search / Clear. The panel only gathers values — matching is the
+              // consumer's job via `onFilter` (see the field's `filterable`).
+              <>
+                <DropdownLabel>Filter</DropdownLabel>
+                <div className="flex max-h-80 w-72 flex-col gap-3 overflow-y-auto p-3">
+                  {filterFields.map((f) => {
+                    const cfg: FieldFilter =
+                      typeof f.filterable === "object" ? f.filterable : {};
+                    const control = cfg.control ?? "text";
+                    const label = cfg.label ?? f.label;
+                    const opts = cfg.options ?? f.options ?? [];
+                    const raw = filterValues[f.key];
+                    const setVal = (v: string | string[]) =>
+                      setFilterValues((prev) => ({ ...prev, [f.key]: v }));
+                    return (
+                      <div key={f.key} className="flex flex-col gap-1">
+                        <label className="text-xs font-medium text-muted-foreground">
+                          {label}
+                        </label>
+                        {control === "select" || control === "combobox" ? (
+                          <Select
+                            value={typeof raw === "string" ? raw : ""}
+                            onValueChange={setVal}
+                            options={opts}
+                            ariaLabel={label}
+                            placeholder={
+                              cfg.placeholder ?? `Any ${label.toLowerCase()}`
+                            }
+                            className="w-full"
+                          />
+                        ) : control === "checkbox" ? (
+                          <div className="flex flex-col gap-1">
+                            {opts.map((o) => {
+                              const arr = Array.isArray(raw) ? raw : [];
+                              const on = arr.includes(o.value);
+                              return (
+                                <label
+                                  key={o.value}
+                                  className="flex items-center gap-2 text-sm"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={on}
+                                    onChange={() =>
+                                      setVal(
+                                        on
+                                          ? arr.filter((v) => v !== o.value)
+                                          : [...arr, o.value],
+                                      )
+                                    }
+                                  />
+                                  {o.label}
+                                </label>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <Input
+                            type={
+                              control === "number"
+                                ? "number"
+                                : control === "date"
+                                  ? "date"
+                                  : "text"
+                            }
+                            value={typeof raw === "string" ? raw : ""}
+                            onChange={(e) => setVal(e.target.value)}
+                            placeholder={cfg.placeholder ?? "Contains…"}
+                            aria-label={label}
+                            className="h-8"
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                  <div className="flex items-center justify-end gap-2 border-t border-border pt-3">
+                    <Button
+                      onClick={() => {
+                        setFilterValues({});
+                        onFilter?.({});
+                      }}
+                    >
+                      Clear
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => onFilter?.(filterValues)}
+                    >
+                      <Search className="size-3.5" />
+                      Search
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <DropdownLabel>Filter by keyword</DropdownLabel>
+                <div className="p-3">
+                  <div className="relative">
+                    <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      value={filter}
+                      onChange={(e) => setFilter(e.target.value)}
+                      placeholder="Contains…"
+                      aria-label="Filter"
+                      className="h-8 pl-9"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </Dropdown>
 
           <Dropdown label="Sort" icon={<ArrowUpDown className="size-3.5 text-blue-500" />}>

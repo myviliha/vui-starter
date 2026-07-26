@@ -7,6 +7,30 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.8.0 — 2026-07-26
+
+### Added
+
+- **Per-field filtering in `RecordView`** (opt-in, backward compatible). Mark a
+  field `filterable` and the Filter panel switches from the single keyword box to
+  a labeled control per field plus **Search / Clear**. The control is dynamic so
+  the front end can compose a different filter form per request:
+  - `filterable: true` → a text input.
+  - `filterable: { control, label, placeholder, options }` → pick the control:
+    `"text" | "number" | "date" | "select" | "combobox" | "checkbox"` (unknown or
+    omitted → text). `options` falls back to the field's own `options`.
+  - New exported types: `FilterControl`, `FieldFilter`, `FilterValues<T>`.
+  - The panel **gathers values only** — it does not match rows in per-field mode.
+    Wire matching through the new `RecordView` prop `onFilter(values)` (Search and
+    Clear both call it), typically a server query or your own client filter. The
+    single-keyword box (and its built-in row matching) is unchanged when no field
+    is `filterable`.
+
+  **For agents:** to add per-field filters, only set `filterable` on the relevant
+  `RecordField`s and handle `onFilter` — never hand-roll a filter form. Extend
+  `FilterControl` when a new control kind is needed. Demo: `system/regions`
+  (Name + Code). Docs: `/docs/data-table`.
+
 ## 1.7.0 — 2026-07-25
 
 ### Added

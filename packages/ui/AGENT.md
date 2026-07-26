@@ -334,6 +334,10 @@ Build forms with VUI and shadcn/ui together, reaching for shadcn Form, React Hoo
 
 Never hand-build an HTML table; always use `RecordView`. Configure columns through its field props (`editable`, `required`, `copyable`, `options`, `render`), and let `RecordView` own the rest: sorting, filtering, pagination, bulk actions, and import/export.
 
+## Filtering
+
+The Filter panel is a single keyword box by default (built in, matches all fields). For a labeled control per field, set `filterable` on the relevant fields and never hand-roll a filter form: `filterable: true` (text) or `filterable: { control, label, placeholder, options }` where `control` is `"text" | "number" | "date" | "select" | "combobox" | "checkbox"`. When any field is filterable the panel shows a control per field plus Search / Clear. It only **collects** values — handle `onFilter(values)` on `RecordView` to run a query or client filter (Search and Clear both call it). Types: `FilterControl`, `FieldFilter`, `FilterValues<T>`. Need a control kind that isn't listed? Extend the `FilterControl` union in the component.
+
 ## Add / edit form
 
 The buffered add/edit form renders in one of two layouts:
