@@ -11,6 +11,7 @@ import { Combobox } from "@viliha/vui-ui/combobox";
 import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
+import { Tooltip } from "@viliha/vui-ui/tooltip";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
 
 function Demo({
@@ -193,6 +194,26 @@ export default function ComponentsPage() {
             { value: "us", label: "United States" },
           ]}
         />
+      </Demo>
+
+      <H2>Tooltip</H2>
+      <P>
+        A themed, dependency-free tooltip (portal-positioned, hover/focus,
+        auto-flip). RecordView uses it for truncated cells; reach for it instead
+        of the native <code>title</code> attribute.
+      </P>
+      <Demo
+        code={`import { Tooltip } from "@viliha/vui-ui/tooltip";
+
+<Tooltip content="Full text shown on hover">
+  <span className="underline decoration-dotted">Hover me</span>
+</Tooltip>`}
+      >
+        <Tooltip content="This is the full, untruncated value.">
+          <span className="cursor-default underline decoration-dotted underline-offset-4">
+            Hover me
+          </span>
+        </Tooltip>
       </Demo>
 
       <H2>Avatar</H2>

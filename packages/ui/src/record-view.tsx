@@ -39,6 +39,7 @@ import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
 import { Combobox } from "./combobox";
+import { Tooltip } from "./tooltip";
 import {
   Table,
   TableBody,
@@ -1220,9 +1221,15 @@ export function RecordView<T extends { id: RowId }>({
               ALIGN_BOX[alignOf(field.key)],
             )}
           >
-            <span className="truncate" title={clip.full}>
-              {clip.text || <span className="text-muted-foreground">—</span>}
-            </span>
+            {clip.full ? (
+              <Tooltip content={clip.full} className="truncate">
+                {clip.text}
+              </Tooltip>
+            ) : (
+              <span className="truncate">
+                {clip.text || <span className="text-muted-foreground">—</span>}
+              </span>
+            )}
           </button>
           {hoverActions}
         </div>
@@ -1235,9 +1242,13 @@ export function RecordView<T extends { id: RowId }>({
           ALIGN_BOX[alignOf(field.key)],
         )}
       >
-        <span className="truncate" title={clip.full}>
-          {clip.text}
-        </span>
+        {clip.full ? (
+          <Tooltip content={clip.full} className="truncate">
+            {clip.text}
+          </Tooltip>
+        ) : (
+          <span className="truncate">{clip.text}</span>
+        )}
         {hoverActions}
       </div>
     );
@@ -1848,9 +1859,15 @@ export function RecordView<T extends { id: RowId }>({
                         <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
                           {primary.initials}
                         </span>
-                        <span className="truncate" title={nameClip.full}>
-                          {nameClip.text || "—"}
-                        </span>
+                        {nameClip.full ? (
+                          <Tooltip content={nameClip.full} className="truncate">
+                            {nameClip.text}
+                          </Tooltip>
+                        ) : (
+                          <span className="truncate">
+                            {nameClip.text || "—"}
+                          </span>
+                        )}
                       </button>
                     </TableCell>
                     {visibleFields.map((f) => (

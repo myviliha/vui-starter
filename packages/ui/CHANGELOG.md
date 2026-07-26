@@ -13,13 +13,17 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
 - **Cell truncation in `RecordView` — long text stays on one line.** A cell
   longer than `maxCellChars` is clipped with an ellipsis (…) and shows the full
-  value in a hover tooltip, so a sentence never wraps to a second row. The limit
-  defaults to `NEXT_PUBLIC_MAX_CELL_CHARS` (or 25) and is overridable per view
-  (`maxCellChars` prop) or per column (a field's `maxChars`; `0` = never
+  value in a **styled hover tooltip**, so a sentence never wraps to a second row.
+  The limit defaults to `NEXT_PUBLIC_MAX_CELL_CHARS` (or 25) and is overridable
+  per view (`maxCellChars` prop) or per column (a field's `maxChars`; `0` = never
   truncate). Applies to the identity/Name cell and every value column.
+- **`Tooltip`** (`@viliha/vui-ui/tooltip`) — a lightweight, dependency-free themed
+  tooltip (portal + fixed positioning, hover/focus, auto-flip). Used by the cell
+  truncation above; reusable anywhere.
 
-  **For agents:** rely on this instead of adding `truncate`/`title` to cells
-  yourself; set `maxChars` on a field to widen/disable a specific column. Env:
+  **For agents:** rely on cell truncation instead of adding `truncate`/`title`
+  to cells yourself; set `maxChars` on a field to widen/disable a specific column.
+  For your own tooltips use `Tooltip`, not native `title`. Env:
   `NEXT_PUBLIC_MAX_CELL_CHARS`. Docs: `/docs/data-table`, `/docs/configuration`.
 
 ## 1.14.2 — 2026-07-26
