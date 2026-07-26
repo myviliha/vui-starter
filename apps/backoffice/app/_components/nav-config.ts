@@ -24,6 +24,7 @@ import {
   RowsIcon as StepsIcon,
   SewingPinFilledIcon as MapPin,
   Share2Icon as Network,
+  TableIcon,
   TargetIcon as Target,
   TextIcon as Languages,
   TokensIcon as Coins,
@@ -75,6 +76,7 @@ export const NAV: NavSection[] = [
     title: "shadcn/ui",
     items: [
       { label: "Components", href: "/components", icon: Blocks, color: "text-indigo-500" },
+      { label: "Data Table", href: "/data-table", icon: TableIcon, color: "text-amber-500" },
       { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
       { label: "Steps", href: "/steps", icon: StepsIcon, color: "text-violet-500" },
       { label: "Calendar", href: "/calendar", icon: CalendarIcon, color: "text-rose-500" },

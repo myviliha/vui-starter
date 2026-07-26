@@ -7,6 +7,31 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.13.0 — 2026-07-26
+
+### Added
+
+- **Server-side ("manual") mode for `RecordView`.** Set `manual` and RecordView
+  stops filtering/sorting/paginating `data` — it renders it as the current page
+  verbatim and reports the query via `onQueryChange({ page, pageSize, sort,
+  search, filters })` so your backend does the work. Pair with `rowCount` (drives
+  the footer + page count) and `loading`. Fires once on mount for the initial
+  load; per-field filters fire it on the Filter panel's Search/Clear. New exported
+  types: `SortState`, `ServerQuery<T>`. Default off — everything stays client-side.
+- **Data Table demo page** in the scaffold (shadcn/ui section) — a full
+  server-side table against a simulated backend (pagination, sort, keyword +
+  per-field filter, loading shimmer, out-of-order-response guard).
+
+### Changed
+
+- The loading skeleton now **shimmers left → right** (a `vui-shimmer` sweep in
+  `theme.css`) instead of a pulse — a clearer "records are loading" cue.
+
+  **For agents:** for a server-backed table use `manual` + `rowCount` +
+  `onQueryChange` (fetch → set `data`/`rowCount`/`loading`); guard stale
+  responses with a request-id ref. Don't reimplement pagination/sort. Demo:
+  the Data Table page. Docs: `/docs/data-table` (Server-side data).
+
 ## 1.12.0 — 2026-07-26
 
 ### Added

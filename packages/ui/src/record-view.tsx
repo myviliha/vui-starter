@@ -213,6 +213,21 @@ export type FilterValues<T> = Partial<
   Record<Extract<keyof T, string>, string | string[]>
 >;
 
+/** Current sort — the field key and direction, or `null` for unsorted. */
+export type SortState = { key: string; dir: "asc" | "desc" };
+
+/** The full query state reported by `onQueryChange` in server (`manual`) mode —
+ *  everything needed to build a request. `page` is 1-based. */
+export type ServerQuery<T> = {
+  page: number;
+  pageSize: number;
+  sort: SortState | null;
+  /** The keyword box. */
+  search: string;
+  /** Per-field filter values (from `filterable` fields). */
+  filters: FilterValues<T>;
+};
+
 export interface RecordField<T> {
   key: Extract<keyof T, string>;
   label: string;
@@ -384,6 +399,20 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  from the server (an initial fetch or a filter/refetch). Set it around your
    *  async load; the toolbar stays usable. */
   loading?: boolean;
+  /** Server-side mode. When `true`, RecordView does NOT filter, sort, or
+   *  paginate `data` — it renders `data` as the current page verbatim and reports
+   *  query state via `onQueryChange`, so your backend does the work. Pair with
+   *  `rowCount` (for totals), `loading`, and `onQueryChange`. Default `false`
+   *  (everything client-side). */
+  manual?: boolean;
+  /** Total row count on the server — drives the pagination footer and page count
+   *  in `manual` mode (RecordView can't infer it from a single page of `data`). */
+  rowCount?: number;
+  /** Server mode: called with the full query whenever page, page size, sort, or
+   *  the keyword changes (and on the per-field Filter Search/Clear). Fetch and
+   *  update `data` + `rowCount` + `loading` in response. Fires once on mount for
+   *  the initial load; debounce inside if keyword changes are chatty. */
+  onQueryChange?: (query: ServerQuery<T>) => void;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -407,6 +436,9 @@ export function RecordView<T extends { id: RowId }>({
   resizableColumns = false,
   onFilter,
   loading = false,
+  manual = false,
+  rowCount,
+  onQueryChange,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -554,6 +586,9 @@ export function RecordView<T extends { id: RowId }>({
   );
 
   const processed = React.useMemo(() => {
+    // Server mode: `rows` is already the filtered/sorted current page — render
+    // it verbatim (no client-side filter/sort).
+    if (manual) return rows;
     let out = rows;
     const q = filter.trim().toLowerCase();
     if (q) {
@@ -582,7 +617,7 @@ export function RecordView<T extends { id: RowId }>({
       });
     }
     return out;
-  }, [rows, filter, sort, fields, getPrimary]);
+  }, [manual, rows, filter, sort, fields, getPrimary]);
 
   const activeRow = rows.find((r) => r.id === activeId) ?? null;
   const deleteTarget =
@@ -591,16 +626,42 @@ export function RecordView<T extends { id: RowId }>({
       : null;
 
   // Pagination (derived; `page` is clamped so it never points past the last page).
-  const totalPages = Math.max(1, Math.ceil(processed.length / pageSize));
+  // Server mode: totals come from `rowCount`, and `data` is already this page —
+  // so render it whole (no slice) and size the range to what the server returned.
+  const total = manual ? (rowCount ?? processed.length) : processed.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(Math.max(1, page), totalPages);
-  const rangeStart = processed.length === 0 ? 0 : (safePage - 1) * pageSize + 1;
-  const rangeEnd = Math.min(safePage * pageSize, processed.length);
-  const paged = processed.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const rangeStart = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
+  const rangeEnd = manual
+    ? total === 0
+      ? 0
+      : Math.min(rangeStart + processed.length - 1, total)
+    : Math.min(safePage * pageSize, total);
+  const paged = manual
+    ? processed
+    : processed.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   // Reset to the first page when the filter or page size changes.
   React.useEffect(() => {
     setPage(1);
   }, [filter, pageSize, setPage]);
+
+  // Server mode: report the query so the consumer can fetch. Fires on page,
+  // size, sort, and keyword changes (and once on mount for the initial load).
+  // Per-field filters emit via the Filter panel's Search/Clear instead, so they
+  // apply on demand, not per keystroke. `filterValues` is read fresh here but
+  // deliberately left out of the deps for that reason.
+  React.useEffect(() => {
+    if (!manual) return;
+    onQueryChange?.({
+      page: safePage,
+      pageSize,
+      sort,
+      search: filter,
+      filters: filterValues,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [manual, safePage, pageSize, sort, filter, onQueryChange]);
 
   // Cascading filter options: when the values change, drop any filter value no
   // longer valid once its options recompute (e.g. changing Region invalidates a
@@ -1246,13 +1307,33 @@ export function RecordView<T extends { id: RowId }>({
                       onClick={() => {
                         setFilterValues({});
                         onFilter?.({});
+                        setPage(1);
+                        if (manual)
+                          onQueryChange?.({
+                            page: 1,
+                            pageSize,
+                            sort,
+                            search: filter,
+                            filters: {},
+                          });
                       }}
                     >
                       Clear
                     </Button>
                     <Button
                       variant="primary"
-                      onClick={() => onFilter?.(filterValues)}
+                      onClick={() => {
+                        onFilter?.(filterValues);
+                        setPage(1);
+                        if (manual)
+                          onQueryChange?.({
+                            page: 1,
+                            pageSize,
+                            sort,
+                            search: filter,
+                            filters: filterValues,
+                          });
+                      }}
                     >
                       <Search className="size-3.5" />
                       Search
@@ -1341,7 +1422,7 @@ export function RecordView<T extends { id: RowId }>({
               ))}
             </Dropdown>
             <span className="whitespace-nowrap px-1 tabular-nums">
-              {rangeStart}–{rangeEnd} of {processed.length}
+              {rangeStart}–{rangeEnd} of {total}
             </span>
             <button
               type="button"
@@ -1468,22 +1549,22 @@ export function RecordView<T extends { id: RowId }>({
               Array.from({ length: Math.min(pageSize, 8) }).map((_, i) => (
                 <TableRow key={`skeleton-${i}`} className="hover:bg-transparent">
                   <TableCell style={{ width: CHECKBOX_W }}>
-                    <div className="mx-2 size-4 animate-pulse rounded bg-muted" />
+                    <div className="mx-2 size-4 vui-shimmer rounded" />
                   </TableCell>
                   <TableCell style={{ width: colWidths[NAME_COL] }}>
                     <div className="flex items-center gap-2">
-                      <div className="size-7 shrink-0 animate-pulse rounded-full bg-muted" />
-                      <div className="h-3.5 w-32 animate-pulse rounded bg-muted" />
+                      <div className="size-7 shrink-0 vui-shimmer rounded-full" />
+                      <div className="h-3.5 w-32 vui-shimmer rounded" />
                     </div>
                   </TableCell>
                   {visibleFields.map((f) => (
                     <TableCell key={f.key} style={{ width: colWidths[f.key] }}>
-                      <div className="h-3.5 w-20 animate-pulse rounded bg-muted" />
+                      <div className="h-3.5 w-20 vui-shimmer rounded" />
                     </TableCell>
                   ))}
                   <TableCell aria-hidden="true" className="border-r-0" />
                   <TableCell style={{ width: ACTIONS_W }}>
-                    <div className="mx-auto h-4 w-8 animate-pulse rounded bg-muted" />
+                    <div className="mx-auto h-4 w-8 vui-shimmer rounded" />
                   </TableCell>
                 </TableRow>
               ))

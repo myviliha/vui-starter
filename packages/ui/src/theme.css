@@ -273,6 +273,30 @@
   transform-origin: var(--vui-pop-origin, top);
 }
 
+/* Loading skeleton: a highlight band sweeping left → right over a muted base,
+   the "records are loading" cue. Used by RecordView's loading skeleton rows.
+   (prefers-reduced-motion is respected by the global clamp above.) */
+@keyframes vui-shimmer {
+  from {
+    background-position: -150% 0;
+  }
+  to {
+    background-position: 150% 0;
+  }
+}
+.vui-shimmer {
+  background-color: var(--muted);
+  background-image: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    color-mix(in oklab, var(--foreground) 12%, var(--muted)) 50%,
+    var(--muted) 100%
+  );
+  background-size: 150% 100%;
+  background-repeat: no-repeat;
+  animation: vui-shimmer 1.5s ease-in-out infinite;
+}
+
 @keyframes vui-slide-out-right {
   from {
     transform: translateX(0);

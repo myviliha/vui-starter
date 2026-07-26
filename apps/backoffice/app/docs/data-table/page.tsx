@@ -111,7 +111,8 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>resizableColumns</code>: <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
         <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
         <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
-        <li><code>loading</code>: while <code>true</code>, the table body shows animated skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
+        <li><code>loading</code>: while <code>true</code>, the table body shows shimmering skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
+        <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: server-side mode (see Server-side data). RecordView stops filtering/sorting/paginating <code>data</code> and reports the query so your backend does the work.</li>
       </Ul>
 
       <H2>Field options</H2>
@@ -215,10 +216,11 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <H2>Loading state</H2>
       <P>
         When rows come from a server, set <code>loading</code> while the request
-        is in flight and the table body shows animated skeleton rows (matched to
-        your columns) instead of an empty &ldquo;No records&rdquo; flash. The
-        toolbar stays usable. Clear it when the data arrives. The Markets demo
-        simulates this on first load.
+        is in flight and the table body shows skeleton rows (matched to your
+        columns) with a highlight <strong>shimmering left to right</strong> —
+        instead of an empty &ldquo;No records&rdquo; flash. The toolbar stays
+        usable. Clear it when the data arrives. The Markets demo simulates this on
+        first load; the Data Table demo shows it on every server fetch.
       </P>
       <CodeBlock title="loading around a fetch">{`const [rows, setRows] = useState([]);
 const [loading, setLoading] = useState(true);
@@ -230,6 +232,62 @@ useEffect(() => {
 }, []);
 
 <RecordView loading={loading} data={rows} onDataChange={setRows} /* … */ />`}</CodeBlock>
+
+      <H2>Server-side data</H2>
+      <P>
+        By default RecordView does filtering, sorting, and pagination in the
+        browser over the <code>data</code> you pass. For large tables that live on
+        a server, set <code>manual</code>: RecordView stops processing{" "}
+        <code>data</code> (it renders it as the current page verbatim) and instead
+        <strong> reports the query</strong> via <code>onQueryChange</code> so your
+        backend does the work. Pair it with <code>rowCount</code> (for the totals
+        and page count) and <code>loading</code> (for the shimmer).
+      </P>
+      <Ul>
+        <li>
+          <code>onQueryChange(query)</code> fires on page, page-size, sort, and
+          keyword changes (and once on mount for the initial load); per-field
+          filters fire it on the Filter panel&apos;s <strong>Search / Clear</strong>.
+        </li>
+        <li>
+          <code>query</code> is{" "}
+          <code>{`{ page, pageSize, sort, search, filters }`}</code> —{" "}
+          everything you need to build the request (<code>page</code> is 1-based).
+        </li>
+        <li>
+          Feed the response back into <code>data</code> + <code>rowCount</code>,
+          and toggle <code>loading</code> around the fetch.
+        </li>
+      </Ul>
+      <CodeBlock title="server-side table">{`const [data, setData] = useState([]);
+const [rowCount, setRowCount] = useState(0);
+const [loading, setLoading] = useState(true);
+
+const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, filters }
+  setLoading(true);
+  fetchPage(q)                               // your API call
+    .then(({ rows, total }) => { setData(rows); setRowCount(total); })
+    .finally(() => setLoading(false));
+}, []);
+
+<RecordView
+  manual
+  rowCount={rowCount}
+  loading={loading}
+  onQueryChange={onQueryChange}
+  data={data}
+  onDataChange={setData}
+  fields={fields}
+  /* … */
+/>`}</CodeBlock>
+      <Note title="Guard against out-of-order responses">
+        A fast user can fire several queries before earlier ones resolve. Track a
+        request id (a <code>useRef</code> counter) and ignore a response whose id
+        isn&apos;t the latest, so a slow earlier page doesn&apos;t overwrite a
+        newer one. Debounce the fetch if keyword changes are chatty. The live{" "}
+        <strong>Data Table</strong> demo (shadcn/ui section) does both against a
+        simulated backend.
+      </Note>
 
       <H2>Add &amp; edit form layouts</H2>
       <P>
