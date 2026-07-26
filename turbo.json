@@ -1,7 +1,7 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
-  "globalEnv": ["NODE_ENV", "PORT"],
+  "globalEnv": ["NODE_ENV", "PORT", "NEXT_PUBLIC_MAX_CELL_CHARS"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
