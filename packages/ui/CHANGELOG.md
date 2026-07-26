@@ -7,6 +7,19 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.13.1 — 2026-07-26
+
+### Fixed
+
+- **Keep-alive tabs now truly preserve a page's live state across tab switches**
+  (within `NEXT_PUBLIC_MAX_TABS`). The scaffold's `KeepAliveTabs` was overwriting
+  a route's cached element with Next's fresh `children` on every re-activation,
+  which remounted the page and threw away its state — so a server-backed table
+  (e.g. the Data Table demo) refetched every time you returned to its tab. It now
+  caches each route's element once and reuses it, so switching away and back keeps
+  the loaded data, scroll, and form state with no reload. Query-param routes
+  (`/organizations/edit?id=…`) still update via their own `useSearchParams`.
+
 ## 1.13.0 — 2026-07-26
 
 ### Added

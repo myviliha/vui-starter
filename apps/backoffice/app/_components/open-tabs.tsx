@@ -503,11 +503,14 @@ export function KeepAliveTabs({ children }: { children: React.ReactNode }) {
   const active = tabKey(usePathname());
   const { tabs } = useOpenTabs();
   const cache = React.useRef(new Map<string, React.ReactNode>());
-  // Refresh the active route's element (so re-opening an /edit tab with a
-  // different record shows the right data); inactive tabs keep their cached
-  // element and stay mounted. In-progress form work survives via RecordForm's
-  // sessionStorage draft (see persistKey), which is StrictMode-safe.
-  cache.current.set(active, children);
+  // Cache each route's element ONCE, on first activation, and reuse it — never
+  // overwrite on re-activation. Reusing the same element reference is what lets
+  // React keep the mounted instance (and its loaded data / scroll / form state)
+  // across tab switches; overwriting with Next's fresh `children` would remount
+  // the subtree and reload everything. Routes that vary by query param (e.g.
+  // /organizations/edit?id=…) share one tab and update themselves via
+  // `useSearchParams`, so they don't need a refresh here.
+  if (!cache.current.has(active)) cache.current.set(active, children);
   // Drop entries for tabs that have been closed.
   const open = new Set(tabs.map((t) => t.href));
   for (const key of [...cache.current.keys()]) {
