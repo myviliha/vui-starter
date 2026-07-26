@@ -7,6 +7,27 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.16.0 — 2026-07-27
+
+### Added
+
+- **Configurable page-form breadcrumb.** `RecordForm` (page layout) takes a
+  `crumbs` prop that fully replaces the default `Home › {title} › Create/Update
+  {singular}` trail — add parents (e.g. an "Access" section), rename the last
+  crumb ("New Role"), or reshape it per route. Each crumb is `{ label, onClick? }`;
+  the last is the current page. The `Crumb` type is re-exported from
+  `@viliha/vui-ui/record-view` (also in `@viliha/vui-ui/breadcrumbs`).
+
+### Changed
+
+- **Choice-field cells show the option label, not the raw value.** A field with
+  `options` now renders its matching label in the table (e.g. `SYSTEM` →
+  "System") while staying editable — no need for a read-only `render` just to map
+  an enum to a friendly label. Falls back to the raw value when unmatched.
+
+  **For agents:** use `options` labels for enum columns (not `render`), and pass
+  `crumbs` to `RecordForm` to shape a route's breadcrumb. Docs: `/docs/data-table`.
+
 ## 1.15.0 — 2026-07-27
 
 ### Added

@@ -348,6 +348,8 @@ Never hand-build an HTML table; always use `RecordView`. Configure columns throu
 
 Long cell text never wraps: cells truncate to one line at `maxCellChars` (view prop; defaults to `NEXT_PUBLIC_MAX_CELL_CHARS` or 25) with an ellipsis + hover tooltip. Override a column with the field's `maxChars` (`0` = never truncate). Don't add your own `truncate`/`title` on cells — it's built in.
 
+A choice field (`options`) shows the option's **label** in the cell (e.g. `SYSTEM` → "System") while staying editable — don't use `render` just to map an enum to a friendly label. To customize the full-page form's breadcrumb, pass a `crumbs` array to `RecordForm` (each `{ label, onClick? }`, last = current page) — e.g. to add an "Access" parent or rename "Create new role" → "New Role".
+
 Sorting follows column visibility by default; use `sortable` to decouple them — `sortable: true` sorts a field with no column (e.g. a `hideInTable` name shown via `getPrimary`), `sortable: false` locks a visible column. Set the flag; don't rewire the Sort dropdown or headers.
 
 Form controls come from the field: `options` → `Select`, `input: "combobox"` → a searchable `Combobox` (`@viliha/vui-ui/combobox`, use for long lists), `input: "number" | "date"` → native inputs. For anything the built-ins don't cover (checkbox, radio group, slider, custom widget), set `renderInput({ value, onChange, field, invalid })` on the field — it drops any component into the Add/Edit form while the field keeps its label, required mark, and Save validation. Don't hand-build a `<form>`.

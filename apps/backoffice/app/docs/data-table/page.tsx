@@ -129,7 +129,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
-        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
+        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). The <strong>table cell shows the option&apos;s label</strong> (e.g. <code>SYSTEM</code> → &quot;System&quot;), staying editable — no <code>render</code> needed. A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
         <li><code>input</code>: form control — <code>&quot;text&quot;</code> (default), <code>&quot;number&quot;</code>, <code>&quot;date&quot;</code>, or <code>&quot;combobox&quot;</code> (searchable, needs <code>options</code>).</li>
         <li><code>renderInput</code>: render a custom Add/Edit control (checkbox, radio group, anything). Overrides the default; you get <code>{`{ value, onChange, field, invalid }`}</code>.</li>
         <li><code>filterable</code>: expose the field in the Filter panel as a labeled control (see Filtering). <code>true</code> = text input; pass a config to choose the control.</li>
@@ -497,6 +497,24 @@ const fields = [
   getPrimary={getPrimary}
   onSave={(row) => { addRow(row); router.push("/organizations"); }}
   onCancel={() => router.push("/organizations")}
+/>`}</CodeBlock>
+      <P>
+        The page form&apos;s breadcrumb defaults to{" "}
+        <code>Home › {`{title}`} › Create/Update {`{singular}`}</code>. Pass a{" "}
+        <strong><code>crumbs</code></strong> array to configure it fully — add a
+        parent, rename the last crumb, whatever the route needs (each crumb is{" "}
+        <code>{`{ label, onClick? }`}</code>; the last is the current page):
+      </P>
+      <CodeBlock title="custom breadcrumb">{`import type { Crumb } from "@viliha/vui-ui/breadcrumbs";
+
+<RecordForm
+  crumbs={[
+    { label: "Home", onClick: () => router.push("/") },
+    { label: "Access", onClick: () => router.push("/access") },
+    { label: "Roles", onClick: () => router.push("/access/roles") },
+    { label: "New Role" },            // current page
+  ]}
+  /* … */
 />`}</CodeBlock>
       <Note title="Consistent breadcrumbs">
         Both layouts and the rest of the app pages share a single{" "}

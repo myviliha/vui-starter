@@ -34,6 +34,7 @@ import {
 
 import { cn } from "./utils";
 import { Breadcrumbs, type Crumb } from "./breadcrumbs";
+export type { Crumb } from "./breadcrumbs";
 import { Button } from "./button";
 import { Checkbox } from "./checkbox";
 import { Input } from "./input";
@@ -1170,7 +1171,12 @@ export function RecordView<T extends { id: RowId }>({
       );
     }
     const value = String(row[field.key] ?? "");
-    const clip = clipCell(value, field.maxChars ?? maxCellChars);
+    // For a choice field, show the option's friendly label (e.g. SYSTEM →
+    // "System") while the cell stays editable — no `render`, no read-only.
+    const display = Array.isArray(field.options)
+      ? (field.options.find((o) => o.value === value)?.label ?? value)
+      : value;
+    const clip = clipCell(display, field.maxChars ?? maxCellChars);
     const cellKey = `${row.id}:${field.key}`;
     const hoverActions =
       (field.editable || (field.copyable && value)) ? (
@@ -2074,6 +2080,11 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Persist the in-progress draft under this key (e.g. the route), so a
    *  half-filled form survives leaving and returning via the open-tabs strip. */
   persistKey?: string;
+  /** Page-form breadcrumb override (fully configurable). When set, these crumbs
+   *  replace the default `Home › {title} › Create/Update {singular}` — so you can
+   *  add parents ("Access") or rename the last crumb ("New Role"). Build each
+   *  crumb as `{ label, onClick? }`; the last one is the current page. */
+  crumbs?: Crumb[];
 }
 
 function RecordDetailPanel<T extends { id: RowId }>({
@@ -2093,6 +2104,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   onHome,
   formDescription,
   persistKey,
+  crumbs,
 }: DetailPanelProps<T>) {
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
@@ -2364,11 +2376,14 @@ function RecordDetailPanel<T extends { id: RowId }>({
         <div className="flex h-12 shrink-0 items-center border-b border-border px-4">
           <Breadcrumbs
             onBack={onCancel}
-            crumbs={[
-              ...(onHome ? [{ label: "Home", onClick: onHome }] : []),
-              { label: title ?? singular, onClick: onCancel },
-              { label: crumb },
-            ] as Crumb[]}
+            crumbs={
+              crumbs ??
+              ([
+                ...(onHome ? [{ label: "Home", onClick: onHome }] : []),
+                { label: title ?? singular, onClick: onCancel },
+                { label: crumb },
+              ] as Crumb[])
+            }
           />
         </div>
         {/* Content — form card (left) + optional documentation panel (right). */}
