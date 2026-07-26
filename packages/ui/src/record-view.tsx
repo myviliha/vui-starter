@@ -380,6 +380,10 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  or client-side filtering here. In per-field mode the panel does not match
    *  rows itself, so the behavior is entirely yours. */
   onFilter?: (values: FilterValues<T>) => void;
+  /** Show animated skeleton rows instead of the table body while data loads
+   *  from the server (an initial fetch or a filter/refetch). Set it around your
+   *  async load; the toolbar stays usable. */
+  loading?: boolean;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -402,6 +406,7 @@ export function RecordView<T extends { id: RowId }>({
   persistKey,
   resizableColumns = false,
   onFilter,
+  loading = false,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -1458,7 +1463,31 @@ export function RecordView<T extends { id: RowId }>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {processed.length ? (
+            {loading ? (
+              // Animated skeleton rows while data loads from the server.
+              Array.from({ length: Math.min(pageSize, 8) }).map((_, i) => (
+                <TableRow key={`skeleton-${i}`} className="hover:bg-transparent">
+                  <TableCell style={{ width: CHECKBOX_W }}>
+                    <div className="mx-2 size-4 animate-pulse rounded bg-muted" />
+                  </TableCell>
+                  <TableCell style={{ width: colWidths[NAME_COL] }}>
+                    <div className="flex items-center gap-2">
+                      <div className="size-7 shrink-0 animate-pulse rounded-full bg-muted" />
+                      <div className="h-3.5 w-32 animate-pulse rounded bg-muted" />
+                    </div>
+                  </TableCell>
+                  {visibleFields.map((f) => (
+                    <TableCell key={f.key} style={{ width: colWidths[f.key] }}>
+                      <div className="h-3.5 w-20 animate-pulse rounded bg-muted" />
+                    </TableCell>
+                  ))}
+                  <TableCell aria-hidden="true" className="border-r-0" />
+                  <TableCell style={{ width: ACTIONS_W }}>
+                    <div className="mx-auto h-4 w-8 animate-pulse rounded bg-muted" />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : processed.length ? (
               paged.map((row) => {
                 const primary = getPrimary(row);
                 return (

@@ -7,6 +7,19 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.12.0 — 2026-07-26
+
+### Added
+
+- **`RecordView` `loading` prop** — while `true`, the table body renders animated
+  skeleton rows (matched to the columns) instead of an empty-state flash, for
+  slow server loads (initial fetch or refetch). The toolbar stays usable; clear
+  `loading` when the data arrives.
+
+  **For agents:** wrap your fetch with `loading` (`setLoading(true)` → fetch →
+  `finally(() => setLoading(false))`); don't hand-roll a spinner overlay. Demo:
+  `markets` simulates a load on first visit. Docs: `/docs/data-table`.
+
 ## 1.11.1 — 2026-07-26
 
 ### Changed

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   CubeIcon as Building,
   GlobeIcon as Compass,
@@ -51,13 +52,28 @@ const fields: RecordField<Market>[] = [
 ];
 
 export function MarketsTable() {
+  // Demo: simulate loading records from a server so the skeleton state shows on
+  // first visit. In a real app, set `loading` around your fetch/refetch.
+  const [data, setData] = useState<Market[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setData(markets);
+      setLoading(false);
+    }, 900);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <RecordView
       title="Markets"
       singular="Market"
       icon={MapPin}
+      loading={loading}
       fields={fields}
-      initialData={markets}
+      initialData={data}
+      data={data}
+      onDataChange={setData}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.organization,

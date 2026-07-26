@@ -338,6 +338,8 @@ Sorting follows column visibility by default; use `sortable` to decouple them �
 
 Form controls come from the field: `options` → `Select`, `input: "combobox"` → a searchable `Combobox` (`@viliha/vui-ui/combobox`, use for long lists), `input: "number" | "date"` → native inputs. For anything the built-ins don't cover (checkbox, radio group, slider, custom widget), set `renderInput({ value, onChange, field, invalid })` on the field — it drops any component into the Add/Edit form while the field keeps its label, required mark, and Save validation. Don't hand-build a `<form>`.
 
+Loading from a server: pass `loading` to `RecordView` while the fetch is in flight — it shows animated skeleton rows (matched to the columns) instead of an empty-state flash; clear it when the data arrives. Don't build your own spinner overlay.
+
 Dependent/cascading options: make `options` (form) or `filterable.options` (filter) a function — `(draft) => …` in the form, `(values) => …` in the filter — and one field's choices depend on another; RecordView clears the child when the parent change invalidates it. Keep `options` a static array for the bulk "Set {label}" action. If a field has both a function `options` and `renderInput`, guard with `Array.isArray(field.options)` before mapping (renderInput doesn't get the draft to resolve it).
 
 ## Filtering

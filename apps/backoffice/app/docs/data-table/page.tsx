@@ -111,6 +111,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>resizableColumns</code>: <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
         <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
         <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
+        <li><code>loading</code>: while <code>true</code>, the table body shows animated skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
       </Ul>
 
       <H2>Field options</H2>
@@ -210,6 +211,25 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         client-side. To add a control kind not listed, extend the{" "}
         <code>FilterControl</code> union in the component.
       </P>
+
+      <H2>Loading state</H2>
+      <P>
+        When rows come from a server, set <code>loading</code> while the request
+        is in flight and the table body shows animated skeleton rows (matched to
+        your columns) instead of an empty &ldquo;No records&rdquo; flash. The
+        toolbar stays usable. Clear it when the data arrives. The Markets demo
+        simulates this on first load.
+      </P>
+      <CodeBlock title="loading around a fetch">{`const [rows, setRows] = useState([]);
+const [loading, setLoading] = useState(true);
+useEffect(() => {
+  fetch("/api/markets")
+    .then((r) => r.json())
+    .then(setRows)
+    .finally(() => setLoading(false));
+}, []);
+
+<RecordView loading={loading} data={rows} onDataChange={setRows} /* … */ />`}</CodeBlock>
 
       <H2>Add &amp; edit form layouts</H2>
       <P>
