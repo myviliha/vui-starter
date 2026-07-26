@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.14.1 — 2026-07-26
+
+### Fixed
+
+- **Per-field Filter panel layout.** The header ("Filter") and the footer
+  (Clear / Search) are now static — only the fields scroll — so the actions stay
+  in view on a long filter form. The footer's top border spans the full panel
+  width, and the action buttons are compact (`size="sm"`).
+
 ## 1.14.0 — 2026-07-26
 
 ### Added

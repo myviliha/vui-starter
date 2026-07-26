@@ -1363,8 +1363,11 @@ export function RecordView<T extends { id: RowId }>({
               // Search / Clear. The panel only gathers values — matching is the
               // consumer's job via `onFilter` (see the field's `filterable`).
               <>
-                <DropdownLabel>Filter</DropdownLabel>
-                <div className="flex max-h-80 w-72 flex-col gap-3 overflow-y-auto p-3">
+                <div className="flex max-h-[min(28rem,70vh)] w-72 flex-col">
+                  {/* Header: static, full-width separator (from DropdownLabel). */}
+                  <DropdownLabel>Filter</DropdownLabel>
+                  {/* Content: the only scrolling region. */}
+                  <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-3">
                   {filterFields.map((f) => {
                     const cfg: FieldFilter<T> =
                       typeof f.filterable === "object" ? f.filterable : {};
@@ -1453,8 +1456,11 @@ export function RecordView<T extends { id: RowId }>({
                       </div>
                     );
                   })}
-                  <div className="flex items-center justify-end gap-2 border-t border-border pt-3">
+                  </div>
+                  {/* Footer: static, full-width top border, compact buttons. */}
+                  <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border p-3">
                     <Button
+                      size="sm"
                       onClick={() => {
                         setFilterValues({});
                         onFilter?.({});
@@ -1473,6 +1479,7 @@ export function RecordView<T extends { id: RowId }>({
                       Clear
                     </Button>
                     <Button
+                      size="sm"
                       variant="primary"
                       onClick={() => {
                         onFilter?.(filterValues);
