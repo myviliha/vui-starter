@@ -7,6 +7,25 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.9.0 — 2026-07-26
+
+### Added
+
+- **`sortable` field flag in `RecordView`** — decouples sorting from column
+  visibility. By default a field is sortable iff it's a visible column
+  (`!hideInTable`), unchanged. Now:
+  - `sortable: true` sorts a field with **no column** (e.g. a `hideInTable` name
+    shown via `getPrimary`) — it appears in the Sort dropdown.
+  - `sortable: false` keeps a **visible column unsortable** (its header stops
+    being a sort toggle).
+
+  Affects both the Sort dropdown and the column-header click. Fully backward
+  compatible — omit the flag for today's behavior.
+
+  **For agents:** to make a non-column field sortable (or lock a column), set
+  `sortable` on the `RecordField`; don't rewire the Sort dropdown or headers.
+  Demo: `system/regions` sorts by Name (which has no column).
+
 ## 1.8.0 — 2026-07-26
 
 ### Added

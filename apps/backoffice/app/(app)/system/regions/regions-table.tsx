@@ -21,6 +21,9 @@ const fields: RecordField<Region>[] = [
     required: true,
     group: "General",
     hideInTable: true,
+    // No Name column (shown in the identity cell via getPrimary), but still
+    // sortable from the Sort dropdown — `sortable` decouples it from visibility.
+    sortable: true,
     filterable: true,
   },
   {

@@ -226,6 +226,12 @@ export interface RecordField<T> {
   copyable?: boolean;
   /** Show in the detail panel only, not as a table column (e.g. first/last name). */
   hideInTable?: boolean;
+  /** Whether this field can be sorted — decoupled from column visibility.
+   *  Default: sortable iff it's a visible column (`!hideInTable`), the historic
+   *  behavior. Set `true` to sort a field with no column (e.g. a `hideInTable`
+   *  name shown via `getPrimary`); set `false` to keep a visible column
+   *  unsortable. Controls both the Sort dropdown and the column-header toggle. */
+  sortable?: boolean;
   /** Custom, non-editable cell/value renderer. */
   render?: (row: T) => React.ReactNode;
   /** If set, the field becomes a choice field: the Add/Edit form renders a
@@ -460,6 +466,12 @@ export function RecordView<T extends { id: RowId }>({
 
   const tableFields = fields.filter((f) => !f.hideInTable);
   const visibleFields = tableFields.filter((f) => !hidden.has(f.key));
+  // Sorting is decoupled from column visibility: a field is sortable when its
+  // `sortable` flag says so, else it falls back to "is a visible column".
+  const canSort = (f: RecordField<T>) => f.sortable ?? !f.hideInTable;
+  // Fields offered in the Sort dropdown (may include hidden-but-sortable fields
+  // and exclude visible-but-unsortable ones).
+  const sortFields = fields.filter(canSort);
   // Fields opted into per-field filtering. Non-empty → the Filter panel renders
   // a control per field instead of the single keyword box.
   const filterFields = fields.filter((f) => f.filterable);
@@ -1182,7 +1194,7 @@ export function RecordView<T extends { id: RowId }>({
 
           <Dropdown label="Sort" icon={<ArrowUpDown className="size-3.5 text-blue-500" />}>
             <DropdownLabel>Sort by</DropdownLabel>
-            {tableFields.map((f) => (
+            {sortFields.map((f) => (
               <DropdownItem
                 key={f.key}
                 onSelect={() => toggleSort(f.key)}
@@ -1300,32 +1312,44 @@ export function RecordView<T extends { id: RowId }>({
               </TableHead>
               {visibleFields.map((f) => {
                 const HeadIcon = f.icon ?? DEFAULT_FIELD_ICON;
+                const sortable = canSort(f);
+                const headInner = (
+                  <>
+                    <HeadIcon className="size-3.5 shrink-0 text-foreground" />
+                    <span className="flex items-center gap-1 whitespace-nowrap">
+                      {f.label}
+                      {f.required && <RequiredMark />}
+                    </span>
+                    {sort?.key === f.key &&
+                      (sort.dir === "asc" ? (
+                        <ArrowUp className="size-3 shrink-0" />
+                      ) : (
+                        <ArrowDown className="size-3 shrink-0" />
+                      ))}
+                  </>
+                );
+                const headClass = cn(
+                  "flex h-8 w-full items-center gap-1.5 whitespace-nowrap",
+                  ALIGN_BOX[alignOf(f.key)],
+                );
                 return (
                   <TableHead
                     key={f.key}
                     className="relative w-max"
                     style={{ width: colWidths[f.key] }}
                   >
-                    <button
-                      type="button"
-                      onClick={() => toggleSort(f.key)}
-                      className={cn(
-                        "flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground",
-                        ALIGN_BOX[alignOf(f.key)],
-                      )}
-                    >
-                      <HeadIcon className="size-3.5 shrink-0 text-foreground" />
-                      <span className="flex items-center gap-1 whitespace-nowrap">
-                        {f.label}
-                        {f.required && <RequiredMark />}
-                      </span>
-                      {sort?.key === f.key &&
-                        (sort.dir === "asc" ? (
-                          <ArrowUp className="size-3 shrink-0" />
-                        ) : (
-                          <ArrowDown className="size-3 shrink-0" />
-                        ))}
-                    </button>
+                    {sortable ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleSort(f.key)}
+                        className={cn(headClass, "hover:text-foreground")}
+                      >
+                        {headInner}
+                      </button>
+                    ) : (
+                      // Not sortable: a static label, no toggle / hover affordance.
+                      <span className={headClass}>{headInner}</span>
+                    )}
                     {resizeHandle(f.key, f.label)}
                   </TableHead>
                 );

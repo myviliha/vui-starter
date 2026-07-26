@@ -121,6 +121,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>required</code>: marks the field with <code>*</code> (in the column header, including the primary Name column, and beside the form label) and validates on save.</li>
         <li><code>copyable</code>: a copy-to-clipboard button on hover.</li>
         <li><code>hideInTable</code>: keep it in the panel but not as a column.</li>
+        <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
         <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action.</li>
@@ -141,6 +142,16 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 { key: "code", label: "Code" }                   // "USD","EUR" → centered
 { key: "name", label: "Name" }                   // long text → left
 { key: "total", label: "Total", align: "right" } // explicit override`}</CodeBlock>
+
+      <H2>Sorting</H2>
+      <P>
+        Click a column header or use the Sort dropdown. By default a field is
+        sortable when it&apos;s a visible column; <code>sortable</code> decouples
+        the two, so your sort set can differ from your column set.
+      </P>
+      <CodeBlock title="sortable, independent of columns">{`{ key: "name", hideInTable: true, sortable: true }  // sorted, but no column
+{ key: "code", label: "Code" }                      // column + sortable (default)
+{ key: "notes", label: "Notes", sortable: false }   // column, but not sortable`}</CodeBlock>
 
       <H2>Filtering</H2>
       <P>
