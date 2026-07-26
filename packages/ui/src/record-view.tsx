@@ -359,6 +359,11 @@ function resolveOptions<T>(
 type RvCacheEntry = { rows: unknown[]; total: number; at: number };
 const RV_CACHE = new Map<string, Map<string, RvCacheEntry>>();
 
+// Minimum time the loading shimmer stays up per `fetcher` load, so a cache hit
+// (instant, from memory) shows the same animation as a real fetch — consistent
+// feedback instead of a blank flash. Real fetches longer than this are unaffected.
+const RV_MIN_LOADING_MS = 300;
+
 function rvQueryKey<T>(q: ServerQuery<T>): string {
   return JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters]);
 }
@@ -528,17 +533,32 @@ export function RecordView<T extends { id: RowId }>({
   const runFetch = React.useCallback(
     (q: ServerQuery<T>, opts?: { background?: boolean }) => {
       if (!fetcher) return;
-      // Foreground: serve from cache if present (instant, no shimmer).
+      const id = ++reqIdRef.current;
+      const started = Date.now();
+      // Reveal the data, but hold the shimmer for a consistent minimum so a
+      // cache hit (served from memory, no server call) looks the same as a real
+      // fetch — same animation every time, never a confusing blank flash.
+      const commit = (rows: T[], total: number) => {
+        const apply = () => {
+          if (id !== reqIdRef.current) return; // superseded
+          setFetchedData(rows);
+          setFetchedTotal(total);
+          setFetchedLoading(false);
+        };
+        const wait = RV_MIN_LOADING_MS - (Date.now() - started);
+        if (opts?.background || wait <= 0) apply();
+        else window.setTimeout(apply, wait);
+      };
+
+      // Foreground cache hit: no server round-trip — the data is in memory.
       if (!opts?.background && cacheKey) {
         const hit = rvCacheGet(cacheKey, rvQueryKey(q), ttlMs);
         if (hit) {
-          setFetchedData(hit.rows as T[]);
-          setFetchedTotal(hit.total);
-          setFetchedLoading(false);
+          setFetchedLoading(true);
+          commit(hit.rows as T[], hit.total);
           return;
         }
       }
-      const id = ++reqIdRef.current;
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
@@ -553,9 +573,7 @@ export function RecordView<T extends { id: RowId }>({
               { rows: res.rows, total: res.total, at: Date.now() },
               cacheMax,
             );
-          setFetchedData(res.rows);
-          setFetchedTotal(res.total);
-          setFetchedLoading(false);
+          commit(res.rows, res.total);
         })
         .catch((err) => {
           if (controller.signal.aborted || id !== reqIdRef.current) return;

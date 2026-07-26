@@ -246,10 +246,13 @@ useEffect(() => {
         Pass a <code>fetcher</code> and RecordView owns the whole read path: it
         calls your endpoint on every query change, manages{" "}
         <code>data</code> / <code>rowCount</code> / <code>loading</code>, and{" "}
-        <strong>caches responses</strong> under <code>cacheKey</code> — so
-        returning to a tab is instant with no refetch. Add <code>persistKey</code>{" "}
-        and the page/sort/filters restore on remount and hit that cache. No{" "}
-        <code>data</code>/<code>onQueryChange</code>/<code>loading</code> wiring.
+        <strong>caches responses in memory</strong> under <code>cacheKey</code>{" "}
+        (a module-scoped map that survives remounts) — so returning to a tab is
+        served from memory with <strong>no server round-trip</strong>. Add{" "}
+        <code>persistKey</code> and the page/sort/filters restore on remount and
+        hit that cache. No <code>data</code>/<code>onQueryChange</code>/
+        <code>loading</code> wiring. The shimmer still shows for a short minimum on
+        every load (cache or server), so the feedback is consistent.
       </P>
       <CodeBlock title="fetcher + cacheKey">{`<RecordView
   fetcher={(query, signal) => fetch(url(query), { signal }).then((r) => r.json())}

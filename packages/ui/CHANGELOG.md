@@ -7,6 +7,22 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.14.2 — 2026-07-26
+
+### Changed
+
+- **Consistent loading feedback in `fetcher` mode.** A cache hit is served from
+  the in-memory cache (no server round-trip), but the loading shimmer now stays
+  up for a short minimum (300ms) so a cached load looks the same as a real
+  fetch — no confusing "loading but blank" flash on tab switch. Real fetches
+  longer than the minimum are unaffected; background (post-mutation) refetches
+  stay silent.
+
+  Note: the `fetcher` cache (added in 1.14.0) stores each page's data in a
+  module-scoped `Map` in JS memory, so switching tabs serves from memory and does
+  **not** re-hit the server. If you still see a refetch, you're on a build older
+  than 1.14.0 (the demo before that had no cache).
+
 ## 1.14.1 — 2026-07-26
 
 ### Fixed
