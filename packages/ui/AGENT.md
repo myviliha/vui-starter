@@ -346,6 +346,8 @@ Build forms with VUI and shadcn/ui together, reaching for shadcn Form, React Hoo
 
 Never hand-build an HTML table; always use `RecordView`. Configure columns through its field props (`editable`, `required`, `copyable`, `options`, `render`), and let `RecordView` own the rest: sorting, filtering, pagination, bulk actions, and import/export.
 
+Long cell text never wraps: cells truncate to one line at `maxCellChars` (view prop; defaults to `NEXT_PUBLIC_MAX_CELL_CHARS` or 25) with an ellipsis + hover tooltip. Override a column with the field's `maxChars` (`0` = never truncate). Don't add your own `truncate`/`title` on cells — it's built in.
+
 Sorting follows column visibility by default; use `sortable` to decouple them — `sortable: true` sorts a field with no column (e.g. a `hideInTable` name shown via `getPrimary`), `sortable: false` locks a visible column. Set the flag; don't rewire the Sort dropdown or headers.
 
 Form controls come from the field: `options` → `Select`, `input: "combobox"` → a searchable `Combobox` (`@viliha/vui-ui/combobox`, use for long lists), `input: "number" | "date"` → native inputs. For anything the built-ins don't cover (checkbox, radio group, slider, custom widget), set `renderInput({ value, onChange, field, invalid })` on the field — it drops any component into the Add/Edit form while the field keeps its label, required mark, and Save validation. Don't hand-build a `<form>`.

@@ -203,6 +203,17 @@ useEffect(() => {
         for the setup.
       </P>
 
+      <H2>Data-table cell truncation</H2>
+      <P>
+        <code>NEXT_PUBLIC_MAX_CELL_CHARS</code> sets how many characters a{" "}
+        <code>RecordView</code> cell shows before it truncates to{" "}
+        <strong>one line</strong> with an ellipsis and a hover tooltip — long text
+        never wraps to a second row. Default 25. Override per table with the{" "}
+        <code>maxCellChars</code> prop, or per column with a field&apos;s{" "}
+        <code>maxChars</code> (<code>0</code> disables truncation for that column).
+      </P>
+      <CodeBlock title=".env.local">{`NEXT_PUBLIC_MAX_CELL_CHARS="25"`}</CodeBlock>
+
       <Note title="Build-time values">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>{" "}
         into the static export, so set them where your deploy runs{" "}

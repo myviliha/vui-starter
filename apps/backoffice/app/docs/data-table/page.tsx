@@ -112,6 +112,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
         <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
         <li><code>loading</code>: while <code>true</code>, the table body shows shimmering skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
+        <li><code>maxCellChars</code>: characters a cell shows before it truncates to <strong>one line</strong> with an ellipsis + hover tooltip (long text never wraps). Defaults to <code>NEXT_PUBLIC_MAX_CELL_CHARS</code> or 25; per-column <code>maxChars</code> overrides it.</li>
         <li><code>fetcher</code> + <code>cacheKey</code>: server-side mode where RecordView owns the fetch, caching, and loading (see Server-side data). Optional <code>cache</code> (LRU tuning) and <code>onError</code>.</li>
         <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode — RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
       </Ul>
@@ -123,6 +124,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>editable</code>: inline-editable cell + shows in the add/edit panel.</li>
         <li><code>required</code>: marks the field with <code>*</code> (in the column header, including the primary Name column, and beside the form label) and validates on save.</li>
         <li><code>copyable</code>: a copy-to-clipboard button on hover.</li>
+        <li><code>maxChars</code>: truncate this column&apos;s cells at N characters (ellipsis + tooltip); overrides the view&apos;s <code>maxCellChars</code>. <code>0</code> = never truncate this column.</li>
         <li><code>hideInTable</code>: keep it in the panel but not as a column.</li>
         <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>

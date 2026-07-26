@@ -245,6 +245,9 @@ export interface RecordField<T> {
   width?: number;
   /** Show a copy-to-clipboard action on hover (e.g. email, phone). */
   copyable?: boolean;
+  /** Max characters this cell shows before truncating with an ellipsis + hover
+   *  tooltip. Overrides the view's `maxCellChars`. Set `0` to never truncate. */
+  maxChars?: number;
   /** Show in the detail panel only, not as a table column (e.g. first/last name). */
   hideInTable?: boolean;
   /** Whether this field can be sorted — decoupled from column visibility.
@@ -364,6 +367,26 @@ const RV_CACHE = new Map<string, Map<string, RvCacheEntry>>();
 // feedback instead of a blank flash. Real fetches longer than this are unaffected.
 const RV_MIN_LOADING_MS = 300;
 
+// `process.env.NEXT_PUBLIC_*` is statically inlined by the consumer's bundler
+// (Next / Vite) at build; declare its shape so this source type-checks on its
+// own (the package ships without @types/node).
+declare const process: { env: Record<string, string | undefined> };
+
+// Default max characters a table cell shows before truncating with an ellipsis
+// (+ hover tooltip). From env (inlined at build), fallback 25. Override per-view
+// with `maxCellChars`, or per-field with `maxChars` (0 = never truncate).
+const MAX_CELL_CHARS = (() => {
+  const n = Number(process.env.NEXT_PUBLIC_MAX_CELL_CHARS);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 25;
+})();
+
+/** Clip a cell string to `max` characters. Returns the display text and, when
+ *  clipped, the full text for a `title` (hover tooltip). */
+function clipCell(value: string, max: number): { text: string; full?: string } {
+  if (max <= 0 || value.length <= max) return { text: value };
+  return { text: value.slice(0, max).trimEnd() + "…", full: value };
+}
+
 function rvQueryKey<T>(q: ServerQuery<T>): string {
   return JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters]);
 }
@@ -479,6 +502,10 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Called when a `fetcher` request rejects (non-abort). RecordView keeps the
    *  previously loaded data and clears the loading state. */
   onError?: (error: unknown, query: ServerQuery<T>) => void;
+  /** Max characters any table cell shows before truncating to one line with an
+   *  ellipsis + hover tooltip (long text never wraps). Defaults to
+   *  `NEXT_PUBLIC_MAX_CELL_CHARS` (or 25). Per-field `maxChars` overrides it. */
+  maxCellChars?: number;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -509,6 +536,7 @@ export function RecordView<T extends { id: RowId }>({
   cacheKey,
   cache,
   onError,
+  maxCellChars = MAX_CELL_CHARS,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -1141,6 +1169,7 @@ export function RecordView<T extends { id: RowId }>({
       );
     }
     const value = String(row[field.key] ?? "");
+    const clip = clipCell(value, field.maxChars ?? maxCellChars);
     const cellKey = `${row.id}:${field.key}`;
     const hoverActions =
       (field.editable || (field.copyable && value)) ? (
@@ -1191,8 +1220,8 @@ export function RecordView<T extends { id: RowId }>({
               ALIGN_BOX[alignOf(field.key)],
             )}
           >
-            <span className="truncate">
-              {value || <span className="text-muted-foreground">—</span>}
+            <span className="truncate" title={clip.full}>
+              {clip.text || <span className="text-muted-foreground">—</span>}
             </span>
           </button>
           {hoverActions}
@@ -1206,7 +1235,9 @@ export function RecordView<T extends { id: RowId }>({
           ALIGN_BOX[alignOf(field.key)],
         )}
       >
-        <span className="truncate">{value}</span>
+        <span className="truncate" title={clip.full}>
+          {clip.text}
+        </span>
         {hoverActions}
       </div>
     );
@@ -1749,6 +1780,7 @@ export function RecordView<T extends { id: RowId }>({
             ) : processed.length ? (
               paged.map((row) => {
                 const primary = getPrimary(row);
+                const nameClip = clipCell(primary.title, maxCellChars);
                 return (
                   <TableRow
                     key={row.id}
@@ -1816,8 +1848,8 @@ export function RecordView<T extends { id: RowId }>({
                         <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
                           {primary.initials}
                         </span>
-                        <span className="truncate">
-                          {primary.title || "—"}
+                        <span className="truncate" title={nameClip.full}>
+                          {nameClip.text || "—"}
                         </span>
                       </button>
                     </TableCell>
