@@ -6,7 +6,7 @@ import { DocPager, H2, H3, P, PageTitle, Ul } from "@/components/doc";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/changelog/" },
-  title: "Changelog",
+  title: "Change Log",
   description:
     "Release history for @viliha/vui-ui — every version's Added / Changed / Fixed, pulled straight from the package CHANGELOG so it never drifts.",
 };
@@ -120,13 +120,13 @@ export default function ChangelogPage() {
   return (
     <article>
       <PageTitle
-        eyebrow="Reference"
-        title="Changelog"
+        eyebrow="Community"
+        title="Change Log"
         lead="Every release of @viliha/vui-ui, newest first — rendered straight from the package CHANGELOG.md, so it never drifts from what shipped."
       />
       {renderChangelog(CHANGELOG)}
       <DocPager
-        prev={{ label: "Data table", href: "/docs/data-table" }}
+        prev={{ label: "Calendar", href: "/docs/calendar" }}
         next={{ label: "Contributing", href: "/docs/contributing" }}
       />
     </article>

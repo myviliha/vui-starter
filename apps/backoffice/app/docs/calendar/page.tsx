@@ -144,7 +144,7 @@ export default function CalendarDocPage() {
 
       <DocPager
         prev={{ label: "Charts", href: "/docs/charts" }}
-        next={{ label: "Contributing", href: "/docs/contributing" }}
+        next={{ label: "Change Log", href: "/docs/changelog" }}
       />
     </article>
   );
