@@ -38,11 +38,18 @@ const ALL: Member[] = Array.from({ length: 213 }, (_, i) => ({
   commits: (i * 7) % 500,
 }));
 
+// In-memory cache of already-fetched pages, keyed by the query. Lives at module
+// scope so it survives component remounts (a tab switch that remounts the page
+// still finds the page instantly — no reload). A real app would use its data
+// layer's cache (React Query, SWR, RTK Query) the same way.
+type PageResult = { rows: Member[]; total: number };
+const pageCache = new Map<string, PageResult>();
+const queryKey = (q: ServerQuery<Member>) =>
+  JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters]);
+
 // Simulated server endpoint: filter + sort + paginate, returning just the page
 // (plus the total). Swap this for a real `fetch` to your API.
-function fetchPage(
-  q: ServerQuery<Member>,
-): Promise<{ rows: Member[]; total: number }> {
+function fetchPage(q: ServerQuery<Member>): Promise<PageResult> {
   return new Promise((resolve) => {
     setTimeout(() => {
       let out = ALL;
@@ -109,12 +116,22 @@ function ServerDataTable() {
   const reqId = useRef(0);
 
   const handleQuery = useCallback((q: ServerQuery<Member>) => {
+    // Already fetched this query? Serve it from memory — instant, no shimmer,
+    // no round-trip. This is what makes returning to the tab feel persisted.
+    const cached = pageCache.get(queryKey(q));
+    if (cached) {
+      setData(cached.rows);
+      setRowCount(cached.total);
+      setLoading(false);
+      return;
+    }
     const id = ++reqId.current;
     setLoading(true);
-    void fetchPage(q).then(({ rows, total }) => {
+    void fetchPage(q).then((res) => {
       if (id !== reqId.current) return; // ignore out-of-order responses
-      setData(rows);
-      setRowCount(total);
+      pageCache.set(queryKey(q), res);
+      setData(res.rows);
+      setRowCount(res.total);
       setLoading(false);
     });
   }, []);
@@ -125,6 +142,7 @@ function ServerDataTable() {
       singular="Member"
       icon={TableIcon}
       manual
+      persistKey="/data-table"
       rowCount={rowCount}
       loading={loading}
       onQueryChange={handleQuery}

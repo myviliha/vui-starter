@@ -288,6 +288,35 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
         <strong>Data Table</strong> demo (shadcn/ui section) does both against a
         simulated backend.
       </Note>
+      <H3>Persisting across tab switches (no reload on return)</H3>
+      <P>
+        Keep-alive keeps a page mounted, but under the App Router an async page
+        can still remount when you switch tabs — which would re-run the fetch and
+        flash the shimmer. Make returning to the tab feel instant with two things:
+      </P>
+      <Ul>
+        <li>
+          <strong>Cache responses</strong> in a module-scoped <code>Map</code>{" "}
+          keyed by the query (or your data layer&apos;s cache — React Query, SWR).
+          A remount then finds the page in memory: serve it synchronously and skip
+          the loading state, so there&apos;s no round-trip and no shimmer.
+        </li>
+        <li>
+          Pass <code>persistKey</code> so the current page, sort, and filters
+          survive the remount — <code>onQueryChange</code> fires with the restored
+          query, hits the cache, and you land back on the exact same view.
+        </li>
+      </Ul>
+      <CodeBlock title="cache + persistKey → instant return">{`const cache = new Map();   // module scope: survives remounts
+
+const onQueryChange = useCallback((q) => {
+  const hit = cache.get(key(q));
+  if (hit) { setData(hit.rows); setRowCount(hit.total); setLoading(false); return; }
+  setLoading(true);
+  fetchPage(q).then((res) => { cache.set(key(q), res); /* setData… */ });
+}, []);
+
+<RecordView manual persistKey="/data-table" onQueryChange={onQueryChange} /* … */ />`}</CodeBlock>
 
       <H2>Add &amp; edit form layouts</H2>
       <P>

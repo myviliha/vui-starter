@@ -7,6 +7,21 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.13.2 — 2026-07-26
+
+### Fixed
+
+- **Data Table demo no longer reloads on tab switch.** Keep-alive keeps a page
+  mounted, but under the App Router an async (server-fetching) page can still
+  remount on tab switch and re-run its fetch. The demo now caches fetched pages
+  in a module-scoped `Map` keyed by the query (served synchronously, no shimmer)
+  and passes `persistKey`, so returning to the tab restores the exact page/sort/
+  filters and shows the data instantly — no round-trip.
+
+  **For agents:** for a server-backed table, cache responses (module `Map` or
+  your data layer) and use `persistKey`; don't rely on keep-alive alone to avoid
+  refetches. Docs: `/docs/data-table` (Persisting across tab switches).
+
 ## 1.13.1 — 2026-07-26
 
 ### Fixed
