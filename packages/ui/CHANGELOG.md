@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.21.2 — 2026-07-27
+
+### Fixed
+
+- README now renders on npmjs. Root cause: `pnpm publish` packs `README.md` into
+  the tarball but doesn't set the registry `readme` field the website renders (it
+  was empty for 1.21.0/1.21.1). Publish the package with **`npm publish`** (from
+  `packages/ui`), not `pnpm publish`. No code change.
+
 ## 1.21.1 — 2026-07-27
 
 ### Fixed
