@@ -252,7 +252,7 @@ place. If you'd rather keep a verbatim copy, run
 wrapper) · `checkbox` · `combobox` (searchable single-select) · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `input` · `kbd`
 (key caps + `Shortcut`) · `menu` · `required-mark` · `select` · `steps`
-(multi-step wizard indicator) · `tooltip` ·
+(multi-step wizard indicator) · `toast` (global notifications) · `tooltip` ·
 `table` · `record-view` (the full datatable + `RecordForm`) · plus the `utils`
 (`cn`) helper and the `theme.css` design tokens.
 

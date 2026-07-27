@@ -11,6 +11,7 @@ import { Combobox } from "@viliha/vui-ui/combobox";
 import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
+import { toast } from "@viliha/vui-ui/toast";
 import { Tooltip } from "@viliha/vui-ui/tooltip";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
 
@@ -194,6 +195,53 @@ export default function ComponentsPage() {
             { value: "us", label: "United States" },
           ]}
         />
+      </Demo>
+
+      <H2>Toast</H2>
+      <P>
+        Global notifications for errors and events. Mount <code>&lt;Toaster /&gt;</code>{" "}
+        once in your root layout, then call <code>toast(...)</code> from anywhere
+        (event handlers, catch blocks) — no provider needed. Supports a title,
+        description, an action button (e.g. Undo), and <code>success</code>/
+        <code>error</code>/<code>warning</code> variants.
+      </P>
+      <Demo
+        code={`import { toast, Toaster } from "@viliha/vui-ui/toast";
+
+// once, in the root layout:
+<Toaster />
+
+// anywhere:
+toast({
+  title: "Event created",
+  description: "Sunday, December 3 at 9:00 AM",
+  action: { label: "Undo", onClick: restore },
+});
+toast.success("Saved");
+toast.error("Couldn't save", { description: "Try again." });`}
+      >
+        <Button
+          onClick={() =>
+            toast({
+              title: "Event created",
+              description: "Sunday, December 3 at 9:00 AM",
+              action: { label: "Undo", onClick: () => toast.success("Undone") },
+            })
+          }
+        >
+          Show toast
+        </Button>
+        <Button variant="secondary" onClick={() => toast.success("Saved")}>
+          Success
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() =>
+            toast.error("Couldn't save", { description: "Please try again." })
+          }
+        >
+          Error
+        </Button>
       </Demo>
 
       <H2>Tooltip</H2>

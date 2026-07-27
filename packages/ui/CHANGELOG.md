@@ -7,6 +7,22 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.21.0 — 2026-07-27
+
+### Added
+
+- **`Toaster` + `toast()`** (`@viliha/vui-ui/toast`) — global notifications for
+  errors and events, matching the shadcn toast design (title, description, an
+  action button like "Undo", close, and `success`/`error`/`warning` variants).
+  It's a module store, so `toast(...)` works from anywhere — event handlers,
+  `catch` blocks — with no provider; mount `<Toaster />` once in the root layout
+  (the scaffold now does). Dependency-free (portal + fixed positioning, like
+  `Tooltip`), bottom-right stack with a rise-and-fade entrance.
+
+  **For agents:** use `toast.error(...)` / `toast(...)` for errors and
+  notifications; don't hand-roll a banner or add a toast library. Demo:
+  `/docs/components` (Toast). `<Toaster />` is already in the scaffold layout.
+
 ## 1.20.0 — 2026-07-27
 
 ### Added

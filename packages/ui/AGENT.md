@@ -342,6 +342,10 @@ Build forms with VUI and shadcn/ui together, reaching for shadcn Form, React Hoo
 
 ---
 
+# Notifications (toasts)
+
+For errors and transient notifications use `toast(...)` from `@viliha/vui-ui/toast` — `toast("Saved")`, `toast({ title, description, action: { label, onClick } })`, or `toast.error(...)` / `toast.success(...)`. It's a module store, so call it from anywhere (event handlers, `catch` blocks) — no provider. `<Toaster />` is mounted once in the scaffold's root layout; keep it there. Don't hand-roll a notification banner or add another toast library.
+
 # Tables
 
 Never hand-build an HTML table; always use `RecordView`. Configure columns through its field props (`editable`, `required`, `copyable`, `options`, `render`), and let `RecordView` own the rest: sorting, filtering, pagination, bulk actions, and import/export.

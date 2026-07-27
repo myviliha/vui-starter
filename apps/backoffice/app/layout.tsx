@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { themeInitScript } from "./_components/theme-toggle";
 import { BrandProvider } from "./_components/brand";
+import { Toaster } from "@viliha/vui-ui/toast";
 import { SITE } from "@/lib/seo";
 
 const inter = Inter({
@@ -98,6 +99,8 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <BrandProvider>{children}</BrandProvider>
+        {/* Global toast stack — trigger from anywhere with toast(...). */}
+        <Toaster />
       </body>
     </html>
   );
