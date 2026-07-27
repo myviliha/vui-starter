@@ -114,6 +114,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>loading</code>: while <code>true</code>, the table body shows shimmering skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
         <li><code>maxCellChars</code>: characters a cell shows before it truncates to <strong>one line</strong> with an ellipsis + hover tooltip (long text never wraps). Defaults to <code>NEXT_PUBLIC_MAX_CELL_CHARS</code> or 25; per-column <code>maxChars</code> overrides it.</li>
         <li><code>nameLabel</code>: header for the leading identity column. Default <code>&quot;Name&quot;</code>; set e.g. <code>&quot;Title&quot;</code> for tables whose identity is a title field (regions, roles, …).</li>
+        <li><code>nameSortKey</code>: field the identity column sorts by, so its header toggles + shows a caret like other columns. Defaults to the first <code>hideInTable</code> field marked <code>sortable</code> (the one driving <code>getPrimary</code>).</li>
         <li><code>fetcher</code> + <code>cacheKey</code>: server-side mode where RecordView owns the fetch, caching, and loading (see Server-side data). Optional <code>cache</code> (LRU tuning) and <code>onError</code>.</li>
         <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode — RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
       </Ul>
@@ -158,7 +159,10 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         caret for the active direction (up = ascending, down = descending). By
         default a field is sortable when it&apos;s a visible column;{" "}
         <code>sortable</code> decouples the two, so your sort set can differ from
-        your column set (a non-sortable column shows no caret).
+        your column set (a non-sortable column shows no caret). The{" "}
+        <strong>identity column</strong> (Name/Title) sorts too: mark its{" "}
+        <code>hideInTable</code> field <code>sortable</code> (or set{" "}
+        <code>nameSortKey</code>) and its header toggles with the same caret.
       </P>
       <CodeBlock title="sortable, independent of columns">{`{ key: "name", hideInTable: true, sortable: true }  // sorted, but no column
 { key: "code", label: "Code" }                      // column + sortable (default)

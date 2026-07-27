@@ -511,6 +511,11 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Header for the leading identity column. Default "Name" — set e.g. "Title"
    *  for tables whose identity is a title field (regions, roles, …). */
   nameLabel?: string;
+  /** Field key the identity column sorts by, so its header toggles sort + shows a
+   *  caret like other columns. Defaults to the first `hideInTable` field marked
+   *  `sortable` (the field that drives `getPrimary`). Unset + none found → the
+   *  identity header stays static. */
+  nameSortKey?: Extract<keyof T, string>;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -543,6 +548,7 @@ export function RecordView<T extends { id: RowId }>({
   onError,
   maxCellChars = MAX_CELL_CHARS,
   nameLabel = "Name",
+  nameSortKey,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -729,6 +735,11 @@ export function RecordView<T extends { id: RowId }>({
   // Fields offered in the Sort dropdown (may include hidden-but-sortable fields
   // and exclude visible-but-unsortable ones).
   const sortFields = fields.filter(canSort);
+  // Field the identity column sorts by (its header toggles + shows a caret).
+  // Explicit `nameSortKey`, else the first hidden field marked sortable (the one
+  // that drives getPrimary). Undefined → identity header stays static.
+  const nameSortKeyResolved =
+    nameSortKey ?? fields.find((f) => f.hideInTable && canSort(f))?.key;
   // Fields opted into per-field filtering. Non-empty → the Filter panel renders
   // a control per field instead of the single keyword box.
   const filterFields = fields.filter((f) => f.filterable);
@@ -1697,15 +1708,43 @@ export function RecordView<T extends { id: RowId }>({
                 </div>
               </TableHead>
               <TableHead className="relative w-max" style={{ width: colWidths[NAME_COL] }}>
-                <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
-                  {TitleIcon ? (
-                    <TitleIcon className="size-3.5 shrink-0 text-foreground" />
+                {(() => {
+                  const IdIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
+                  const inner = (
+                    <>
+                      <IdIcon className="size-3.5 shrink-0 text-foreground" />
+                      <span className="flex items-center gap-1 whitespace-nowrap">
+                        {nameLabel}
+                        {nameRequired && <RequiredMark />}
+                      </span>
+                      {/* Same sort affordance as other columns: muted caret by
+                          default, solid caret for the active direction. */}
+                      {nameSortKeyResolved &&
+                        (sort?.key === nameSortKeyResolved ? (
+                          sort.dir === "asc" ? (
+                            <CaretUp className="size-3.5 shrink-0" />
+                          ) : (
+                            <CaretDown className="size-3.5 shrink-0" />
+                          )
+                        ) : (
+                          <CaretSort className="size-3.5 shrink-0 text-muted-foreground/50" />
+                        ))}
+                    </>
+                  );
+                  return nameSortKeyResolved ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleSort(nameSortKeyResolved)}
+                      className="flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground"
+                    >
+                      {inner}
+                    </button>
                   ) : (
-                    <DEFAULT_FIELD_ICON className="size-3.5 shrink-0 text-foreground" />
-                  )}
-                  {nameLabel}
-                  {nameRequired && <RequiredMark />}
-                </span>
+                    <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
+                      {inner}
+                    </span>
+                  );
+                })()}
                 {resizeHandle(NAME_COL, nameLabel)}
               </TableHead>
               {visibleFields.map((f) => {

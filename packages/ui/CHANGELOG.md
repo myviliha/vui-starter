@@ -7,6 +7,22 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.19.0 — 2026-07-27
+
+### Added
+
+- **Sortable identity column header.** The leading Name/Title column (driven by
+  `nameLabel` + `getPrimary`) was a static header — you could only sort it from
+  the Sort dropdown. It now toggles sort on click and shows the same
+  CaretSort/CaretUp/CaretDown affordance as other columns. It sorts by
+  `nameSortKey`, or auto-detects the first `hideInTable` field marked `sortable`
+  (the one driving `getPrimary`). No opt-in beyond marking that field `sortable`;
+  if none is sortable, the header stays static (unchanged).
+
+  **For agents:** to make the identity column sortable, mark its `hideInTable`
+  name/title field `sortable: true` (that also lists it in the Sort dropdown), or
+  pass `nameSortKey`. Docs: `/docs/data-table` (Sorting).
+
 ## 1.18.0 — 2026-07-27
 
 ### Changed
