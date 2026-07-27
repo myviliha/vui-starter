@@ -7,6 +7,29 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.25.0 — 2026-07-27
+
+### Added
+
+- **Async option loading for pickers (`loadOptions` / `resolveOption`)** — a
+  reusable primitive so `Combobox`, `Select`, and `RecordView` choice/filter
+  fields fetch their options **on demand** instead of receiving a fully-loaded
+  static `options` array. Browsing a table now fetches **zero** reference data;
+  a picker loads its list only when opened, and an already-set value shows its
+  label from a **single-record** `resolveOption` (never the whole list). Powered
+  by the exported `useAsyncOptions` hook.
+  - **`Combobox` / `Select`** accept a `source` (`{ loadOptions, resolveOption }`)
+    in place of `options`, plus `resetKey` for cascade invalidation. Combobox
+    debounces server search (250 ms, aborts superseded requests); both surface
+    loading / empty / error (retry) states inside the dropdown.
+  - **`RecordField` / `FieldFilter`** gain `loadOptions({ search, signal, values })`,
+    `resolveOption(value)`, and `dependsOn` — so form **and** filter comboboxes
+    lazy-load, with `values` giving the current draft / filter values and
+    `dependsOn` clearing the cache + selection when a cascade parent changes.
+    Works where `onFormOpen` (1.24.0) couldn't reach: filters and standalone
+    pickers.
+  - Exported types: `AsyncOptionSource`, `AsyncOption`.
+
 ## 1.24.0 — 2026-07-27
 
 ### Added

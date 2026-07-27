@@ -6,10 +6,14 @@ import {
   CheckIcon as Check,
   ChevronDownIcon as ChevronDown,
   MagnifyingGlassIcon as Search,
+  UpdateIcon as Spinner,
 } from "@radix-ui/react-icons";
 
 import { cn } from "./utils";
 import type { SelectOption } from "./select";
+import { useAsyncOptions, type AsyncOptionSource } from "./use-async-options";
+
+export type { AsyncOptionSource, AsyncOption } from "./use-async-options";
 
 type Placement = {
   left: number;
@@ -19,27 +23,17 @@ type Placement = {
   maxHeight: number;
 };
 
-/**
- * Searchable single-select. Same trigger + portal-popover as {@link Select}, but
- * the popover leads with a filter input that type-narrows the options, so it
- * scales to long lists (an FK / country picker) where a plain Select doesn't.
- * Same API as Select (drop-in), plus search/empty placeholders. Keyboard: type
- * to filter, ↑/↓ to move, Enter to pick, Esc to close.
- */
-export function Combobox({
-  value,
-  onValueChange,
-  options,
-  id,
-  ariaLabel,
-  placeholder = "Select…",
-  searchPlaceholder = "Search…",
-  emptyText = "No matches",
-  className,
-}: {
+export interface ComboboxProps {
   value: string;
   onValueChange: (value: string) => void;
-  options: SelectOption[];
+  /** Static options. Omit when using `source` (async). */
+  options?: SelectOption[];
+  /** Async option source (lazy load on open + debounced search). Takes over from
+   *  `options`; the list is fetched on demand, never on mount. */
+  source?: AsyncOptionSource;
+  /** Changing this invalidates the async cache + reloads on next open — wire it
+   *  to a cascade parent (e.g. the selected Region for a Country picker). */
+  resetKey?: string;
   id?: string;
   ariaLabel?: string;
   placeholder?: string;
@@ -47,9 +41,37 @@ export function Combobox({
   searchPlaceholder?: string;
   /** Shown when the query matches nothing. */
   emptyText?: string;
+  /** Shown in the dropdown while an async load is in flight. */
+  loadingText?: string;
+  /** Shown in the dropdown when an async load fails (click to retry). */
+  errorText?: string;
   /** Applied to the root (e.g. width in a flex row). */
   className?: string;
-}) {
+}
+
+/**
+ * Searchable single-select. Same trigger + portal-popover as {@link Select}, but
+ * the popover leads with a filter input that type-narrows the options, so it
+ * scales to long lists (an FK / country picker) where a plain Select doesn't.
+ * Pass a static `options` array, or a `source` for async lazy loading (fetch on
+ * open, debounced server search, single-record label resolve). Keyboard: type to
+ * filter, ↑/↓ to move, Enter to pick, Esc to close.
+ */
+export function Combobox({
+  value,
+  onValueChange,
+  options,
+  source,
+  resetKey,
+  id,
+  ariaLabel,
+  placeholder = "Select…",
+  searchPlaceholder = "Search…",
+  emptyText = "No matches",
+  loadingText = "Loading…",
+  errorText = "Couldn't load — retry",
+  className,
+}: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [active, setActive] = React.useState(0);
@@ -59,10 +81,17 @@ export function Combobox({
   const listRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const filtered = React.useMemo(() => {
+  const isAsync = !!source;
+  const async = useAsyncOptions({ source, open, search: query, value, resetKey });
+
+  // Async: the server already applied the search, so render as-is. Static: filter
+  // client-side by the query.
+  const list = React.useMemo(() => {
+    if (isAsync) return async.options;
+    const opts = options ?? [];
     const q = query.trim().toLowerCase();
-    return q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options;
-  }, [options, query]);
+    return q ? opts.filter((o) => o.label.toLowerCase().includes(q)) : opts;
+  }, [isAsync, async.options, options, query]);
 
   const place = React.useCallback(() => {
     const el = triggerRef.current;
@@ -112,12 +141,15 @@ export function Combobox({
     return () => document.removeEventListener("mousedown", onDown);
   }, [open]);
 
-  // Keep the active index in range as the filtered list shrinks/grows.
+  // Keep the active index in range as the list shrinks/grows.
   React.useEffect(() => {
-    setActive((i) => Math.min(i, Math.max(0, filtered.length - 1)));
-  }, [filtered.length]);
+    setActive((i) => Math.min(i, Math.max(0, list.length - 1)));
+  }, [list.length]);
 
-  const selected = options.find((o) => o.value === value);
+  // Selected label: from the (async-resolved or static) options; falls back to
+  // the raw value if nothing resolves it yet.
+  const pool = isAsync ? async.options : (options ?? []);
+  const selected = pool.find((o) => o.value === value);
   const commit = (v: string) => {
     onValueChange(v);
     setOpen(false);
@@ -126,19 +158,22 @@ export function Combobox({
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setActive((i) => Math.min(i + 1, filtered.length - 1));
+      setActive((i) => Math.min(i + 1, list.length - 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setActive((i) => Math.max(i - 1, 0));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const o = filtered[active];
+      const o = list[active];
       if (o) commit(o.value);
     } else if (e.key === "Escape") {
       e.preventDefault();
       setOpen(false);
     }
   };
+
+  const showLoading = isAsync && async.loading && list.length === 0;
+  const showError = isAsync && async.error && !async.loading;
 
   return (
     <div className={cn("relative", className)} ref={rootRef}>
@@ -193,14 +228,29 @@ export function Combobox({
                 aria-label={ariaLabel ? `Search ${ariaLabel}` : "Search"}
                 className="h-8 w-full rounded-sm bg-transparent pl-8 pr-2 text-sm outline-none placeholder:text-muted-foreground"
               />
+              {isAsync && async.loading && (
+                <Spinner className="absolute right-3 top-1/2 size-3.5 -translate-y-1/2 animate-spin text-muted-foreground" />
+              )}
             </div>
             <div role="listbox" aria-label={ariaLabel} className="overflow-auto">
-              {filtered.length === 0 ? (
+              {showLoading ? (
+                <div className="px-3 py-6 text-center text-sm text-muted-foreground">
+                  {loadingText}
+                </div>
+              ) : showError ? (
+                <button
+                  type="button"
+                  onClick={async.reload}
+                  className="w-full px-3 py-6 text-center text-sm text-destructive hover:underline"
+                >
+                  {errorText}
+                </button>
+              ) : list.length === 0 ? (
                 <div className="px-3 py-6 text-center text-sm text-muted-foreground">
                   {emptyText}
                 </div>
               ) : (
-                filtered.map((o, i) => {
+                list.map((o, i) => {
                   const isSelected = o.value === value;
                   return (
                     <button

@@ -249,7 +249,8 @@ place. If you'd rather keep a verbatim copy, run
 ## Components
 
 `avatar` · `badge` · `breadcrumbs` · `button` · `card` · `chart` (themed Recharts
-wrapper) · `checkbox` · `combobox` (searchable single-select) · `command-palette`
+wrapper) · `checkbox` · `combobox` (searchable single-select, static or async
+`loadOptions`) · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `input` · `kbd`
 (key caps + `Shortcut`) · `menu` · `required-mark` · `select` · `steps`
 (multi-step wizard indicator) · `toast` (global notifications) · `tooltip` ·

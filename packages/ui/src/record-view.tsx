@@ -40,6 +40,9 @@ import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
 import { Combobox } from "./combobox";
+import type { AsyncOption, AsyncOptionSource } from "./use-async-options";
+
+export type { AsyncOption } from "./use-async-options";
 import { Tooltip } from "./tooltip";
 import {
   Table,
@@ -207,6 +210,19 @@ export interface FieldFilter<T = Record<string, unknown>> {
   options?:
     | { value: string; label: string }[]
     | ((values: FilterValues<T>) => { value: string; label: string }[]);
+  /** Async option source — lazy-load filter options on open + debounced search
+   *  instead of a static array. `values` is the current filter values (read a
+   *  cascade parent from it). Only for `select` / `combobox` controls. */
+  loadOptions?: (args: {
+    search: string;
+    signal: AbortSignal;
+    values: FilterValues<T>;
+  }) => Promise<AsyncOption[]>;
+  /** Resolve one already-set value's label without loading the full list. */
+  resolveOption?: (value: string) => Promise<AsyncOption | null>;
+  /** Sibling field keys this filter cascades from; a change clears its options +
+   *  value and the next open re-runs `loadOptions`. */
+  dependsOn?: Extract<keyof T, string>[];
 }
 
 /** Values collected by the Filter panel, keyed by field. Single-value controls
@@ -289,6 +305,23 @@ export interface RecordField<T> {
     field: RecordField<T>;
     invalid?: boolean;
   }) => React.ReactNode;
+  /** Async option source for a choice field — lazy-load options on form open +
+   *  debounced search instead of a static `options` array. Use for large/remote
+   *  reference lists (FK pickers): the form fetches only when opened, resolves a
+   *  set value's label via one record (`resolveOption`), and searches server-side.
+   *  `values` is the current draft (read a cascade parent from it). Pairs with
+   *  `input: "combobox"` (searchable) or the default `Select`. */
+  loadOptions?: (args: {
+    search: string;
+    signal: AbortSignal;
+    values: Partial<T>;
+  }) => Promise<AsyncOption[]>;
+  /** Resolve one already-set value's label without loading the whole list
+   *  (edit/view + preselected default). */
+  resolveOption?: (value: string) => Promise<AsyncOption | null>;
+  /** Sibling field keys this choice cascades from. A change clears the cached
+   *  options + this field's value; the next open re-runs `loadOptions`. */
+  dependsOn?: Extract<keyof T, string>[];
   /** Expose this field in the Filter panel. When ANY field is filterable, the
    *  panel switches from the single keyword box to a labeled control per field
    *  plus Search / Clear. `true` = a text input; pass a {@link FieldFilter} to
@@ -1539,6 +1572,20 @@ export function RecordView<T extends { id: RowId }>({
                     const raw = filterValues[f.key];
                     const setVal = (v: string | string[]) =>
                       setFilterValues((prev) => ({ ...prev, [f.key]: v }));
+                    // Async filter options: lazy-load on open instead of `opts`.
+                    const asyncProps: { source: AsyncOptionSource; resetKey: string } | null =
+                      cfg.loadOptions
+                        ? {
+                            source: {
+                              loadOptions: ({ search, signal }) =>
+                                cfg.loadOptions!({ search, signal, values: filterValues }),
+                              resolveOption: cfg.resolveOption,
+                            },
+                            resetKey: (cfg.dependsOn ?? [])
+                              .map((k) => String(filterValues[k] ?? ""))
+                              .join(" "),
+                          }
+                        : null;
                     return (
                       <div key={f.key} className="flex flex-col gap-1">
                         <label className="text-xs font-medium text-muted-foreground">
@@ -1548,7 +1595,7 @@ export function RecordView<T extends { id: RowId }>({
                           <Combobox
                             value={typeof raw === "string" ? raw : ""}
                             onValueChange={setVal}
-                            options={opts}
+                            {...(asyncProps ?? { options: opts })}
                             ariaLabel={label}
                             placeholder={
                               cfg.placeholder ?? `Any ${label.toLowerCase()}`
@@ -1559,7 +1606,7 @@ export function RecordView<T extends { id: RowId }>({
                           <Select
                             value={typeof raw === "string" ? raw : ""}
                             onValueChange={setVal}
-                            options={opts}
+                            {...(asyncProps ?? { options: opts })}
                             ariaLabel={label}
                             placeholder={
                               cfg.placeholder ?? `Any ${label.toLowerCase()}`
@@ -2374,12 +2421,23 @@ function RecordDetailPanel<T extends { id: RowId }>({
                       field: f,
                       invalid: errors.has(f.key),
                     })
-                  ) : f.options ? (
+                  ) : f.options || f.loadOptions ? (
                     f.input === "combobox" ? (
                       <Combobox
                         value={String(draft[f.key as keyof T] ?? "")}
                         onValueChange={(v) => setField(f.key as keyof T, v)}
-                        options={resolveOptions(f.options, draft)}
+                        {...(f.loadOptions
+                          ? {
+                              source: {
+                                loadOptions: ({ search, signal }) =>
+                                  f.loadOptions!({ search, signal, values: draft }),
+                                resolveOption: f.resolveOption,
+                              },
+                              resetKey: (f.dependsOn ?? [])
+                                .map((k) => String(draft[k] ?? ""))
+                                .join(" "),
+                            }
+                          : { options: resolveOptions(f.options, draft) })}
                         ariaLabel={f.label}
                         placeholder={`Select ${f.label.toLowerCase()}…`}
                         className="w-full"
@@ -2388,7 +2446,18 @@ function RecordDetailPanel<T extends { id: RowId }>({
                       <Select
                         value={String(draft[f.key as keyof T] ?? "")}
                         onValueChange={(v) => setField(f.key as keyof T, v)}
-                        options={resolveOptions(f.options, draft)}
+                        {...(f.loadOptions
+                          ? {
+                              source: {
+                                loadOptions: ({ search, signal }) =>
+                                  f.loadOptions!({ search, signal, values: draft }),
+                                resolveOption: f.resolveOption,
+                              },
+                              resetKey: (f.dependsOn ?? [])
+                                .map((k) => String(draft[k] ?? ""))
+                                .join(" "),
+                            }
+                          : { options: resolveOptions(f.options, draft) })}
                         ariaLabel={f.label}
                         placeholder={`Select ${f.label.toLowerCase()}…`}
                         className="w-full"

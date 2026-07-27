@@ -386,7 +386,12 @@ Either way, don't reimplement pagination/sort. Reference: the Data Table demo pa
 
 Page size: the initial rows-per-page and the selector ceiling come from `NEXT_PUBLIC_DEFAULT_PAGE_SIZE` (default 25) and `NEXT_PUBLIC_MAX_PAGE_SIZE` (default unbounded), overridable per table with the `defaultPageSize` / `maxPageSize` props. `maxPageSize` is a UI ceiling only — **your data layer must clamp the returned page to the same max**, because a client can request any size. For a read-only or `fetcher`-backed list, omit `initialData` and `makeEmptyRow`; the "+ New" button and CSV/JSON import are then hidden (there's nothing to create). Add both env vars to `turbo.json` `globalEnv` if you read `NEXT_PUBLIC_*` inside `packages/ui`.
 
-Lazy-load form field data: choice/combobox `options` must be ready when a form opens, but you don't want to fetch a whole FK catalog on every table mount when the user may only be browsing. Pass `onFormOpen(mode, row?)` — it fires when the Add/View/Edit form opens (`mode` = `"create" | "edit" | "view"`) so you can fetch the option catalogs then. It's a pure notification and does NOT suppress the panel (unlike `onCreate`/`onView`/`onEdit`, which redirect); in panel mode `row` is the record opened. Use it for Region → Country → State style cascades instead of eager-loading at mount.
+Lazy-load option data — **required for remote / large reference lists; never eager-load a catalog into a static `options` array at mount.** A choice/combobox field, filter, or standalone picker that sources its options from an API must use the async option loader, so browsing a table fetches zero reference data:
+
+- On a **`RecordField` or `FieldFilter`**: set `loadOptions({ search, signal, values })` (fetch on open + debounced server search), `resolveOption(value)` (resolve an already-set/defaulted value's label from a **single record** — never load the whole list to show one label), and `dependsOn: [parentKey]` for cascades (Region → Country → State: a parent change clears the child's cached options + value). `values` is the live draft (form) or filter values. Works for both the form and the filter.
+- On a **standalone `Combobox` / `Select`**: pass `source={{ loadOptions, resolveOption }}` instead of `options`, plus `resetKey` (a string derived from any cascade parent) to invalidate. This is the same engine (`useAsyncOptions`), so any picker outside a datatable — `/settings` timezone/currency/language dropdowns, an FK picker in a custom form — lazy-loads the same way.
+
+Loading / empty / error (retry) states render inside the dropdown automatically. `onFormOpen(mode, row?)` (1.24.0) is now only a coarse "a form opened" notification; for option data prefer `loadOptions`, which also covers filters and standalone pickers that `onFormOpen` can't reach.
 
 Dependent/cascading options: make `options` (form) or `filterable.options` (filter) a function — `(draft) => …` in the form, `(values) => …` in the filter — and one field's choices depend on another; RecordView clears the child when the parent change invalidates it. Keep `options` a static array for the bulk "Set {label}" action. If a field has both a function `options` and `renderInput`, guard with `Array.isArray(field.options)` before mapping (renderInput doesn't get the draft to resolve it).
 
@@ -497,6 +502,8 @@ Panel
 # AI Development Rules
 
 Before you write code, reuse what's already there (components, layouts, utilities, and variants), and extend an existing component before creating a new one. Never duplicate code or styling. Keep APIs simple and components focused.
+
+**Any picker whose options come from an API must lazy-load them** via `loadOptions` / `resolveOption` (on a `Combobox`/`Select` `source`, or a `RecordField`/`FieldFilter`). Never fetch a reference catalog into a static `options` array on mount — that wastes requests when the user is only browsing. Resolve an already-set value's label from a single record, and use `dependsOn` (or `resetKey`) for cascades. This applies to every picker (form fields, filters, `/settings` dropdowns), not just datatables.
 
 ---
 

@@ -467,25 +467,55 @@ const fields = [
         function isn&apos;t resolved for you there.
       </Note>
 
-      <H3>Lazy-loading option data (onFormOpen)</H3>
+      <H3>Lazy-loading option data (loadOptions)</H3>
       <P>
-        Choice / combobox <code>options</code> must be ready when a form opens —
-        but eagerly fetching a whole FK catalog on every table mount is wasteful
-        if the user is only browsing. Pass <code>onFormOpen(mode, row?)</code> to
-        fetch those catalogs <strong>only when a form actually opens</strong>.
-        It&apos;s a pure notification — unlike <code>onCreate</code> /{" "}
-        <code>onView</code> / <code>onEdit</code> (which redirect and suppress the
-        panel), <code>onFormOpen</code> doesn&apos;t suppress anything.
+        Remote reference lists (FK pickers — regions, countries, states, 181
+        timezones …) should <strong>never</strong> be eager-loaded into a static{" "}
+        <code>options</code> array on mount. Give the field a{" "}
+        <code>loadOptions</code> source instead and it fetches only when the
+        picker opens — browsing the table triggers zero option requests. This
+        works in both the form and the filter (unlike <code>onFormOpen</code>,
+        which only covers the form).
       </P>
-      <CodeBlock title="fetch reference data on demand">{`<RecordView
-  fields={fields}          // options can start empty / stale
-  onFormOpen={(mode, row) => {
-    // mode: "create" | "edit" | "view"; row is the record (draft for create)
-    void loadCountries();                 // fetch once, cache
-    if (row?.country) void loadStates(row.country);
-  }}
-  /* … */
-/>`}</CodeBlock>
+      <Ul>
+        <li>
+          <code>loadOptions({`{ search, signal, values }`})</code> — fetch on open
+          (empty search) and debounced (250&nbsp;ms) per keystroke;{" "}
+          <code>values</code> is the live draft / filter values, <code>signal</code>{" "}
+          aborts superseded requests.
+        </li>
+        <li>
+          <code>resolveOption(value)</code> — resolve an already-set or defaulted
+          value&apos;s label from a <strong>single record</strong>, so edit/view
+          never loads the whole list just to show one label.
+        </li>
+        <li>
+          <code>dependsOn: [parentKey]</code> — cascades: a parent change clears
+          this field&apos;s cached options + value, and the next open re-fetches.
+        </li>
+      </Ul>
+      <CodeBlock title="async FK picker with a Region → Country cascade">{`const fields = [
+  { key: "region", label: "Region", input: "combobox",
+    loadOptions: ({ search, signal }) => api.regions(search, signal),
+    resolveOption: (id) => api.region(id) },                    // one record for the label
+
+  { key: "country", label: "Country", input: "combobox",
+    dependsOn: ["region"],                                      // clears when region changes
+    loadOptions: ({ search, signal, values }) =>
+      api.countries(values.region, search, signal),
+    resolveOption: (id) => api.country(id),
+    // filter uses the same async source:
+    filterable: { control: "combobox", dependsOn: ["region"],
+      loadOptions: ({ search, signal, values }) =>
+        api.countries(values.region, search, signal) } },
+];`}</CodeBlock>
+      <Note title="Any picker, not just tables">
+        The same engine powers standalone <code>Combobox</code> /{" "}
+        <code>Select</code>: pass <code>source={`{{ loadOptions, resolveOption }}`}</code>{" "}
+        (+ <code>resetKey</code> for cascades) instead of <code>options</code> — for
+        FK pickers in custom forms or the <code>/settings</code> dropdowns.
+        Loading / empty / error (retry) states render inside the dropdown for you.
+      </Note>
 
       <H3>Slide-over panel (default)</H3>
       <P>
