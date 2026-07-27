@@ -7,6 +7,29 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.23.0 — 2026-07-27
+
+### Added
+
+- **Env-driven page size for server-paginated tables.** `RecordView` now reads
+  `NEXT_PUBLIC_DEFAULT_PAGE_SIZE` (initial rows per page) and
+  `NEXT_PUBLIC_MAX_PAGE_SIZE` (the ceiling the page-size selector won't exceed),
+  both overridable per table via the new **`defaultPageSize`** / **`maxPageSize`**
+  props. In `fetcher`/`manual` mode the data layer must clamp its returned page
+  to the max too — the client's requested size isn't trusted.
+- **`users` demo — server-side pagination over a large table.** A new reference
+  showing the correct pattern for a table with far more rows than you'd send to
+  the browser: `lib/api/users.ts` returns one page at a time (search / sort /
+  filter / paginate on the server, page size clamped to the max), and the view
+  wires it with `RecordView`'s `fetcher`. Only one page is ever in memory.
+
+### Changed
+
+- **`initialData` and `makeEmptyRow` are now optional.** Omit them for a
+  `fetcher`-backed or read-only list; the "+ New" button (and CSV/JSON import)
+  is hidden when a table has no way to create rows. Client-managed tables are
+  unaffected (they still pass both).
+
 ## 1.22.0 — 2026-07-27
 
 ### Added

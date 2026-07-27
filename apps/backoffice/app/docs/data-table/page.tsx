@@ -286,6 +286,32 @@ useEffect(() => {
         </li>
       </Ul>
 
+      <H3>Page size (env-configurable)</H3>
+      <P>
+        A table with a million rows never ships them all to the browser — it
+        pulls one page at a time. The initial page size and the ceiling are set
+        by env, so every table inherits one setting:
+      </P>
+      <CodeBlock title=".env">{`NEXT_PUBLIC_DEFAULT_PAGE_SIZE=50   # initial rows per page
+NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling — the selector never offers more`}</CodeBlock>
+      <P>
+        Override per table with the <code>defaultPageSize</code> /{" "}
+        <code>maxPageSize</code> props. The important rule:{" "}
+        <strong>
+          <code>maxPageSize</code> is a UI ceiling only — your data layer must
+          clamp the returned page to the same max
+        </strong>
+        , because a client can request any size. The <code>users</code> demo does
+        exactly this (<code>Math.min(query.pageSize, MAX_PAGE_SIZE)</code> before
+        it slices the page).
+      </P>
+      <Note>
+        For a read-only or <code>fetcher</code>-backed list, omit{" "}
+        <code>initialData</code> and <code>makeEmptyRow</code> — the &quot;+
+        New&quot; button and CSV/JSON import are hidden when there&apos;s nothing
+        to create.
+      </Note>
+
       <H3>Or manage it yourself (onQueryChange)</H3>
       <P>
         For full control, set <code>manual</code> instead: RecordView stops

@@ -385,6 +385,20 @@ const MAX_CELL_CHARS = (() => {
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : 25;
 })();
 
+// Rows-per-page defaults, from env (inlined at build). DEFAULT is the initial
+// page size; MAX is the ceiling the page-size selector won't exceed. In `manual`
+// / `fetcher` mode the DATA LAYER must independently clamp its returned page to
+// MAX — the client's requested size can't be trusted. Override per-view with
+// `defaultPageSize` / `maxPageSize`.
+const DEFAULT_PAGE_SIZE = (() => {
+  const n = Number(process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 25;
+})();
+const MAX_PAGE_SIZE = (() => {
+  const n = Number(process.env.NEXT_PUBLIC_MAX_PAGE_SIZE);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : Infinity;
+})();
+
 /** Clip a cell string to `max` characters. Returns the display text and, when
  *  clipped, the full text for a `title` (hover tooltip). */
 function clipCell(value: string, max: number): { text: string; full?: string } {
@@ -432,8 +446,12 @@ interface RecordViewProps<T extends { id: RowId }> {
   singular: string;
   icon?: IconType;
   fields: RecordField<T>[];
-  initialData: T[];
-  makeEmptyRow: () => T;
+  /** Seed rows for a client-managed table. Optional — omit in `fetcher`/`manual`
+   *  mode (the server owns the data) or for a read-only list. Defaults to `[]`. */
+  initialData?: T[];
+  /** Factory for a blank row, used by the Add action. Omit it (and `onCreate`)
+   *  for a read-only list — the "+ New" button is then hidden. */
+  makeEmptyRow?: () => T;
   getPrimary: (row: T) => {
     title: string;
     initials: string;
@@ -511,6 +529,13 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  ellipsis + hover tooltip (long text never wraps). Defaults to
    *  `NEXT_PUBLIC_MAX_CELL_CHARS` (or 25). Per-field `maxChars` overrides it. */
   maxCellChars?: number;
+  /** Initial rows per page. Defaults to `NEXT_PUBLIC_DEFAULT_PAGE_SIZE` (or 25),
+   *  clamped to `maxPageSize`. */
+  defaultPageSize?: number;
+  /** Ceiling for the page-size selector (options above it are hidden). Defaults
+   *  to `NEXT_PUBLIC_MAX_PAGE_SIZE` (or unbounded). In server mode the data layer
+   *  must enforce this too — the client's requested size isn't trusted. */
+  maxPageSize?: number;
   /** Header for the leading identity column. Default "Name" — set e.g. "Title"
    *  for tables whose identity is a title field (regions, roles, …). */
   nameLabel?: string;
@@ -531,7 +556,7 @@ export function RecordView<T extends { id: RowId }>({
   singular,
   icon: TitleIcon,
   fields,
-  initialData,
+  initialData = [],
   makeEmptyRow,
   getPrimary,
   formMode = "panel",
@@ -555,6 +580,8 @@ export function RecordView<T extends { id: RowId }>({
   cache,
   onError,
   maxCellChars = MAX_CELL_CHARS,
+  defaultPageSize = DEFAULT_PAGE_SIZE,
+  maxPageSize = MAX_PAGE_SIZE,
   nameLabel = "Name",
   nameSortKey,
   identityColumn = "first",
@@ -695,7 +722,15 @@ export function RecordView<T extends { id: RowId }>({
     persistKey ? `${persistKey}::page` : undefined,
     1,
   );
-  const [pageSize, setPageSize] = React.useState<number>(25);
+  // Page-size selector options: never above `maxPageSize` (guard against an
+  // empty list if the ceiling is below the smallest preset).
+  const pageSizeOptions = React.useMemo(() => {
+    const opts = PAGE_SIZES.filter((n) => n <= maxPageSize);
+    return opts.length ? opts : [Math.max(1, Math.floor(maxPageSize))];
+  }, [maxPageSize]);
+  const [pageSize, setPageSize] = React.useState<number>(() =>
+    Math.min(Math.max(1, Math.floor(defaultPageSize)), maxPageSize),
+  );
   const [flashId, setFlashId] = React.useState<RowId | null>(null);
   const [copiedKey, setCopiedKey] = React.useState<string | null>(null);
   const [dragId, setDragId] = React.useState<RowId | null>(null);
@@ -1017,6 +1052,7 @@ export function RecordView<T extends { id: RowId }>({
       onCreate();
       return;
     }
+    if (!makeEmptyRow) return; // read-only list — nothing to create
     const row = { ...makeEmptyRow(), id: nextId.current++ };
     // Prepend so the new record is immediately visible at the top…
     setRows((prev) => [row, ...prev]);
@@ -1084,7 +1120,7 @@ export function RecordView<T extends { id: RowId }>({
   async function onImportFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = "";
-    if (!file) return;
+    if (!file || !makeEmptyRow) return; // read-only list — no row factory to import into
     const text = await file.text();
     let records: Record<string, unknown>[] = [];
     try {
@@ -1405,10 +1441,12 @@ export function RecordView<T extends { id: RowId }>({
             </DropdownItem>
           </Dropdown>
 
-          <Button variant="primary" size="sm" onClick={addRow} className="ml-1">
-            <Plus className="size-4" />
-            <span className="hidden sm:inline">{singular}</span>
-          </Button>
+          {(onCreate || makeEmptyRow) && (
+            <Button variant="primary" size="sm" onClick={addRow} className="ml-1">
+              <Plus className="size-4" />
+              <span className="hidden sm:inline">{singular}</span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -1676,7 +1714,7 @@ export function RecordView<T extends { id: RowId }>({
               align="end"
             >
               <DropdownLabel>Rows per page</DropdownLabel>
-              {PAGE_SIZES.map((n) => (
+              {pageSizeOptions.map((n) => (
                 <DropdownItem
                   key={n}
                   checked={pageSize === n}
