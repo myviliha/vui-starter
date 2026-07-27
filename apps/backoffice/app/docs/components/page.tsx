@@ -198,14 +198,17 @@ export default function ComponentsPage() {
 
       <H2>Tooltip</H2>
       <P>
-        A themed, dependency-free tooltip (portal-positioned, hover/focus,
-        auto-flip). RecordView uses it for truncated cells; reach for it instead
-        of the native <code>title</code> attribute.
+        A themed, dependency-free tooltip matching the shadcn design (dark bubble
+        + arrow), portal-positioned with hover/focus. <code>side</code> defaults
+        to <code>&quot;auto&quot;</code> — it prefers <strong>bottom</strong> and
+        flips to <strong>top</strong> only when there isn&apos;t room below (e.g.
+        the last rows of a table). RecordView uses it for truncated cells; reach
+        for it instead of the native <code>title</code> attribute.
       </P>
       <Demo
         code={`import { Tooltip } from "@viliha/vui-ui/tooltip";
 
-<Tooltip content="Full text shown on hover">
+<Tooltip content="Full text shown on hover" side="auto">
   <span className="underline decoration-dotted">Hover me</span>
 </Tooltip>`}
       >

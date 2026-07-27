@@ -5,27 +5,34 @@ import { createPortal } from "react-dom";
 
 import { cn } from "./utils";
 
-type Placement = { left: number; top: number; up: boolean };
+type ResolvedSide = "top" | "bottom";
+type Placement = { left: number; top: number; side: ResolvedSide };
 
 /**
- * Lightweight styled tooltip. Wraps a trigger and shows `content` in a themed
- * popover on hover/focus (after a short delay), rendered in a portal with fixed
- * positioning so it floats above any scroll/overflow container. Flips above or
- * below depending on room. No dependency — same portal pattern as `Select`.
+ * Lightweight styled tooltip matching the shadcn design (dark `bg-primary`
+ * bubble + arrow), rendered in a portal with fixed positioning so it floats
+ * above any scroll/overflow container. No dependency.
+ *
+ * `side` defaults to `"auto"`: it prefers **bottom** and flips to **top** only
+ * when there isn't room below (e.g. the last rows of a table, near the footer).
+ * Pass `"top"`/`"bottom"` to force a side.
  */
 export function Tooltip({
   content,
   children,
   className,
-  delay = 350,
+  delay = 300,
+  side = "auto",
 }: {
   content: React.ReactNode;
-  /** The trigger — wrapped in an inline element that carries the hover/focus. */
+  /** The trigger — wrapped in an inline element that carries hover/focus. */
   children: React.ReactNode;
   /** Applied to the inline trigger wrapper (e.g. `truncate` for a table cell). */
   className?: string;
   /** Hover open delay in ms. */
   delay?: number;
+  /** `"auto"` (default) = prefer bottom, flip to top near the viewport bottom. */
+  side?: "top" | "bottom" | "auto";
 }) {
   const [pos, setPos] = React.useState<Placement | null>(null);
   const ref = React.useRef<HTMLSpanElement>(null);
@@ -35,26 +42,30 @@ export function Tooltip({
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    const up = r.top > 72; // room above? else drop below
+    // Prefer bottom; flip to top only when there isn't room below.
+    const resolved: ResolvedSide =
+      side === "auto"
+        ? window.innerHeight - r.bottom < 96
+          ? "top"
+          : "bottom"
+        : side;
     setPos({
       left: r.left + r.width / 2,
-      top: up ? r.top - 6 : r.bottom + 6,
-      up,
+      top: resolved === "bottom" ? r.bottom + 8 : r.top - 8,
+      side: resolved,
     });
-  }, []);
+  }, [side]);
 
   const open = React.useCallback(() => {
     clearTimeout(timer.current);
     timer.current = setTimeout(place, delay);
   }, [place, delay]);
-
   const close = React.useCallback(() => {
     clearTimeout(timer.current);
     setPos(null);
   }, []);
 
   React.useEffect(() => () => clearTimeout(timer.current), []);
-  // Close on scroll (position would go stale).
   React.useEffect(() => {
     if (!pos) return;
     window.addEventListener("scroll", close, true);
@@ -74,22 +85,33 @@ export function Tooltip({
       {pos &&
         typeof document !== "undefined" &&
         createPortal(
+          // Outer: fixed positioning (transform centers/anchors it). Inner: the
+          // animated bubble (opacity only, so it doesn't fight the transform).
           <div
-            role="tooltip"
             style={{
               position: "fixed",
               left: pos.left,
               top: pos.top,
-              transform: pos.up
-                ? "translate(-50%, -100%)"
-                : "translate(-50%, 0)",
+              transform:
+                pos.side === "bottom"
+                  ? "translateX(-50%)"
+                  : "translate(-50%, -100%)",
             }}
-            className={cn(
-              "vui-fade-in pointer-events-none z-[220] max-w-xs rounded-md border border-border bg-popover px-2 py-1",
-              "text-xs leading-snug text-popover-foreground shadow-md",
-            )}
+            className="pointer-events-none z-[220]"
           >
-            {content}
+            <div
+              role="tooltip"
+              className="vui-fade-in relative w-fit max-w-xs text-balance rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground shadow-md"
+            >
+              {content}
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute left-1/2 size-2 -translate-x-1/2 rotate-45 bg-primary",
+                  pos.side === "bottom" ? "-top-1" : "-bottom-1",
+                )}
+              />
+            </div>
           </div>,
           document.body,
         )}

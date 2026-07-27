@@ -7,6 +7,17 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.18.0 — 2026-07-27
+
+### Changed
+
+- **`Tooltip` now matches the shadcn design** (dark `bg-primary` bubble + arrow)
+  and takes a **`side`** prop: `"top" | "bottom" | "auto"` (default `"auto"`).
+  Auto prefers **bottom** and flips to **top** only when there isn't room below —
+  so datatable cell tooltips drop below a column but flip up for the last rows
+  near the footer, never clipped. Still dependency-free (portal + fixed
+  positioning). RecordView's truncated-cell tooltips get this automatically.
+
 ## 1.17.0 — 2026-07-27
 
 ### Added
