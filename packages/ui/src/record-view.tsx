@@ -477,6 +477,13 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  of opening the built-in overlay form. */
   onView?: (id: RowId) => void;
   onEdit?: (id: RowId) => void;
+  /** Notified whenever the Add / View / Edit form opens, so you can lazily load
+   *  field data (e.g. FK/combobox option catalogs) only when a user actually
+   *  opens a form — not on every table mount. Pure notification: it does **not**
+   *  suppress the form (unlike `onCreate`/`onView`/`onEdit`, which redirect). In
+   *  panel mode `row` is the record being opened (the fresh draft for "create");
+   *  in page mode it fires alongside the redirect for symmetry. */
+  onFormOpen?: (mode: "create" | "edit" | "view", row?: T) => void;
   /** Persist this view's filter / sort / page under this key (e.g. the route),
    *  so the work survives leaving and returning via the open-tabs strip. */
   persistKey?: string;
@@ -568,6 +575,7 @@ export function RecordView<T extends { id: RowId }>({
   onCreate,
   onView,
   onEdit,
+  onFormOpen,
   persistKey,
   resizableColumns = false,
   onFilter,
@@ -1049,11 +1057,13 @@ export function RecordView<T extends { id: RowId }>({
   function addRow() {
     // Routed create: delegate to the caller (e.g. navigate to /new).
     if (onCreate) {
+      onFormOpen?.("create");
       onCreate();
       return;
     }
     if (!makeEmptyRow) return; // read-only list — nothing to create
     const row = { ...makeEmptyRow(), id: nextId.current++ };
+    onFormOpen?.("create", row);
     // Prepend so the new record is immediately visible at the top…
     setRows((prev) => [row, ...prev]);
     setPage(1);
@@ -1063,6 +1073,7 @@ export function RecordView<T extends { id: RowId }>({
   }
   /** Open the detail panel read-only (View). */
   function openView(id: RowId) {
+    onFormOpen?.("view", rows.find((r) => r.id === id) ?? undefined);
     if (onView) {
       onView(id);
       return;
@@ -1072,6 +1083,7 @@ export function RecordView<T extends { id: RowId }>({
   }
   /** Open the detail panel editable (Edit). */
   function openEdit(id: RowId) {
+    onFormOpen?.("edit", rows.find((r) => r.id === id) ?? undefined);
     if (onEdit) {
       onEdit(id);
       return;

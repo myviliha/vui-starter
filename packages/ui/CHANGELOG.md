@@ -7,6 +7,20 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.24.0 — 2026-07-27
+
+### Added
+
+- **`onFormOpen?(mode, row?)`** on `RecordView` — fires when the Add / View / Edit
+  form opens (`mode` is `"create" | "edit" | "view"`), so you can **lazily load
+  field data only when a form actually opens** instead of on every table mount.
+  The intended use is FK / combobox option catalogs (e.g. Region → Country → State
+  cascades): browsing the list fires nothing, opening a form triggers the fetch.
+  It's a pure notification — unlike `onCreate` / `onView` / `onEdit` (which
+  redirect and suppress the panel), `onFormOpen` does **not** suppress anything.
+  In panel mode `row` is the record opened (the fresh draft for `"create"`); in
+  page mode it fires alongside the redirect for symmetry.
+
 ## 1.23.2 — 2026-07-27
 
 ### Changed

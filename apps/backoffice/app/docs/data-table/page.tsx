@@ -467,6 +467,26 @@ const fields = [
         function isn&apos;t resolved for you there.
       </Note>
 
+      <H3>Lazy-loading option data (onFormOpen)</H3>
+      <P>
+        Choice / combobox <code>options</code> must be ready when a form opens —
+        but eagerly fetching a whole FK catalog on every table mount is wasteful
+        if the user is only browsing. Pass <code>onFormOpen(mode, row?)</code> to
+        fetch those catalogs <strong>only when a form actually opens</strong>.
+        It&apos;s a pure notification — unlike <code>onCreate</code> /{" "}
+        <code>onView</code> / <code>onEdit</code> (which redirect and suppress the
+        panel), <code>onFormOpen</code> doesn&apos;t suppress anything.
+      </P>
+      <CodeBlock title="fetch reference data on demand">{`<RecordView
+  fields={fields}          // options can start empty / stale
+  onFormOpen={(mode, row) => {
+    // mode: "create" | "edit" | "view"; row is the record (draft for create)
+    void loadCountries();                 // fetch once, cache
+    if (row?.country) void loadStates(row.country);
+  }}
+  /* … */
+/>`}</CodeBlock>
+
       <H3>Slide-over panel (default)</H3>
       <P>
         By default the form slides in from the right, over the table. There is
