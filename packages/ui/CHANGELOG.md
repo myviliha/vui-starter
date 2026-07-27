@@ -7,6 +7,14 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.21.1 — 2026-07-27
+
+### Fixed
+
+- List `README.md` in the package `files` so npm reliably renders the README on
+  the package page (npmjs was showing a stale/empty README — the registry's
+  readme field wasn't refreshing on publish). No code change.
+
 ## 1.21.0 — 2026-07-27
 
 ### Added
