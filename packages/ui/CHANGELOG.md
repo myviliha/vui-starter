@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.17.0 — 2026-07-27
+
+### Added
+
+- **`nameLabel` prop on `RecordView`** — the leading identity-column header was
+  hardcoded to "Name". Set `nameLabel="Title"` (etc.) for tables whose identity
+  is a title field (regions, countries, languages, roles, …). Default stays
+  "Name", fully backward compatible.
+
 ## 1.16.0 — 2026-07-27
 
 ### Added

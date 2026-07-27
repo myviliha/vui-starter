@@ -508,6 +508,9 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  ellipsis + hover tooltip (long text never wraps). Defaults to
    *  `NEXT_PUBLIC_MAX_CELL_CHARS` (or 25). Per-field `maxChars` overrides it. */
   maxCellChars?: number;
+  /** Header for the leading identity column. Default "Name" — set e.g. "Title"
+   *  for tables whose identity is a title field (regions, roles, …). */
+  nameLabel?: string;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -539,6 +542,7 @@ export function RecordView<T extends { id: RowId }>({
   cache,
   onError,
   maxCellChars = MAX_CELL_CHARS,
+  nameLabel = "Name",
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -1699,10 +1703,10 @@ export function RecordView<T extends { id: RowId }>({
                   ) : (
                     <DEFAULT_FIELD_ICON className="size-3.5 shrink-0 text-foreground" />
                   )}
-                  Name
+                  {nameLabel}
                   {nameRequired && <RequiredMark />}
                 </span>
-                {resizeHandle(NAME_COL, "Name")}
+                {resizeHandle(NAME_COL, nameLabel)}
               </TableHead>
               {visibleFields.map((f) => {
                 const HeadIcon = f.icon ?? DEFAULT_FIELD_ICON;

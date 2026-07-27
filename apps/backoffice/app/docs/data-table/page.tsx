@@ -113,6 +113,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
         <li><code>loading</code>: while <code>true</code>, the table body shows shimmering skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
         <li><code>maxCellChars</code>: characters a cell shows before it truncates to <strong>one line</strong> with an ellipsis + hover tooltip (long text never wraps). Defaults to <code>NEXT_PUBLIC_MAX_CELL_CHARS</code> or 25; per-column <code>maxChars</code> overrides it.</li>
+        <li><code>nameLabel</code>: header for the leading identity column. Default <code>&quot;Name&quot;</code>; set e.g. <code>&quot;Title&quot;</code> for tables whose identity is a title field (regions, roles, …).</li>
         <li><code>fetcher</code> + <code>cacheKey</code>: server-side mode where RecordView owns the fetch, caching, and loading (see Server-side data). Optional <code>cache</code> (LRU tuning) and <code>onError</code>.</li>
         <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode — RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
       </Ul>
