@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-ui",
-  "version": "1.23.1",
+  "version": "1.23.2",
   "description": "Vui UI — a clean, token-driven React admin/CRM component library built on Tailwind CSS v4, shadcn-style patterns, and Radix Icons. Ships as TypeScript source (Just-in-Time), compiled by the consuming app.",
   "license": "MIT",
   "author": "Suman Bonakurthi",
@@ -58,7 +58,7 @@
     "check-types": "tsgo --noEmit",
     "test": "vitest run",
     "sync-template": "node scripts/sync-template.mjs",
-    "prepublishOnly": "node scripts/sync-template.mjs"
+    "prepublishOnly": "node scripts/require-pnpm-publish.mjs && node scripts/sync-template.mjs"
   },
   "peerDependencies": {
     "react": "^18 || ^19",

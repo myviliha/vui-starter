@@ -7,6 +7,23 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.23.2 — 2026-07-27
+
+### Changed
+
+- **Publish with `pnpm publish` (now enforced).** The published manifest used to
+  ship internal dev tooling as literal `workspace:*` (an invalid npm manifest,
+  left there by `npm publish`). `pnpm publish` rewrites those to spec-valid
+  versions, so a `prepublishOnly` guard now blocks any non-pnpm publish. Run
+  `cd packages/ui && pnpm publish`.
+
+### Note
+
+- This does **not** change the npmjs "no README" display — that's a registry-side
+  render issue (the README is present and valid in every tarball regardless of
+  publish client); it needs an npm support ticket, not a republish. Corrects the
+  1.21.2 / 1.23.1 notes that wrongly attributed it to the publish client.
+
 ## 1.23.1 — 2026-07-27
 
 ### Fixed
