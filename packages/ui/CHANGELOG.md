@@ -7,6 +7,22 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.20.0 — 2026-07-27
+
+### Added
+
+- **`identityColumn` prop — position (or hide) the identity column.** The leading
+  Name/Title column was hard-forced first; it can now go anywhere among the field
+  columns: `"first"` (default), `"last"`, `"hidden"`, or a number = how many field
+  columns precede it (e.g. `1` → Region, Title, Code). Lets reference/data-grid
+  tables order columns freely (Country → State → City → Title). The header,
+  loading skeleton, and body rows all render from one shared ordered column list,
+  so they stay in sync. Default `"first"` keeps existing tables unchanged.
+
+  **For agents:** set `identityColumn` to place the Name/Title column (or
+  `"hidden"` when a field already shows it). Demo: `system/cities` (`"last"`).
+  Docs: `/docs/data-table`.
+
 ## 1.19.0 — 2026-07-27
 
 ### Added

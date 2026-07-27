@@ -70,6 +70,9 @@ const CHECKBOX_W = 56;
 const ACTIONS_W = 120;
 const NAME_COL = "__name";
 const NAME_DEFAULT_W = 190;
+// Marks the identity (Name/Title) column's slot in the ordered column list, so
+// header/skeleton/body render it wherever `identityColumn` places it.
+const IDENTITY_COL = Symbol("identity");
 const MIN_COL_W = 80;
 const PAGE_SIZES = [10, 25, 50, 100] as const;
 /** Fallback column-header icon so every column title shows an icon. */
@@ -516,6 +519,11 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  `sortable` (the field that drives `getPrimary`). Unset + none found → the
    *  identity header stays static. */
   nameSortKey?: Extract<keyof T, string>;
+  /** Where the leading identity (Name/Title) column sits among the field columns.
+   *  `"first"` (default) | `"last"` | `"hidden"` (no identity column), or a number
+   *  = how many field columns come before it (e.g. `1` → Region, Title, Code).
+   *  Lets the app order reference tables like Country/State/City freely. */
+  identityColumn?: number | "first" | "last" | "hidden";
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -549,6 +557,7 @@ export function RecordView<T extends { id: RowId }>({
   maxCellChars = MAX_CELL_CHARS,
   nameLabel = "Name",
   nameSortKey,
+  identityColumn = "first",
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -729,6 +738,21 @@ export function RecordView<T extends { id: RowId }>({
 
   const tableFields = fields.filter((f) => !f.hideInTable);
   const visibleFields = tableFields.filter((f) => !hidden.has(f.key));
+  // Column order: field columns with the identity (Name/Title) column inserted
+  // at `identityColumn` (or hidden). `IDENTITY_COL` marks the identity slot so
+  // the header, skeleton, and body rows all render in one consistent order.
+  const orderedCols: (RecordField<T> | typeof IDENTITY_COL)[] = (() => {
+    const cols: (RecordField<T> | typeof IDENTITY_COL)[] = [...visibleFields];
+    if (identityColumn === "hidden") return cols;
+    const at =
+      identityColumn === "first"
+        ? 0
+        : identityColumn === "last"
+          ? cols.length
+          : Math.max(0, Math.min(identityColumn, cols.length));
+    cols.splice(at, 0, IDENTITY_COL);
+    return cols;
+  })();
   // Sorting is decoupled from column visibility: a field is sortable when its
   // `sortable` flag says so, else it falls back to "is a visible column".
   const canSort = (f: RecordField<T>) => f.sortable ?? !f.hideInTable;
@@ -1707,8 +1731,8 @@ export function RecordView<T extends { id: RowId }>({
                   />
                 </div>
               </TableHead>
-              <TableHead className="relative w-max" style={{ width: colWidths[NAME_COL] }}>
-                {(() => {
+              {orderedCols.map((col) => {
+                if (col === IDENTITY_COL) {
                   const IdIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
                   const inner = (
                     <>
@@ -1717,8 +1741,6 @@ export function RecordView<T extends { id: RowId }>({
                         {nameLabel}
                         {nameRequired && <RequiredMark />}
                       </span>
-                      {/* Same sort affordance as other columns: muted caret by
-                          default, solid caret for the active direction. */}
                       {nameSortKeyResolved &&
                         (sort?.key === nameSortKeyResolved ? (
                           sort.dir === "asc" ? (
@@ -1731,23 +1753,30 @@ export function RecordView<T extends { id: RowId }>({
                         ))}
                     </>
                   );
-                  return nameSortKeyResolved ? (
-                    <button
-                      type="button"
-                      onClick={() => toggleSort(nameSortKeyResolved)}
-                      className="flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground"
+                  return (
+                    <TableHead
+                      key="__identity"
+                      className="relative w-max"
+                      style={{ width: colWidths[NAME_COL] }}
                     >
-                      {inner}
-                    </button>
-                  ) : (
-                    <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
-                      {inner}
-                    </span>
+                      {nameSortKeyResolved ? (
+                        <button
+                          type="button"
+                          onClick={() => toggleSort(nameSortKeyResolved)}
+                          className="flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground"
+                        >
+                          {inner}
+                        </button>
+                      ) : (
+                        <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
+                          {inner}
+                        </span>
+                      )}
+                      {resizeHandle(NAME_COL, nameLabel)}
+                    </TableHead>
                   );
-                })()}
-                {resizeHandle(NAME_COL, nameLabel)}
-              </TableHead>
-              {visibleFields.map((f) => {
+                }
+                const f = col;
                 const HeadIcon = f.icon ?? DEFAULT_FIELD_ICON;
                 const sortable = canSort(f);
                 const headInner = (
@@ -1820,17 +1849,26 @@ export function RecordView<T extends { id: RowId }>({
                   <TableCell style={{ width: CHECKBOX_W }}>
                     <div className="mx-2 size-4 vui-shimmer rounded" />
                   </TableCell>
-                  <TableCell style={{ width: colWidths[NAME_COL] }}>
-                    <div className="flex items-center gap-2">
-                      <div className="size-7 shrink-0 vui-shimmer rounded-full" />
-                      <div className="h-3.5 w-32 vui-shimmer rounded" />
-                    </div>
-                  </TableCell>
-                  {visibleFields.map((f) => (
-                    <TableCell key={f.key} style={{ width: colWidths[f.key] }}>
-                      <div className="h-3.5 w-20 vui-shimmer rounded" />
-                    </TableCell>
-                  ))}
+                  {orderedCols.map((col) =>
+                    col === IDENTITY_COL ? (
+                      <TableCell
+                        key="__identity"
+                        style={{ width: colWidths[NAME_COL] }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="size-7 shrink-0 vui-shimmer rounded-full" />
+                          <div className="h-3.5 w-32 vui-shimmer rounded" />
+                        </div>
+                      </TableCell>
+                    ) : (
+                      <TableCell
+                        key={col.key}
+                        style={{ width: colWidths[col.key] }}
+                      >
+                        <div className="h-3.5 w-20 vui-shimmer rounded" />
+                      </TableCell>
+                    ),
+                  )}
                   <TableCell aria-hidden="true" className="border-r-0" />
                   <TableCell style={{ width: ACTIONS_W }}>
                     <div className="mx-auto h-4 w-8 vui-shimmer rounded" />
@@ -1896,38 +1934,49 @@ export function RecordView<T extends { id: RowId }>({
                         />
                       </div>
                     </TableCell>
-                    <TableCell
-                      className="p-0"
-                      style={{ maxWidth: colWidths[NAME_COL] ?? NAME_DEFAULT_W }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => openView(row.id)}
-                        className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60"
-                      >
-                        <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
-                          {primary.initials}
-                        </span>
-                        {nameClip.full ? (
-                          <Tooltip content={nameClip.full} className="truncate">
-                            {nameClip.text}
-                          </Tooltip>
-                        ) : (
-                          <span className="truncate">
-                            {nameClip.text || "—"}
-                          </span>
-                        )}
-                      </button>
-                    </TableCell>
-                    {visibleFields.map((f) => (
-                      <TableCell
-                        key={f.key}
-                        className="p-0"
-                        style={{ maxWidth: colWidths[f.key] ?? fieldDefaultWidth(f) }}
-                      >
-                        {renderCellValue(row, f)}
-                      </TableCell>
-                    ))}
+                    {orderedCols.map((col) =>
+                      col === IDENTITY_COL ? (
+                        <TableCell
+                          key="__identity"
+                          className="p-0"
+                          style={{
+                            maxWidth: colWidths[NAME_COL] ?? NAME_DEFAULT_W,
+                          }}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => openView(row.id)}
+                            className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60"
+                          >
+                            <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
+                              {primary.initials}
+                            </span>
+                            {nameClip.full ? (
+                              <Tooltip
+                                content={nameClip.full}
+                                className="truncate"
+                              >
+                                {nameClip.text}
+                              </Tooltip>
+                            ) : (
+                              <span className="truncate">
+                                {nameClip.text || "—"}
+                              </span>
+                            )}
+                          </button>
+                        </TableCell>
+                      ) : (
+                        <TableCell
+                          key={col.key}
+                          className="p-0"
+                          style={{
+                            maxWidth: colWidths[col.key] ?? fieldDefaultWidth(col),
+                          }}
+                        >
+                          {renderCellValue(row, col)}
+                        </TableCell>
+                      ),
+                    )}
                     <TableCell aria-hidden="true" className="w-full border-r-0" />
                     <TableCell
                       className="sticky right-0 z-10 border-l border-border bg-card p-0 shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
@@ -1969,7 +2018,7 @@ export function RecordView<T extends { id: RowId }>({
             ) : (
               <TableRow className="hover:bg-transparent">
                 <TableCell
-                  colSpan={visibleFields.length + 4}
+                  colSpan={orderedCols.length + 3}
                   className="h-32 text-center text-muted-foreground"
                 >
                   {filter ? `No results for “${filter}”.` : "No records yet."}

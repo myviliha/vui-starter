@@ -90,6 +90,8 @@ export function CitiesTable() {
       singular="City"
       icon={Landmark}
       persistKey="/system/cities"
+      // Reference-table order: Country, State, then the city Name (identity).
+      identityColumn="last"
       fields={fields}
       initialData={rows}
       data={rows}
