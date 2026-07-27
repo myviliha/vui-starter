@@ -221,6 +221,23 @@ types/
 
 Keep business logic out of UI components.
 
+**Data-backed pages use three separated layers — never fetch or process data in
+a UI component:**
+
+- **Data (API)** — `lib/api/<entity>.ts`: async functions that talk to the
+  backend. No React.
+- **Controller** — `use-<entity>.ts`: a hook that owns `{ data, loading, error }`,
+  calls the data layer *after mount*, and exposes writes.
+- **Presentation** — a thin `*-table.tsx` that `next/dynamic`-loads the view
+  behind a skeleton, and a `*-view.tsx` that reads the controller and renders
+  `RecordView`.
+
+This makes navigation feel instant — the UI paints its skeleton before the data
+loads (controller starts `loading: true`; the dynamic import renders the shell
+before the datatable chunk parses). For large server-backed lists, use
+`RecordView`'s built-in `fetcher` instead of paginating by hand. The scaffolded
+`organizations` page is the reference implementation.
+
 ---
 
 # Page Layout

@@ -20,6 +20,8 @@ Turborepo + pnpm monorepo. One app + one published library:
 | shadcn component | `npx shadcn@latest add <name>` (from the backoffice dir) → `components/ui/` |
 | Design token / color / radius | `packages/ui/src/theme.css` — **never hard-code**, add/read a token |
 | Navigation (sidebar + breadcrumbs) | `apps/backoffice/app/_components/nav-config.ts` — single source; breadcrumbs derive from it |
+| Data fetching / API calls (**Data layer**) | `apps/backoffice/lib/api/<entity>.ts` — async functions, no React. Swap the mock bodies for `fetch(url, { signal })` later |
+| Page data + loading/error state (**Controller**) | `apps/backoffice/app/(app)/<route>/use-<entity>.ts` — a hook that bridges the data layer to the UI |
 
 ## Single sources of truth — never duplicate
 
@@ -27,6 +29,33 @@ Turborepo + pnpm monorepo. One app + one published library:
 - **Navigation** → `nav-config.ts` (sidebar + breadcrumb trail both derive from it).
 - **Page layout / section cards / dialogs / menus / datatable** → documented at docs `/layout` and `/data-table`. Reuse `Dialog`, `Menu`, `RecordView`, `ChartContainer` — don't re-implement.
 - **`cn`** → `@viliha/vui-ui/utils`. `utils.ts` is intentional; do not "fix" it.
+
+## Architecture: three layers (Data → Controller → Presentation)
+
+Data flows one way through three separated layers. **Keep them in separate files
+— never process data in a UI component.** `organizations` is the reference
+implementation; copy its shape for any data-backed page.
+
+| Layer | File | Rule |
+| --- | --- | --- |
+| **Data (API)** | `lib/api/<entity>.ts` | Talks to the backend. Async functions (`list…`, `add…`, `update…`), **no React**. Mock in-memory today; swap the bodies for `fetch(url, { signal })` and nothing above changes. |
+| **Controller** | `app/(app)/<route>/use-<entity>.ts` | A hook that bridges data ↔ UI. Owns `{ data, loading, error }`, calls the data layer in an effect **after mount**, exposes writes. **No JSX.** |
+| **Presentation** | `app/(app)/<route>/<entity>-view.tsx` (+ thin `-table.tsx` loader) | Reads the controller and renders `RecordView`. **Zero fetching or data processing.** |
+
+Two consequences you must preserve:
+
+1. **Paint the UI first, load data after.** The controller starts `loading: true`
+   with empty data, so `RecordView`'s skeleton shows immediately; data fills in
+   when the fetch resolves. The thin `*-table.tsx` loader `next/dynamic`-imports
+   the (heavier) view behind a `TableSkeleton`, so the shell paints on the first
+   click instead of waiting for the datatable chunk to parse.
+2. **No data work in the UI.** Filtering, sorting, mapping, and persistence live
+   in the data/controller layers (or `RecordView`'s own `fetcher`), never in the
+   view. If a component is both fetching and rendering, split it.
+
+For large server-backed lists, prefer `RecordView`'s built-in `fetcher` /
+`manual` (server-side query + shimmer + cache) over hand-rolling it in the
+controller.
 
 ## Page types
 

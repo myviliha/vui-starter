@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { RecordForm } from "@viliha/vui-ui/record-view";
 import { SetPageTitle } from "@/app/_components/set-page-title";
-import { orgStore } from "@/lib/org-store";
+import { getOrganization, updateOrganization } from "@/lib/api/organizations";
 import {
   fields,
   getPrimary,
@@ -18,7 +18,7 @@ import {
 function EditOrganizationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const row = orgStore.get(Number(searchParams.get("id")));
+  const row = getOrganization(Number(searchParams.get("id")));
 
   if (!row) {
     // Unknown id — e.g. a refresh cleared an in-session record.
@@ -53,7 +53,7 @@ function EditOrganizationForm() {
         formDescription={ORG_FORM_DESCRIPTION}
         onHome={() => router.push("/dashboard")}
         onSave={(saved) => {
-          orgStore.update(saved);
+          updateOrganization(saved);
           router.push("/organizations");
         }}
         onCancel={() => router.push("/organizations")}

@@ -7,6 +7,26 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.22.0 — 2026-07-27
+
+### Added
+
+- **Three-layer architecture for data-backed pages** (Data → Controller →
+  Presentation), demonstrated end-to-end on the scaffolded `organizations` page
+  and documented in `AGENT.md` and the docs site. Data access lives in
+  `lib/api/<entity>.ts` (async, no React — the real-API seam), a controller hook
+  `use-<entity>.ts` owns `{ data, loading, error }` and loads *after mount*, and
+  the presentation renders `RecordView` with no data processing of its own.
+- **UI-first navigation.** The presentation now paints its shell first: a thin
+  `*-table.tsx` `next/dynamic`-loads the datatable view behind a `TableSkeleton`,
+  and the controller starts `loading: true` with no rows — so the skeleton shows
+  the instant you click a menu item, instead of waiting for the datatable chunk
+  to parse and the data to arrive. Fixes the perceptible lag before the loading
+  animation on record-heavy pages.
+
+_App/template change (no component API change); `template/` regenerates from the
+demo app on publish._
+
 ## 1.21.2 — 2026-07-27
 
 ### Fixed

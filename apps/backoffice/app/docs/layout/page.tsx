@@ -70,6 +70,69 @@ export default function MyPage() {
         share this exact frame, and yours should as well.
       </Note>
 
+      <H2>Architecture: three layers</H2>
+      <P>
+        Data-backed pages are split into three files so no data processing ever
+        happens in a UI component. Data flows one way:{" "}
+        <strong>Data → Controller → Presentation</strong>. The{" "}
+        <code>organizations</code> page is the reference — copy its shape.
+      </P>
+      <Ul>
+        <li>
+          <strong>Data (API)</strong> — <code>lib/api/&lt;entity&gt;.ts</code>.
+          Async functions that talk to the backend; no React. It&apos;s a mock
+          in-memory table today, but the signatures are the real-API seam: swap
+          each body for <code>fetch(url, {`{ signal }`})</code> and nothing above
+          changes.
+        </li>
+        <li>
+          <strong>Controller</strong> —{" "}
+          <code>app/(app)/&lt;route&gt;/use-&lt;entity&gt;.ts</code>. A hook that
+          owns <code>{`{ data, loading, error }`}</code>, calls the data layer{" "}
+          <em>after mount</em>, and exposes writes. No JSX.
+        </li>
+        <li>
+          <strong>Presentation</strong> — a thin <code>*-table.tsx</code> that{" "}
+          <code>next/dynamic</code>-loads the view behind a skeleton, and a{" "}
+          <code>*-view.tsx</code> that reads the controller and renders{" "}
+          <code>RecordView</code>. Zero fetching or data processing.
+        </li>
+      </Ul>
+      <Note>
+        This is what makes navigation feel instant:{" "}
+        <strong>the UI paints before the data loads.</strong> The controller
+        starts <code>loading: true</code> with no rows, so the skeleton shows the
+        moment you click; the dynamic import means the shell renders before the
+        heavier datatable chunk parses. For large server-backed lists, reach for{" "}
+        <code>RecordView</code>&apos;s built-in <code>fetcher</code> instead of
+        wiring pagination by hand.
+      </Note>
+      <CodeBlock title="organizations — the three layers">{`// lib/api/organizations.ts — DATA (no React; swap body for fetch())
+export async function listOrganizations(signal?: AbortSignal) {
+  const res = await fetch("/api/organizations", { signal });
+  return res.json();
+}
+
+// use-organizations.ts — CONTROLLER (loads after mount)
+export function useOrganizations() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const c = new AbortController();
+    listOrganizations(c.signal).then((rows) => { setData(rows); setLoading(false); });
+    return () => c.abort();
+  }, []);
+  return { data, loading, save: replaceOrganizations };
+}
+
+// organizations-table.tsx — PRESENTATION (paint shell first)
+const View = dynamic(() => import("./organizations-view").then((m) => m.OrganizationsView),
+  { ssr: false, loading: () => <TableSkeleton /> });
+
+// organizations-view.tsx — PRESENTATION (no data work)
+const { data, loading, save } = useOrganizations();
+<RecordView data={data} loading={loading} onDataChange={save} … />`}</CodeBlock>
+
       <H2>Page types</H2>
       <P>
         Every page shares the frame above; only the content region changes. The
@@ -152,10 +215,12 @@ export default function DepartmentsPage() {
       <CodeBlock title="slide-over (Branches) vs. full-page routes (Organizations)">{`// Branches — overlay, uncontrolled. That's the whole difference.
 <RecordView title="Branches" fields={fields} initialData={branches} … />
 
-// Organizations — full-page routes, controlled via a shared store.
+// Organizations — full-page routes, controlled via a controller hook that
+// loads from the data layer (data → controller → presentation; see /docs/layout).
+const { data, loading, save } = useOrganizations();
 <RecordView
   formMode="page" formColumns={1}
-  fields={fields} data={rows} onDataChange={orgStore.set}
+  fields={fields} data={data} loading={loading} onDataChange={save}
   onCreate={() => router.push("/organizations/new")}
   onView={(id) => router.push(\`/organizations/edit?id=\${id}\`)}
   onEdit={(id) => router.push(\`/organizations/edit?id=\${id}\`)}

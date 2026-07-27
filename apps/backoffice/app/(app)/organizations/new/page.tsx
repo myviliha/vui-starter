@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { RecordForm } from "@viliha/vui-ui/record-view";
 import { SetPageTitle } from "@/app/_components/set-page-title";
-import { orgStore } from "@/lib/org-store";
+import { addOrganization } from "@/lib/api/organizations";
 import {
   fields,
   getPrimary,
@@ -36,7 +36,7 @@ export default function NewOrganizationPage() {
         formDescription={ORG_FORM_DESCRIPTION}
         onHome={() => router.push("/dashboard")}
         onSave={(saved) => {
-          orgStore.add(saved);
+          addOrganization(saved);
           router.push("/organizations");
         }}
         onCancel={() => router.push("/organizations")}
