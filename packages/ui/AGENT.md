@@ -351,6 +351,19 @@ server components per route, either adopt the demo's static-export shell or fall
 back to a plain navigation-tab model (router push per tab); the strip,
 persistence, and nav-config wiring stay identical.
 
+**Revalidate stale tabs.** Keep-alive's tradeoff: a controller that fetches once
+on mount **never re-fetches**, so if another user edits a record while your tab
+sits open, you keep seeing the old value (and risk a write conflict on save).
+Revalidate with `useRefetchOnActive(routePath, refetch)` (scaffolded at
+`lib/use-refetch-on-active.ts`) — it re-runs `refetch` when the tab becomes
+active again or the window regains focus. Make `refetch` a **delta**
+(`?since=cursor` → only changed rows + deleted ids, merged by `id`), **not** a
+full reload — the point is a cheap "what changed?" call. `use-organizations.ts`
++ the data layer's `syncOrganizations(since)` are the reference. Refetch narrows
+but can't close the conflict window: guard the write itself with optimistic
+concurrency (send the record's version/`updatedAt`, reject a stale write with
+`409`) when conflicts matter.
+
 ---
 
 # Forms

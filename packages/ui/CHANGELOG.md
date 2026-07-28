@@ -7,6 +7,19 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.25.1 — 2026-07-28
+
+### Added
+
+- **Revalidate stale keep-alive tabs (`useRefetchOnActive`)** — a scaffolded
+  hook (`lib/use-refetch-on-active.ts`) that re-runs a controller's `refetch`
+  when its tab becomes active again or the window regains focus, so a kept-alive
+  page no longer shows data frozen at open time after another user edits a
+  record. The reference wiring (`use-organizations.ts` + the data layer's
+  `syncOrganizations(since)`) revalidates with a **delta** (`?since=cursor` →
+  only changed rows + deleted ids, merged by `id`), not a full reload. Documented
+  in `AGENT.md` (Open tabs) and docs `/layout`.
+
 ## 1.25.0 — 2026-07-27
 
 ### Added
