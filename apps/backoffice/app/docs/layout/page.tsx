@@ -519,6 +519,23 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         makes tab switching feel native. The <code>MAX_TABS</code> cap bounds how
         many stay mounted at once.
       </Note>
+      <Note title="Stale data in a kept-alive tab">
+        The flip side of keep-alive: a controller that fetches once on mount{" "}
+        <strong>never re-fetches</strong>, so if another user changes a record
+        while your tab sits open, you keep seeing the old value (and risk a
+        write conflict). Revalidate with{" "}
+        <code>useRefetchOnActive(routePath, refetch)</code> (
+        <code>lib/use-refetch-on-active.ts</code>), which runs your{" "}
+        <code>refetch</code> when the tab becomes active again or the window
+        regains focus. Make that <code>refetch</code> a <strong>delta</strong>{" "}
+        (<code>{`?since=cursor`}</code>) that returns only the changed rows +
+        deleted ids and merges them by <code>id</code>&nbsp;— not a full reload.{" "}
+        <code>use-organizations.ts</code> +{" "}
+        <code>syncOrganizations()</code> are the reference. Refetch narrows the
+        conflict window but can&apos;t close it: guard the write itself with
+        optimistic concurrency (send the record&apos;s version/updatedAt, reject
+        a stale write with 409).
+      </Note>
 
       <H2>Multi-step wizard</H2>
       <P>

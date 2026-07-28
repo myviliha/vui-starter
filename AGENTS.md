@@ -39,7 +39,7 @@ implementation; copy its shape for any data-backed page.
 | Layer | File | Rule |
 | --- | --- | --- |
 | **Data (API)** | `lib/api/<entity>.ts` | Talks to the backend. Async functions (`list…`, `add…`, `update…`), **no React**. Mock in-memory today; swap the bodies for `fetch(url, { signal })` and nothing above changes. |
-| **Controller** | `app/(app)/<route>/use-<entity>.ts` | A hook that bridges data ↔ UI. Owns `{ data, loading, error }`, calls the data layer in an effect **after mount**, exposes writes. **No JSX.** |
+| **Controller** | `app/(app)/<route>/use-<entity>.ts` | A hook that bridges data ↔ UI. Owns `{ data, loading, error }`, calls the data layer in an effect **after mount**, exposes writes. **No JSX.** For kept-alive pages, revalidate on tab re-focus with `useRefetchOnActive` + a delta sync (see "Open tabs"). |
 | **Presentation** | `app/(app)/<route>/<entity>-view.tsx` (+ thin `-table.tsx` loader) | Reads the controller and renders `RecordView`. **Zero fetching or data processing.** |
 
 Two consequences you must preserve:
@@ -98,6 +98,8 @@ The sidebar is driven by `nav-config.ts` (`NAV: NavSection[]`). **Two grouping s
 ## Open tabs
 
 A browser-style strip of opened pages (labelled "Tabs") lives in the shell: `OpenTabsProvider` + `<TabStrip/>` + `<KeepAliveTabs/>` in `app/_components/open-tabs.tsx`, mounted once in `(app)/layout.tsx`. **Keep-alive**: every open page stays mounted (inactive hidden) so switching is instant with no remount/flash and preserved state; new routes mount on first visit. The list persists in `sessionStorage`, capped by `NEXT_PUBLIC_MAX_TABS` (default 5, FIFO-evict oldest + warn). Tab identity is normalized via `tabKey` (trailingSlash-safe). Labels/icons/colors derive from `nav-config.ts` + `route-meta.ts` (no per-tab wiring). Tabs are **drag-reorderable** (FLIP-animated) and **right-click-taggable** with one of seven color labels (order + colors persisted). ⌘/Ctrl-click a sidebar item opens a background tab; for a custom "open in new tab" call `useOpenTabs().openTab(href, { background: true })`. Keep-alive works because the app is a static export (all client at runtime).
+
+**Stale data (keep-alive tradeoff).** A kept-alive controller fetches once on mount and never again, so another user's edit won't show until you reopen the tab. Revalidate with `useRefetchOnActive(routePath, refetch)` (`lib/use-refetch-on-active.ts`) — it re-runs `refetch` when the tab becomes active again or the window regains focus. Make `refetch` a **delta** (`?since=cursor` → only changed rows + deleted ids, merged by `id`), not a full reload; `use-organizations.ts` + `syncOrganizations()` are the reference. This narrows but doesn't close the conflict window — guard the write with optimistic concurrency (version/updatedAt → 409) if conflicts matter.
 
 ## Multi-step wizards
 
