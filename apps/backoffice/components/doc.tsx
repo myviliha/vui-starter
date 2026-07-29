@@ -47,7 +47,7 @@ export function H2({ children }: { children: React.ReactNode }) {
   return (
     <h2
       id={slug(children)}
-      className="mt-10 mb-3 scroll-mt-20 border-b border-border pb-2 text-lg font-semibold tracking-tight text-foreground"
+      className="mt-12 mb-4 scroll-mt-24 border-b border-border pb-2 text-xl font-semibold tracking-tight text-foreground"
     >
       {children}
     </h2>
@@ -58,7 +58,7 @@ export function H3({ children }: { children: React.ReactNode }) {
   return (
     <h3
       id={slug(children)}
-      className="mt-6 mb-2 scroll-mt-20 text-sm font-semibold tracking-tight text-foreground"
+      className="mt-8 mb-2 scroll-mt-24 text-[15px] font-semibold tracking-tight text-foreground"
     >
       {children}
     </h3>
@@ -66,20 +66,20 @@ export function H3({ children }: { children: React.ReactNode }) {
 }
 
 export function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-4 text-sm leading-relaxed text-foreground">{children}</p>;
+  return (
+    <p className="mb-4 text-[15px] leading-7 text-foreground">{children}</p>
+  );
 }
 
 export function Lead({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-6 text-[15px] leading-relaxed text-muted-foreground">
-      {children}
-    </p>
+    <p className="mb-6 text-base leading-7 text-muted-foreground">{children}</p>
   );
 }
 
 export function Ul({ children }: { children: React.ReactNode }) {
   return (
-    <ul className="mb-4 ml-5 list-disc space-y-1.5 text-sm leading-relaxed text-foreground marker:text-[var(--button-primary)]">
+    <ul className="mb-4 ml-5 list-disc space-y-2 text-[15px] leading-7 text-foreground marker:text-[var(--button-primary)]">
       {children}
     </ul>
   );

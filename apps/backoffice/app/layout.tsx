@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — ${SITE.tagline}`,
+    default: `${SITE.name} · ${SITE.tagline}`,
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
     type: "website",
     siteName: SITE.name,
     url: SITE.url,
-    title: `${SITE.name} — ${SITE.tagline}`,
+    title: `${SITE.name} · ${SITE.tagline}`,
     description: SITE.description,
     images: [{ url: SITE.ogImage, alt: SITE.name }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — ${SITE.tagline}`,
+    title: `${SITE.name} · ${SITE.tagline}`,
     description: SITE.description,
     images: [SITE.ogImage],
   },
@@ -102,7 +102,7 @@ export default function RootLayout({
         <BrandProvider>
           <AppAuthProvider>{children}</AppAuthProvider>
         </BrandProvider>
-        {/* Global toast stack — trigger from anywhere with toast(...). */}
+        {/* Global toast stack: trigger from anywhere with toast(...). */}
         <Toaster />
       </body>
     </html>

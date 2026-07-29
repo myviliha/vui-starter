@@ -1,28 +1,30 @@
 import type { Metadata } from "next";
 
+import { COMPONENTS } from "@/app/docs/components/registry";
+
 /** Single source of truth for site-wide SEO. Deployed as a static export to a
  * custom domain (see ../CNAME), so URLs are absolute against SITE.url. */
 export const SITE = {
   // App/brand identity shown in the sidebar, wordmark, auth screens, and the
   // browser-tab metadata (title/description). Override per deployment via env
-  // (NEXT_PUBLIC_ = inlined at build). The tab title is `${name} — ${tagline}`.
+  // (NEXT_PUBLIC_ = inlined at build). The tab title is `${name} · ${tagline}`.
   name: process.env.NEXT_PUBLIC_APP_NAME ?? "Vui Starter",
   tagline:
     process.env.NEXT_PUBLIC_APP_TAGLINE ?? "React Admin & CRM Design System",
-  // Deploy origin — drives metadataBase, canonical URLs, and OG image URLs.
+  // Deploy origin: drives metadataBase, canonical URLs, and OG image URLs.
   // Set NEXT_PUBLIC_APP_URL to your domain (no trailing slash) per deployment.
   url: process.env.NEXT_PUBLIC_APP_URL ?? "https://vui.viliha.com",
   description:
     process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
-    "Vui Starter is a free, open-source React admin & CRM design system — a token-driven component library (@viliha/vui-ui) plus a full backoffice demo.",
+    "Vui Starter is a free, open-source React admin dashboard template and CRM design system for Next.js and Tailwind CSS v4. It pairs the token-driven @viliha/vui-ui component library with a full backoffice demo: datatables, forms, charts, and auth.",
   ogImage: "/brand/pulse-wordmark.png",
   author: "Suman Bonakurthi",
-  // Footer identity — overridable per deployment via env (see .env.example).
+  // Footer identity: overridable per deployment via env (see .env.example).
   // NEXT_PUBLIC_ so the value is inlined into the client bundle at build time.
   company: process.env.NEXT_PUBLIC_COMPANY_NAME ?? "VILIHA PTE. LTD.",
   // Optional link for the company name in the footer (e.g. https://viliha.com).
   companyUrl: process.env.NEXT_PUBLIC_COMPANY_URL ?? "",
-  // Always the current year — inlined at build, so a rebuild/deploy keeps it fresh.
+  // Always the current year: inlined at build, so a rebuild/deploy keeps it fresh.
   copyrightYear: new Date().getFullYear(),
   license: process.env.NEXT_PUBLIC_LICENSE ?? "MIT Licensed",
 } as const;
@@ -48,32 +50,32 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
   "/charts": {
     title: "Charts",
     description:
-      "Chart component showcase — line, bar, area and pie charts styled with Vui Starter design tokens.",
+      "Chart component showcase: line, bar, area and pie charts styled with Vui Starter design tokens.",
   },
   "/components": {
     title: "Components",
     description:
-      "Live component gallery for @viliha/vui-ui — buttons, forms, tables, dialogs, menus and more.",
+      "Live component gallery for @viliha/vui-ui: buttons, forms, tables, dialogs, menus and more.",
   },
   "/forms": {
     title: "Forms",
     description:
-      "Form patterns demo — inputs, selects, validation and multi-step forms built with React Hook Form and vui-ui.",
+      "Form patterns demo: inputs, selects, validation and multi-step forms built with React Hook Form and vui-ui.",
   },
   "/steps": {
     title: "Steps",
     description:
-      "Multi-step wizard demo built on the Steps indicator — stepper, per-step forms and Back/Next in the Vui Starter admin.",
+      "Multi-step wizard demo built on the Steps indicator: stepper, per-step forms and Back/Next in the Vui Starter admin.",
   },
   "/calendar": {
     title: "Calendar",
     description:
-      "Calendar demo — a Google-style month view with appointments you can add and remove, built on the Vui Starter design system.",
+      "Calendar demo: a Google-style month view with appointments you can add and remove, built on the Vui Starter design system.",
   },
   "/settings": {
     title: "Settings",
     description:
-      "Settings screen demo — profile, appearance and preferences in the Vui Starter admin template.",
+      "Settings screen demo: profile, appearance and preferences in the Vui Starter admin template.",
   },
   "/organizations": {
     title: "Organizations",
@@ -83,98 +85,114 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
   "/branches": {
     title: "Branches",
     description:
-      "Branches management screen — an example data table in the Vui Starter React admin template.",
+      "Branches management screen: an example data table in the Vui Starter React admin template.",
   },
   "/departments": {
     title: "Departments",
     description:
-      "Departments management screen — an example data table in the Vui Starter React admin template.",
+      "Departments management screen: an example data table in the Vui Starter React admin template.",
   },
   "/employees": {
     title: "Employees",
     description:
-      "Employees directory demo — a sortable, filterable data table from the Vui Starter admin template.",
+      "Employees directory demo: a sortable, filterable data table from the Vui Starter admin template.",
   },
   "/markets": {
     title: "Markets",
     description:
-      "Markets management screen — an example data table in the Vui Starter React admin template.",
+      "Markets management screen: an example data table in the Vui Starter React admin template.",
   },
   "/businesses": {
     title: "Businesses",
     description:
-      "Businesses management screen — an example data table in the Vui Starter React admin template.",
+      "Businesses management screen: an example data table in the Vui Starter React admin template.",
   },
   "/users": {
     title: "Users",
     description:
-      "User management demo — roles, status and access control in the Vui Starter admin template.",
+      "User management demo: roles, status and access control in the Vui Starter admin template.",
   },
   "/crm/companies": {
     title: "Companies",
     description:
-      "CRM companies demo — manage accounts in the Vui Starter React admin & CRM design system.",
+      "CRM companies demo: manage accounts in the Vui Starter React admin & CRM design system.",
   },
   "/crm/people": {
     title: "People",
     description:
-      "CRM contacts demo — manage people and leads in the Vui Starter React admin & CRM design system.",
+      "CRM contacts demo: manage people and leads in the Vui Starter React admin & CRM design system.",
   },
   "/crm/opportunities": {
     title: "Opportunities",
     description:
-      "CRM pipeline demo — a kanban opportunities board in the Vui Starter admin & CRM design system.",
+      "CRM pipeline demo: a kanban opportunities board in the Vui Starter admin & CRM design system.",
   },
   "/system/regions": {
     title: "Regions",
     description:
-      "System regions reference data — an example data table in the Vui Starter admin.",
+      "System regions reference data: an example data table in the Vui Starter admin.",
   },
   "/system/countries": {
     title: "Countries",
     description:
-      "System countries reference data — an example data table in the Vui Starter admin.",
+      "System countries reference data: an example data table in the Vui Starter admin.",
   },
   "/system/cities": {
     title: "Cities",
     description:
-      "System cities reference data — an example data table in the Vui Starter admin.",
+      "System cities reference data: an example data table in the Vui Starter admin.",
   },
   "/system/currencies": {
     title: "Currencies",
     description:
-      "System currencies reference data — an example data table in the Vui Starter admin.",
+      "System currencies reference data: an example data table in the Vui Starter admin.",
   },
   "/system/languages": {
     title: "Languages",
     description:
-      "System languages reference data — an example data table in the Vui Starter admin.",
+      "System languages reference data: an example data table in the Vui Starter admin.",
   },
 };
 
-/** All public routes, for the sitemap. */
-export const PUBLIC_ROUTES: string[] = [
-  "/",
-  ...Object.keys(ROUTE_META),
+/** Every docs route, so the sitemap covers the whole site. Component pages are
+ * generated from the registry (the single source), so adding a component page
+ * lists it here automatically. Keep the top-level entries in sync with the
+ * pages under `app/docs/**`. */
+const DOCS_ROUTES: string[] = [
   "/docs",
   "/docs/installation",
   "/docs/configuration",
   "/docs/theming",
   "/docs/layout",
-  "/docs/components",
+  "/docs/navigation",
   "/docs/data-table",
-  "/docs/changelog",
+  "/docs/components",
+  ...COMPONENTS.map((c) => `/docs/components/${c.slug}`),
   "/docs/steps",
   "/docs/charts",
   "/docs/auth",
+  "/docs/blocks",
+  "/docs/calendar",
+  "/docs/chat",
+  "/docs/typeset",
   "/docs/shadcn-ui",
   "/docs/ai-agents",
   "/docs/templates",
+  "/docs/support",
+  "/docs/sponsor",
+  "/docs/changelog",
   "/docs/contributing",
 ];
 
+/** All public routes, for the sitemap. */
+export const PUBLIC_ROUTES: string[] = [
+  "/",
+  ...Object.keys(ROUTE_META),
+  ...DOCS_ROUTES,
+];
+
 /** Self-referencing canonical for a route. The app is exported with
- * `trailingSlash: true`, so pages are served at `/foo/` — the canonical must
+ * `trailingSlash: true`, so pages are served at `/foo/`: the canonical must
  * match that exactly, otherwise it points at a URL the host 301s away from. */
 export function canonicalFor(path: string): string {
   return path === "/" ? "/" : `${path}/`;
