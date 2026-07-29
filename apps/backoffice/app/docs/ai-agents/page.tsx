@@ -52,7 +52,7 @@ export default function AiAgentsPage() {
       </P>
       <CodeBlock title="wire up the guide (recommended)">{`# after: npm install @viliha/vui-ui
 cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md
-# or ./AGENTS.md — now your agent reads it automatically`}</CodeBlock>
+# or ./AGENTS.md, and your agent reads it automatically`}</CodeBlock>
       <P>
         Prefer a self-contained copy over the <code>@import</code>? Copy{" "}
         <code>AGENT.md</code> itself:

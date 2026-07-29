@@ -74,7 +74,7 @@ export default function Page() {
       <CodeBlock title="breadcrumb-demo.tsx">{usage}</CodeBlock>
       <Note title="App breadcrumbs">
         For route-derived app breadcrumbs, VUI also ships a higher-level{" "}
-        <code>Breadcrumbs</code> component fed a trail — see the app shell. This
+        <code>Breadcrumbs</code> component fed a trail; see the app shell. This
         primitive is for hand-composed trails.
       </Note>
 

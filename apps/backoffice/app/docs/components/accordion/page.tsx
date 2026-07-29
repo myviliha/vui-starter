@@ -52,7 +52,7 @@ export default function Page() {
           <AccordionItem value="b">
             <AccordionTrigger>Is it styled?</AccordionTrigger>
             <AccordionContent>
-              Yes — it uses VUI design tokens out of the box, in light and dark.
+              Yes. It uses VUI design tokens out of the box, in light and dark.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="c">

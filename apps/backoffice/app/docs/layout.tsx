@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import { DocsShell } from "@/components/docs-shell";
 
 /**
- * Docs use the Geist typeface (shadcn-style), scoped to this section only — the
+ * Docs use the Geist typeface (shadcn-style), scoped to this section only; the
  * admin app keeps its own brand fonts. We override the `--font-sans`/`--font-mono`
  * tokens on the docs subtree so every Tailwind `font-*` utility inside resolves
  * to Geist.

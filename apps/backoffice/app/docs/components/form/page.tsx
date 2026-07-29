@@ -104,7 +104,7 @@ export default function Page() {
       <CodeBlock title="form-demo.tsx">{usage}</CodeBlock>
       <Note title="Validation">
         Use RHF <code>rules</code> (shown here) or plug in a schema resolver like
-        <code> zod</code> via <code>@hookform/resolvers</code> — both are
+        <code> zod</code> via <code>@hookform/resolvers</code>; both are
         consumer-side; the package only depends on <code>react-hook-form</code>.
       </Note>
 

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/typeset/" },
   title: "Typeset",
   description:
-    "The documentation typography — the Geist type scale used across these docs.",
+    "The documentation typography: the Geist type scale used across these docs.",
 };
 
 const SCALE = [
@@ -40,10 +40,10 @@ export default function TypesetPage() {
 
       <H2>Weights</H2>
       <div className="space-y-2 rounded-lg border border-border bg-card p-6 text-lg">
-        <p className="font-normal">Regular — 400</p>
-        <p className="font-medium">Medium — 500</p>
-        <p className="font-semibold">Semibold — 600</p>
-        <p className="font-bold">Bold — 700</p>
+        <p className="font-normal">Regular (400)</p>
+        <p className="font-medium">Medium (500)</p>
+        <p className="font-semibold">Semibold (600)</p>
+        <p className="font-bold">Bold (700)</p>
       </div>
 
       <H2>Monospace</H2>

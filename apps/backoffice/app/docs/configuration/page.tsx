@@ -38,7 +38,7 @@ export default function ConfigurationPage() {
 NEXT_PUBLIC_COMPANY_NAME="Acme Inc."
 NEXT_PUBLIC_COMPANY_URL="https://acme.com"   # links the company name in the footer
 NEXT_PUBLIC_LICENSE="All rights reserved"
-# The copyright year is automatic (current/build year) — no env needed.
+# The copyright year is automatic (current/build year); no env needed.
 
 NEXT_PUBLIC_LOGO_URL="/logo.svg"             # your logo from /public; else built-in mark
 
@@ -48,7 +48,7 @@ NEXT_PUBLIC_FOOTER_NOTICE="© 2026 Acme Inc. · All rights reserved"
 # Max pages kept open in the tab strip (default 5, min 1):
 NEXT_PUBLIC_MAX_TABS="5"
 
-# How a collapsed sidebar rail reveals a group's sub-items — inline,
+# How a collapsed sidebar rail reveals a group's sub-items: inline,
 # flyout-click, or flyout-hover (default flyout-hover):
 NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
       <Ul>
@@ -95,7 +95,7 @@ NEXT_PUBLIC_SIDEBAR_GROUP_MODE="flyout-hover"`}</CodeBlock>
         Rename the app with a few env vars. They drive the brand name shown in
         the sidebar, the wordmark, the auth/onboarding screens, and the{" "}
         <strong>browser-tab metadata</strong> (the tab title is{" "}
-        <code>&lt;name&gt; — &lt;tagline&gt;</code>):
+        <code>&lt;name&gt; · &lt;tagline&gt;</code>):
       </P>
       <CodeBlock title=".env.local">{`NEXT_PUBLIC_APP_NAME="Acme Console"
 NEXT_PUBLIC_APP_TAGLINE="Operations Platform"
@@ -170,7 +170,7 @@ useEffect(() => {
       <H3>Favicon (browser-tab icon)</H3>
       <P>
         The static icons in <code>app/</code> (<code>icon.svg</code>,{" "}
-        <code>icon.png</code>, <code>apple-icon.png</code>) are the default —
+        <code>icon.png</code>, <code>apple-icon.png</code>) are the default,
         replace those files to change the icon at build time. To make it{" "}
         <strong>configurable</strong> the same way as the rest of the brand, set a
         favicon URL and <code>BrandProvider</code> swaps the tab icon:
@@ -178,11 +178,11 @@ useEffect(() => {
       <CodeBlock title=".env.local">{`NEXT_PUBLIC_FAVICON_URL="/favicon.png"`}</CodeBlock>
       <Ul>
         <li>
-          <strong>From env</strong> — drop the file in <code>public/</code> and set{" "}
+          <strong>From env</strong>: drop the file in <code>public/</code> and set{" "}
           <code>NEXT_PUBLIC_FAVICON_URL</code>, then rebuild.
         </li>
         <li>
-          <strong>From an API / database</strong> (per tenant) — return{" "}
+          <strong>From an API / database</strong> (per tenant): return{" "}
           <code>faviconUrl</code> in your branding JSON (or call{" "}
           <code>useBrand().setBrand({"{ faviconUrl }"})</code>). The tab icon
           updates live, no rebuild.
@@ -207,7 +207,7 @@ useEffect(() => {
       <P>
         <code>NEXT_PUBLIC_MAX_CELL_CHARS</code> sets how many characters a{" "}
         <code>RecordView</code> cell shows before it truncates to{" "}
-        <strong>one line</strong> with an ellipsis and a hover tooltip — long text
+        <strong>one line</strong> with an ellipsis and a hover tooltip; long text
         never wraps to a second row. Default 25. Override per table with the{" "}
         <code>maxCellChars</code> prop, or per column with a field&apos;s{" "}
         <code>maxChars</code> (<code>0</code> disables truncation for that column).

@@ -19,7 +19,7 @@ import {
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/" },
-  title: "Vui UI — the foundation for your admin app",
+  title: "Vui UI: the foundation for your admin app",
   description:
     "A token-driven React admin & CRM design system: components, datatables, charts, and a full backoffice demo. Open source, ships as source.",
 };
@@ -79,7 +79,7 @@ export default function DocsHome() {
           >
             working demo app
           </Link>{" "}
-          — real datatables, forms, charts, and auth screens.
+          with real datatables, forms, charts, and auth screens.
         </p>
       </div>
 
@@ -189,7 +189,7 @@ export default function DocsHome() {
             Support the project
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            VUI is free and open source — sponsorship keeps it maintained.
+            VUI is free and open source; sponsorship keeps it maintained.
           </p>
         </div>
         <iframe

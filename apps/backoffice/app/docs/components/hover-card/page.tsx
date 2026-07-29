@@ -45,7 +45,7 @@ export default function Page() {
           <HoverCardContent>
             <p className="text-sm font-semibold">Viliha</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              The open-source admin design system — components, datatables, and a
+              The open-source admin design system: components, datatables, and a
               full backoffice demo.
             </p>
           </HoverCardContent>
@@ -56,7 +56,7 @@ export default function Page() {
       <Install slug="hover-card" />
 
       <H2>Usage</H2>
-      <P>Preview content on hover — best for supplementary, non-essential info.</P>
+      <P>Preview content on hover: best for supplementary, non-essential info.</P>
       <CodeBlock title="hover-card-demo.tsx">{usage}</CodeBlock>
 
       <ComponentDocFooter slug="hover-card" />

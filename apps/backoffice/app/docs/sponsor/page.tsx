@@ -94,8 +94,8 @@ export default function SponsorPage() {
 
       <P>
         VUI Starter is a <strong>production-ready, enterprise-grade</strong> admin
-        &amp; SaaS theme — the kind of UI system that usually sits behind a paywall
-        — built over many hours and given away <strong>free and open source</strong>.
+        &amp; SaaS theme: the kind of UI system that usually sits behind a paywall
+        built over many hours and given away <strong>free and open source</strong>.
         If it saved you time or helped ship your product, a sponsorship is the best
         way to say thank you. Even <strong>$1</strong> genuinely helps: it funds new
         components, documentation, and maintenance, and it&apos;s a real motivation
@@ -104,7 +104,7 @@ export default function SponsorPage() {
       </P>
 
       <H2>Sponsors</H2>
-      <P>Sponsors are featured here — be the first to claim a spot.</P>
+      <P>Sponsors are featured here. Be the first to claim a spot.</P>
       <div className="mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-dashed border-border p-6">
         <a
           href={SPONSORS_URL}
@@ -128,7 +128,7 @@ export default function SponsorPage() {
       <H2>Why sponsor</H2>
       <P>
         VUI is developed and maintained by a small, independent team. There is no
-        company behind it — sponsorship is what pays for the time to keep building.
+        company behind it; sponsorship is what pays for the time to keep building.
       </P>
 
       <H2>What your sponsorship supports</H2>
@@ -141,7 +141,7 @@ export default function SponsorPage() {
 
       <H2>Tiers</H2>
       <P>
-        Monthly or one-time — pick what fits. Custom amounts start at $1, and
+        Monthly or one-time, pick what fits. Custom amounts start at $1, and
         every card links straight to GitHub Sponsors checkout.
       </P>
 
@@ -161,13 +161,13 @@ export default function SponsorPage() {
         <TierCard amount="$10" perk="One bug or medium-sized bounty" />
         <TierCard
           amount="$100"
-          perk="Large contract project — contact me!"
+          perk="Large contract project: contact me!"
           featured
         />
       </div>
 
       <Note title="Thank you" variant="tip">
-        Every sponsorship — big or small — directly funds the next release. Thank
+        Every sponsorship, big or small, directly funds the next release. Thank
         you for supporting open source.
       </Note>
 
@@ -191,7 +191,7 @@ export default function SponsorPage() {
         >
           React
         </a>{" "}
-        — VUI builds on their ideas and components, and wouldn&apos;t exist
+        VUI builds on their ideas and components, and wouldn&apos;t exist
         without them.
       </P>
 

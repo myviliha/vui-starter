@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/blocks/" },
   title: "Blocks",
   description:
-    "Prebuilt, full-page compositions — the five VUI page types you assemble screens from.",
+    "Prebuilt, full-page compositions: the five VUI page types you assemble screens from.",
 };
 
 const BLOCKS = [
@@ -19,7 +19,7 @@ const BLOCKS = [
   },
   {
     title: "Record form",
-    body: "Add / Edit / View a record — slide-over or full-page — generated from the same fields array.",
+    body: "Add / Edit / View a record (slide-over or full-page) generated from the same fields array.",
     href: "/branches",
   },
   {
@@ -29,7 +29,7 @@ const BLOCKS = [
   },
   {
     title: "Settings",
-    body: "A single bordered card of sections with a fixed Save footer — a form with a Save button, not a list.",
+    body: "A single bordered card of sections with a fixed Save footer: a form with a Save button, not a list.",
     href: "/settings",
   },
   {
@@ -45,7 +45,7 @@ export default function BlocksPage() {
       <PageTitle
         eyebrow="Reference"
         title="Blocks"
-        lead="Blocks are full-page compositions — the five page types you assemble real screens from. Each one is a documented pattern in the reference app; copy it and swap in your data."
+        lead="Blocks are full-page compositions: the five page types you assemble real screens from. Each one is a documented pattern in the reference app; copy it and swap in your data."
       />
 
       <H2>Page types</H2>

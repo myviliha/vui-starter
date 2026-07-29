@@ -67,7 +67,7 @@ export default function Page() {
       <CodeBlock title="sonner-demo.tsx">{usage}</CodeBlock>
       <Note title="Theme">
         VUI&apos;s <code>Toaster</code> follows the <code>.dark</code> class on{" "}
-        <code>&lt;html&gt;</code> — no <code>next-themes</code> needed.
+        <code>&lt;html&gt;</code>; no <code>next-themes</code> needed.
       </Note>
 
       <ComponentDocFooter slug="sonner" />

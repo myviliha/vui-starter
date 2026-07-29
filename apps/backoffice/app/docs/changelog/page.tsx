@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/changelog/" },
   title: "Change Log",
   description:
-    "Release history for @viliha/vui-ui — every version's new features, changes, and fixes, pulled straight from the package CHANGELOG so it never drifts from what shipped.",
+    "Release history for @viliha/vui-ui: every version's new features, changes, and fixes, pulled straight from the package CHANGELOG so it never drifts from what shipped.",
 };
 
 // Single source of truth: read the package CHANGELOG at build time. Docs pages
@@ -20,7 +20,7 @@ const CHANGELOG = fs.readFileSync(
 );
 
 /** Parse the Keep-a-Changelog markdown into typed releases (the intro boilerplate
- *  is ignored — the page provides its own). Rendering happens in the client view. */
+ *  is ignored; the page provides its own). Rendering happens in the client view. */
 function parseReleases(md: string): Release[] {
   const lines = md.split("\n");
   const releases: Release[] = [];
@@ -71,7 +71,7 @@ export default function ChangelogPage() {
       <PageTitle
         eyebrow="Community"
         title="Change Log"
-        lead="What's new in @viliha/vui-ui — features, changes, and fixes, newest first. Rendered straight from the package changelog, so it always matches what actually shipped. Filter by change type, or browse by release."
+        lead="What's new in @viliha/vui-ui: features, changes, and fixes, newest first. Rendered straight from the package changelog, so it always matches what actually shipped. Filter by change type, or browse by release."
       />
       <ChangelogView releases={releases} />
       <DocPager

@@ -78,7 +78,7 @@ export default function NavigationDocPage() {
       </P>
 
       <CodeBlock title="nav-config.ts">{`export const NAV: NavSection[] = [
-  // Section with NO title — always-visible top-level links + one collapsible group
+  // Section with NO title: always-visible top-level links + one collapsible group
   {
     items: [
       { label: "Home", href: "/dashboard", icon: Home, color: "text-blue-500" },
@@ -95,7 +95,7 @@ export default function NavigationDocPage() {
       },
     ],
   },
-  // Section WITH a title heading — a static labeled band of links
+  // Section WITH a title heading: a static labeled band of links
   {
     title: "Records",
     items: [
@@ -131,7 +131,7 @@ export default function NavigationDocPage() {
         <strong>keep-alive</strong>: every opened page stays mounted (inactive ones
         hidden), so switching tabs is instant (no remount, no flash) and each
         page keeps its live state, from scroll position to form input to active
-        filters — including data already fetched from a server, which is{" "}
+        filters, including data already fetched from a server, which is{" "}
         <strong>not re-fetched</strong> when you return to the tab. New routes
         mount on first visit; a route&apos;s element is cached once and reused, so
         returning never remounts it (within <code>NEXT_PUBLIC_MAX_TABS</code>).

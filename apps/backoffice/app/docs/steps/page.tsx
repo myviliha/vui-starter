@@ -82,11 +82,11 @@ function Steps(props: {
       <H2>Wizard scaffold</H2>
       <P>
         <code>Steps</code> is only the indicator. For a full multi-step form use
-        the <strong>wizard scaffold</strong> (<code>@viliha/vui-ui/wizard</code>) —
+        the <strong>wizard scaffold</strong> (<code>@viliha/vui-ui/wizard</code>),
         it&apos;s <strong>layout only</strong>, so you keep your own step index,
         field state, and logic and drop any components inside. <code>Wizard</code>{" "}
         gives you the stepper, a scrolling body, and a Back/Next footer;{" "}
-        <code>WizardSection</code> is a bordered title/icon card — put{" "}
+        <code>WizardSection</code> is a bordered title/icon card: put{" "}
         <strong>one or many per step</strong>. Fields go in a{" "}
         <code>FieldGrid</code> as the two-column{" "}
         <code>Label&nbsp;*&nbsp;│&nbsp;control</code> standard (from{" "}
@@ -129,7 +129,7 @@ function Onboarding() {
   );
 }`}</CodeBlock>
       <Note title="Layout, not a form engine">
-        The scaffold never touches your data — no values, validation, or
+        The scaffold never touches your data: no values, validation, or
         submission. That stays yours; the wizard just guarantees the structure
         and the two-column field design. A live example is the{" "}
         <a href="/demo" className="font-medium text-foreground underline">
