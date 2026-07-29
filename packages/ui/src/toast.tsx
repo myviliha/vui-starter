@@ -137,7 +137,12 @@ export function Toaster() {
     () => items,
     () => items,
   );
-  if (typeof document === "undefined") return null;
+  // Render nothing until mounted, so the FIRST client render matches the
+  // server's `null` (a bare `typeof document` check doesn't — `document` exists
+  // during hydration, so the portal would appear on the client only → mismatch).
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return createPortal(
     <div
       role="region"

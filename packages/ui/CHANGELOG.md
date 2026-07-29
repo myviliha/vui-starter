@@ -17,6 +17,14 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
   the message). The `[aria-invalid]` selector out-specifies the base border, so
   no `!important` is needed.
 
+### Fixed
+
+- **`Toaster` hydration mismatch** — the portal was gated on
+  `typeof document === "undefined"`, which is `false` during client hydration,
+  so the toast region rendered on the client but not the server. Now gated on a
+  mounted flag, so the first client render matches the server (`null`) and the
+  portal mounts in an effect.
+
 ## 1.25.1 — 2026-07-28
 
 ### Added
