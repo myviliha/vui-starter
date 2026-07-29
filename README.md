@@ -5,30 +5,24 @@
 [![license](https://img.shields.io/npm/l/@viliha/vui-ui)](./LICENSE)
 [![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
 
-## ❤️ Please sponsor Vui Starter — this is how it stays free
+## ❤️ Sponsoring is what keeps Vui free
 
-**Vui is a production-ready, enterprise-grade admin & SaaS theme — the kind of UI
-system that is normally sold behind a paywall. Right now, no one else is giving
-away a theme at this level for free. We are — under the MIT license, for
-everyone.**
+Vui is an enterprise-grade admin & SaaS theme — the kind of thing that's usually
+sold, not given away. We keep it free under MIT, and sponsors are what make that
+possible.
 
-Every component, design token, datatable, chart, auth screen, and doc is
-hand-crafted, and it takes an enormous amount of effort and personal time to
-build it and keep it enterprise-ready. We give it to you at no cost; in return we
-ask for one thing — **your support**. If Vui saves you time or helps ship your
-product, please **sponsor the project**. It's the clearest way to say "this was
-worth it," and it's what makes the next release possible.
+The components, tokens, datatable, auth screens, and docs all take real time to
+build and keep in good shape. We give them away so you don't have to build or buy
+your own — so if Vui saved you time or helped you ship, the best thank-you is to
+sponsor the project.
 
-**Even $1 genuinely matters.** It funds new components and features, keeps the
-docs and the live demo current, pays for maintenance and bug fixes — and, hand on
-heart, it's real motivation to keep building in the open. If everyone using Vui
-chipped in a little, it would change everything.
+**Even $1 helps.** It goes toward new components, bug fixes, and keeping the docs
+and demo current — and, honestly, it's what keeps us building in the open. If a
+fraction of the people using Vui chipped in, that would be plenty.
 
-> We build this for the community. **Sponsoring keeps it alive, free, and
-> improving** — please chip in if you can. Your name/logo can appear on our
-> sponsors wall, too.
+> Sponsors get a spot on the wall — name and logo — and our genuine thanks.
 
-### 👉 [Become a sponsor on GitHub →](https://github.com/sponsors/myviliha) &nbsp;·&nbsp; thank you 🙏❤️
+### 👉 [Sponsor on GitHub →](https://github.com/sponsors/myviliha) &nbsp;·&nbsp; thank you 🙏
 
 ---
 

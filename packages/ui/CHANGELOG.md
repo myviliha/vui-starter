@@ -7,6 +7,14 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.34.1 — 2026-07-29
+
+### Changed
+
+- **README** — rewrote the Sponsor section in a plainer, human voice: dropped
+  the stacked superlatives and marketing phrasing, kept the ask (free under MIT,
+  real effort, even $1 helps, sponsors wall). Mirrors the repo README. Docs-only.
+
 ## 1.34.0 — 2026-07-29
 
 ### Added
