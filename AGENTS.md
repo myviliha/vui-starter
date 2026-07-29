@@ -174,6 +174,7 @@ Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs"
 - Author is **Suman Bonakurthi**. Do **not** add a Claude/AI co-author trailer or attribution.
 - Small, focused commits with imperative messages (`feat(ui): …`, `fix(backoffice): …`).
 - Branch off `main`; open a PR using `.github/PULL_REQUEST_TEMPLATE.md`.
+- **One feature, one fresh branch — and clean up the old ones first (mandatory).** Before starting new work, delete the local branches that are already merged into `main`, then branch off an up-to-date `main`. The goal is a tidy tree: just `main` plus the branch you're working on. Only ever delete **merged** branches — list them with `git branch --merged main` (exclude `main` and your current branch) and delete with `git branch -d`. **Never** delete a branch that still has unmerged commits, and never touch remote branches or history — this is local cleanup only.
 
 ## Performance defaults
 
