@@ -103,10 +103,7 @@ export default function DocsHome() {
             <div className="flex items-center gap-3">
               <Badge variant="success">Active</Badge>
               <Badge variant="muted">Draft</Badge>
-              <div className="ml-auto flex items-center gap-2">
-                <Switch defaultChecked />
-                <Switch size="sm" />
-              </div>
+              <Switch defaultChecked className="ml-auto" />
             </div>
           </div>
         </Cell>

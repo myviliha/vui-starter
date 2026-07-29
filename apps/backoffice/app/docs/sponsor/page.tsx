@@ -92,6 +92,17 @@ export default function SponsorPage() {
         />
       </div>
 
+      <P>
+        VUI Starter is a <strong>production-ready, enterprise-grade</strong> admin
+        &amp; SaaS theme — the kind of UI system that usually sits behind a paywall
+        — built over many hours and given away <strong>free and open source</strong>.
+        If it saved you time or helped ship your product, a sponsorship is the best
+        way to say thank you. Even <strong>$1</strong> genuinely helps: it funds new
+        components, documentation, and maintenance, and it&apos;s a real motivation
+        to keep building in the open. If everyone using VUI chipped in a little, it
+        would make a world of difference.
+      </P>
+
       <H2>Sponsors</H2>
       <P>Sponsors are featured here — be the first to claim a spot.</P>
       <div className="mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-dashed border-border p-6">

@@ -14,6 +14,21 @@ and open-source admin design system.
 
 [![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
 
+## ❤️ Support VUI
+
+VUI Starter is a **production-ready, enterprise-grade** admin & SaaS theme — the
+kind of UI system that usually sits behind a paywall — built over many hours and
+released **free and open source** under MIT.
+
+If it saves you time or helps ship your product, a sponsorship is the best way to
+say thank you. Even **$1** genuinely helps: it funds new components,
+documentation, and maintenance, and — honestly — it's a real motivation to keep
+building in the open. If everyone using VUI chipped in a little, it would make a
+world of difference.
+
+**[❤️ Sponsor on GitHub →](https://github.com/sponsors/myviliha)** — thank you for
+supporting independent open source.
+
 ## Install
 
 ```bash

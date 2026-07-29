@@ -11,9 +11,9 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
 ### Changed
 
-- **README** — add a GitHub Sponsors badge/link, emphasize the live demo app,
-  and add an acknowledgments section (inspired by / thanks to shadcn/ui + React).
-  Docs-only; no component changes.
+- **README** — add a GitHub Sponsors badge/link, a "Support VUI" section, an
+  acknowledgments section (inspired by / thanks to shadcn/ui + React), and
+  emphasize the live demo app. Docs-only; no component changes.
 
 ## 1.30.0 — 2026-07-29
 
