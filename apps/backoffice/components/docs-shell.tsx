@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, HeartFilledIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@viliha/vui-ui/utils";
 import { Wordmark as BrandWordmark } from "@/app/_components/wordmark";
@@ -197,6 +197,14 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           >
             <GitHubLogoIcon className="size-5" />
           </a>
+          <Link
+            href="/docs/sponsor"
+            title="Sponsor VUI"
+            className="flex h-8 items-center gap-1.5 rounded-md bg-[#db61a2] px-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#c8508f]"
+          >
+            <HeartFilledIcon className="size-3.5" />
+            <span className="hidden sm:inline">Sponsor</span>
+          </Link>
           <Link
             href="/dashboard"
             title="Open the full working demo app"
