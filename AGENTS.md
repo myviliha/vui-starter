@@ -141,7 +141,7 @@ To change the trail, edit `nav-config.ts` (structure/order) and the label/color 
 7. **Lists/menus:** use `Menu`/`MenuItem` (bordered-row standard) or the shared `Dropdown`/`Select`; don't hand-roll list borders.
 8. **Icons:** Radix Icons (`@radix-ui/react-icons`) for app chrome; leave shadcn's internal Lucide icons as-is.
 9. **Comment deliberate no-ops** (e.g. clipboard/storage `catch`). Never silently swallow errors elsewhere.
-10. **Changelog + docs on every change (mandatory — see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change — and, after writing them, you **re-read and humanize** the prose (plain, human voice; no AI tells). See the humanize rule in "Changelog & docs".
+10. **Changelog + docs on every change (mandatory; see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change. After writing them, you **re-read and humanize** the prose (plain, human voice, no AI tells, and no em dashes). See the humanize rule in "Changelog & docs".
 
 ## Changelog & docs — mandatory on every change (never skip)
 
@@ -154,7 +154,14 @@ Any change that adds, changes, removes, or fixes behaviour **must** update the d
    - the reference/agent docs (`README.md`, `CONTRIBUTING.md`, this `AGENTS.md`) when the workflow or rules change.
    - requirement templates in `apps/backoffice/public/templates/**` when a page/feature pattern changes.
 3. **A new `init` scaffolder feature or new demo page** must also be reflected in the shipped `template/` (it regenerates from `apps/backoffice` on publish) and documented in `AGENT.md` + the docs.
-4. **After writing any docs, check and humanize them (mandatory).** Once you've drafted the prose — READMEs, CHANGELOG entries, docs-site pages, reader-facing comments, this file — go back and re-read it before committing, then rewrite anything that sounds machine-generated. This is a required final pass, not optional: use plain, direct language; vary sentence length; cut filler and the usual AI tells ("delve", "seamless", "robust", "leverage", "in today's fast-paced…", "it's worth noting", hedging, padded bullet lists); favour a concrete example over an abstract claim; match the voice already in the repo. If a sentence sounds like boilerplate, rewrite it or delete it. Applies to **every** doc surface above — no exceptions.
+4. **After writing any docs, check and humanize them (mandatory).** Once the prose is drafted (READMEs, CHANGELOG entries, docs-site pages, reader-facing comments, this file), re-read it before committing and rewrite anything that sounds machine-generated. This is a required final pass, not optional. In that pass:
+   - **Remove every em dash (the `—` character) used as punctuation, no exceptions.** It is the single biggest AI tell. Rewrite around it with a comma, a colon, parentheses, or by splitting into two sentences. The only acceptable `—` is a literal reference to the character itself, as in this rule.
+   - Use plain, direct language and vary sentence length.
+   - Cut filler and the usual AI tells: "delve", "seamless", "robust", "leverage", "in today's fast-paced…", "it's worth noting", hedging, padded bullet lists.
+   - Prefer a concrete example over an abstract claim, and match the voice already in the repo.
+   - If a sentence reads like boilerplate, rewrite it or delete it.
+
+   Applies to every doc surface above, no exceptions.
 
 If you're unsure whether a doc applies, it does — update it. A change that touches code but no docs/changelog is incomplete.
 
@@ -174,7 +181,7 @@ Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs"
 - Author is **Suman Bonakurthi**. Do **not** add a Claude/AI co-author trailer or attribution.
 - Small, focused commits with imperative messages (`feat(ui): …`, `fix(backoffice): …`).
 - Branch off `main`; open a PR using `.github/PULL_REQUEST_TEMPLATE.md`.
-- **One feature, one fresh branch — and clean up the old ones first (mandatory).** Before starting new work, delete the local branches that are already merged into `main`, then branch off an up-to-date `main`. The goal is a tidy tree: just `main` plus the branch you're working on. Only ever delete **merged** branches — list them with `git branch --merged main` (exclude `main` and your current branch) and delete with `git branch -d`. **Never** delete a branch that still has unmerged commits, and never touch remote branches or history — this is local cleanup only.
+- **One feature, one fresh branch, and clean up the old ones first (mandatory).** Before starting new work, delete the local branches already merged into `main`, then branch off an up-to-date `main`. The goal is a tidy tree: just `main` plus the branch you are working on. Only ever delete **merged** branches: list them with `git branch --merged main` (excluding `main` and the current branch) and delete with `git branch -d`. **Never** delete a branch with unmerged commits, and never touch remote branches or history. This is local cleanup only.
 
 ## Performance defaults
 
