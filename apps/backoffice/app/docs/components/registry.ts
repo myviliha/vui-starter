@@ -1,5 +1,5 @@
 /**
- * Registry of documented components — the single source that drives the docs
+ * Registry of documented components: the single source that drives the docs
  * sidebar "Components" list and each component page's prev/next pager. Order
  * here is the order shown in the sidebar. Add a component by adding one entry
  * plus its page at `app/docs/components/<slug>/page.tsx`.
@@ -18,157 +18,157 @@ export const COMPONENTS: ComponentMeta[] = [
     slug: "accordion",
     title: "Accordion",
     description:
-      "A vertically stacked set of interactive headings that each reveal a section of content.",
+      "Accordion is a vertically stacked set of headings, each revealing a section of content when you open it.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/accordion",
   },
   {
     slug: "alert",
     title: "Alert",
-    description: "Displays a callout for user attention.",
+    description: "Alert is a callout that highlights an important message to the user.",
   },
   {
     slug: "alert-dialog",
     title: "Alert Dialog",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Alert Dialog is a modal that interrupts the user with important content and waits for a response before continuing.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/alert-dialog",
   },
   {
     slug: "aspect-ratio",
     title: "Aspect Ratio",
-    description: "Displays content within a desired ratio.",
+    description: "Aspect Ratio locks its content to a fixed width-to-height ratio, such as 16:9.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/aspect-ratio",
   },
   {
     slug: "breadcrumb",
     title: "Breadcrumb",
-    description: "Displays the path to the current resource using a hierarchy of links.",
+    description: "Breadcrumb shows the path to the current page as a row of linked parent levels.",
   },
   {
     slug: "calendar",
     title: "Calendar",
     description:
-      "A date field component that allows users to enter and edit dates.",
+      "Calendar is a date picker for selecting a single date, several dates, or a range.",
   },
   {
     slug: "collapsible",
     title: "Collapsible",
-    description: "An interactive component which expands/collapses a panel.",
+    description: "Collapsible is a control that shows or hides a single panel of content.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/collapsible",
   },
   {
     slug: "command",
     title: "Command",
-    description: "Fast, composable, unstyled command menu for React.",
+    description: "Command is a fast, composable command menu (the kind behind a Cmd+K palette) for searching and running actions.",
   },
   {
     slug: "form",
     title: "Form",
-    description: "Building forms with React Hook Form and accessible field wiring.",
+    description: "Form wires React Hook Form to accessible fields, labels, and validation messages.",
   },
   {
     slug: "hover-card",
     title: "Hover Card",
-    description: "For sighted users to preview content available behind a link.",
+    description: "Hover Card previews the content behind a link when the user hovers over it.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/hover-card",
   },
   {
     slug: "input-otp",
     title: "Input OTP",
     description:
-      "Accessible one-time-password input with copy-paste functionality.",
+      "Input OTP is an accessible one-time-password field with per-digit boxes and paste support.",
   },
   {
     slug: "label",
     title: "Label",
-    description: "Renders an accessible label associated with a control.",
+    description: "Label renders an accessible caption tied to a form control.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/label",
   },
   {
     slug: "popover",
     title: "Popover",
-    description: "Displays rich content in a portal, triggered by a button.",
+    description: "Popover shows rich content in a floating panel, anchored to the button that opens it.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/popover",
   },
   {
     slug: "progress",
     title: "Progress",
     description:
-      "Displays an indicator showing the completion progress of a task.",
+      "Progress is a horizontal bar that shows how far a task has completed.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/progress",
   },
   {
     slug: "radio-group",
     title: "Radio Group",
     description:
-      "A set of checkable buttons where no more than one can be checked at a time.",
+      "Radio Group is a set of options where the user can select exactly one.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/radio-group",
   },
   {
     slug: "scroll-area",
     title: "Scroll Area",
-    description: "Augments native scroll functionality for custom, cross-browser styling.",
+    description: "Scroll Area is a scrollable container with consistent, cross-browser custom scrollbars.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/scroll-area",
   },
   {
     slug: "separator",
     title: "Separator",
-    description: "Visually or semantically separates content.",
+    description: "Separator is a thin line that divides content, horizontally or vertically.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/separator",
   },
   {
     slug: "sheet",
     title: "Sheet",
     description:
-      "Extends the Dialog to display content that complements the main content of the screen.",
+      "Sheet is a dialog that slides in from an edge of the screen (top, right, bottom, or left).",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/dialog",
   },
   {
     slug: "skeleton",
     title: "Skeleton",
-    description: "Use to show a placeholder while content is loading.",
+    description: "Skeleton is a placeholder shape that stands in for content while it loads.",
   },
   {
     slug: "slider",
     title: "Slider",
     description:
-      "An input where the user selects a value from within a given range.",
+      "Slider is an input for choosing a value, or a range, by dragging along a track.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/slider",
   },
   {
     slug: "sonner",
     title: "Sonner",
-    description: "An opinionated toast component for React.",
+    description: "Sonner is a toast notification system for React, an alternative to the built-in toast.",
   },
   {
     slug: "switch",
     title: "Switch",
     description:
-      "A control that allows the user to toggle between checked and not checked.",
+      "Switch is an on/off toggle for a single setting.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/switch",
   },
   {
     slug: "tabs",
     title: "Tabs",
     description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "Tabs organize content into panels shown one at a time, with a row of triggers to switch between them.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/tabs",
   },
   {
     slug: "textarea",
     title: "Textarea",
-    description: "Displays a form textarea or a component that looks like one.",
+    description: "Textarea is a multi-line text input for longer, free-form content.",
   },
   {
     slug: "toggle",
     title: "Toggle",
-    description: "A two-state button that can be either on or off.",
+    description: "Toggle is a button that stays pressed to represent an on or off state.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/toggle",
   },
   {
     slug: "toggle-group",
     title: "Toggle Group",
-    description: "A set of two-state buttons that can be toggled on or off.",
+    description: "Toggle Group is a set of toggle buttons for single or multiple selection.",
     radixUrl:
       "https://www.radix-ui.com/primitives/docs/components/toggle-group",
   },
