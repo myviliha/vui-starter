@@ -589,6 +589,28 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  = how many field columns come before it (e.g. `1` → Region, Title, Code).
    *  Lets the app order reference tables like Country/State/City freely. */
   identityColumn?: number | "first" | "last" | "hidden";
+  /** Toolbar feature toggles — each defaults to **on**, so leaving them unset
+   *  keeps the full toolbar. Set one to `false` to remove that control.
+   *  `filter` / `sort` / `pagination` are standard; `import` / `export` are the
+   *  ones you'll typically turn off per page. */
+  /** Show the Import (CSV/JSON/Excel) menu. Default `true`. */
+  showImport?: boolean;
+  /** Show the Export (CSV/Excel/JSON/PDF) menu. Default `true`. */
+  showExport?: boolean;
+  /** Show the "+ {singular}" add button (still also requires `onCreate` or
+   *  `makeEmptyRow`). Default `true`. */
+  showAdd?: boolean;
+  /** Show the Filter panel. Default `true`. */
+  showFilter?: boolean;
+  /** Show the Sort menu. Default `true`. */
+  showSort?: boolean;
+  /** Show the pagination footer. When `false` in client mode, all rows render
+   *  (no page slicing). Default `true`. */
+  showPagination?: boolean;
+  /** Show row selection — the checkbox column, bulk Actions, and Clear
+   *  selection. `false` also removes drag-to-reorder (it shares the leading
+   *  column). Default `true`. */
+  showSelection?: boolean;
 }
 
 export function RecordView<T extends { id: RowId }>({
@@ -626,6 +648,13 @@ export function RecordView<T extends { id: RowId }>({
   nameLabel = "Name",
   nameSortKey,
   identityColumn = "first",
+  showImport = true,
+  showExport = true,
+  showAdd = true,
+  showFilter = true,
+  showSort = true,
+  showPagination = true,
+  showSelection = true,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -852,7 +881,7 @@ export function RecordView<T extends { id: RowId }>({
 
   const nameWidth = colWidths[NAME_COL] ?? NAME_DEFAULT_W;
   const totalWidth =
-    CHECKBOX_W +
+    (showSelection ? CHECKBOX_W : 0) +
     ACTIONS_W +
     nameWidth +
     visibleFields.reduce(
@@ -940,7 +969,9 @@ export function RecordView<T extends { id: RowId }>({
     : Math.min(safePage * pageSize, total);
   const paged = isManual
     ? processed
-    : processed.slice((safePage - 1) * pageSize, safePage * pageSize);
+    : showPagination
+      ? processed.slice((safePage - 1) * pageSize, safePage * pageSize)
+      : processed;
   // Loading state comes from the fetcher when it owns the data.
   const effectiveLoading = fetching ? fetchedLoading : loading;
   // Keep the current query fresh for post-mutation background refetches.
@@ -1411,66 +1442,72 @@ export function RecordView<T extends { id: RowId }>({
       <div className="flex h-12 items-center justify-between border-b border-border px-4">
         <div className="flex items-center gap-2">{titleLeading}</div>
         <div className="flex items-center gap-1.5">
-          <input
-            ref={importRef}
-            type="file"
-            accept=".csv,.json"
-            onChange={onImportFile}
-            className="hidden"
-            aria-hidden="true"
-          />
-          <Dropdown
-            label="Import"
-            labelClassName="hidden sm:inline"
-            icon={<Upload className="size-3.5 text-sky-500" />}
-            align="end"
-          >
-            <DropdownLabel>Import from</DropdownLabel>
-            <DropdownItem onSelect={() => importRef.current?.click()}>
-              <span className="flex items-center gap-2">
-                <FileText className="size-3.5" /> CSV
-              </span>
-            </DropdownItem>
-            <DropdownItem onSelect={() => importRef.current?.click()}>
-              <span className="flex items-center gap-2">
-                <Code className="size-3.5" /> JSON
-              </span>
-            </DropdownItem>
-            <DropdownItem onSelect={() => importRef.current?.click()}>
-              <span className="flex items-center gap-2">
-                <SheetIcon className="size-3.5" /> Excel
-              </span>
-            </DropdownItem>
-          </Dropdown>
+          {showImport && (
+            <>
+              <input
+                ref={importRef}
+                type="file"
+                accept=".csv,.json"
+                onChange={onImportFile}
+                className="hidden"
+                aria-hidden="true"
+              />
+              <Dropdown
+                label="Import"
+                labelClassName="hidden sm:inline"
+                icon={<Upload className="size-3.5 text-sky-500" />}
+                align="end"
+              >
+                <DropdownLabel>Import from</DropdownLabel>
+                <DropdownItem onSelect={() => importRef.current?.click()}>
+                  <span className="flex items-center gap-2">
+                    <FileText className="size-3.5" /> CSV
+                  </span>
+                </DropdownItem>
+                <DropdownItem onSelect={() => importRef.current?.click()}>
+                  <span className="flex items-center gap-2">
+                    <Code className="size-3.5" /> JSON
+                  </span>
+                </DropdownItem>
+                <DropdownItem onSelect={() => importRef.current?.click()}>
+                  <span className="flex items-center gap-2">
+                    <SheetIcon className="size-3.5" /> Excel
+                  </span>
+                </DropdownItem>
+              </Dropdown>
+            </>
+          )}
 
-          <Dropdown
-            label="Export"
-            labelClassName="hidden sm:inline"
-            icon={<Download className="size-3.5 text-violet-500" />}
-            align="end"
-          >
-            <DropdownLabel>Export as</DropdownLabel>
-            <DropdownItem onSelect={() => exportData("csv")}>
-              <span className="flex items-center gap-2">
-                <FileText className="size-3.5" /> CSV
-              </span>
-            </DropdownItem>
-            <DropdownItem onSelect={() => exportData("excel")}>
-              <span className="flex items-center gap-2">
-                <SheetIcon className="size-3.5" /> Excel
-              </span>
-            </DropdownItem>
-            <DropdownItem onSelect={() => exportData("json")}>
-              <span className="flex items-center gap-2">
-                <Code className="size-3.5" /> JSON
-              </span>
-            </DropdownItem>
-            <DropdownItem onSelect={() => exportData("pdf")}>
-              <span className="flex items-center gap-2">
-                <Reader className="size-3.5" /> PDF
-              </span>
-            </DropdownItem>
-          </Dropdown>
+          {showExport && (
+            <Dropdown
+              label="Export"
+              labelClassName="hidden sm:inline"
+              icon={<Download className="size-3.5 text-violet-500" />}
+              align="end"
+            >
+              <DropdownLabel>Export as</DropdownLabel>
+              <DropdownItem onSelect={() => exportData("csv")}>
+                <span className="flex items-center gap-2">
+                  <FileText className="size-3.5" /> CSV
+                </span>
+              </DropdownItem>
+              <DropdownItem onSelect={() => exportData("excel")}>
+                <span className="flex items-center gap-2">
+                  <SheetIcon className="size-3.5" /> Excel
+                </span>
+              </DropdownItem>
+              <DropdownItem onSelect={() => exportData("json")}>
+                <span className="flex items-center gap-2">
+                  <Code className="size-3.5" /> JSON
+                </span>
+              </DropdownItem>
+              <DropdownItem onSelect={() => exportData("pdf")}>
+                <span className="flex items-center gap-2">
+                  <Reader className="size-3.5" /> PDF
+                </span>
+              </DropdownItem>
+            </Dropdown>
+          )}
 
           <Dropdown
             label=""
@@ -1478,15 +1515,17 @@ export function RecordView<T extends { id: RowId }>({
             icon={<MoreHorizontal className="size-4 text-slate-500" />}
             align="end"
           >
-            <DropdownItem onSelect={() => setSelected(new Set())}>
-              Clear selection
-            </DropdownItem>
+            {showSelection && (
+              <DropdownItem onSelect={() => setSelected(new Set())}>
+                Clear selection
+              </DropdownItem>
+            )}
             <DropdownItem onSelect={() => setHidden(new Set())}>
               Show all columns
             </DropdownItem>
           </Dropdown>
 
-          {(onCreate || makeEmptyRow) && (
+          {showAdd && (onCreate || makeEmptyRow) && (
             <Button variant="primary" size="sm" onClick={addRow} className="ml-1">
               <Plus className="size-4" />
               <span className="hidden sm:inline">{singular}</span>
@@ -1545,6 +1584,7 @@ export function RecordView<T extends { id: RowId }>({
               </DropdownItem>
             </Dropdown>
           )}
+          {showFilter && (
           <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
             {filterFields.length > 0 ? (
               // Per-field mode: a labeled control per `filterable` field, plus
@@ -1721,7 +1761,9 @@ export function RecordView<T extends { id: RowId }>({
               </>
             )}
           </Dropdown>
+          )}
 
+          {showSort && (
           <Dropdown label="Sort" icon={<CaretSort className="size-3.5 text-blue-500" />}>
             <DropdownLabel>Sort by</DropdownLabel>
             {sortFields.map((f) => (
@@ -1747,6 +1789,7 @@ export function RecordView<T extends { id: RowId }>({
               </DropdownItem>
             )}
           </Dropdown>
+          )}
 
           <Dropdown
             label="Options"
@@ -1766,6 +1809,7 @@ export function RecordView<T extends { id: RowId }>({
           </Dropdown>
 
           {/* Pagination */}
+          {showPagination && (
           <div className="ml-1 flex items-center gap-1 border-l border-border pl-2 text-muted-foreground">
             <Dropdown
               label={`${pageSize} / page`}
@@ -1805,6 +1849,7 @@ export function RecordView<T extends { id: RowId }>({
               <ChevronRight className="size-4" />
             </button>
           </div>
+          )}
         </div>
       </div>
 
@@ -1816,18 +1861,20 @@ export function RecordView<T extends { id: RowId }>({
         >
           <TableHeader className="sticky top-0 z-20 bg-background [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:bg-background">
             <TableRow className="hover:bg-transparent">
-              <TableHead style={{ width: CHECKBOX_W }} className="p-0">
-                <div className="flex h-8 items-center gap-2 pl-2 pr-3">
-                  {/* Spacer matching the row drag-grip slot so this checkbox
-                      lines up vertically with the row checkboxes below. */}
-                  <span aria-hidden="true" className="h-6 w-4 shrink-0" />
-                  <Checkbox
-                    checked={allSelected}
-                    onChange={toggleSelectAll}
-                    aria-label="Select all"
-                  />
-                </div>
-              </TableHead>
+              {showSelection && (
+                <TableHead style={{ width: CHECKBOX_W }} className="p-0">
+                  <div className="flex h-8 items-center gap-2 pl-2 pr-3">
+                    {/* Spacer matching the row drag-grip slot so this checkbox
+                        lines up vertically with the row checkboxes below. */}
+                    <span aria-hidden="true" className="h-6 w-4 shrink-0" />
+                    <Checkbox
+                      checked={allSelected}
+                      onChange={toggleSelectAll}
+                      aria-label="Select all"
+                    />
+                  </div>
+                </TableHead>
+              )}
               {orderedCols.map((col) => {
                 if (col === IDENTITY_COL) {
                   const IdIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
@@ -2001,36 +2048,38 @@ export function RecordView<T extends { id: RowId }>({
                     }}
                     className="group data-[active=true]:bg-accent/60 data-[dragover=true]:border-t-2 data-[dragover=true]:border-t-primary data-[flash=true]:bg-primary/10"
                   >
-                    <TableCell className="p-0" style={{ width: CHECKBOX_W }}>
-                      <div className="flex h-8 items-center gap-2 pl-2 pr-3">
-                        {/* Drag grip — always visible in a light color (so the
-                            reorder affordance is discoverable), darkening on
-                            hover. Inline before the checkbox; plain glyph (no
-                            icon-chip border) so it doesn't read as a box. */}
-                        <div
-                          draggable
-                          onDragStart={(e) => {
-                            e.dataTransfer.effectAllowed = "move";
-                            e.dataTransfer.setData("text/plain", String(row.id));
-                            setDragId(row.id);
-                          }}
-                          onDragEnd={() => {
-                            setDragId(null);
-                            setDragOverId(null);
-                          }}
-                          aria-label={`Drag ${primary.title || singular} to reorder`}
-                          title="Drag to reorder"
-                          className="flex h-6 w-4 shrink-0 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
-                        >
-                          <GripVertical className="size-3.5 border-transparent bg-transparent" />
+                    {showSelection && (
+                      <TableCell className="p-0" style={{ width: CHECKBOX_W }}>
+                        <div className="flex h-8 items-center gap-2 pl-2 pr-3">
+                          {/* Drag grip — always visible in a light color (so the
+                              reorder affordance is discoverable), darkening on
+                              hover. Inline before the checkbox; plain glyph (no
+                              icon-chip border) so it doesn't read as a box. */}
+                          <div
+                            draggable
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "move";
+                              e.dataTransfer.setData("text/plain", String(row.id));
+                              setDragId(row.id);
+                            }}
+                            onDragEnd={() => {
+                              setDragId(null);
+                              setDragOverId(null);
+                            }}
+                            aria-label={`Drag ${primary.title || singular} to reorder`}
+                            title="Drag to reorder"
+                            className="flex h-6 w-4 shrink-0 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
+                          >
+                            <GripVertical className="size-3.5 border-transparent bg-transparent" />
+                          </div>
+                          <Checkbox
+                            checked={selected.has(row.id)}
+                            onChange={() => toggleSelect(row.id)}
+                            aria-label={`Select ${primary.title}`}
+                          />
                         </div>
-                        <Checkbox
-                          checked={selected.has(row.id)}
-                          onChange={() => toggleSelect(row.id)}
-                          aria-label={`Select ${primary.title}`}
-                        />
-                      </div>
-                    </TableCell>
+                      </TableCell>
+                    )}
                     {orderedCols.map((col) =>
                       col === IDENTITY_COL ? (
                         <TableCell
@@ -2115,7 +2164,7 @@ export function RecordView<T extends { id: RowId }>({
             ) : (
               <TableRow className="hover:bg-transparent">
                 <TableCell
-                  colSpan={orderedCols.length + 3}
+                  colSpan={orderedCols.length + (showSelection ? 3 : 2)}
                   className="h-32 text-center text-muted-foreground"
                 >
                   {filter ? `No results for “${filter}”.` : "No records yet."}

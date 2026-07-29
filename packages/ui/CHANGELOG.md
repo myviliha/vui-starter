@@ -7,7 +7,18 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
-## 1.25.3 — 2026-07-29
+## 1.26.0 — 2026-07-29
+
+### Added
+
+- **`RecordView` toolbar feature toggles.** New boolean props let a page choose
+  which toolbar controls appear — each defaults to **on**, so existing tables
+  are unchanged: `showFilter`, `showSort`, `showPagination` (the standard set),
+  `showImport`, `showExport` (turn off per page — they "depend on the user"),
+  `showAdd`, and `showSelection`. `showPagination={false}` renders all rows (no
+  page slicing) in client mode; `showSelection={false}` removes the checkbox
+  column, bulk actions, and Clear selection (and, since they share the leading
+  column, drag-to-reorder).
 
 ### Fixed
 

@@ -118,6 +118,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>identityColumn</code>: where the identity (Name/Title) column sits — <code>&quot;first&quot;</code> (default), <code>&quot;last&quot;</code>, <code>&quot;hidden&quot;</code>, or a number = field columns before it (e.g. <code>1</code> → Region, Title, Code). Lets you order reference tables (Country/State/City) freely.</li>
         <li><code>fetcher</code> + <code>cacheKey</code>: server-side mode where RecordView owns the fetch, caching, and loading (see Server-side data). Optional <code>cache</code> (LRU tuning) and <code>onError</code>.</li>
         <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode — RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
+        <li><strong>Toolbar toggles</strong> — each defaults to <code>true</code>, so the full toolbar ships unless you opt out: <code>showFilter</code>, <code>showSort</code>, <code>showPagination</code> (the standard set), <code>showImport</code> / <code>showExport</code> (the ones you&apos;ll usually turn off per page), <code>showAdd</code>, and <code>showSelection</code>. <code>showPagination={`{false}`}</code> renders all rows (no page slicing) in client mode; <code>showSelection={`{false}`}</code> removes the checkbox column, bulk actions, and Clear selection (and drag-to-reorder, which shares that column).</li>
       </Ul>
 
       <H2>Field options</H2>
