@@ -253,16 +253,19 @@ place. If you'd rather keep a verbatim copy, run
 `collapsible` · `combobox` (searchable single-select, static or async
 `loadOptions`) · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `hover-card` ·
-`input` · `kbd` (key caps + `Shortcut`) · `label` · `menu` · `popover` ·
-`required-mark` · `select` · `separator` · `sheet` · `skeleton` · `steps`
-(multi-step wizard indicator) · `switch` · `tabs` · `toast` (global
+`input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` · `menu` ·
+`popover` · `radio-group` · `required-mark` · `select` · `separator` · `sheet` ·
+`skeleton` · `slider` · `steps`
+(multi-step wizard indicator) · `switch` · `tabs` · `textarea` · `toggle` ·
+`toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
 `RecordForm`) · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 Components ported from shadcn/ui (Radix-based) are being brought into the package
 so you don't need a separate `shadcn add`. Batch 1: `accordion`, `label`,
 `separator`, `skeleton`, `switch`, `tabs`. Batch 2: `alert`, `alert-dialog`,
-`collapsible`, `hover-card`, `popover`, `sheet`. More on the way.
+`collapsible`, `hover-card`, `popover`, `sheet`. Batch 3: `input-otp`,
+`radio-group`, `slider`, `textarea`, `toggle`, `toggle-group`. More on the way.
 
 ## Theming
 

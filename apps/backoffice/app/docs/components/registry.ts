@@ -46,6 +46,12 @@ export const COMPONENTS: ComponentMeta[] = [
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/hover-card",
   },
   {
+    slug: "input-otp",
+    title: "Input OTP",
+    description:
+      "Accessible one-time-password input with copy-paste functionality.",
+  },
+  {
     slug: "label",
     title: "Label",
     description: "Renders an accessible label associated with a control.",
@@ -56,6 +62,13 @@ export const COMPONENTS: ComponentMeta[] = [
     title: "Popover",
     description: "Displays rich content in a portal, triggered by a button.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/popover",
+  },
+  {
+    slug: "radio-group",
+    title: "Radio Group",
+    description:
+      "A set of checkable buttons where no more than one can be checked at a time.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/radio-group",
   },
   {
     slug: "separator",
@@ -76,6 +89,13 @@ export const COMPONENTS: ComponentMeta[] = [
     description: "Use to show a placeholder while content is loading.",
   },
   {
+    slug: "slider",
+    title: "Slider",
+    description:
+      "An input where the user selects a value from within a given range.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/slider",
+  },
+  {
     slug: "switch",
     title: "Switch",
     description:
@@ -88,6 +108,24 @@ export const COMPONENTS: ComponentMeta[] = [
     description:
       "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/tabs",
+  },
+  {
+    slug: "textarea",
+    title: "Textarea",
+    description: "Displays a form textarea or a component that looks like one.",
+  },
+  {
+    slug: "toggle",
+    title: "Toggle",
+    description: "A two-state button that can be either on or off.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/toggle",
+  },
+  {
+    slug: "toggle-group",
+    title: "Toggle Group",
+    description: "A set of two-state buttons that can be toggled on or off.",
+    radixUrl:
+      "https://www.radix-ui.com/primitives/docs/components/toggle-group",
   },
 ];
 

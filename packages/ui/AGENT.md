@@ -474,6 +474,15 @@ Batch 2 (overlays):
 - `@viliha/vui-ui/popover` — `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverAnchor`
 - `@viliha/vui-ui/sheet` — `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription`, `SheetClose` (`side?: "top" | "right" | "bottom" | "left"`)
 
+Batch 3 (form controls):
+
+- `@viliha/vui-ui/textarea` — `Textarea` (auto-growing, `aria-invalid` styling)
+- `@viliha/vui-ui/radio-group` — `RadioGroup`, `RadioGroupItem`
+- `@viliha/vui-ui/slider` — `Slider` (array value → multiple thumbs / range)
+- `@viliha/vui-ui/toggle` — `Toggle`, `toggleVariants` (`variant?: "default" | "outline"`, `size?: "default" | "sm" | "lg"`)
+- `@viliha/vui-ui/toggle-group` — `ToggleGroup`, `ToggleGroupItem` (`type="single" | "multiple"`; group variant/size cascade to items)
+- `@viliha/vui-ui/input-otp` — `InputOTP`, `InputOTPGroup`, `InputOTPSlot`, `InputOTPSeparator`
+
 These use VUI's tokens automatically (no shadcn token duplication needed). More
 components land in later batches; prefer the `@viliha/vui-ui/*` import over a local
 shadcn copy. For anything not yet ported, you can still `shadcn add` it locally.

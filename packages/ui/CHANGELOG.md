@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.29.0 — 2026-07-29
+
+### Added
+
+- **shadcn/ui components, batch 3 (form controls).** Ported into the package
+  (Radix-based, VUI tokens): `textarea`, `radio-group`, `slider`, `toggle`,
+  `toggle-group`, `input-otp`. New dep: `input-otp` (for the OTP field);
+  `theme.css` now ships the `caret-blink` keyframe so the OTP caret animates
+  without `tw-animate-css`.
+
 ## 1.28.0 — 2026-07-29
 
 ### Added
