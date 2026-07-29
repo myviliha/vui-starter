@@ -159,33 +159,6 @@ export default function SignInPage() {
       <form onSubmit={signIn}>
         <AuthCardHeader title="Sign in to your account" />
         <AuthCardBody className="space-y-4">
-          <div className="space-y-4">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => setView("2fa")}
-            >
-              <GoogleIcon />
-              Continue with Google
-            </Button>
-            <Button type="button" variant="outline" className="w-full" onClick={finish}>
-              <Fingerprint className="size-4" />
-              Sign in with a passkey
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => setView("sso")}
-            >
-              <KeyRound className="size-4" />
-              Single sign-on (SSO)
-            </Button>
-          </div>
-
-          <OrDivider />
-
           <FieldGrid>
             <Field
               label="Email"
@@ -227,17 +200,43 @@ export default function SignInPage() {
               Forgot password?
             </Link>
           </div>
-        </AuthCardBody>
-        <AuthCardFooter>
           <Button type="submit" className="w-full">
             Sign in
           </Button>
-          <AuthCardAside>
-            New to <BrandName />?{" "}
-            <Link href="/auth/signup" className="font-medium text-primary hover:underline">
-              Create an account
-            </Link>
-          </AuthCardAside>
+
+          {/* Alternative sign-in methods — below the email/password form. */}
+          <OrDivider />
+
+          <div className="space-y-4">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setView("2fa")}
+            >
+              <GoogleIcon />
+              Google
+            </Button>
+            <Button type="button" variant="outline" className="w-full" onClick={finish}>
+              <Fingerprint className="size-4" />
+              Sign in with a passkey
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setView("sso")}
+            >
+              <KeyRound className="size-4" />
+              Single sign-on (SSO)
+            </Button>
+          </div>
+        </AuthCardBody>
+        <AuthCardFooter className="text-center">
+          New to <BrandName />?{" "}
+          <Link href="/auth/signup" className="font-medium text-primary hover:underline">
+            Create an account
+          </Link>
         </AuthCardFooter>
       </form>
     </AuthCard>
