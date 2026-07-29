@@ -270,7 +270,8 @@ place. If you'd rather keep a verbatim copy, run
 (provider-agnostic `AuthProvider` / `useAuth`) · `avatar` · `badge` ·
 `breadcrumb` · `breadcrumbs` · `button` · `calendar` · `card` · `chart` (themed
 Recharts wrapper) · `checkbox` · `collapsible` · `combobox` (searchable
-single-select, static or async `loadOptions`) · `command` · `command-palette`
+single-select, static or async `loadOptions`) · `cascading-combobox`
+(fixed named levels — Region → Country → State → City) · `command` · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `filter-field`
 (two-column `FilterGrid` / `FilterField` layout) · `form` ·
 `hover-card` · `input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` ·

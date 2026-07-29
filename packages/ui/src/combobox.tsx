@@ -36,6 +36,8 @@ export interface ComboboxProps {
   resetKey?: string;
   id?: string;
   ariaLabel?: string;
+  /** Disable the control (trigger inert, popover can't open). */
+  disabled?: boolean;
   placeholder?: string;
   /** Placeholder for the filter input. */
   searchPlaceholder?: string;
@@ -65,6 +67,7 @@ export function Combobox({
   resetKey,
   id,
   ariaLabel,
+  disabled = false,
   placeholder = "Select…",
   searchPlaceholder = "Search…",
   emptyText = "No matches",
@@ -184,10 +187,12 @@ export function Combobox({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={ariaLabel}
+        disabled={disabled}
         onClick={() => setOpen((v) => !v)}
         className={cn(
           "flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-2.5 transition-colors",
           "hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+          "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background",
         )}
       >
         <span className={cn("truncate", !selected && "text-muted-foreground")}>

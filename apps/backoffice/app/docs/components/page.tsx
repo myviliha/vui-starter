@@ -8,12 +8,73 @@ import { Button } from "@viliha/vui-ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@viliha/vui-ui/card";
 import { Checkbox } from "@viliha/vui-ui/checkbox";
 import { Combobox } from "@viliha/vui-ui/combobox";
+import {
+  CascadingCombobox,
+  type CascadeNode,
+} from "@viliha/vui-ui/cascading-combobox";
 import { Dropdown, DropdownItem, DropdownLabel } from "@viliha/vui-ui/dropdown-menu";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
 import { toast } from "@viliha/vui-ui/toast";
 import { Tooltip } from "@viliha/vui-ui/tooltip";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
+
+/** Sample Region → Country → State → City tree for the cascading combobox demo. */
+const LOCATIONS: CascadeNode[] = [
+  {
+    value: "apac",
+    label: "APAC",
+    children: [
+      {
+        value: "in",
+        label: "India",
+        children: [
+          {
+            value: "mh",
+            label: "Maharashtra",
+            children: [
+              { value: "mumbai", label: "Mumbai" },
+              { value: "pune", label: "Pune" },
+            ],
+          },
+          {
+            value: "ka",
+            label: "Karnataka",
+            children: [{ value: "bengaluru", label: "Bengaluru" }],
+          },
+        ],
+      },
+      {
+        value: "au",
+        label: "Australia",
+        children: [
+          {
+            value: "nsw",
+            label: "New South Wales",
+            children: [{ value: "sydney", label: "Sydney" }],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: "emea",
+    label: "EMEA",
+    children: [
+      {
+        value: "de",
+        label: "Germany",
+        children: [
+          {
+            value: "by",
+            label: "Bavaria",
+            children: [{ value: "munich", label: "Munich" }],
+          },
+        ],
+      },
+    ],
+  },
+];
 
 function Demo({
   children,
@@ -38,6 +99,7 @@ export default function ComponentsPage() {
   const [checked, setChecked] = React.useState(true);
   const [fruit, setFruit] = React.useState("apple");
   const [country, setCountry] = React.useState("");
+  const [location, setLocation] = React.useState<string[]>([]);
 
   return (
     <article>
@@ -194,6 +256,45 @@ export default function ComponentsPage() {
             { value: "sg", label: "Singapore" },
             { value: "us", label: "United States" },
           ]}
+        />
+      </Demo>
+
+      <H2>Cascading combobox</H2>
+      <P>
+        One searchable Combobox per <strong>fixed, named level</strong> (Region →
+        Country → State → City). Picking a level narrows the next from the
+        selected node&apos;s children and clears everything downstream; a level
+        stays disabled until its parent is chosen. Depth comes from the data —
+        pass a 3-, 4-, or N-level tree.
+      </P>
+      <Demo
+        code={`import { CascadingCombobox } from "@viliha/vui-ui/cascading-combobox";
+
+<CascadingCombobox
+  levels={[
+    { key: "region", label: "Region" },
+    { key: "country", label: "Country" },
+    { key: "state", label: "State" },
+    { key: "city", label: "City" },
+  ]}
+  items={LOCATIONS}          // tree: node.children feeds the next level
+  value={path}               // string[], one value per level
+  onValueChange={(next) => setPath(next)}
+  orientation="horizontal"
+/>`}
+      >
+        <CascadingCombobox
+          className="w-full"
+          orientation="horizontal"
+          levels={[
+            { key: "region", label: "Region" },
+            { key: "country", label: "Country" },
+            { key: "state", label: "State" },
+            { key: "city", label: "City" },
+          ]}
+          items={LOCATIONS}
+          value={location}
+          onValueChange={setLocation}
         />
       </Demo>
 

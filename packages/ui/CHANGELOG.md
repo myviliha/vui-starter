@@ -7,6 +7,19 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.33.0 — 2026-07-29
+
+### Added
+
+- **`@viliha/vui-ui/cascading-combobox` — `CascadingCombobox`.** A cascading
+  picker for **fixed, named levels** (Region → Country → State → City): one
+  searchable `Combobox` per level, where picking a level narrows the next from
+  the selected node's `children` and clears everything downstream. A level is
+  disabled until its parent is chosen. Data-driven — pass a `CascadeNode[]` tree
+  of any depth (3, 4, N levels). Exported types: `CascadeNode`, `CascadeLevel`.
+- **`Combobox` `disabled` prop** — inert trigger, popover can't open (used per
+  level by `CascadingCombobox`).
+
 ## 1.32.0 — 2026-07-29
 
 ### Added
