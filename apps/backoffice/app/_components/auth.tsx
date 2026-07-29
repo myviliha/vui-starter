@@ -57,10 +57,10 @@ export function Field({
   return (
     // Label beside the input on one row (matches the app's RecordForm), with
     // any hint/error flowing under the input in the same right-hand column.
-    <div className="flex gap-3">
+    <div className="flex gap-2">
       <label
         htmlFor={htmlFor}
-        className="flex w-32 shrink-0 items-center gap-1 font-medium leading-relaxed"
+        className="flex shrink-0 items-center gap-1 whitespace-nowrap font-medium leading-relaxed"
       >
         {label}
         {required && <RequiredMark />}

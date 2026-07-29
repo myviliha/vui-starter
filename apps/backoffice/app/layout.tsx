@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
-import { themeInitScript } from "./_components/theme-toggle";
+import { themeInitScript } from "./_components/theme-script";
 import { BrandProvider } from "./_components/brand";
 import { Toaster } from "@viliha/vui-ui/toast";
 import { SITE } from "@/lib/seo";
