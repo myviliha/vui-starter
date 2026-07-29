@@ -17,6 +17,17 @@ import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
 import { toast } from "@viliha/vui-ui/toast";
 import { Tooltip } from "@viliha/vui-ui/tooltip";
+import { Code } from "@viliha/vui-ui/code";
+import { Kbd, Shortcut } from "@viliha/vui-ui/kbd";
+import { RequiredMark } from "@viliha/vui-ui/required-mark";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@viliha/vui-ui/table";
 import { CodeBlock, DocPager, H2, P, PageTitle } from "@/components/doc";
 
 /** Sample Region → Country → State → City tree for the cascading combobox demo. */
@@ -424,6 +435,103 @@ const fields: RecordField<Org>[] = [
   makeEmptyRow={() => ({ id: Date.now(), name: "", domain: "", country: "" })}
   getPrimary={(row) => ({ title: row.name, initials: row.name.slice(0, 2) })}
 />`}</CodeBlock>
+
+      <H2>Table</H2>
+      <P>
+        Low-level, unstyled-to-theme table primitives (
+        <code>Table</code>, <code>TableHeader</code>, <code>TableBody</code>,{" "}
+        <code>TableRow</code>, <code>TableHead</code>, <code>TableCell</code>,
+        plus <code>TableFooter</code> / <code>TableCaption</code>). Use these for
+        a plain static table; for a data grid with sorting, filtering, paging and
+        editing, reach for <code>RecordView</code> instead.
+      </P>
+      <Demo
+        code={`import {
+  Table, TableHeader, TableBody, TableRow, TableHead, TableCell,
+} from "@viliha/vui-ui/table";
+
+<Table>
+  <TableHeader>
+    <TableRow><TableHead>Name</TableHead><TableHead>Role</TableHead></TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow><TableCell>Ada</TableCell><TableCell>Admin</TableCell></TableRow>
+  </TableBody>
+</Table>`}
+      >
+        <div className="w-full">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Role</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Ada Lovelace</TableCell>
+                <TableCell>Admin</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Alan Turing</TableCell>
+                <TableCell>Member</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </Demo>
+
+      <H2>Kbd &amp; Shortcut</H2>
+      <P>
+        Keyboard key caps. <code>Kbd</code> renders a single cap;{" "}
+        <code>Shortcut</code> renders a combo from a <code>keys</code> array,
+        joined with <code>+</code> — used in menus and the ⌘K launchers.
+      </P>
+      <Demo
+        code={`import { Kbd, Shortcut } from "@viliha/vui-ui/kbd";
+
+<Kbd>Esc</Kbd>
+<Shortcut keys={["⌘", "K"]} />`}
+      >
+        <Kbd>Esc</Kbd>
+        <Shortcut keys={["⌘", "K"]} />
+        <Shortcut keys={["⌘", "⌥", "K"]} />
+      </Demo>
+
+      <H2>Required mark</H2>
+      <P>
+        The mandatory-field asterisk used across forms, filters and auth — one
+        consistent cue. Place it next to a label; it takes no props.
+      </P>
+      <Demo
+        code={`import { RequiredMark } from "@viliha/vui-ui/required-mark";
+
+<label className="flex items-center gap-1">Email <RequiredMark /></label>`}
+      >
+        <span className="flex items-center gap-1 text-sm font-medium">
+          Email <RequiredMark />
+        </span>
+      </Demo>
+
+      <H2>Code</H2>
+      <P>
+        A minimal inline <code>&lt;code&gt;</code> element for referencing a
+        token, path or value in running text (as opposed to <code>CodeBlock</code>,
+        which is for multi-line snippets).
+      </P>
+      <Demo
+        code={`import { Code } from "@viliha/vui-ui/code";
+
+Run <Code>pnpm dev</Code> to start.`}
+      >
+        <span className="text-sm">
+          Run{" "}
+          <Code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[13px]">
+            pnpm dev
+          </Code>{" "}
+          to start.
+        </span>
+      </Demo>
 
       <DocPager
         prev={{ label: "Auth screens", href: "/docs/auth" }}
