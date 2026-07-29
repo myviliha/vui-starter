@@ -7,6 +7,14 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.30.2 — 2026-07-29
+
+### Changed
+
+- **README** — republish so the "Support VUI" sponsor section, badge, and
+  acknowledgments actually reach npmjs (they were bundled with a version already
+  on the registry). No component changes.
+
 ## 1.30.1 — 2026-07-29
 
 ### Changed
