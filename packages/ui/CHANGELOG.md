@@ -11,12 +11,13 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
 ### Fixed
 
-- **README blank on npmjs.com.** The README is in every tarball, but npmjs
-  renders from the packument `readme` field, which recent npm/node don't
-  repopulate on publish (it went stale). `scripts/publish.mjs` now injects
-  `README.md` into the manifest (`readme` + `readmeFilename`) before
-  `npm publish`, so the registry always stores the current text. No source
-  change — republish to refresh the page.
+- **README blank on npmjs.com** — resolved by republishing. The registry had
+  the README correct all along (top-level packument `readme` field, which npm
+  populates on its own); the blank page was an npmjs.com **re-index delay**.
+  Publishing a new version makes npmjs re-render it. No source or tooling change
+  is needed for this. (This release also briefly added a manifest `readme`
+  injection to `publish.mjs`; it had no effect and was removed the same day —
+  the per-version `readme` field is stripped by the registry for every package.)
 
 ## 1.26.0 — 2026-07-29
 

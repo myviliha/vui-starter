@@ -6,23 +6,23 @@
 //   node scripts/publish.mjs            # or: pnpm release
 //   node scripts/publish.mjs --dry-run  # extra args pass through to npm
 //
-// Two problems it solves, which is why a bare `<pm> publish` doesn't just work:
+// What it solves, which is why a bare `<pm> publish` doesn't just work:
 //
-//  1. Spec-valid manifest. This package uses `workspace:*` for its internal
-//     @repo/* dev tooling. Those are devDependencies (consumers never install
-//     them), but a literal `workspace:*` in the published manifest is invalid.
-//     We strip them here, so the manifest is valid under ANY client.
+//   Spec-valid manifest. This package uses `workspace:*` for its internal
+//   @repo/* dev tooling. Those are devDependencies (consumers never install
+//   them), but a literal `workspace:*` in the published manifest is invalid.
+//   We strip them here, so the manifest is valid under ANY client, and publish
+//   via `npm` for one consistent path.
 //
-//  2. README on npmjs. npmjs.com renders the README from the per-version
-//     `readme` field in the publish request. `npm publish` sends it; pnpm and
-//     yarn-classic do NOT — so those leave a blank README page even though
-//     README.md is in the tarball. We always upload via `npm publish`.
+// (A blank README on npmjs.com is NOT this script's job — that's a re-index
+// delay on npmjs's side; the registry gets the README on its own. Just publish
+// a new version and it re-renders.)
 //
 // The manifest edit is done on a temp copy and restored in `finally`, so your
 // working tree is left exactly as it was.
 
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -53,22 +53,10 @@ for (const [name, spec] of Object.entries(pkg.devDependencies ?? {})) {
   }
 }
 
-// npmjs.com renders the README from the packument `readme` field. Recent
-// npm/pnpm/node don't reliably repopulate it on publish (the file lands in the
-// tarball, but the website field goes stale/blank). Inject README.md into the
-// manifest so the registry always stores the current text — this is the field
-// npm itself used to set from the file.
-const readmePath = join(pkgDir, "README.md");
-const hasReadme = existsSync(readmePath);
-if (hasReadme) {
-  pkg.readme = readFileSync(readmePath, "utf8");
-  pkg.readmeFilename = "README.md";
-}
-
 const args = process.argv.slice(2);
 console.log(
   `Publishing ${pkg.name}@${pkg.version} via npm ` +
-    `(stripped ${stripped} workspace devDep(s), readme ${hasReadme ? "injected" : "MISSING"})…`,
+    `(stripped ${stripped} workspace devDep(s))…`,
 );
 try {
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
