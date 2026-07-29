@@ -183,6 +183,31 @@ This applies to everyone, humans and AI agents alike, no exceptions:
 A change that touches code but not the changelog and docs is **incomplete** and
 will not be merged.
 
+# Publishing `@viliha/vui-ui`
+
+Publish with **one command, from any package manager**:
+
+```bash
+cd packages/ui
+pnpm release          # or: node scripts/publish.mjs   (npm / yarn / bun users)
+node scripts/publish.mjs --dry-run   # inspect the tarball without publishing
+```
+
+Do **not** run a bare `pnpm publish` / `npm publish` — a `prepublishOnly` guard
+blocks it and points you here. Why the wrapper exists:
+
+- **README on npmjs**: npmjs.com renders the README from the per-version
+  `readme` field in the publish request. `npm publish` sends it; `pnpm publish`,
+  yarn-classic, and bun do **not**, so they leave a blank README page. The
+  script always uploads via `npm publish`.
+- **Spec-valid manifest**: the package uses `workspace:*` for its internal
+  `@repo/*` dev tooling. The script strips those devDeps (consumers never
+  install them) so the published manifest is valid; your working tree is
+  restored afterward.
+
+Bump `packages/ui/package.json` + add the `CHANGELOG.md` entry first (see above);
+a published version is immutable, so a fix ships as a new version.
+
 # Pull Request Checklist
 
 Every Pull Request should:

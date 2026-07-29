@@ -7,6 +7,19 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.25.3 — 2026-07-29
+
+### Fixed
+
+- **README missing on npmjs.** npmjs.com renders the README from the
+  per-version `readme` field in the publish request, which `pnpm publish` (and
+  yarn-classic / bun) do **not** send — only `npm publish` does. Publishing now
+  goes through `scripts/publish.mjs` (run it with `pnpm release` or
+  `node scripts/publish.mjs`, from any package manager): it strips the internal
+  `workspace:*` devDeps to keep the manifest spec-valid, then uploads via
+  `npm publish`, so the README shows again. A `prepublishOnly` guard blocks a
+  bare `<pm> publish` and points at the script.
+
 ## 1.25.2 — 2026-07-29
 
 ### Added
