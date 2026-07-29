@@ -53,7 +53,8 @@ export default function AuthDocPage() {
         <li><code>AuthCardBody</code>: the fields (roomy, consistent spacing)</li>
         <li><code>AuthCardFooter</code>: the primary action(s) (muted background)</li>
         <li><code>AuthCardAside</code>: secondary nav (e.g. &quot;Create an account&quot;), set off by its own divider</li>
-        <li><code>Field</code>: a labelled field — label sits <strong>beside</strong> the input on one row (matching the app&apos;s <code>RecordForm</code>); pass <code>required</code> for the <code>*</code> marker, <code>error</code>/<code>hint</code> for text under the input</li>
+        <li><code>FieldGrid</code>: wraps a form&apos;s <code>Field</code>s in a two-column grid — labels line up in column 1, inputs in column 2, so every input starts at the same x</li>
+        <li><code>Field</code>: a labelled field (render inside a <code>FieldGrid</code>); pass <code>required</code> for the <code>*</code> marker, <code>error</code>/<code>hint</code> for text under the input</li>
       </Ul>
 
       <H2>Build a screen</H2>
@@ -67,7 +68,8 @@ import Link from "next/link";
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import {
-  AuthCard, AuthCardHeader, AuthCardBody, AuthCardFooter, AuthCardAside, Field,
+  AuthCard, AuthCardHeader, AuthCardBody, AuthCardFooter, AuthCardAside,
+  FieldGrid, Field,
 } from "@/app/_components/auth";
 
 export default function SignIn() {
@@ -76,9 +78,14 @@ export default function SignIn() {
       <form onSubmit={handleSubmit}>
         <AuthCardHeader title="Sign in to your account" />
         <AuthCardBody>
-          <Field label="Work email" htmlFor="email" required error={error}>
-            <Input id="email" type="email" placeholder="you@company.com" />
-          </Field>
+          <FieldGrid>
+            <Field label="Email" htmlFor="email" required>
+              <Input id="email" type="email" placeholder="you@company.com" />
+            </Field>
+            <Field label="Password" htmlFor="password" required error={error}>
+              <Input id="password" type="password" placeholder="Your password" />
+            </Field>
+          </FieldGrid>
         </AuthCardBody>
         <AuthCardFooter>
           <Button type="submit" className="w-full">Continue</Button>

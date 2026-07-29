@@ -19,6 +19,7 @@ import {
   AuthCardFooter,
   AuthCardHeader,
   Field,
+  FieldGrid,
   GoogleIcon,
   OrDivider,
 } from "@/app/_components/auth";
@@ -93,16 +94,18 @@ export default function SignUpPage() {
 
           <OrDivider />
 
-          <Field label="Work email" htmlFor="email" required error={error}>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              autoComplete="email"
-            />
-          </Field>
+          <FieldGrid>
+            <Field label="Work email" htmlFor="email" required error={error}>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                autoComplete="email"
+              />
+            </Field>
+          </FieldGrid>
 
           <RecaptchaMock checked={robot} onChange={setRobot} />
         </AuthCardBody>

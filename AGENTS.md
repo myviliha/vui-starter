@@ -16,7 +16,7 @@ Turborepo + pnpm monorepo. One app + one published library:
 | --- | --- |
 | New reusable component | `packages/ui/src/<name>.tsx` → auto-exported as `@viliha/vui-ui/<name>` (the `./*` export map; **no barrel edit needed**) |
 | New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout`. **Pick a page type** (see "Page types" below) and state which; for a record form default to **slide-over**. |
-| New auth page | `apps/backoffice/app/auth/<name>/page.tsx` — inherits the auth shell (`AuthHeader` logo bar + `SiteFooter`). Build fields with `Field` (label-beside-input) from `_components/auth.tsx`; don't hand-roll |
+| New auth page | `apps/backoffice/app/auth/<name>/page.tsx` — inherits the auth shell (`AuthHeader` logo bar + `SiteFooter`). Build fields with `Field` inside a `FieldGrid` (two-column: labels │ inputs) from `_components/auth.tsx`; don't hand-roll |
 | shadcn component | `npx shadcn@latest add <name>` (from the backoffice dir) → `components/ui/` |
 | Design token / color / radius | `packages/ui/src/theme.css` — **never hard-code**, add/read a token |
 | Navigation (sidebar + breadcrumbs) | `apps/backoffice/app/_components/nav-config.ts` — single source; breadcrumbs derive from it |

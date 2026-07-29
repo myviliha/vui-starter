@@ -17,6 +17,7 @@ import {
   AuthCardFooter,
   AuthCardHeader,
   Field,
+  FieldGrid,
 } from "@/app/_components/auth";
 
 export default function ResetPasswordPage() {
@@ -66,26 +67,28 @@ export default function ResetPasswordPage() {
           description="Choose a strong password you don't use elsewhere."
         />
         <AuthCardBody>
-          <Field label="New password" htmlFor="password" required>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              placeholder="At least 8 characters"
-            />
-          </Field>
-          <Field label="Confirm password" htmlFor="confirm" required error={error}>
-            <Input
-              id="confirm"
-              type="password"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              autoComplete="new-password"
-              placeholder="Re-enter password"
-            />
-          </Field>
+          <FieldGrid>
+            <Field label="New password" htmlFor="password" required>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                placeholder="At least 8 characters"
+              />
+            </Field>
+            <Field label="Confirm password" htmlFor="confirm" required error={error}>
+              <Input
+                id="confirm"
+                type="password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                autoComplete="new-password"
+                placeholder="Re-enter password"
+              />
+            </Field>
+          </FieldGrid>
         </AuthCardBody>
         <AuthCardFooter>
           <Button type="submit" className="w-full">

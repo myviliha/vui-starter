@@ -21,6 +21,7 @@ import {
   AuthCardFooter,
   AuthCardHeader,
   Field,
+  FieldGrid,
   GoogleIcon,
   OrDivider,
 } from "@/app/_components/auth";
@@ -70,16 +71,18 @@ export default function SignInPage() {
         >
           <AuthCardHeader title="Single sign-on" />
           <AuthCardBody>
-            <Field label="Organization ID" htmlFor="org" required>
-              <Input
-                id="org"
-                value={orgId}
-                onChange={(e) => setOrgId(e.target.value)}
-                placeholder="org_ACME1234"
-                autoComplete="off"
-                required
-              />
-            </Field>
+            <FieldGrid>
+              <Field label="Organization ID" htmlFor="org" required>
+                <Input
+                  id="org"
+                  value={orgId}
+                  onChange={(e) => setOrgId(e.target.value)}
+                  placeholder="org_ACME1234"
+                  autoComplete="off"
+                  required
+                />
+              </Field>
+            </FieldGrid>
           </AuthCardBody>
           <AuthCardFooter>
             <Button type="submit" className="w-full" disabled={!orgId || busy}>
@@ -177,26 +180,28 @@ export default function SignInPage() {
 
           <OrDivider />
 
-          <Field label="Email" htmlFor="email" required>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              autoComplete="email"
-            />
-          </Field>
-          <Field label="Password" htmlFor="password" required>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Your password"
-              autoComplete="current-password"
-            />
-          </Field>
+          <FieldGrid>
+            <Field label="Email" htmlFor="email" required>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                autoComplete="email"
+              />
+            </Field>
+            <Field label="Password" htmlFor="password" required>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Your password"
+                autoComplete="current-password"
+              />
+            </Field>
+          </FieldGrid>
           {/* Forgot password — primary color, aligned under the input. */}
           <div className="text-right">
             <Link

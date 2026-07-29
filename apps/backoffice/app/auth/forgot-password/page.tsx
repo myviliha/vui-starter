@@ -17,6 +17,7 @@ import {
   AuthCardFooter,
   AuthCardHeader,
   Field,
+  FieldGrid,
 } from "@/app/_components/auth";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,16 +71,18 @@ export default function ForgotPasswordPage() {
           description="Enter your email and we'll send you a reset link."
         />
         <AuthCardBody>
-          <Field label="Work email" htmlFor="email" required error={error}>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              autoComplete="email"
-            />
-          </Field>
+          <FieldGrid>
+            <Field label="Work email" htmlFor="email" required error={error}>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                autoComplete="email"
+              />
+            </Field>
+          </FieldGrid>
         </AuthCardBody>
         <AuthCardFooter>
           <Button type="submit" className="w-full">

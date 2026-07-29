@@ -38,7 +38,34 @@ export function OrDivider({ label = "or" }: { label?: string }) {
   );
 }
 
-/** Labeled form field with optional required marker / hint / error text. */
+/**
+ * Two-column layout for a set of `Field`s: labels align in column 1, inputs in
+ * column 2, so every input starts at the same x (a clean table look). Wrap a
+ * form's fields in this. Column 1 is `max-content` (as wide as the longest
+ * label), column 2 fills the rest.
+ */
+export function FieldGrid({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-[max-content_1fr] items-center gap-x-3 gap-y-4",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Labeled form field with optional required marker / hint / error text. Must
+ *  be rendered inside a {@link FieldGrid} — it emits its label and input as two
+ *  grid cells (`display: contents`) so labels/inputs line up across rows. */
 export function Field({
   label,
   htmlFor,
@@ -55,17 +82,17 @@ export function Field({
   children: React.ReactNode;
 }) {
   return (
-    // Label beside the input on one row (matches the app's RecordForm), with
-    // any hint/error flowing under the input in the same right-hand column.
-    <div className="flex gap-2">
+    // display:contents → the label + input become direct cells of the parent
+    // FieldGrid (column 1 = label, column 2 = input), not a nested box.
+    <div className="contents">
       <label
         htmlFor={htmlFor}
-        className="flex shrink-0 items-center gap-1 whitespace-nowrap font-medium leading-relaxed"
+        className="flex items-center gap-1 whitespace-nowrap font-medium leading-relaxed"
       >
         {label}
         {required && <RequiredMark />}
       </label>
-      <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="min-w-0 space-y-1.5">
         {children}
         {error ? (
           <p className="text-destructive">{error}</p>
