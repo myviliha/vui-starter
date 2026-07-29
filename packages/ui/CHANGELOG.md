@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.34.2 — 2026-07-29
+
+### Changed
+
+- **README + npm metadata** — humanize pass and SEO. Rewrote the opening and
+  `package.json` `description` around real search terms (React component
+  library, admin dashboard template, Next.js, Tailwind CSS v4, shadcn/ui,
+  datatable), expanded `keywords`, and removed every em dash per the new
+  humanize rule. Mirrors the repo README. Docs/metadata-only.
+
 ## 1.34.1 — 2026-07-29
 
 ### Changed

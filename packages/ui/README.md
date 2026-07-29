@@ -4,34 +4,36 @@
 
 ## ❤️ Sponsoring is what keeps Vui free
 
-Vui is an enterprise-grade admin & SaaS theme — the kind of thing that's usually
+Vui is an enterprise-grade admin and SaaS theme, the kind of thing that's usually
 sold, not given away. We keep it free under MIT, and sponsors are what make that
 possible.
 
 The components, tokens, datatable, auth screens, and docs all take real time to
 build and keep in good shape. We give them away so you don't have to build or buy
-your own — so if Vui saved you time or helped you ship, the best thank-you is to
+your own. If Vui saved you time or helped you ship, the best thank-you is to
 sponsor the project.
 
 **Even $1 helps.** It goes toward new components, bug fixes, and keeping the docs
-and demo current — and, honestly, it's what keeps us building in the open. If a
+and demo current, and honestly it's what keeps us building in the open. If a
 fraction of the people using Vui chipped in, that would be plenty.
 
-> Sponsors get a spot on the wall — name and logo — and our genuine thanks.
+> Sponsors get a spot on the wall (name and logo) and our genuine thanks.
 
 ### 👉 [Sponsor on GitHub →](https://github.com/sponsors/myviliha) &nbsp;·&nbsp; thank you 🙏
 
 ---
 
-A **token-driven React component library** for admin and CRM interfaces, built on
-Tailwind CSS v4, shadcn-style patterns, and Radix Icons. It ships as **TypeScript
-source** rather than a prebuilt bundle, so your app's bundler compiles only the
-components you actually import.
+**Vui UI** is a free, token-driven **React component library** and **admin
+dashboard template** for **Next.js** and **Tailwind CSS v4**. It bundles the
+**shadcn/ui** component set alongside a full datatable, forms, charts, and auth
+screens, all built on **Radix** and driven by CSS-variable design tokens. It
+ships as **TypeScript source** instead of a prebuilt bundle, so your app's
+bundler compiles only the components you import.
 
 It's part of [**Vui Starter**](https://github.com/myviliha/vui-starter), a free
 and open-source admin design system.
 
-- 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com) — a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
+- 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com), a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
 - 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
 - ❤️ **Sponsor:** [github.com/sponsors/myviliha](https://github.com/sponsors/myviliha)
 
@@ -277,7 +279,7 @@ place. If you'd rather keep a verbatim copy, run
 `breadcrumb` · `breadcrumbs` · `button` · `calendar` · `card` · `chart` (themed
 Recharts wrapper) · `checkbox` · `collapsible` · `combobox` (searchable
 single-select, static or async `loadOptions`) · `cascading-combobox`
-(fixed named levels — Region → Country → State → City) · `command` · `command-palette`
+(fixed named levels: Region → Country → State → City) · `command` · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `filter-field`
 (two-column `FilterGrid` / `FilterField` layout) · `form` ·
 `field-grid` (two-column `Label │ control` form layout) ·
@@ -288,7 +290,7 @@ single-select, static or async `loadOptions`) · `cascading-combobox`
 (multi-step wizard indicator) · `switch` · `tabs` · `textarea` · `toggle` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
-`RecordForm`) · `wizard` (multi-step wizard scaffold — `Wizard` + `WizardSection`)
+`RecordForm`) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)
 · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 Components ported from shadcn/ui (Radix-based) are being brought into the package
@@ -317,7 +319,7 @@ to rebrand the entire system:
 ## Acknowledgments
 
 Inspired by and a big thank-you to [**shadcn/ui**](https://ui.shadcn.com) and
-[**React**](https://react.dev) — VUI builds on their ideas and components.
+[**React**](https://react.dev). Vui builds on their ideas and components.
 
 ## License
 

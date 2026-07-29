@@ -7,40 +7,42 @@
 
 ## ❤️ Sponsoring is what keeps Vui free
 
-Vui is an enterprise-grade admin & SaaS theme — the kind of thing that's usually
+Vui is an enterprise-grade admin and SaaS theme, the kind of thing that's usually
 sold, not given away. We keep it free under MIT, and sponsors are what make that
 possible.
 
 The components, tokens, datatable, auth screens, and docs all take real time to
 build and keep in good shape. We give them away so you don't have to build or buy
-your own — so if Vui saved you time or helped you ship, the best thank-you is to
+your own. If Vui saved you time or helped you ship, the best thank-you is to
 sponsor the project.
 
 **Even $1 helps.** It goes toward new components, bug fixes, and keeping the docs
-and demo current — and, honestly, it's what keeps us building in the open. If a
+and demo current, and honestly it's what keeps us building in the open. If a
 fraction of the people using Vui chipped in, that would be plenty.
 
-> Sponsors get a spot on the wall — name and logo — and our genuine thanks.
+> Sponsors get a spot on the wall (name and logo) and our genuine thanks.
 
 ### 👉 [Sponsor on GitHub →](https://github.com/sponsors/myviliha) &nbsp;·&nbsp; thank you 🙏
 
 ---
 
-A free, **open-source admin/CRM design system** for React: a clean, token-driven
-component library (**`@viliha/vui-ui`**) and a full backoffice demo you can clone
-and run in minutes.
+**Vui Starter** is a free, open-source **admin dashboard template** and **CRM
+design system** for **React** and **Next.js**. It pairs a clean, token-driven
+component library (**`@viliha/vui-ui`**) with a full backoffice demo you can
+clone and run in minutes.
 
-It's built on **Next.js · React 19 · Tailwind CSS v4 · shadcn-style components ·
-Radix Icons**, and everything runs on in-memory mock data. Clone it and you have
-a working admin UI with no backend to stand up.
+It's built on **Next.js, React 19, Tailwind CSS v4, shadcn/ui components, and
+Radix**, and everything runs on in-memory mock data. Clone it and you have a
+working admin UI (datatables, forms, charts, auth, dark mode) with no backend to
+stand up.
 
 > This repo is both the **library** (`packages/ui`, published to npm as
 > `@viliha/vui-ui`) and a **reference app** (`apps/backoffice`) that shows
 > every component in a real admin UI.
 
-![Vui Starter: datatable](./.github/screenshots/organizations.png)
+![Vui Starter admin dashboard template: the organizations datatable with sorting, filtering, and row actions](./.github/screenshots/organizations.png)
 
-![Vui Starter: dashboard](./.github/screenshots/home.png)
+![Vui Starter dashboard: stat cards and themed charts in a React admin UI](./.github/screenshots/home.png)
 
 ---
 
@@ -152,7 +154,7 @@ npm install @viliha/vui-ui
 ```css
 @import "tailwindcss";
 /* Design tokens, @theme mapping, base reset, AND scanning of the library’s
-   component classes — all in one import. */
+   component classes, all in one import. */
 @import "@viliha/vui-ui/theme.css";
 ```
 
@@ -327,10 +329,10 @@ at **build time** and inlined into the export, so set them where your deploy run
 
 ```
 apps/
-  backoffice/          # The app (:3000) — admin UI + docs at /docs
+  backoffice/          # The app (:3000): admin UI + docs at /docs
 packages/
-  ui/                  # @viliha/vui-ui — the published component library
-                       #   (ships AGENT.md + CLAUDE.template.md — the AI-agent guide)
+  ui/                  # @viliha/vui-ui, the published component library
+                       #   (ships AGENT.md + CLAUDE.template.md, the AI-agent guide)
   eslint-config/       # Shared ESLint config
   typescript-config/   # Shared tsconfig
 ```
