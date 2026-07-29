@@ -23,17 +23,23 @@ import {
 export default function ResetPasswordPage() {
   const [password, setPassword] = React.useState("");
   const [confirm, setConfirm] = React.useState("");
-  const [error, setError] = React.useState<string>();
+  const [error, setError] = React.useState<{
+    field: "password" | "confirm";
+    message: string;
+  }>();
   const [done, setDone] = React.useState(false);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
+      setError({
+        field: "password",
+        message: "Password must be at least 8 characters.",
+      });
       return;
     }
     if (password !== confirm) {
-      setError("Passwords don't match.");
+      setError({ field: "confirm", message: "Passwords don't match." });
       return;
     }
     setError(undefined);
@@ -68,7 +74,12 @@ export default function ResetPasswordPage() {
         />
         <AuthCardBody>
           <FieldGrid>
-            <Field label="New password" htmlFor="password" required>
+            <Field
+              label="New password"
+              htmlFor="password"
+              required
+              error={error?.field === "password" ? error.message : undefined}
+            >
               <Input
                 id="password"
                 type="password"
@@ -78,7 +89,12 @@ export default function ResetPasswordPage() {
                 placeholder="At least 8 characters"
               />
             </Field>
-            <Field label="Confirm password" htmlFor="confirm" required error={error}>
+            <Field
+              label="Confirm password"
+              htmlFor="confirm"
+              required
+              error={error?.field === "confirm" ? error.message : undefined}
+            >
               <Input
                 id="confirm"
                 type="password"

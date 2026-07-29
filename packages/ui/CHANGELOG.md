@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.25.2 — 2026-07-29
+
+### Added
+
+- **`Input` invalid state** — an `<Input>` with `aria-invalid` now paints its
+  border and focus ring in the `destructive` color, so form validation can show
+  an error without a layout-shifting message line (pair it with a tooltip for
+  the message). The `[aria-invalid]` selector out-specifies the base border, so
+  no `!important` is needed.
+
 ## 1.25.1 — 2026-07-28
 
 ### Added

@@ -35,7 +35,10 @@ export default function SignInPage() {
   const [view, setView] = React.useState<View>("main");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState<string>();
+  const [error, setError] = React.useState<{
+    field: "email" | "password";
+    message: string;
+  }>();
   const [orgId, setOrgId] = React.useState("");
   const [code, setCode] = React.useState("");
   const [busy, setBusy] = React.useState(false);
@@ -43,11 +46,14 @@ export default function SignInPage() {
   function signIn(e: React.FormEvent) {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
-      setError("Enter a valid email address.");
+      setError({ field: "email", message: "Enter a valid email address." });
       return;
     }
     if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
+      setError({
+        field: "password",
+        message: "Password must be at least 8 characters.",
+      });
       return;
     }
     setError(undefined);
@@ -181,7 +187,12 @@ export default function SignInPage() {
           <OrDivider />
 
           <FieldGrid>
-            <Field label="Email" htmlFor="email" required>
+            <Field
+              label="Email"
+              htmlFor="email"
+              required
+              error={error?.field === "email" ? error.message : undefined}
+            >
               <Input
                 id="email"
                 type="email"
@@ -191,7 +202,12 @@ export default function SignInPage() {
                 autoComplete="email"
               />
             </Field>
-            <Field label="Password" htmlFor="password" required>
+            <Field
+              label="Password"
+              htmlFor="password"
+              required
+              error={error?.field === "password" ? error.message : undefined}
+            >
               <Input
                 id="password"
                 type="password"
@@ -211,7 +227,6 @@ export default function SignInPage() {
               Forgot password?
             </Link>
           </div>
-          {error && <p className="text-destructive">{error}</p>}
         </AuthCardBody>
         <AuthCardFooter>
           <Button type="submit" className="w-full">

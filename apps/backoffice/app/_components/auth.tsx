@@ -1,7 +1,9 @@
 import * as React from "react";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { RequiredMark } from "@viliha/vui-ui/required-mark";
+import { Tooltip } from "@viliha/vui-ui/tooltip";
 
 /** Multicolor Google "G" (brand mark — colors are intentional). */
 export function GoogleIcon({ className }: { className?: string }) {
@@ -65,7 +67,11 @@ export function FieldGrid({
 
 /** Labeled form field with optional required marker / hint / error text. Must
  *  be rendered inside a {@link FieldGrid} — it emits its label and input as two
- *  grid cells (`display: contents`) so labels/inputs line up across rows. */
+ *  grid cells (`display: contents`) so labels/inputs line up across rows.
+ *
+ *  A validation `error` does NOT push layout: the input border turns red and an
+ *  alert icon inside the input carries the message in a tooltip (the full text
+ *  is also announced to screen readers via `aria-describedby`). */
 export function Field({
   label,
   htmlFor,
@@ -81,6 +87,19 @@ export function Field({
   required?: boolean;
   children: React.ReactNode;
 }) {
+  const errorId = React.useId();
+  // Wire aria-invalid / aria-describedby onto the control without the caller
+  // having to; harmless if children isn't a single element.
+  const control = React.isValidElement(children)
+    ? React.cloneElement(
+        children as React.ReactElement<Record<string, unknown>>,
+        {
+          "aria-invalid": error ? true : undefined,
+          "aria-describedby": error ? errorId : undefined,
+        },
+      )
+    : children;
+
   return (
     // display:contents → the label + input become direct cells of the parent
     // FieldGrid (column 1 = label, column 2 = input), not a nested box.
@@ -92,13 +111,29 @@ export function Field({
         {label}
         {required && <RequiredMark />}
       </label>
-      <div className="min-w-0 space-y-1.5">
-        {children}
-        {error ? (
-          <p className="text-destructive">{error}</p>
-        ) : hint ? (
-          <p className="text-muted-foreground">{hint}</p>
-        ) : null}
+      <div className="min-w-0">
+        {/* The red border/ring comes from the Input's own `aria-invalid` styling
+            (set on `control` above); here we just leave room for the alert icon. */}
+        <div className={cn("relative", error && "[&_input]:pr-8")}>
+          {control}
+          {error && (
+            <Tooltip
+              content={error}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-destructive"
+            >
+              <ExclamationTriangleIcon className="size-4" aria-hidden="true" />
+            </Tooltip>
+          )}
+        </div>
+        {/* Full message for screen readers (visual users get the tooltip). */}
+        {error && (
+          <span id={errorId} className="sr-only">
+            {error}
+          </span>
+        )}
+        {hint && !error && (
+          <p className="mt-1.5 text-muted-foreground">{hint}</p>
+        )}
       </div>
     </div>
   );
