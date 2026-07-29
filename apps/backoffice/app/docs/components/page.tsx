@@ -235,7 +235,7 @@ export default function ComponentsPage() {
 
       <H2>Combobox</H2>
       <P>
-        A searchable single-select — same API as <code>Select</code>, but the
+        A searchable single-select. Same API as <code>Select</code>, but the
         popover leads with a type-to-filter input. Use it for long option lists
         (an FK / country picker) where scrolling a Select is painful.
       </P>
@@ -275,7 +275,7 @@ export default function ComponentsPage() {
         One searchable Combobox per <strong>fixed, named level</strong> (Region →
         Country → State → City). Picking a level narrows the next from the
         selected node&apos;s children and clears everything downstream; a level
-        stays disabled until its parent is chosen. Depth comes from the data —
+        stays disabled until its parent is chosen. Depth comes from the data:
         pass a 3-, 4-, or N-level tree.
       </P>
       <Demo
@@ -313,7 +313,7 @@ export default function ComponentsPage() {
       <P>
         Global notifications for errors and events. Mount <code>&lt;Toaster /&gt;</code>{" "}
         once in your root layout, then call <code>toast(...)</code> from anywhere
-        (event handlers, catch blocks) — no provider needed. Supports a title,
+        (event handlers, catch blocks), no provider needed. Supports a title,
         description, an action button (e.g. Undo), and <code>success</code>/
         <code>error</code>/<code>warning</code> variants.
       </P>
@@ -360,7 +360,7 @@ toast.error("Couldn't save", { description: "Try again." });`}
       <P>
         A themed, dependency-free tooltip matching the shadcn design (dark bubble
         + arrow), portal-positioned with hover/focus. <code>side</code> defaults
-        to <code>&quot;auto&quot;</code> — it prefers <strong>bottom</strong> and
+        to <code>&quot;auto&quot;</code>, it prefers <strong>bottom</strong> and
         flips to <strong>top</strong> only when there isn&apos;t room below (e.g.
         the last rows of a table). RecordView uses it for truncated cells; reach
         for it instead of the native <code>title</code> attribute.
@@ -485,7 +485,7 @@ const fields: RecordField<Org>[] = [
       <P>
         Keyboard key caps. <code>Kbd</code> renders a single cap;{" "}
         <code>Shortcut</code> renders a combo from a <code>keys</code> array,
-        joined with <code>+</code> — used in menus and the ⌘K launchers.
+        joined with <code>+</code>, used in menus and the ⌘K launchers.
       </P>
       <Demo
         code={`import { Kbd, Shortcut } from "@viliha/vui-ui/kbd";
@@ -500,7 +500,7 @@ const fields: RecordField<Org>[] = [
 
       <H2>Required mark</H2>
       <P>
-        The mandatory-field asterisk used across forms, filters and auth — one
+        The mandatory-field asterisk used across forms, filters and auth: one
         consistent cue. Place it next to a label; it takes no props.
       </P>
       <Demo

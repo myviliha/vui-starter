@@ -115,10 +115,10 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>maxCellChars</code>: characters a cell shows before it truncates to <strong>one line</strong> with an ellipsis + hover tooltip (long text never wraps). Defaults to <code>NEXT_PUBLIC_MAX_CELL_CHARS</code> or 25; per-column <code>maxChars</code> overrides it.</li>
         <li><code>nameLabel</code>: header for the leading identity column. Default <code>&quot;Name&quot;</code>; set e.g. <code>&quot;Title&quot;</code> for tables whose identity is a title field (regions, roles, …).</li>
         <li><code>nameSortKey</code>: field the identity column sorts by, so its header toggles + shows a caret like other columns. Defaults to the first <code>hideInTable</code> field marked <code>sortable</code> (the one driving <code>getPrimary</code>).</li>
-        <li><code>identityColumn</code>: where the identity (Name/Title) column sits — <code>&quot;first&quot;</code> (default), <code>&quot;last&quot;</code>, <code>&quot;hidden&quot;</code>, or a number = field columns before it (e.g. <code>1</code> → Region, Title, Code). Lets you order reference tables (Country/State/City) freely.</li>
+        <li><code>identityColumn</code>: where the identity (Name/Title) column sits: <code>&quot;first&quot;</code> (default), <code>&quot;last&quot;</code>, <code>&quot;hidden&quot;</code>, or a number = field columns before it (e.g. <code>1</code> → Region, Title, Code). Lets you order reference tables (Country/State/City) freely.</li>
         <li><code>fetcher</code> + <code>cacheKey</code>: server-side mode where RecordView owns the fetch, caching, and loading (see Server-side data). Optional <code>cache</code> (LRU tuning) and <code>onError</code>.</li>
-        <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode — RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
-        <li><strong>Toolbar toggles</strong> — each defaults to <code>true</code>, so the full toolbar ships unless you opt out: <code>showFilter</code>, <code>showSort</code>, <code>showPagination</code> (the standard set), <code>showImport</code> / <code>showExport</code> (the ones you&apos;ll usually turn off per page), <code>showAdd</code>, and <code>showSelection</code>. <code>showPagination={`{false}`}</code> renders all rows (no page slicing) in client mode; <code>showSelection={`{false}`}</code> removes the checkbox column, bulk actions, and Clear selection (and drag-to-reorder, which shares that column).</li>
+        <li><code>manual</code> + <code>rowCount</code> + <code>onQueryChange</code>: the lower-level server mode: RecordView reports the query and you manage <code>data</code>/<code>loading</code> yourself.</li>
+        <li><strong>Toolbar toggles</strong>: each defaults to <code>true</code>, so the full toolbar ships unless you opt out: <code>showFilter</code>, <code>showSort</code>, <code>showPagination</code> (the standard set), <code>showImport</code> / <code>showExport</code> (the ones you&apos;ll usually turn off per page), <code>showAdd</code>, and <code>showSelection</code>. <code>showPagination={`{false}`}</code> renders all rows (no page slicing) in client mode; <code>showSelection={`{false}`}</code> removes the checkbox column, bulk actions, and Clear selection (and drag-to-reorder, which shares that column).</li>
       </Ul>
 
       <H2>Field options</H2>
@@ -133,8 +133,8 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
-        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). The <strong>table cell shows the option&apos;s label</strong> (e.g. <code>SYSTEM</code> → &quot;System&quot;), staying editable — no <code>render</code> needed. A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
-        <li><code>input</code>: form control — <code>&quot;text&quot;</code> (default), <code>&quot;number&quot;</code>, <code>&quot;date&quot;</code>, or <code>&quot;combobox&quot;</code> (searchable, needs <code>options</code>).</li>
+        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). The <strong>table cell shows the option&apos;s label</strong> (e.g. <code>SYSTEM</code> → &quot;System&quot;), staying editable, with no <code>render</code> needed. A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
+        <li><code>input</code>: form control. <code>&quot;text&quot;</code> (default), <code>&quot;number&quot;</code>, <code>&quot;date&quot;</code>, or <code>&quot;combobox&quot;</code> (searchable, needs <code>options</code>).</li>
         <li><code>renderInput</code>: render a custom Add/Edit control (checkbox, radio group, anything). Overrides the default; you get <code>{`{ value, onChange, field, invalid }`}</code>.</li>
         <li><code>filterable</code>: expose the field in the Filter panel as a labeled control (see Filtering). <code>true</code> = text input; pass a config to choose the control.</li>
         <li><code>icon</code>: column-header icon.</li>
@@ -157,7 +157,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <H2>How do I enable sorting?</H2>
       <P>
         Click a column header or use the Sort dropdown. Every sortable column
-        shows a caret indicator — a muted up/down caret by default, then a solid
+        shows a caret indicator: a muted up/down caret by default, then a solid
         caret for the active direction (up = ascending, down = descending). By
         default a field is sortable when it&apos;s a visible column;{" "}
         <code>sortable</code> decouples the two, so your sort set can differ from
@@ -177,7 +177,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         control per field, mark fields <code>filterable</code>. When any field is
         filterable the panel switches to a control per field plus{" "}
         <strong>Search</strong> and <strong>Clear</strong>. Every row uses the
-        theme&apos;s enforced filter layout — <strong>two columns: label │
+        theme&apos;s enforced filter layout, <strong>two columns: label │
         control, one row per field</strong>, with labels aligned across rows.
       </P>
       <P>
@@ -200,7 +200,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         (unknown or omitted → text). <code>combobox</code> is a searchable
         single-select (type-to-filter) for long option lists; <code>select</code>{" "}
         is the plain dropdown. <code>options</code> is a static array or a{" "}
-        <strong>function of the current filter values</strong> (cascading — see
+        <strong>function of the current filter values</strong> (cascading, see
         Cascading options), and falls back to the field&apos;s own{" "}
         <code>options</code>. The exported types are{" "}
         <code>FilterControl</code>, <code>FieldFilter</code>, and{" "}
@@ -212,7 +212,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         Need a control the built-in kinds don&apos;t cover? Add your own row with{" "}
         <code>filterExtras</code>, composed with <code>FilterField</code> from{" "}
         <code>@viliha/vui-ui/filter-field</code> so it inherits the same
-        two-column layout — never hand-roll the row. It renders below the{" "}
+        two-column layout. Never hand-roll the row. It renders below the{" "}
         <code>filterable</code> fields in the same grid; its state and matching
         are yours (RecordView&apos;s Search / Clear drive the{" "}
         <code>filterable</code> values only).
@@ -256,7 +256,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
       <P>
         When rows come from a server, set <code>loading</code> while the request
         is in flight and the table body shows skeleton rows (matched to your
-        columns) with a highlight <strong>shimmering left to right</strong> —
+        columns) with a highlight <strong>shimmering left to right</strong>,
         instead of an empty &ldquo;No records&rdquo; flash. The toolbar stays
         usable. Clear it when the data arrives. The Markets demo simulates this on
         first load; the Data Table demo shows it on every server fetch.
@@ -285,7 +285,7 @@ useEffect(() => {
         calls your endpoint on every query change, manages{" "}
         <code>data</code> / <code>rowCount</code> / <code>loading</code>, and{" "}
         <strong>caches responses in memory</strong> under <code>cacheKey</code>{" "}
-        (a module-scoped map that survives remounts) — so returning to a tab is
+        (a module-scoped map that survives remounts), so returning to a tab is
         served from memory with <strong>no server round-trip</strong>. Add{" "}
         <code>persistKey</code> and the page/sort/filters restore on remount and
         hit that cache. No <code>data</code>/<code>onQueryChange</code>/
@@ -304,7 +304,7 @@ useEffect(() => {
       <Ul>
         <li>
           Superseded requests are aborted via the <code>signal</code>, and stale
-          responses are ignored — no out-of-order flicker to handle yourself.
+          responses are ignored, so no out-of-order flicker to handle yourself.
         </li>
         <li>
           Edits/adds/deletes update optimistically, invalidate the cache, and
@@ -318,17 +318,17 @@ useEffect(() => {
 
       <H3>Page size (env-configurable)</H3>
       <P>
-        A table with a million rows never ships them all to the browser — it
+        A table with a million rows never ships them all to the browser: it
         pulls one page at a time. The initial page size and the ceiling are set
         by env, so every table inherits one setting:
       </P>
       <CodeBlock title=".env">{`NEXT_PUBLIC_DEFAULT_PAGE_SIZE=50   # initial rows per page
-NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling — the selector never offers more`}</CodeBlock>
+NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling, the selector never offers more`}</CodeBlock>
       <P>
         Override per table with the <code>defaultPageSize</code> /{" "}
         <code>maxPageSize</code> props. The important rule:{" "}
         <strong>
-          <code>maxPageSize</code> is a UI ceiling only — your data layer must
+          <code>maxPageSize</code> is a UI ceiling only. Your data layer must
           clamp the returned page to the same max
         </strong>
         , because a client can request any size. The <code>users</code> demo does
@@ -337,7 +337,7 @@ NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling — the selector never offers more`
       </P>
       <Note>
         For a read-only or <code>fetcher</code>-backed list, omit{" "}
-        <code>initialData</code> and <code>makeEmptyRow</code> — the &quot;+
+        <code>initialData</code> and <code>makeEmptyRow</code>, the &quot;+
         New&quot; button and CSV/JSON import are hidden when there&apos;s nothing
         to create.
       </Note>
@@ -358,7 +358,7 @@ NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling — the selector never offers more`
         </li>
         <li>
           <code>query</code> is{" "}
-          <code>{`{ page, pageSize, sort, search, filters }`}</code> —{" "}
+          <code>{`{ page, pageSize, sort, search, filters }`}</code>,{" "}
           everything you need to build the request (<code>page</code> is 1-based).
         </li>
         <li>
@@ -398,19 +398,19 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
       <H3>Persisting across tab switches (no reload on return)</H3>
       <P>
         Keep-alive keeps a page mounted, but under the App Router an async page
-        can still remount when you switch tabs — which would re-run the fetch and
+        can still remount when you switch tabs, which would re-run the fetch and
         flash the shimmer. Make returning to the tab feel instant with two things:
       </P>
       <Ul>
         <li>
           <strong>Cache responses</strong> in a module-scoped <code>Map</code>{" "}
-          keyed by the query (or your data layer&apos;s cache — React Query, SWR).
+          keyed by the query (or your data layer&apos;s cache, like React Query or SWR).
           A remount then finds the page in memory: serve it synchronously and skip
           the loading state, so there&apos;s no round-trip and no shimmer.
         </li>
         <li>
           Pass <code>persistKey</code> so the current page, sort, and filters
-          survive the remount — <code>onQueryChange</code> fires with the restored
+          survive the remount, and <code>onQueryChange</code> fires with the restored
           query, hits the cache, and you land back on the exact same view.
         </li>
       </Ul>
@@ -444,7 +444,7 @@ const onQueryChange = useCallback((q) => {
         for native inputs, else an auto-growing text area.
       </P>
       <P>
-        Need something the built-ins don&apos;t cover — a checkbox, a radio group,
+        Need something the built-ins don&apos;t cover, like a checkbox, a radio group,
         a slider, a date-range, your own widget? Use <code>renderInput</code> to
         drop in <strong>any component</strong>. It overrides the default control;
         the field still owns the label, required mark, and Save validation. The
@@ -474,7 +474,7 @@ const onQueryChange = useCallback((q) => {
         choices depend on another. In the form it receives the live draft; in the
         filter it receives the current filter values. When the parent changes and
         the child&apos;s value is no longer valid, RecordView <strong>clears the
-        child</strong> automatically — both in the Add/Edit form and the Filter.
+        child</strong> automatically, both in the Add/Edit form and the Filter.
         The Cities demo derives State from the selected Country in both.
       </P>
       <CodeBlock title="Country → State cascade">{`const statesFor = (country) =>
@@ -492,35 +492,35 @@ const fields = [
       <Note title="renderInput + function options">
         If a field uses both a function <code>options</code> and{" "}
         <code>renderInput</code>, guard with{" "}
-        <code>Array.isArray(field.options)</code> before mapping — inside{" "}
+        <code>Array.isArray(field.options)</code> before mapping, inside{" "}
         <code>renderInput</code> you only get the field, not the draft, so a
         function isn&apos;t resolved for you there.
       </Note>
 
       <H3>Lazy-loading option data (loadOptions)</H3>
       <P>
-        Remote reference lists (FK pickers — regions, countries, states, 181
+        Remote reference lists (FK pickers like regions, countries, states, 181
         timezones …) should <strong>never</strong> be eager-loaded into a static{" "}
         <code>options</code> array on mount. Give the field a{" "}
         <code>loadOptions</code> source instead and it fetches only when the
-        picker opens — browsing the table triggers zero option requests. This
+        picker opens, so browsing the table triggers zero option requests. This
         works in both the form and the filter (unlike <code>onFormOpen</code>,
         which only covers the form).
       </P>
       <Ul>
         <li>
-          <code>loadOptions({`{ search, signal, values }`})</code> — fetch on open
+          <code>loadOptions({`{ search, signal, values }`})</code>: fetch on open
           (empty search) and debounced (250&nbsp;ms) per keystroke;{" "}
           <code>values</code> is the live draft / filter values, <code>signal</code>{" "}
           aborts superseded requests.
         </li>
         <li>
-          <code>resolveOption(value)</code> — resolve an already-set or defaulted
+          <code>resolveOption(value)</code>: resolve an already-set or defaulted
           value&apos;s label from a <strong>single record</strong>, so edit/view
           never loads the whole list just to show one label.
         </li>
         <li>
-          <code>dependsOn: [parentKey]</code> — cascades: a parent change clears
+          <code>dependsOn: [parentKey]</code> for cascades: a parent change clears
           this field&apos;s cached options + value, and the next open re-fetches.
         </li>
       </Ul>
@@ -542,7 +542,7 @@ const fields = [
       <Note title="Any picker, not just tables">
         The same engine powers standalone <code>Combobox</code> /{" "}
         <code>Select</code>: pass <code>source={`{{ loadOptions, resolveOption }}`}</code>{" "}
-        (+ <code>resetKey</code> for cascades) instead of <code>options</code> — for
+        (+ <code>resetKey</code> for cascades) instead of <code>options</code>, for
         FK pickers in custom forms or the <code>/settings</code> dropdowns.
         Loading / empty / error (retry) states render inside the dropdown for you.
       </Note>
@@ -591,7 +591,7 @@ const fields = [
       </P>
       <CodeBlock title="routed create form">{`import { RecordForm } from "@viliha/vui-ui/record-view";
 
-// table — navigate instead of opening the overlay
+// table row: navigate instead of opening the overlay
 <RecordView
   data={rows}
   onDataChange={setRows}
@@ -613,7 +613,7 @@ const fields = [
       <P>
         The page form&apos;s breadcrumb defaults to{" "}
         <code>Home › {`{title}`} › Create/Update {`{singular}`}</code>. Pass a{" "}
-        <strong><code>crumbs</code></strong> array to configure it fully — add a
+        <strong><code>crumbs</code></strong> array to configure it fully, to add a
         parent, rename the last crumb, whatever the route needs (each crumb is{" "}
         <code>{`{ label, onClick? }`}</code>; the last is the current page):
       </P>

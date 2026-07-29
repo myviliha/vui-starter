@@ -44,7 +44,7 @@ export default function AuthDocPage() {
       <H2>The auth contract</H2>
       <P>
         The library ships auth <em>screens</em> but deliberately <strong>not</strong>{" "}
-        an auth engine — bundling a provider (NextAuth, Clerk, Better Auth,
+        an auth engine. Bundling a provider (NextAuth, Clerk, Better Auth,
         Supabase, …) would force its SDK and backend on every consumer. Instead,
         screens depend on <code>@viliha/vui-ui/auth-context</code>: a tiny
         interface you implement with an adapter. Swapping providers touches only
@@ -102,7 +102,7 @@ const value: AuthContract = {
 };`}</CodeBlock>
       <Note title="This app is a static export">
         <code>output: &quot;export&quot;</code> means the app can&apos;t host
-        Better Auth&apos;s <code>/api/auth/*</code> handler itself — run the
+        Better Auth&apos;s <code>/api/auth/*</code> handler itself. Run the
         server on your own backend (or a non-static deployment) and set{" "}
         <code>NEXT_PUBLIC_AUTH_BASE_URL</code> to its origin. Minimal server:
       </Note>
@@ -132,8 +132,8 @@ export const { GET, POST } = toNextJsHandler(auth);`}</CodeBlock>
         <li><code>AuthCardBody</code>: the fields (roomy, consistent spacing)</li>
         <li><code>AuthCardFooter</code>: the primary action(s) (muted background)</li>
         <li><code>AuthCardAside</code>: secondary nav (e.g. &quot;Create an account&quot;), set off by its own divider</li>
-        <li><code>FieldGrid</code>: wraps a form&apos;s <code>Field</code>s in a two-column grid — labels line up in column 1, inputs in column 2, so every input starts at the same x</li>
-        <li><code>Field</code>: a labelled field (render inside a <code>FieldGrid</code>); pass <code>required</code> for the <code>*</code> marker and <code>hint</code> for helper text. An <code>error</code> turns the input border red (via the <code>Input</code>&apos;s <code>aria-invalid</code> styling) and shows the message in a tooltip on an alert icon — <strong>no layout shift</strong>; the full text is announced to screen readers. The error <strong>auto-clears the moment the user edits the field</strong> (and re-validates on the next submit), so pages just set <code>error</code> on submit and never clear it on change</li>
+        <li><code>FieldGrid</code>: wraps a form&apos;s <code>Field</code>s in a two-column grid: labels line up in column 1, inputs in column 2, so every input starts at the same x</li>
+        <li><code>Field</code>: a labelled field (render inside a <code>FieldGrid</code>); pass <code>required</code> for the <code>*</code> marker and <code>hint</code> for helper text. An <code>error</code> turns the input border red (via the <code>Input</code>&apos;s <code>aria-invalid</code> styling) and shows the message in a tooltip on an alert icon, with <strong>no layout shift</strong>; the full text is announced to screen readers. The error <strong>auto-clears the moment the user edits the field</strong> (and re-validates on the next submit), so pages just set <code>error</code> on submit and never clear it on change</li>
       </Ul>
 
       <H2>How do I build an auth screen?</H2>
@@ -198,9 +198,9 @@ export default function SignIn() {
 
       <Note title="Layout">
         Auth screens render inside <code>app/auth/layout.tsx</code>: a brand
-        header (<code>AuthHeader</code> — logo top-left, theme toggle right) and
+        header (<code>AuthHeader</code>: logo top-left, theme toggle right) and
         the same footer as the app shell (<code>SiteFooter</code>, full width),
-        with the card centered between them — so moving between auth and the
+        with the card centered between them, so moving between auth and the
         dashboard doesn&apos;t feel like a different site. Add a new screen at{" "}
         <code>app/auth/&lt;name&gt;/page.tsx</code> and it inherits the layout.
         The <code>not-found</code> (404) and <code>error</code> (500) pages reuse

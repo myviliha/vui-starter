@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Customize Vui Starter with CSS-variable design tokens (colors, radius, dark mode and typography), all from one theme.css.",
 };
 
-/** Semantic colors of the theme — the ones you reach for most. */
+/** Semantic colors of the theme, the ones you reach for most. */
 const COLORS: {
   name: string;
   token: string;

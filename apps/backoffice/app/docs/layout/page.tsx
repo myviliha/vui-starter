@@ -46,16 +46,16 @@ import { SetPageTitle } from "@/app/_components/set-page-title";
 export default function MyPage() {
   return (
     <div className="flex h-full flex-col">
-      {/* 1 — surfaces the title + icon in the global top bar */}
+      {/* 1: surfaces the title + icon in the global top bar */}
       <SetPageTitle title="My page" icon={RocketIcon} />
 
-      {/* 2 — action header: breadcrumbs (left) + optional actions (right) */}
+      {/* 2 - action header: breadcrumbs (left) + optional actions (right) */}
       <div className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border px-4">
         <Breadcrumbs />
         {/* <Button variant="primary">…</Button> */}
       </div>
 
-      {/* 3 — the only scrolling region; p-4 + gap-4 between sections */}
+      {/* 3: the only scrolling region; p-4 + gap-4 between sections */}
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="flex flex-col gap-4 p-4">
           {/* sections go here */}
@@ -75,24 +75,24 @@ export default function MyPage() {
         Data-backed pages are split into three files so no data processing ever
         happens in a UI component. Data flows one way:{" "}
         <strong>Data → Controller → Presentation</strong>. The{" "}
-        <code>organizations</code> page is the reference — copy its shape.
+        <code>organizations</code> page is the reference. Copy its shape.
       </P>
       <Ul>
         <li>
-          <strong>Data (API)</strong> — <code>lib/api/&lt;entity&gt;.ts</code>.
+          <strong>Data (API)</strong>: <code>lib/api/&lt;entity&gt;.ts</code>.
           Async functions that talk to the backend; no React. It&apos;s a mock
           in-memory table today, but the signatures are the real-API seam: swap
           each body for <code>fetch(url, {`{ signal }`})</code> and nothing above
           changes.
         </li>
         <li>
-          <strong>Controller</strong> —{" "}
+          <strong>Controller</strong>:{" "}
           <code>app/(app)/&lt;route&gt;/use-&lt;entity&gt;.ts</code>. A hook that
           owns <code>{`{ data, loading, error }`}</code>, calls the data layer{" "}
           <em>after mount</em>, and exposes writes. No JSX.
         </li>
         <li>
-          <strong>Presentation</strong> — a thin <code>*-table.tsx</code> that{" "}
+          <strong>Presentation</strong>: a thin <code>*-table.tsx</code> that{" "}
           <code>next/dynamic</code>-loads the view behind a skeleton, and a{" "}
           <code>*-view.tsx</code> that reads the controller and renders{" "}
           <code>RecordView</code>. Zero fetching or data processing.
@@ -107,13 +107,13 @@ export default function MyPage() {
         <code>RecordView</code>&apos;s built-in <code>fetcher</code> instead of
         wiring pagination by hand.
       </Note>
-      <CodeBlock title="organizations — the three layers">{`// lib/api/organizations.ts — DATA (no React; swap body for fetch())
+      <CodeBlock title="organizations: the three layers">{`// lib/api/organizations.ts: DATA (no React; swap body for fetch())
 export async function listOrganizations(signal?: AbortSignal) {
   const res = await fetch("/api/organizations", { signal });
   return res.json();
 }
 
-// use-organizations.ts — CONTROLLER (loads after mount)
+// use-organizations.ts: CONTROLLER (loads after mount)
 export function useOrganizations() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -125,11 +125,11 @@ export function useOrganizations() {
   return { data, loading, save: replaceOrganizations };
 }
 
-// organizations-table.tsx — PRESENTATION (paint shell first)
+// organizations-table.tsx: PRESENTATION (paint shell first)
 const View = dynamic(() => import("./organizations-view").then((m) => m.OrganizationsView),
   { ssr: false, loading: () => <TableSkeleton /> });
 
-// organizations-view.tsx — PRESENTATION (no data work)
+// organizations-view.tsx: PRESENTATION (no data work)
 const { data, loading, save } = useOrganizations();
 <RecordView data={data} loading={loading} onDataChange={save} … />`}</CodeBlock>
 
@@ -155,13 +155,13 @@ const { data, loading, save } = useOrganizations();
         configure it rather than lay it out. Every data table page runs on this
         one layout; only the <code>fields</code> config changes.
       </P>
-      <CodeBlock title="app/(app)/departments/ (server page + client table)">{`// page.tsx — server component: metadata + the table, nothing else
+      <CodeBlock title="app/(app)/departments/ (server page + client table)">{`// page.tsx - server component: metadata + the table, nothing else
 export const metadata = pageMeta("/departments");
 export default function DepartmentsPage() {
   return <main className="h-full"><DepartmentsTable /></main>;
 }
 
-// departments-table.tsx — "use client"
+// departments-table.tsx: "use client"
 <RecordView
   title="Departments" singular="Department" icon={LayoutGrid}
   fields={fields}                       // the whole design comes from here
@@ -212,10 +212,10 @@ export default function DepartmentsPage() {
           needs its own URL.
         </li>
       </Ul>
-      <CodeBlock title="slide-over (Branches) vs. full-page routes (Organizations)">{`// Branches — overlay, uncontrolled. That's the whole difference.
+      <CodeBlock title="slide-over (Branches) vs. full-page routes (Organizations)">{`// Branches: overlay, uncontrolled. That's the whole difference.
 <RecordView title="Branches" fields={fields} initialData={branches} … />
 
-// Organizations — full-page routes, controlled via a controller hook that
+// Organizations: full-page routes, controlled via a controller hook that
 // loads from the data layer (data → controller → presentation; see /docs/layout).
 const { data, loading, save } = useOrganizations();
 <RecordView
@@ -272,7 +272,7 @@ const { data, loading, save } = useOrganizations();
       {/* <StatCard /> × 4 */}
     </section>
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-      {/* bordered-card sections — a wide table + a side column */}
+      {/* bordered-card sections: a wide table + a side column */}
     </div>
   </div>
 </div>`}</CodeBlock>
@@ -296,7 +296,7 @@ const { data, loading, save } = useOrganizations();
     <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
       {/* <Section title="Profile"> … </Section> cards */}
     </div>
-    {/* fixed footer — matches the record form's action bar */}
+    {/* fixed footer: matches the record form's action bar */}
     <div className="flex shrink-0 items-center justify-end gap-2 border-y border-border bg-muted/40 px-4 py-3">
       <Button variant="primary">Save changes</Button>
     </div>
@@ -434,7 +434,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  // Global shortcut — ⌘K here; use e.altKey to tell ⌘K from ⌘⌥K.
+  // Global shortcut: ⌘K here; use e.altKey to tell ⌘K from ⌘⌥K.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && !e.altKey && e.code === "KeyK") {
@@ -446,7 +446,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Build actions from anything — NAV pages, or records from your API.
+  // Build actions from anything: NAV pages, or records from your API.
   const actions: CommandAction[] = useMemo(
     () => [
       { id: "orgs", label: "Organizations", group: "Go to",
@@ -480,35 +480,35 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
       <H2>Top bar features (configurable)</H2>
       <P>
-        Every top-bar affordance — <strong>Quick actions</strong>,{" "}
+        Every top-bar affordance (<strong>Quick actions</strong>,{" "}
         <strong>Global search</strong>, <strong>Help</strong>,{" "}
         <strong>Documentation</strong>, <strong>Notifications</strong>,{" "}
-        <strong>Settings</strong> and the <strong>User menu</strong> — is on by
+        <strong>Settings</strong> and the <strong>User menu</strong>) is on by
         default, and a consumer can turn any of them off. Flags live in{" "}
         <code>lib/app-config.ts</code>; there are two ways to set them:
       </P>
       <Ul>
         <li>
-          <strong>Install-time</strong> — set the matching{" "}
+          <strong>Install-time</strong>: set the matching{" "}
           <code>NEXT_PUBLIC_SHOW_*</code> env var to <code>0</code> (baked into
           the build; the default for everyone).
         </li>
         <li>
-          <strong>Runtime</strong> — flip it on the Settings page (
+          <strong>Runtime</strong>: flip it on the Settings page (
           <em>Top bar</em> section); the choice persists per-browser and
-          overrides the install-time default live — no rebuild.
+          overrides the install-time default live, no rebuild.
         </li>
       </Ul>
-      <CodeBlock title=".env.local — hide two features at build time">{`NEXT_PUBLIC_SHOW_HELP=0
+      <CodeBlock title=".env.local: hide two features at build time">{`NEXT_PUBLIC_SHOW_HELP=0
 NEXT_PUBLIC_SHOW_NOTIFICATIONS=0`}</CodeBlock>
       <P>
-        Turning a feature off doesn&apos;t just hide the icon — it also drops the
+        Turning a feature off doesn&apos;t just hide the icon; it also drops the
         keyboard shortcut (e.g. disabling Quick actions removes <code>⌘K</code>)
         and skips mounting its palette. Read the effective flags anywhere with{" "}
         <code>useChrome()</code> (<code>_components/chrome-config.tsx</code>).
       </P>
       <Note title="Settings stays reachable">
-        Hiding the Settings icon only removes the top-bar shortcut — the page is
+        Hiding the Settings icon only removes the top-bar shortcut; the page is
         still at <code>/settings</code> (and in the user menu), so you can always
         get back to re-enable a feature or <em>Reset to defaults</em>.
       </Note>
@@ -571,7 +571,7 @@ NEXT_PUBLIC_SHOW_NOTIFICATIONS=0`}</CodeBlock>
         <code>refetch</code> when the tab becomes active again or the window
         regains focus. Make that <code>refetch</code> a <strong>delta</strong>{" "}
         (<code>{`?since=cursor`}</code>) that returns only the changed rows +
-        deleted ids and merges them by <code>id</code>&nbsp;— not a full reload.{" "}
+        deleted ids and merges them by <code>id</code>, not a full reload.{" "}
         <code>use-organizations.ts</code> +{" "}
         <code>syncOrganizations()</code> are the reference. Refetch narrows the
         conflict window but can&apos;t close it: guard the write itself with

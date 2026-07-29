@@ -145,7 +145,7 @@ export default function InstallationPage() {
       </P>
       <CodeBlock title="app/globals.css">{`@import "tailwindcss";
 /* Design tokens, @theme mapping, base reset, and scanning of the
-   library's component classes — all in one import. */
+   library's component classes, all in one import. */
 @import "@viliha/vui-ui/theme.css";`}</CodeBlock>
       <H3>b. Transpile the source package</H3>
       <CodeBlock title="next.config.ts">{`import type { NextConfig } from "next";
