@@ -14,7 +14,6 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import {
   AuthCard,
-  AuthCardAside,
   AuthCardBody,
   AuthCardFooter,
   AuthCardHeader,
@@ -56,7 +55,7 @@ export default function SignUpPage() {
       <AuthCard>
         <AuthCardHeader
           icon={<MailCheck className="size-6" />}
-          title="Verify your email"
+          title="Verify Your Email"
           description={
             <>
               Verification link sent to{" "}
@@ -67,10 +66,10 @@ export default function SignUpPage() {
         <AuthCardFooter className="space-y-2">
           {/* Demo shortcut — no real inbox in the demo. */}
           <Button className="w-full" onClick={() => router.push("/onboarding")}>
-            I&apos;ve verified — continue
+            I&apos;ve Verified — Continue
           </Button>
           <Button variant="ghost" className="w-full" onClick={() => setSent(false)}>
-            Change email
+            Change Email
           </Button>
         </AuthCardFooter>
       </AuthCard>
@@ -80,22 +79,10 @@ export default function SignUpPage() {
   return (
     <AuthCard>
       <form onSubmit={submit}>
-        <AuthCardHeader title="Create your account" />
+        <AuthCardHeader title="Create Your Account" />
         <AuthCardBody className="space-y-4">
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => router.push("/onboarding")}
-          >
-            <GoogleIcon />
-            Sign up with Google
-          </Button>
-
-          <OrDivider />
-
           <FieldGrid>
-            <Field label="Work email" htmlFor="email" required error={error}>
+            <Field label="Work Email" htmlFor="email" required error={error}>
               <Input
                 id="email"
                 type="email"
@@ -108,17 +95,29 @@ export default function SignUpPage() {
           </FieldGrid>
 
           <RecaptchaMock checked={robot} onChange={setRobot} />
-        </AuthCardBody>
-        <AuthCardFooter>
+
           <Button type="submit" className="w-full">
-            Create account
+            Create Account
           </Button>
-          <AuthCardAside>
-            Already have an account?{" "}
-            <Link href="/auth/signin" className="font-medium text-primary hover:underline">
-              Sign in
-            </Link>
-          </AuthCardAside>
+
+          {/* Alternative sign-up — below the form, consistent with sign-in. */}
+          <OrDivider />
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => router.push("/onboarding")}
+          >
+            <GoogleIcon />
+            Sign Up With Google
+          </Button>
+        </AuthCardBody>
+        <AuthCardFooter className="text-center">
+          Already have an account?{" "}
+          <Link href="/auth/signin" className="font-medium text-primary hover:underline">
+            Sign In
+          </Link>
         </AuthCardFooter>
       </form>
     </AuthCard>

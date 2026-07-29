@@ -39,7 +39,7 @@ export default function VerifyPage() {
       <form onSubmit={submit}>
         <AuthCardHeader
           icon={<Shield className="size-6" />}
-          title="Enter verification code"
+          title="Enter Verification Code"
           description="We sent a 6-digit code to your email."
         />
         <AuthCardBody className="flex flex-col items-center gap-4">
@@ -76,7 +76,7 @@ export default function VerifyPage() {
               className="flex items-center justify-center gap-1 hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Back to sign in
+              Back To Sign In
             </Link>
           </AuthCardAside>
         </AuthCardFooter>

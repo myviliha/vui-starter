@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
       <AuthCard>
         <AuthCardHeader
           icon={<MailCheck className="size-6" />}
-          title="Check your email"
+          title="Check Your Email"
           description={
             <>
               A reset link was sent to{" "}
@@ -53,10 +53,10 @@ export default function ForgotPasswordPage() {
         <AuthCardFooter className="space-y-2">
           {/* Demo shortcut — no real inbox in the demo. */}
           <Link href="/auth/reset-password" className="block">
-            <Button className="w-full">I&apos;ve got the link — continue</Button>
+            <Button className="w-full">I&apos;ve Got The Link — Continue</Button>
           </Link>
           <Button variant="ghost" className="w-full" onClick={() => setSent(false)}>
-            Use a different email
+            Use A Different Email
           </Button>
         </AuthCardFooter>
       </AuthCard>
@@ -67,12 +67,12 @@ export default function ForgotPasswordPage() {
     <AuthCard>
       <form onSubmit={submit}>
         <AuthCardHeader
-          title="Reset your password"
+          title="Reset Your Password"
           description="Enter your email and we'll send you a reset link."
         />
         <AuthCardBody>
           <FieldGrid>
-            <Field label="Work email" htmlFor="email" required error={error}>
+            <Field label="Work Email" htmlFor="email" required error={error}>
               <Input
                 id="email"
                 type="email"
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
         <AuthCardFooter>
           <Button type="submit" className="w-full">
             <Mail className="size-4" />
-            Send reset link
+            Send Reset Link
           </Button>
           <AuthCardAside>
             <Link
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
               className="flex items-center justify-center gap-1 hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Back to sign in
+              Back To Sign In
             </Link>
           </AuthCardAside>
         </AuthCardFooter>

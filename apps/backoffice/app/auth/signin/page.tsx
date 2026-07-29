@@ -75,7 +75,7 @@ export default function SignInPage() {
             finish();
           }}
         >
-          <AuthCardHeader title="Single sign-on" />
+          <AuthCardHeader title="Single Sign On" />
           <AuthCardBody>
             <FieldGrid>
               <Field label="Organization ID" htmlFor="org" required>
@@ -92,7 +92,7 @@ export default function SignInPage() {
           </AuthCardBody>
           <AuthCardFooter>
             <Button type="submit" className="w-full" disabled={!orgId || busy}>
-              Continue to your provider
+              Continue To Your Provider
             </Button>
             <AuthCardAside>
               <BackLink onClick={() => setView("main")} />
@@ -114,7 +114,7 @@ export default function SignInPage() {
         >
           <AuthCardHeader
             icon={<ShieldCheck className="size-6" />}
-            title="Two-factor authentication"
+            title="Two-Factor Authentication"
             description="Enter your 6-digit code"
           />
           <AuthCardBody>
@@ -135,7 +135,7 @@ export default function SignInPage() {
               className="w-full"
               disabled={code.length !== 6 || busy}
             >
-              Verify &amp; sign in
+              Verify &amp; Sign In
             </Button>
             <AuthCardAside>
               <button
@@ -143,7 +143,7 @@ export default function SignInPage() {
                 onClick={finish}
                 className="mx-auto block text-primary hover:underline"
               >
-                Use a passkey instead
+                Use A Passkey Instead
               </button>
               <BackLink onClick={() => setView("main")} />
             </AuthCardAside>
@@ -157,7 +157,7 @@ export default function SignInPage() {
   return (
     <AuthCard>
       <form onSubmit={signIn}>
-        <AuthCardHeader title="Sign in to your account" />
+        <AuthCardHeader title="Sign In To Your Account" />
         <AuthCardBody className="space-y-4">
           <FieldGrid>
             <Field
@@ -201,7 +201,7 @@ export default function SignInPage() {
             </Link>
           </div>
           <Button type="submit" className="w-full">
-            Sign in
+            Sign In
           </Button>
 
           {/* Alternative sign-in methods — below the email/password form. */}
@@ -219,7 +219,7 @@ export default function SignInPage() {
             </Button>
             <Button type="button" variant="outline" className="w-full" onClick={finish}>
               <Fingerprint className="size-4" />
-              Sign in with a passkey
+              Sign In With A Passkey
             </Button>
             <Button
               type="button"
@@ -228,14 +228,14 @@ export default function SignInPage() {
               onClick={() => setView("sso")}
             >
               <KeyRound className="size-4" />
-              Single sign-on (SSO)
+              Single Sign On (SSO)
             </Button>
           </div>
         </AuthCardBody>
         <AuthCardFooter className="text-center">
           New to <BrandName />?{" "}
           <Link href="/auth/signup" className="font-medium text-primary hover:underline">
-            Create an account
+            Create An Account
           </Link>
         </AuthCardFooter>
       </form>

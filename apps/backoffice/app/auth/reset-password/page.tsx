@@ -51,13 +51,13 @@ export default function ResetPasswordPage() {
       <AuthCard>
         <AuthCardHeader
           icon={<CheckCircle className="size-6" />}
-          title="Password updated"
+          title="Password Updated"
           description="Your password has been changed. You can sign in now."
         />
         <AuthCardFooter>
           <Link href="/auth/signin" className="block">
             <Button variant="primary" className="w-full">
-              Continue to sign in
+              Continue To Sign In
             </Button>
           </Link>
         </AuthCardFooter>
@@ -69,13 +69,13 @@ export default function ResetPasswordPage() {
     <AuthCard>
       <form onSubmit={submit}>
         <AuthCardHeader
-          title="Set a new password"
+          title="Set A New Password"
           description="Choose a strong password you don't use elsewhere."
         />
         <AuthCardBody>
           <FieldGrid>
             <Field
-              label="New password"
+              label="New Password"
               htmlFor="password"
               required
               error={error?.field === "password" ? error.message : undefined}
@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
               />
             </Field>
             <Field
-              label="Confirm password"
+              label="Confirm Password"
               htmlFor="confirm"
               required
               error={error?.field === "confirm" ? error.message : undefined}
@@ -109,7 +109,7 @@ export default function ResetPasswordPage() {
         <AuthCardFooter>
           <Button type="submit" className="w-full">
             <Lock className="size-4" />
-            Update password
+            Update Password
           </Button>
           <AuthCardAside>
             <Link
@@ -117,7 +117,7 @@ export default function ResetPasswordPage() {
               className="flex items-center justify-center gap-1 hover:text-foreground"
             >
               <ArrowLeft className="size-3.5" />
-              Back to sign in
+              Back To Sign In
             </Link>
           </AuthCardAside>
         </AuthCardFooter>
