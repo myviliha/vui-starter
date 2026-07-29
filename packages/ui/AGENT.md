@@ -438,15 +438,30 @@ Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colo
 
 # Authentication
 
-The auth screens are a **demo pattern in the reference app**, not exports of the
-`@viliha/vui-ui` package. `AuthCard`, `AuthCardHeader`, `AuthCardBody`,
-`AuthCardFooter` and `AuthCardAside` live in
-`apps/backoffice/app/_components/auth.tsx`; **copy and adapt them** into your
-app (they are built from published primitives: `Button`, `Input`, tokens).
+The package ships an **auth contract**, not an auth engine. Bundling a provider
+(NextAuth, Clerk, Better Auth, Supabase, …) would force its SDK and backend on
+every consumer, so instead:
 
-Do not `import … from "@viliha/vui-ui/auth"`; no such entry point exists.
+- `@viliha/vui-ui/auth-context` — `AuthProvider`, `useAuth()`, and the
+  `AuthContract` / `AuthUser` / `Credentials` / `SignUpInput` types. Screens
+  depend on this; you supply an **adapter** that implements it for your
+  provider. Swapping providers is one adapter file, no screen changes.
 
-Wrap the forms in semantic HTML.
+```tsx
+import { AuthProvider, useAuth } from "@viliha/vui-ui/auth-context";
+<AuthProvider value={adapter}>{children}</AuthProvider>   // mount once
+const { user, status, signIn, signOut } = useAuth();        // read anywhere
+```
+
+The auth **screens** (`AuthCard`, `AuthCardHeader`, `AuthCardBody`,
+`AuthCardFooter`, `AuthCardAside`, `FieldGrid`, `Field`) remain a **demo pattern
+in the reference app** (`apps/backoffice/app/_components/auth.tsx`) — copy and
+adapt them; they are built from published primitives (`Button`, `Input`,
+tokens). The reference app also ships a **Better Auth** adapter
+(`app/_components/auth-provider.tsx`) with a mock fallback for the static demo.
+
+Do not `import … from "@viliha/vui-ui/auth"`; no such entry point exists — the
+contract is `@viliha/vui-ui/auth-context`. Wrap the forms in semantic HTML.
 
 ---
 

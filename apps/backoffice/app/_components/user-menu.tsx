@@ -11,7 +11,7 @@ import {
 
 import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
 import { MenuItem } from "@viliha/vui-ui/menu";
-import { setSignedIn } from "@/lib/auth-state";
+import { useAuth } from "@viliha/vui-ui/auth-context";
 import { ThemeToggle } from "./theme-toggle";
 
 // ponytail: no auth in the demo — mock the signed-in user. Swap for the real
@@ -27,6 +27,7 @@ const isAdmin = USER.role === "Administrator";
 /** GitLab-style profile menu in the top bar: avatar → popup with account
  *  info, an admin-only entry, appearance toggle, and sign out. */
 export function UserMenu() {
+  const auth = useAuth();
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -103,7 +104,7 @@ export function UserMenu() {
             as={Link}
             href="/auth/signin"
             onClick={() => {
-              setSignedIn(false); // clear the demo session (see lib/auth-state.ts)
+              void auth.signOut(); // clear the session via the auth contract
               setOpen(false);
             }}
           >

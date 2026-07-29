@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
+import { useAuth } from "@viliha/vui-ui/auth-context";
 import {
   AuthCard,
   AuthCardBody,
@@ -26,6 +27,7 @@ import { checkBusinessEmail } from "@/lib/auth-demo";
 
 export default function SignUpPage() {
   const router = useRouter();
+  const auth = useAuth();
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState<string>();
   const [robot, setRobot] = React.useState(false);
@@ -107,7 +109,11 @@ export default function SignUpPage() {
             type="button"
             variant="outline"
             className="w-full"
-            onClick={() => router.push("/onboarding")}
+            onClick={async () => {
+              // Contract-driven: mock signs in locally; Better Auth redirects to Google.
+              await auth.signInSocial?.("google");
+              router.push("/onboarding");
+            }}
           >
             <GoogleIcon />
             Sign Up With Google

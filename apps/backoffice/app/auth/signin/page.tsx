@@ -12,7 +12,7 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
-import { setSignedIn } from "@/lib/auth-state";
+import { useAuth } from "@viliha/vui-ui/auth-context";
 import { BrandName } from "@/app/_components/brand";
 import {
   AuthCard,
@@ -32,6 +32,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function SignInPage() {
   const router = useRouter();
+  const auth = useAuth();
   const [view, setView] = React.useState<View>("main");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -43,7 +44,7 @@ export default function SignInPage() {
   const [code, setCode] = React.useState("");
   const [busy, setBusy] = React.useState(false);
 
-  function signIn(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
       setError({ field: "email", message: "Enter A Valid Email Address." });
@@ -60,10 +61,26 @@ export default function SignInPage() {
     finish();
   }
 
-  function finish() {
+  // Complete sign-in through the auth contract (useAuth). The demo runs on the
+  // mock adapter; set NEXT_PUBLIC_AUTH_BASE_URL to hit a real Better Auth server.
+  // The 2FA/SSO/passkey sub-views are illustrative and reuse this terminal step;
+  // wire them to your provider's plugins when you go live.
+  async function finish() {
     setBusy(true);
-    setSignedIn(true); // mark the demo session (see lib/auth-state.ts)
-    router.push("/dashboard");
+    try {
+      await auth.signIn({
+        email: email.trim() || "admin@viliha.example",
+        password: password || "demo-password",
+      });
+      router.push("/dashboard");
+    } catch (err) {
+      setBusy(false);
+      setError({
+        field: "password",
+        message:
+          err instanceof Error ? err.message : "Sign In Failed. Please Try Again.",
+      });
+    }
   }
 
   if (view === "sso") {
@@ -156,7 +173,7 @@ export default function SignInPage() {
   // main
   return (
     <AuthCard>
-      <form onSubmit={signIn}>
+      <form onSubmit={handleSubmit}>
         <AuthCardHeader title="Sign In To Your Account" />
         <AuthCardBody className="space-y-4">
           <FieldGrid>
@@ -200,7 +217,7 @@ export default function SignInPage() {
               Forgot password?
             </Link>
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={busy}>
             Sign In
           </Button>
 

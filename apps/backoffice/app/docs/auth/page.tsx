@@ -29,8 +29,9 @@ export default function AuthDocPage() {
 
       <H2>What's included</H2>
       <P>
-        Themed, client-side demo screens live under <code>/auth</code>. Swap
-        the demo handlers for your real auth calls:
+        Themed, client-side screens live under <code>/auth</code>. They drive a
+        small, provider-agnostic <strong>auth contract</strong> (below), so
+        wiring a real backend is one adapter, not a screen rewrite:
       </P>
       <Ul>
         <li><code>/auth/signin</code>: Google / passkey / SSO / magic-link, with 2FA and SSO sub-views</li>
@@ -39,6 +40,84 @@ export default function AuthDocPage() {
         <li><code>/auth/reset-password</code>: set a new password</li>
         <li><code>/auth/verify</code>: 6-digit verification code (OTP)</li>
       </Ul>
+
+      <H2>The auth contract</H2>
+      <P>
+        The library ships auth <em>screens</em> but deliberately <strong>not</strong>{" "}
+        an auth engine — bundling a provider (NextAuth, Clerk, Better Auth,
+        Supabase, …) would force its SDK and backend on every consumer. Instead,
+        screens depend on <code>@viliha/vui-ui/auth-context</code>: a tiny
+        interface you implement with an adapter. Swapping providers touches only
+        the adapter; the screens never change.
+      </P>
+      <CodeBlock title="@viliha/vui-ui/auth-context">{`export interface AuthContract {
+  user: AuthUser | null;
+  status: "loading" | "authenticated" | "unauthenticated";
+  signIn(creds: { email: string; password: string }): Promise<void>;
+  signUp?(input: { email: string; password: string; name?: string }): Promise<void>;
+  signInSocial?(provider: string): Promise<void>; // omit → hide the buttons
+  signOut(): Promise<void>;
+}`}</CodeBlock>
+      <P>
+        Wrap the app once with an adapter, then read it anywhere with{" "}
+        <code>useAuth()</code>:
+      </P>
+      <CodeBlock title="app/layout.tsx & any screen">{`import { AuthProvider, useAuth } from "@viliha/vui-ui/auth-context";
+
+// mount once (see app/_components/auth-provider.tsx)
+<AuthProvider value={adapter}>{children}</AuthProvider>
+
+// in a screen
+const auth = useAuth();
+await auth.signIn({ email, password }); // throws on failure → show the error`}</CodeBlock>
+
+      <H2>Reference adapter — Better Auth</H2>
+      <P>
+        The starter ships a <a href="https://better-auth.com" target="_blank" rel="noreferrer">Better Auth</a>{" "}
+        adapter (<code>app/_components/auth-provider.tsx</code>) that maps the
+        Better Auth React client onto the contract. It activates when{" "}
+        <code>NEXT_PUBLIC_AUTH_BASE_URL</code> points at your Better Auth server;
+        otherwise it falls back to an in-memory <strong>mock</strong> so the
+        static demo keeps working with no backend.
+      </P>
+      <CodeBlock title="lib/auth/client.ts">{`import { createAuthClient } from "better-auth/react";
+
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_AUTH_BASE_URL,
+});`}</CodeBlock>
+      <CodeBlock title="app/_components/auth-provider.tsx (the bridge)">{`const session = authClient.useSession();
+const value: AuthContract = {
+  user: session.data?.user ?? null,
+  status: session.isPending ? "loading" : session.data ? "authenticated" : "unauthenticated",
+  async signIn({ email, password }) {
+    const { error } = await authClient.signIn.email({ email, password });
+    if (error) throw new Error(error.message);
+  },
+  async signUp({ email, password, name }) {
+    const { error } = await authClient.signUp.email({ email, password, name });
+    if (error) throw new Error(error.message);
+  },
+  signInSocial: (provider) => authClient.signIn.social({ provider, callbackURL: "/dashboard" }),
+  signOut: () => authClient.signOut(),
+};`}</CodeBlock>
+      <Note title="This app is a static export">
+        <code>output: &quot;export&quot;</code> means the app can&apos;t host
+        Better Auth&apos;s <code>/api/auth/*</code> handler itself — run the
+        server on your own backend (or a non-static deployment) and set{" "}
+        <code>NEXT_PUBLIC_AUTH_BASE_URL</code> to its origin. Minimal server:
+      </Note>
+      <CodeBlock title="server (Node/Next route, own deployment)">{`// auth.ts
+import { betterAuth } from "better-auth";
+export const auth = betterAuth({
+  database: /* your adapter */,
+  emailAndPassword: { enabled: true },
+  socialProviders: { google: { clientId: "…", clientSecret: "…" } },
+});
+
+// app/api/auth/[...all]/route.ts
+import { toNextJsHandler } from "better-auth/next-js";
+import { auth } from "@/auth";
+export const { GET, POST } = toNextJsHandler(auth);`}</CodeBlock>
 
       <H2>The building blocks</H2>
       <P>

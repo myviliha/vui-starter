@@ -266,7 +266,8 @@ place. If you'd rather keep a verbatim copy, run
 
 ## Components
 
-`accordion` · `alert` · `alert-dialog` · `aspect-ratio` · `avatar` · `badge` ·
+`accordion` · `alert` · `alert-dialog` · `aspect-ratio` · `auth-context`
+(provider-agnostic `AuthProvider` / `useAuth`) · `avatar` · `badge` ·
 `breadcrumb` · `breadcrumbs` · `button` · `calendar` · `card` · `chart` (themed
 Recharts wrapper) · `checkbox` · `collapsible` · `combobox` (searchable
 single-select, static or async `loadOptions`) · `command` · `command-palette`

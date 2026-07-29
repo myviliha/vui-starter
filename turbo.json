@@ -6,7 +6,8 @@
     "PORT",
     "NEXT_PUBLIC_MAX_CELL_CHARS",
     "NEXT_PUBLIC_DEFAULT_PAGE_SIZE",
-    "NEXT_PUBLIC_MAX_PAGE_SIZE"
+    "NEXT_PUBLIC_MAX_PAGE_SIZE",
+    "NEXT_PUBLIC_AUTH_BASE_URL"
   ],
   "tasks": {
     "build": {

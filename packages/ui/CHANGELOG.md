@@ -7,6 +7,26 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.31.0 — 2026-07-29
+
+### Added
+
+- **`@viliha/vui-ui/auth-context` — a provider-agnostic auth contract.**
+  Exports `AuthProvider`, `useAuth()`, and the `AuthContract` / `AuthUser` /
+  `Credentials` / `SignUpInput` types. Auth screens now depend on this small
+  interface rather than any provider SDK, so wiring a real backend
+  (NextAuth, Clerk, Better Auth, Supabase, …) is a single adapter with no
+  screen changes. `useAuth()` throws when no `AuthProvider` is mounted, so a
+  missing adapter fails loudly instead of silently no-op'ing.
+
+### Changed
+
+- **Reference app** — auth screens (`signin`, `signup`) and sign-out are wired
+  to `useAuth()`; the app mounts a **Better Auth** adapter
+  (`app/_components/auth-provider.tsx`) that activates when
+  `NEXT_PUBLIC_AUTH_BASE_URL` is set and otherwise falls back to an in-memory
+  mock so the static demo works with no backend. Docs at `/docs/auth`.
+
 ## 1.30.2 — 2026-07-29
 
 ### Changed
