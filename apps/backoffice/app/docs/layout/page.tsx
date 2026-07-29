@@ -554,6 +554,13 @@ NEXT_PUBLIC_SHOW_NOTIFICATIONS=0`}</CodeBlock>
         makes tab switching feel native. The <code>MAX_TABS</code> cap bounds how
         many stay mounted at once.
       </Note>
+      <Note title="Turn keep-alive off">
+        Keep-alive is on by default; set{" "}
+        <code>NEXT_PUBLIC_KEEP_ALIVE_TABS=0</code> to disable it while the
+        feature is being stabilised. Pages then <strong>remount on navigation</strong>{" "}
+        (no cached instances, no preserved state), and the tab strip stays as a
+        plain navigation shortcut.
+      </Note>
       <Note title="Stale data in a kept-alive tab">
         The flip side of keep-alive: a controller that fetches once on mount{" "}
         <strong>never re-fetches</strong>, so if another user changes a record

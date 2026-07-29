@@ -487,6 +487,13 @@ export function TabStrip() {
   );
 }
 
+/** Keep-alive is on by default; set NEXT_PUBLIC_KEEP_ALIVE_TABS=0 (or `false`)
+ *  to disable it while the feature is being stabilised. Referenced literally so
+ *  Next inlines it into the client bundle. */
+const KEEP_ALIVE =
+  process.env.NEXT_PUBLIC_KEEP_ALIVE_TABS !== "0" &&
+  process.env.NEXT_PUBLIC_KEEP_ALIVE_TABS?.toLowerCase() !== "false";
+
 /**
  * Keep-alive outlet — renders the content of every OPEN tab and shows only the
  * active one (the rest are `hidden`), so switching tabs is instant with no
@@ -498,11 +505,21 @@ export function TabStrip() {
  * Because it renders app pages itself, they are no longer re-created by the file
  * router on navigation — fine here: the app is a static export (all client at
  * runtime, no SSR/SEO to lose).
+ *
+ * When keep-alive is disabled via env, it renders only the active route (Next
+ * remounts on navigation, no cached instances) — the tab strip still works as a
+ * plain navigation shortcut.
  */
 export function KeepAliveTabs({ children }: { children: React.ReactNode }) {
   const active = tabKey(usePathname());
   const { tabs } = useOpenTabs();
   const cache = React.useRef(new Map<string, React.ReactNode>());
+
+  // Hooks above run unconditionally (KEEP_ALIVE is a build-time constant, so the
+  // branch never changes between renders → hook order stays stable).
+  if (!KEEP_ALIVE) {
+    return <div className="flex min-h-0 flex-1 flex-col">{children}</div>;
+  }
   // Cache each route's element ONCE, on first activation, and reuse it — never
   // overwrite on re-activation. Reusing the same element reference is what lets
   // React keep the mounted instance (and its loaded data / scroll / form state)
