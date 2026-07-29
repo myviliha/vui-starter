@@ -92,6 +92,15 @@ Two ⌘K palettes, **both the same headless `CommandPalette`** (`@viliha/vui-ui/
 
 Each is a provider (open state + a `keydown` effect, told apart by `e.altKey`) mounting `CommandPalette` with a `CommandAction[]` (`{ id, label, group?, icon?, keywords?, onSelect }`). To add a searchable source, push more actions — for real data, swap the demo record index for API results. Docs + examples at `/layout`.
 
+## Top-bar feature flags (configurable chrome)
+
+The seven top-bar affordances — **Quick actions, Global search, Help, Documentation, Notifications, Settings, User menu** — are **on by default and each can be turned off.** Single source: `lib/app-config.ts` (`ChromeFeature`, `CHROME_FEATURES`, `CHROME_DEFAULTS`). Two layers, do not add a third:
+
+- **Install-time default** → `NEXT_PUBLIC_SHOW_*` env var (`=0`/`false` to hide); referenced literally so Next inlines it — never a dynamic `process.env[…]` lookup. Declare any new one in `turbo.json` `globalEnv`.
+- **Runtime override** → `ChromeConfigProvider` + `useChrome()`/`useChromeConfig()` in `app/_components/chrome-config.tsx` (localStorage key `vui.chrome`), toggled on the Settings page's *Top bar* section. `ChromeConfigProvider` wraps the app shell in `(app)/layout.tsx`.
+
+Gate a feature by reading `useChrome().<feature>` where it renders (hide the control **and** skip its shortcut/palette — see `top-bar.tsx`, `quick-actions.tsx`, `global-search.tsx`). To add a new toggleable feature: add a `ChromeFeature` key + `CHROME_FEATURES` entry + `CHROME_DEFAULTS` line + `turbo.json` env, then gate the render.
+
 ## Sidebar sections & groups
 
 The sidebar is driven by `nav-config.ts` (`NAV: NavSection[]`). **Two grouping shapes — use them, don't invent a third:** a **Section** (`NavSection`, `{ title?, items }`) is a top-level band with an optional `title` heading whose items are always visible (static, no collapse — e.g. *Records*, *System*; the first section usually has no title); a **collapsible group** (`NavGroup`, an entry with `children`) is a parent row with a chevron that **hides/unhides** its nested links and auto-opens when a child is active (e.g. *Auth*, *CRM*, *System*) — use it to keep the sidebar short. A group parent has no page of its own, so its breadcrumb points at its first child (see `SECTION_INDEX`). When adding a page, add it to `NAV` and mirror its color in `route-meta.ts`; default to an existing Section and only add a Group when nesting several related sub-pages. Full write-up at docs `/navigation`.

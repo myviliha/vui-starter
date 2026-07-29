@@ -11,6 +11,7 @@ import {
 import { Shortcut } from "@viliha/vui-ui/kbd";
 import { cn } from "@/lib/utils";
 import { isGroup, NAV, type IconType } from "./nav-config";
+import { useChrome } from "./chrome-config";
 
 /**
  * Quick actions — a ⌘K command palette launched from the sidebar. Wires the
@@ -70,8 +71,10 @@ function isEditableTarget(t: EventTarget | null): boolean {
 export function QuickActionsProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const enabled = useChrome().quickActions;
 
   React.useEffect(() => {
+    if (!enabled) return; // feature off → no ⌘K / "/" shortcut
     const onKey = (e: KeyboardEvent) => {
       // ⌘K / Ctrl+K — but not ⌘⌥K, which is the global-search shortcut.
       if ((e.metaKey || e.ctrlKey) && !e.altKey && e.code === "KeyK") {
@@ -84,7 +87,7 @@ export function QuickActionsProvider({ children }: { children: React.ReactNode }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, enabled]);
 
   const actions = React.useMemo<CommandAction[]>(
     () =>
@@ -104,12 +107,14 @@ export function QuickActionsProvider({ children }: { children: React.ReactNode }
   return (
     <QuickActionsContext.Provider value={value}>
       {children}
-      <CommandPalette
-        open={open}
-        onClose={() => setOpen(false)}
-        actions={actions}
-        placeholder="Search for a page or action…"
-      />
+      {enabled && (
+        <CommandPalette
+          open={open}
+          onClose={() => setOpen(false)}
+          actions={actions}
+          placeholder="Search for a page or action…"
+        />
+      )}
     </QuickActionsContext.Provider>
   );
 }
@@ -117,6 +122,8 @@ export function QuickActionsProvider({ children }: { children: React.ReactNode }
 /** Sidebar launcher — collapses to an icon-only button when the rail is narrow. */
 export function QuickActionsLauncher({ collapsed = false }: { collapsed?: boolean }) {
   const { open } = useQuickActions();
+  const enabled = useChrome().quickActions;
+  if (!enabled) return null; // feature off → hide the sidebar launcher
   return (
     <button
       type="button"

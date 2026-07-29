@@ -15,8 +15,11 @@ import { Button } from "@viliha/vui-ui/button";
 import { Checkbox } from "@viliha/vui-ui/checkbox";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
+import { Switch } from "@viliha/vui-ui/switch";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
+import { useChromeConfig } from "@/app/_components/chrome-config";
+import { CHROME_FEATURES } from "@/lib/app-config";
 
 type Theme = "light" | "dark" | "system";
 
@@ -94,6 +97,7 @@ export default function SettingsPage() {
   const [notifyDesktop, setNotifyDesktop] = React.useState(false);
   const [notifyWeekly, setNotifyWeekly] = React.useState(true);
   const [saved, setSaved] = React.useState(false);
+  const { chrome, setFeature, reset } = useChromeConfig();
 
   React.useEffect(() => {
     try {
@@ -191,6 +195,35 @@ export default function SettingsPage() {
                   </button>
                 );
               })}
+            </div>
+          </Section>
+
+          <Section
+            title="Top bar"
+            description="Show or hide top-bar features. Changes apply instantly and are saved to this browser."
+          >
+            <div className="space-y-3 sm:max-w-xl">
+              {CHROME_FEATURES.map((f) => (
+                <div
+                  key={f.key}
+                  className="flex items-center justify-between gap-4"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium">{f.label}</p>
+                    <p className="text-sm text-muted-foreground">{f.hint}</p>
+                  </div>
+                  <Switch
+                    checked={chrome[f.key]}
+                    onCheckedChange={(on) => setFeature(f.key, on)}
+                    aria-label={f.label}
+                  />
+                </div>
+              ))}
+              <div className="pt-1">
+                <Button variant="outline" onClick={reset}>
+                  Reset to defaults
+                </Button>
+              </div>
             </div>
           </Section>
 

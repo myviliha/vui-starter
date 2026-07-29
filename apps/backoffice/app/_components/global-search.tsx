@@ -20,6 +20,7 @@ import {
   languages,
 } from "@/lib/mock-data";
 import { companies, people, opportunities } from "@/lib/crm-data";
+import { useChrome } from "./chrome-config";
 
 /**
  * Global search — a ⌘⌥K palette that searches across *records* (organizations,
@@ -166,8 +167,10 @@ export function GlobalSearchProvider({
 }) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const enabled = useChrome().globalSearch;
 
   React.useEffect(() => {
+    if (!enabled) return; // feature off → no ⌘⌥K shortcut
     const onKey = (e: KeyboardEvent) => {
       // ⌘⌥K / Ctrl+Alt+K — ⌘K (no Alt) is Quick actions. e.code, because macOS
       // Option remaps e.key to a composed character.
@@ -178,7 +181,7 @@ export function GlobalSearchProvider({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [enabled]);
 
   const actions = React.useMemo<CommandAction[]>(
     () =>
@@ -197,13 +200,15 @@ export function GlobalSearchProvider({
   return (
     <GlobalSearchContext.Provider value={value}>
       {children}
-      <CommandPalette
-        open={open}
-        onClose={() => setOpen(false)}
-        actions={actions}
-        placeholder="Search organizations, people, records…"
-        emptyMessage="No records match — try a name, code or email."
-      />
+      {enabled && (
+        <CommandPalette
+          open={open}
+          onClose={() => setOpen(false)}
+          actions={actions}
+          placeholder="Search organizations, people, records…"
+          emptyMessage="No records match — try a name, code or email."
+        />
+      )}
     </GlobalSearchContext.Provider>
   );
 }

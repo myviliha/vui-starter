@@ -16,6 +16,7 @@ import { usePageChrome } from "@viliha/vui-ui/record-view";
 import { SidebarToggle } from "@/app/_components/app-sidebar";
 import { UserMenu } from "@/app/_components/user-menu";
 import { useGlobalSearch } from "@/app/_components/global-search";
+import { useChrome } from "@/app/_components/chrome-config";
 import { colorFor } from "@/app/_components/route-meta";
 import { Shortcut } from "@viliha/vui-ui/kbd";
 
@@ -33,6 +34,8 @@ export function TopBar() {
   // Global search (records) lives in GlobalSearchProvider; the box below is its
   // launcher. Quick actions (pages) is a separate ⌘K palette in the sidebar.
   const { open: openSearch } = useGlobalSearch();
+  // Which top-bar affordances are enabled (config default + Settings override).
+  const chrome = useChrome();
 
   return (
     <header className="relative flex h-12 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
@@ -50,59 +53,69 @@ export function TopBar() {
       </div>
 
       {/* Center — global search launcher (opens the records palette). */}
-      <div className="absolute left-1/2 top-1/2 hidden w-full max-w-sm -translate-x-1/2 -translate-y-1/2 px-4 md:block">
-        <button
-          type="button"
-          onClick={openSearch}
-          aria-label="Global search"
-          className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-2.5 text-muted-foreground transition-colors hover:bg-accent"
-        >
-          <MagnifyingGlassIcon className="size-3.5 shrink-0" aria-hidden="true" />
-          <span className="flex-1 text-left text-sm">Search…</span>
-          <Shortcut keys={["⌘", "⌥", "K"]} />
-        </button>
-      </div>
+      {chrome.globalSearch && (
+        <div className="absolute left-1/2 top-1/2 hidden w-full max-w-sm -translate-x-1/2 -translate-y-1/2 px-4 md:block">
+          <button
+            type="button"
+            onClick={openSearch}
+            aria-label="Global search"
+            className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-2.5 text-muted-foreground transition-colors hover:bg-accent"
+          >
+            <MagnifyingGlassIcon className="size-3.5 shrink-0" aria-hidden="true" />
+            <span className="flex-1 text-left text-sm">Search…</span>
+            <Shortcut keys={["⌘", "⌥", "K"]} />
+          </button>
+        </div>
+      )}
 
       {/* Right — help, notifications, settings, profile.
           Bold, dark, larger glyphs (heavier stroke via [&_path]). */}
       {/* All controls share one size (size-9 box, size-5 glyph) so the cluster
           is visually uniform — see iconControl. */}
       <div className="ml-auto flex items-center gap-1.5">
-        <button
-          type="button"
-          aria-label="Help &amp; support"
-          className={`hidden sm:grid ${iconControl}`}
-        >
-          <QuestionMarkCircledIcon className={iconGlyph} />
-        </button>
-        <Link
-          href="/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Documentation (opens in a new tab)"
-          className={iconControl}
-        >
-          <ReaderIcon className={iconGlyph} />
-        </Link>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className={`relative ${iconControl}`}
-        >
-          <BellIcon className={iconGlyph} />
-          <span
-            className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
-            aria-hidden="true"
-          />
-        </button>
-        <Link
-          href="/settings"
-          aria-label="Settings"
-          className={`hidden sm:grid ${iconControl}`}
-        >
-          <GearIcon className={iconGlyph} />
-        </Link>
-        <UserMenu />
+        {chrome.help && (
+          <button
+            type="button"
+            aria-label="Help &amp; support"
+            className={`hidden sm:grid ${iconControl}`}
+          >
+            <QuestionMarkCircledIcon className={iconGlyph} />
+          </button>
+        )}
+        {chrome.docs && (
+          <Link
+            href="/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Documentation (opens in a new tab)"
+            className={iconControl}
+          >
+            <ReaderIcon className={iconGlyph} />
+          </Link>
+        )}
+        {chrome.notifications && (
+          <button
+            type="button"
+            aria-label="Notifications"
+            className={`relative ${iconControl}`}
+          >
+            <BellIcon className={iconGlyph} />
+            <span
+              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
+              aria-hidden="true"
+            />
+          </button>
+        )}
+        {chrome.settings && (
+          <Link
+            href="/settings"
+            aria-label="Settings"
+            className={`hidden sm:grid ${iconControl}`}
+          >
+            <GearIcon className={iconGlyph} />
+          </Link>
+        )}
+        {chrome.userMenu && <UserMenu />}
       </div>
     </header>
   );

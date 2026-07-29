@@ -9,6 +9,7 @@ import { SiteFooter } from "@/app/_components/site-footer";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
+import { ChromeConfigProvider } from "@/app/_components/chrome-config";
 import {
   KeepAliveTabs,
   OpenTabsProvider,
@@ -21,7 +22,8 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
+    <ChromeConfigProvider>
+     <SidebarProvider>
       <QuickActionsProvider>
        <GlobalSearchProvider>
         <OpenTabsProvider>
@@ -49,6 +51,7 @@ export default function AppLayout({
         </OpenTabsProvider>
        </GlobalSearchProvider>
       </QuickActionsProvider>
-    </SidebarProvider>
+     </SidebarProvider>
+    </ChromeConfigProvider>
   );
 }

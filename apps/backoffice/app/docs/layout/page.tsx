@@ -478,6 +478,41 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         <code>e.altKey</code> tells the two apart.
       </Note>
 
+      <H2>Top bar features (configurable)</H2>
+      <P>
+        Every top-bar affordance — <strong>Quick actions</strong>,{" "}
+        <strong>Global search</strong>, <strong>Help</strong>,{" "}
+        <strong>Documentation</strong>, <strong>Notifications</strong>,{" "}
+        <strong>Settings</strong> and the <strong>User menu</strong> — is on by
+        default, and a consumer can turn any of them off. Flags live in{" "}
+        <code>lib/app-config.ts</code>; there are two ways to set them:
+      </P>
+      <Ul>
+        <li>
+          <strong>Install-time</strong> — set the matching{" "}
+          <code>NEXT_PUBLIC_SHOW_*</code> env var to <code>0</code> (baked into
+          the build; the default for everyone).
+        </li>
+        <li>
+          <strong>Runtime</strong> — flip it on the Settings page (
+          <em>Top bar</em> section); the choice persists per-browser and
+          overrides the install-time default live — no rebuild.
+        </li>
+      </Ul>
+      <CodeBlock title=".env.local — hide two features at build time">{`NEXT_PUBLIC_SHOW_HELP=0
+NEXT_PUBLIC_SHOW_NOTIFICATIONS=0`}</CodeBlock>
+      <P>
+        Turning a feature off doesn&apos;t just hide the icon — it also drops the
+        keyboard shortcut (e.g. disabling Quick actions removes <code>⌘K</code>)
+        and skips mounting its palette. Read the effective flags anywhere with{" "}
+        <code>useChrome()</code> (<code>_components/chrome-config.tsx</code>).
+      </P>
+      <Note title="Settings stays reachable">
+        Hiding the Settings icon only removes the top-bar shortcut — the page is
+        still at <code>/settings</code> (and in the user menu), so you can always
+        get back to re-enable a feature or <em>Reset to defaults</em>.
+      </Note>
+
       <H2>Open tabs</H2>
       <P>
         The shell keeps a <strong>browser-style strip of the pages you&apos;ve
