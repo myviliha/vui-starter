@@ -7,6 +7,14 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.30.1 — 2026-07-29
+
+### Changed
+
+- **README** — add a GitHub Sponsors badge/link, emphasize the live demo app,
+  and add an acknowledgments section (inspired by / thanks to shadcn/ui + React).
+  Docs-only; no component changes.
+
 ## 1.30.0 — 2026-07-29
 
 ### Added
