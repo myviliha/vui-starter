@@ -1,5 +1,34 @@
 # @viliha/vui-ui
 
+[![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
+
+## ❤️ Please sponsor Vui Starter — this is how it stays free
+
+**Vui is a production-ready, enterprise-grade admin & SaaS theme — the kind of UI
+system that is normally sold behind a paywall. Right now, no one else is giving
+away a theme at this level for free. We are — under the MIT license, for
+everyone.**
+
+Every component, design token, datatable, chart, auth screen, and doc is
+hand-crafted, and it takes an enormous amount of effort and personal time to
+build it and keep it enterprise-ready. We give it to you at no cost; in return we
+ask for one thing — **your support**. If Vui saves you time or helps ship your
+product, please **sponsor the project**. It's the clearest way to say "this was
+worth it," and it's what makes the next release possible.
+
+**Even $1 genuinely matters.** It funds new components and features, keeps the
+docs and the live demo current, pays for maintenance and bug fixes — and, hand on
+heart, it's real motivation to keep building in the open. If everyone using Vui
+chipped in a little, it would change everything.
+
+> We build this for the community. **Sponsoring keeps it alive, free, and
+> improving** — please chip in if you can. Your name/logo can appear on our
+> sponsors wall, too.
+
+### 👉 [Become a sponsor on GitHub →](https://github.com/sponsors/myviliha) &nbsp;·&nbsp; thank you 🙏❤️
+
+---
+
 A **token-driven React component library** for admin and CRM interfaces, built on
 Tailwind CSS v4, shadcn-style patterns, and Radix Icons. It ships as **TypeScript
 source** rather than a prebuilt bundle, so your app's bundler compiles only the
@@ -11,23 +40,6 @@ and open-source admin design system.
 - 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com) — a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
 - 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
 - ❤️ **Sponsor:** [github.com/sponsors/myviliha](https://github.com/sponsors/myviliha)
-
-[![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
-
-## ❤️ Support VUI
-
-VUI Starter is a **production-ready, enterprise-grade** admin & SaaS theme — the
-kind of UI system that usually sits behind a paywall — built over many hours and
-released **free and open source** under MIT.
-
-If it saves you time or helps ship your product, a sponsorship is the best way to
-say thank you. Even **$1** genuinely helps: it funds new components,
-documentation, and maintenance, and — honestly — it's a real motivation to keep
-building in the open. If everyone using VUI chipped in a little, it would make a
-world of difference.
-
-**[❤️ Sponsor on GitHub →](https://github.com/sponsors/myviliha)** — thank you for
-supporting independent open source.
 
 ## Install
 

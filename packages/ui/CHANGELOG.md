@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.33.1 — 2026-07-29
+
+### Changed
+
+- **README** — lead with a prominent **Sponsor** section at the very top: Vui is
+  a free, enterprise-grade theme that would normally sit behind a paywall, built
+  with significant personal effort, and sponsorship is what keeps it free and
+  maintained. Mirrors the repo README. Docs-only.
+
 ## 1.33.0 — 2026-07-29
 
 ### Added

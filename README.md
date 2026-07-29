@@ -3,6 +3,34 @@
 [![live](https://img.shields.io/badge/live-vui.viliha.com-266df0)](https://vui.viliha.com)
 [![npm](https://img.shields.io/npm/v/@viliha/vui-ui?color=266df0&label=%40viliha%2Fvui-ui)](https://www.npmjs.com/package/@viliha/vui-ui)
 [![license](https://img.shields.io/npm/l/@viliha/vui-ui)](./LICENSE)
+[![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
+
+## ❤️ Please sponsor Vui Starter — this is how it stays free
+
+**Vui is a production-ready, enterprise-grade admin & SaaS theme — the kind of UI
+system that is normally sold behind a paywall. Right now, no one else is giving
+away a theme at this level for free. We are — under the MIT license, for
+everyone.**
+
+Every component, design token, datatable, chart, auth screen, and doc is
+hand-crafted, and it takes an enormous amount of effort and personal time to
+build it and keep it enterprise-ready. We give it to you at no cost; in return we
+ask for one thing — **your support**. If Vui saves you time or helps ship your
+product, please **sponsor the project**. It's the clearest way to say "this was
+worth it," and it's what makes the next release possible.
+
+**Even $1 genuinely matters.** It funds new components and features, keeps the
+docs and the live demo current, pays for maintenance and bug fixes — and, hand on
+heart, it's real motivation to keep building in the open. If everyone using Vui
+chipped in a little, it would change everything.
+
+> We build this for the community. **Sponsoring keeps it alive, free, and
+> improving** — please chip in if you can. Your name/logo can appear on our
+> sponsors wall, too.
+
+### 👉 [Become a sponsor on GitHub →](https://github.com/sponsors/myviliha) &nbsp;·&nbsp; thank you 🙏❤️
+
+---
 
 A free, **open-source admin/CRM design system** for React: a clean, token-driven
 component library (**`@viliha/vui-ui`**) and a full backoffice demo you can clone
