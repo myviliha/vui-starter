@@ -141,7 +141,7 @@ To change the trail, edit `nav-config.ts` (structure/order) and the label/color 
 7. **Lists/menus:** use `Menu`/`MenuItem` (bordered-row standard) or the shared `Dropdown`/`Select`; don't hand-roll list borders.
 8. **Icons:** Radix Icons (`@radix-ui/react-icons`) for app chrome; leave shadcn's internal Lucide icons as-is.
 9. **Comment deliberate no-ops** (e.g. clipboard/storage `catch`). Never silently swallow errors elsewhere.
-10. **Changelog + docs on every change (mandatory; see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change. After writing them, you **re-read and humanize** the prose (plain, human voice, no AI tells, and no em dashes). See the humanize rule in "Changelog & docs".
+10. **Changelog + docs on every change (mandatory; see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change. After writing them, you **re-read and humanize** the prose (plain, human voice, no AI tells, and no em dashes) and make them **SEO and AEO friendly**. See the humanize and SEO/AEO rules in "Changelog & docs".
 
 ## Changelog & docs — mandatory on every change (never skip)
 
@@ -162,8 +162,11 @@ Any change that adds, changes, removes, or fixes behaviour **must** update the d
    - If a sentence reads like boilerplate, rewrite it or delete it.
 
    Applies to every doc surface above, no exceptions.
+5. **Docs must be SEO and AEO friendly (mandatory).** Write every doc so both search engines and answer engines (Google, plus AI assistants like ChatGPT, Claude, and Perplexity) can find, index, and quote it. Apply this in the same pass as the humanize check.
+   - **SEO:** give each docs-site page a unique, keyword-led `title` and `description` in its `metadata` (client pages put it in the sibling `layout.tsx`); use one `H1` (`PageTitle`) per page, then a logical `H2`/`H3` outline that uses real search terms; write descriptive link text and image `alt`; set a self-canonical. Add any new route to `PUBLIC_ROUTES` in `lib/seo.ts` so it reaches the sitemap.
+   - **AEO:** open the page, and each major section, with a direct one-sentence answer to the question it addresses, before the detail. Phrase headings the way people actually ask ("How do I add a page?"). Keep statements factual, self-contained, and quotable, define a term on first use, and show concrete code or steps. Those are the passages an answer engine lifts.
 
-If you're unsure whether a doc applies, it does — update it. A change that touches code but no docs/changelog is incomplete.
+If you're unsure whether a doc applies, it does, so update it. A change that touches code but no docs/changelog is incomplete.
 
 ## Verify before "done" (must pass)
 
