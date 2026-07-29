@@ -46,13 +46,7 @@ export default function DocsHome() {
     <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
       {/* Hero */}
       <div className="mx-auto max-w-3xl text-center">
-        <Link
-          href="/docs/components"
-          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-3 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          Batch 1 components are here <ArrowRightIcon className="size-3.5" />
-        </Link>
-        <h1 className="mt-6 text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
+        <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
           The Foundation for your Admin App
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
