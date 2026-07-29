@@ -54,7 +54,7 @@ export default function AuthDocPage() {
         <li><code>AuthCardFooter</code>: the primary action(s) (muted background)</li>
         <li><code>AuthCardAside</code>: secondary nav (e.g. &quot;Create an account&quot;), set off by its own divider</li>
         <li><code>FieldGrid</code>: wraps a form&apos;s <code>Field</code>s in a two-column grid — labels line up in column 1, inputs in column 2, so every input starts at the same x</li>
-        <li><code>Field</code>: a labelled field (render inside a <code>FieldGrid</code>); pass <code>required</code> for the <code>*</code> marker and <code>hint</code> for helper text. An <code>error</code> turns the input border red (via the <code>Input</code>&apos;s <code>aria-invalid</code> styling) and shows the message in a tooltip on an alert icon — <strong>no layout shift</strong>; the full text is announced to screen readers</li>
+        <li><code>Field</code>: a labelled field (render inside a <code>FieldGrid</code>); pass <code>required</code> for the <code>*</code> marker and <code>hint</code> for helper text. An <code>error</code> turns the input border red (via the <code>Input</code>&apos;s <code>aria-invalid</code> styling) and shows the message in a tooltip on an alert icon — <strong>no layout shift</strong>; the full text is announced to screen readers. The error <strong>auto-clears the moment the user edits the field</strong> (and re-validates on the next submit), so pages just set <code>error</code> on submit and never clear it on change</li>
       </Ul>
 
       <H2>Build a screen</H2>

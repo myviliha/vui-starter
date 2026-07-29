@@ -88,16 +88,44 @@ export function Field({
   children: React.ReactNode;
 }) {
   const errorId = React.useId();
-  // Wire aria-invalid / aria-describedby onto the control without the caller
-  // having to; harmless if children isn't a single element.
-  const control = React.isValidElement(children)
-    ? React.cloneElement(
-        children as React.ReactElement<Record<string, unknown>>,
-        {
-          "aria-invalid": error ? true : undefined,
-          "aria-describedby": error ? errorId : undefined,
+  // Auto-clear on edit (built in, so pages get it for free): the moment the user
+  // changes the field, hide the error — red border AND icon — instead of leaving
+  // it up until the next submit. It re-arms when a new validation result arrives
+  // (the `error` value changes) or on the next form submit, so resubmitting a
+  // still-invalid value shows the error again even if the message is identical.
+  const [edited, setEdited] = React.useState(false);
+  React.useEffect(() => setEdited(false), [error]);
+  const showError = Boolean(error) && !edited;
+
+  // Re-validate on submit: reset the edited flag when the enclosing form submits,
+  // so `showError` reflects the parent's fresh validation.
+  const anchorRef = React.useRef<HTMLLabelElement>(null);
+  React.useEffect(() => {
+    const form = anchorRef.current?.closest("form");
+    if (!form) return;
+    const rearm = () => setEdited(false);
+    form.addEventListener("submit", rearm);
+    return () => form.removeEventListener("submit", rearm);
+  }, []);
+
+  // Wire aria-invalid / aria-describedby onto the control, and intercept its
+  // onChange to trigger the auto-clear — the caller wires nothing.
+  const el = React.isValidElement(children)
+    ? (children as React.ReactElement<{
+        "aria-invalid"?: boolean;
+        "aria-describedby"?: string;
+        onChange?: React.ChangeEventHandler<HTMLInputElement>;
+      }>)
+    : null;
+  const control = el
+    ? React.cloneElement(el, {
+        "aria-invalid": showError ? true : undefined,
+        "aria-describedby": showError ? errorId : undefined,
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (error) setEdited(true); // hide the error as soon as they type
+          el.props.onChange?.(e);
         },
-      )
+      })
     : children;
 
   return (
@@ -105,6 +133,7 @@ export function Field({
     // FieldGrid (column 1 = label, column 2 = input), not a nested box.
     <div className="contents">
       <label
+        ref={anchorRef}
         htmlFor={htmlFor}
         className="flex items-center gap-1 whitespace-nowrap font-medium leading-relaxed"
       >
@@ -114,9 +143,9 @@ export function Field({
       <div className="min-w-0">
         {/* The red border/ring comes from the Input's own `aria-invalid` styling
             (set on `control` above); here we just leave room for the alert icon. */}
-        <div className={cn("relative", error && "[&_input]:pr-8")}>
+        <div className={cn("relative", showError && "[&_input]:pr-8")}>
           {control}
-          {error && (
+          {showError && (
             <Tooltip
               content={error}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-destructive"
@@ -126,12 +155,12 @@ export function Field({
           )}
         </div>
         {/* Full message for screen readers (visual users get the tooltip). */}
-        {error && (
+        {showError && (
           <span id={errorId} className="sr-only">
             {error}
           </span>
         )}
-        {hint && !error && (
+        {hint && !showError && (
           <p className="mt-1.5 text-muted-foreground">{hint}</p>
         )}
       </div>
