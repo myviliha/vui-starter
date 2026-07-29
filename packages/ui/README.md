@@ -248,19 +248,21 @@ place. If you'd rather keep a verbatim copy, run
 
 ## Components
 
-`accordion` · `avatar` · `badge` · `breadcrumbs` · `button` · `card` · `chart`
-(themed Recharts wrapper) · `checkbox` · `combobox` (searchable single-select,
-static or async `loadOptions`) · `command-palette`
-(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `input` · `kbd`
-(key caps + `Shortcut`) · `label` · `menu` · `required-mark` · `select` ·
-`separator` · `skeleton` · `steps`
+`accordion` · `alert` · `alert-dialog` · `avatar` · `badge` · `breadcrumbs` ·
+`button` · `card` · `chart` (themed Recharts wrapper) · `checkbox` ·
+`collapsible` · `combobox` (searchable single-select, static or async
+`loadOptions`) · `command-palette`
+(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `hover-card` ·
+`input` · `kbd` (key caps + `Shortcut`) · `label` · `menu` · `popover` ·
+`required-mark` · `select` · `separator` · `sheet` · `skeleton` · `steps`
 (multi-step wizard indicator) · `switch` · `tabs` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
 `RecordForm`) · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 Components ported from shadcn/ui (Radix-based) are being brought into the package
-so you don't need a separate `shadcn add` — `accordion`, `label`, `separator`,
-`skeleton`, `switch`, and `tabs` are the first batch; more are on the way.
+so you don't need a separate `shadcn add`. Batch 1: `accordion`, `label`,
+`separator`, `skeleton`, `switch`, `tabs`. Batch 2: `alert`, `alert-dialog`,
+`collapsible`, `hover-card`, `popover`, `sheet`. More on the way.
 
 ## Theming
 

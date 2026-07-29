@@ -22,16 +22,53 @@ export const COMPONENTS: ComponentMeta[] = [
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/accordion",
   },
   {
+    slug: "alert",
+    title: "Alert",
+    description: "Displays a callout for user attention.",
+  },
+  {
+    slug: "alert-dialog",
+    title: "Alert Dialog",
+    description:
+      "A modal dialog that interrupts the user with important content and expects a response.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/alert-dialog",
+  },
+  {
+    slug: "collapsible",
+    title: "Collapsible",
+    description: "An interactive component which expands/collapses a panel.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/collapsible",
+  },
+  {
+    slug: "hover-card",
+    title: "Hover Card",
+    description: "For sighted users to preview content available behind a link.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/hover-card",
+  },
+  {
     slug: "label",
     title: "Label",
     description: "Renders an accessible label associated with a control.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/label",
   },
   {
+    slug: "popover",
+    title: "Popover",
+    description: "Displays rich content in a portal, triggered by a button.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/popover",
+  },
+  {
     slug: "separator",
     title: "Separator",
     description: "Visually or semantically separates content.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/separator",
+  },
+  {
+    slug: "sheet",
+    title: "Sheet",
+    description:
+      "Extends the Dialog to display content that complements the main content of the screen.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/dialog",
   },
   {
     slug: "skeleton",

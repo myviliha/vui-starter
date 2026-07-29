@@ -454,7 +454,9 @@ Wrap the forms in semantic HTML.
 
 The shadcn/ui component set is being brought **into this package** (Radix-based,
 restyled to VUI tokens) so you import them from `@viliha/vui-ui/<name>` instead of
-running `shadcn add` and maintaining a local `components/ui/`. First batch shipped:
+running `shadcn add` and maintaining a local `components/ui/`. Shipped so far:
+
+Batch 1:
 
 - `@viliha/vui-ui/accordion` — `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`
 - `@viliha/vui-ui/label` — `Label`
@@ -462,6 +464,15 @@ running `shadcn add` and maintaining a local `components/ui/`. First batch shipp
 - `@viliha/vui-ui/skeleton` — `Skeleton`
 - `@viliha/vui-ui/switch` — `Switch` (`size?: "sm" | "default"`)
 - `@viliha/vui-ui/tabs` — `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`
+
+Batch 2 (overlays):
+
+- `@viliha/vui-ui/alert` — `Alert`, `AlertTitle`, `AlertDescription` (`variant?: "default" | "destructive"`)
+- `@viliha/vui-ui/alert-dialog` — `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogFooter`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogAction`, `AlertDialogCancel` (Action/Cancel take VUI Button `variant`/`size`)
+- `@viliha/vui-ui/collapsible` — `Collapsible`, `CollapsibleTrigger`, `CollapsibleContent`
+- `@viliha/vui-ui/hover-card` — `HoverCard`, `HoverCardTrigger`, `HoverCardContent`
+- `@viliha/vui-ui/popover` — `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverAnchor`
+- `@viliha/vui-ui/sheet` — `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription`, `SheetClose` (`side?: "top" | "right" | "bottom" | "left"`)
 
 These use VUI's tokens automatically (no shadcn token duplication needed). More
 components land in later batches; prefer the `@viliha/vui-ui/*` import over a local

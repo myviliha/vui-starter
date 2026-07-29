@@ -7,6 +7,17 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.28.0 — 2026-07-29
+
+### Added
+
+- **shadcn/ui components, batch 2 (overlays).** Ported into the package
+  (Radix-based, VUI tokens): `alert`, `alert-dialog`, `collapsible`,
+  `hover-card`, `popover`, `sheet`. No new dependencies (all use the existing
+  `radix-ui` / `class-variance-authority` / `lucide-react`). `AlertDialogAction`
+  / `AlertDialogCancel` style the Radix element with VUI's `buttonVariants`
+  (VUI's `Button` has no `asChild`), so they still accept Button `variant`/`size`.
+
 ## 1.27.0 — 2026-07-29
 
 ### Added
