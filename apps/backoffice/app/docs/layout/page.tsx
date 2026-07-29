@@ -29,7 +29,7 @@ export default function LayoutPage() {
         lead="These are the structural conventions of the theme. Follow them for every page, section, dialog and list, and the app stays consistent on its own; you never design a one-off layout per screen."
       />
 
-      <H2>Page template</H2>
+      <H2>What is the standard page template?</H2>
       <P>
         Every page is a full-height flex column. The title moves up to the global
         top bar, an <strong>action header</strong> holds the breadcrumbs and any

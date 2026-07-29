@@ -28,7 +28,7 @@ export default function InstallationPage() {
         lead="@viliha/vui-ui ships as TypeScript source, so your bundler compiles it alongside your own code. Install the package, add Tailwind v4, import the theme, and you're ready."
       />
 
-      <H2>Install the package</H2>
+      <H2>How do I install @viliha/vui-ui?</H2>
       <PackageManagerTabs
         commands={{
           npm: "npm install @viliha/vui-ui\nnpm install -D tailwindcss @tailwindcss/postcss",
@@ -248,7 +248,7 @@ pnpm --filter web dev`}</CodeBlock>
         </li>
       </Ul>
 
-      <H2>Use a component</H2>
+      <H2>How do I use a component?</H2>
       <CodeBlock title="example.tsx">{`import { Button } from "@viliha/vui-ui/button";
 import { Badge } from "@viliha/vui-ui/badge";
 

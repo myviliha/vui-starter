@@ -130,7 +130,7 @@ export default function ThemingPage() {
   /* …neutral palette, chart + sidebar tokens… */
 }`}</CodeBlock>
 
-      <H2>Customize</H2>
+      <H2>How do I rebrand the theme?</H2>
       <P>Override tokens <strong>after</strong> importing the theme:</P>
       <CodeBlock title="app/globals.css">{`@import "tailwindcss";
 @import "@viliha/vui-ui/theme.css";
@@ -140,7 +140,7 @@ export default function ThemingPage() {
   --radius: 0.5rem;
 }`}</CodeBlock>
 
-      <H2>Dark mode</H2>
+      <H2>How does dark mode work?</H2>
       <P>
         The tokens ship with a <code>.dark</code> block. Add the{" "}
         <code>dark</code> class to <code>&lt;html&gt;</code> to switch, and wire

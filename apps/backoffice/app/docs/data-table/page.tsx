@@ -154,7 +154,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 { key: "name", label: "Name" }                   // long text → left
 { key: "total", label: "Total", align: "right" } // explicit override`}</CodeBlock>
 
-      <H2>Sorting</H2>
+      <H2>How do I enable sorting?</H2>
       <P>
         Click a column header or use the Sort dropdown. Every sortable column
         shows a caret indicator — a muted up/down caret by default, then a solid
@@ -170,7 +170,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
 { key: "code", label: "Code" }                      // column + sortable (default)
 { key: "notes", label: "Notes", sortable: false }   // column, but not sortable`}</CodeBlock>
 
-      <H2>Filtering</H2>
+      <H2>How do I add filters?</H2>
       <P>
         By default the toolbar&apos;s Filter panel is a single keyword box that
         matches across every field (built in, nothing to wire). For a labeled
@@ -252,7 +252,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <code>FilterControl</code> union in the component.
       </P>
 
-      <H2>Loading state</H2>
+      <H2>How do I show a loading state?</H2>
       <P>
         When rows come from a server, set <code>loading</code> while the request
         is in flight and the table body shows skeleton rows (matched to your
@@ -272,7 +272,7 @@ useEffect(() => {
 
 <RecordView loading={loading} data={rows} onDataChange={setRows} /* … */ />`}</CodeBlock>
 
-      <H2>Server-side data</H2>
+      <H2>How do I load data from a server?</H2>
       <P>
         By default RecordView does filtering, sorting, and pagination in the
         browser over the <code>data</code> you pass. For large tables that live on
@@ -425,7 +425,7 @@ const onQueryChange = useCallback((q) => {
 
 <RecordView manual persistKey="/data-table" onQueryChange={onQueryChange} /* … */ />`}</CodeBlock>
 
-      <H2>Add &amp; edit form layouts</H2>
+      <H2>How do the add and edit forms work?</H2>
       <P>
         Every RecordView comes with a buffered add/edit form: edits stay in a
         draft and commit only when you hit <strong>Save</strong>. The form is{" "}

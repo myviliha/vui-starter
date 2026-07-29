@@ -71,7 +71,7 @@ export default function AuthDocPage() {
 const auth = useAuth();
 await auth.signIn({ email, password }); // throws on failure → show the error`}</CodeBlock>
 
-      <H2>Reference adapter — Better Auth</H2>
+      <H2>How do I wire Better Auth?</H2>
       <P>
         The starter ships a <a href="https://better-auth.com" target="_blank" rel="noreferrer">Better Auth</a>{" "}
         adapter (<code>app/_components/auth-provider.tsx</code>) that maps the
@@ -136,7 +136,7 @@ export const { GET, POST } = toNextJsHandler(auth);`}</CodeBlock>
         <li><code>Field</code>: a labelled field (render inside a <code>FieldGrid</code>); pass <code>required</code> for the <code>*</code> marker and <code>hint</code> for helper text. An <code>error</code> turns the input border red (via the <code>Input</code>&apos;s <code>aria-invalid</code> styling) and shows the message in a tooltip on an alert icon — <strong>no layout shift</strong>; the full text is announced to screen readers. The error <strong>auto-clears the moment the user edits the field</strong> (and re-validates on the next submit), so pages just set <code>error</code> on submit and never clear it on change</li>
       </Ul>
 
-      <H2>Build a screen</H2>
+      <H2>How do I build an auth screen?</H2>
       <P>
         Compose the sections inside a <code>&lt;form&gt;</code> so the
         footer&apos;s submit button drives the whole card:
