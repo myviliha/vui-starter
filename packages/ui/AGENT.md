@@ -450,11 +450,22 @@ Wrap the forms in semantic HTML.
 
 ---
 
-# shadcn/ui Integration
+# shadcn/ui components
 
-VUI and shadcn/ui complement each other, so split the work along their strengths. Reach for shadcn for forms, dialogs, sheets, tabs, popovers, and accordions; reach for VUI for layouts, `RecordView`, enterprise components, charts, and navigation patterns.
+The shadcn/ui component set is being brought **into this package** (Radix-based,
+restyled to VUI tokens) so you import them from `@viliha/vui-ui/<name>` instead of
+running `shadcn add` and maintaining a local `components/ui/`. First batch shipped:
 
-VUI owns the design tokens, so delete any duplicate token definitions shadcn generates.
+- `@viliha/vui-ui/accordion` — `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`
+- `@viliha/vui-ui/label` — `Label`
+- `@viliha/vui-ui/separator` — `Separator`
+- `@viliha/vui-ui/skeleton` — `Skeleton`
+- `@viliha/vui-ui/switch` — `Switch` (`size?: "sm" | "default"`)
+- `@viliha/vui-ui/tabs` — `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`
+
+These use VUI's tokens automatically (no shadcn token duplication needed). More
+components land in later batches; prefer the `@viliha/vui-ui/*` import over a local
+shadcn copy. For anything not yet ported, you can still `shadcn add` it locally.
 
 ---
 

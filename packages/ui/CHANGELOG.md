@@ -7,6 +7,18 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.27.0 — 2026-07-29
+
+### Added
+
+- **shadcn/ui components, batch 1 — now in the package.** Ported (Radix-based,
+  restyled to VUI tokens, zero token duplication) so consumers import from
+  `@viliha/vui-ui/<name>` instead of running `shadcn add`:
+  `accordion`, `label`, `separator`, `skeleton`, `switch`, `tabs`.
+  New runtime deps: `radix-ui`, `class-variance-authority`, `lucide-react`.
+  `theme.css` now ships the `accordion-down`/`accordion-up` keyframes so the
+  Accordion animates without `tw-animate-css`. More components in later batches.
+
 ## 1.26.2 — 2026-07-29
 
 ### Changed
