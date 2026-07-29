@@ -7,6 +7,17 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.26.1 — 2026-07-29
+
+### Fixed
+
+- **README blank on npmjs.com.** The README is in every tarball, but npmjs
+  renders from the packument `readme` field, which recent npm/node don't
+  repopulate on publish (it went stale). `scripts/publish.mjs` now injects
+  `README.md` into the manifest (`readme` + `readmeFilename`) before
+  `npm publish`, so the registry always stores the current text. No source
+  change — republish to refresh the page.
+
 ## 1.26.0 — 2026-07-29
 
 ### Added

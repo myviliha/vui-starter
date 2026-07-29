@@ -22,7 +22,7 @@
 // working tree is left exactly as it was.
 
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -53,10 +53,22 @@ for (const [name, spec] of Object.entries(pkg.devDependencies ?? {})) {
   }
 }
 
+// npmjs.com renders the README from the packument `readme` field. Recent
+// npm/pnpm/node don't reliably repopulate it on publish (the file lands in the
+// tarball, but the website field goes stale/blank). Inject README.md into the
+// manifest so the registry always stores the current text — this is the field
+// npm itself used to set from the file.
+const readmePath = join(pkgDir, "README.md");
+const hasReadme = existsSync(readmePath);
+if (hasReadme) {
+  pkg.readme = readFileSync(readmePath, "utf8");
+  pkg.readmeFilename = "README.md";
+}
+
 const args = process.argv.slice(2);
 console.log(
   `Publishing ${pkg.name}@${pkg.version} via npm ` +
-    `(stripped ${stripped} workspace devDep(s))…`,
+    `(stripped ${stripped} workspace devDep(s), readme ${hasReadme ? "injected" : "MISSING"})…`,
 );
 try {
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
