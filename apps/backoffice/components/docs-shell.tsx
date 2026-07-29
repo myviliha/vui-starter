@@ -196,9 +196,10 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           </a>
           <Link
             href="/dashboard"
+            title="Open the full working demo app"
             className="hidden h-8 items-center rounded-md bg-[var(--button-primary)] px-3 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] transition-colors hover:bg-[var(--button-primary-hover)] sm:flex"
           >
-            Open App
+            Live Demo
           </Link>
         </div>
       </header>
@@ -222,16 +223,25 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Footer */}
-      <footer className="shrink-0 border-t border-border bg-background px-4 py-2.5 text-center text-xs text-muted-foreground md:px-6">
-        Made with <span className="text-rose-500">♥</span> from Vietnam by the{" "}
-        <a
-          href="https://viliha.com"
-          target="_blank"
-          rel="noreferrer"
-          className="font-medium text-foreground hover:underline"
-        >
-          Viliha Team
-        </a>
+      <footer className="flex shrink-0 flex-col items-center justify-center gap-2 border-t border-border bg-background px-4 py-2.5 text-xs text-muted-foreground sm:flex-row sm:justify-between md:px-6">
+        <span>
+          Made with <span className="text-rose-500">♥</span> from Vietnam by the{" "}
+          <a
+            href="https://viliha.com"
+            target="_blank"
+            rel="noreferrer"
+            className="font-medium text-foreground hover:underline"
+          >
+            Viliha Team
+          </a>
+        </span>
+        <iframe
+          src="https://github.com/sponsors/myviliha/button"
+          title="Sponsor myviliha"
+          height={32}
+          width={114}
+          style={{ border: 0, borderRadius: 6 }}
+        />
       </footer>
     </div>
   );

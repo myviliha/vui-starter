@@ -54,7 +54,7 @@ export default function DocsHome() {
           and build on. Datatables, charts, auth, and a full backoffice demo.
           Open Source. Ships as source.
         </p>
-        <div className="mt-8 flex items-center justify-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="/docs/installation">
             <Button variant="primary" size="lg">
               Get Started <ArrowRightIcon className="size-4" />
@@ -65,7 +65,22 @@ export default function DocsHome() {
               Browse Components
             </Button>
           </Link>
+          <Link href="/dashboard">
+            <Button variant="outline" size="lg">
+              Live Demo
+            </Button>
+          </Link>
         </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Prefer to explore first? Every component runs in a full{" "}
+          <Link
+            href="/dashboard"
+            className="font-medium text-[var(--button-primary)] hover:underline"
+          >
+            working demo app
+          </Link>{" "}
+          — real datatables, forms, charts, and auth screens.
+        </p>
       </div>
 
       {/* Bento */}
@@ -168,6 +183,26 @@ export default function DocsHome() {
             ))}
           </div>
         </Cell>
+      </div>
+
+      {/* Support */}
+      <div className="mt-16 flex flex-col items-center gap-5 border-t border-border pt-12 text-center">
+        <div>
+          <p className="text-lg font-semibold tracking-tight text-foreground">
+            Support the project
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            VUI is free and open source — sponsorship keeps it maintained.
+          </p>
+        </div>
+        <iframe
+          src="https://github.com/sponsors/myviliha/card"
+          title="Sponsor myviliha"
+          height={225}
+          width={600}
+          style={{ border: 0 }}
+          className="max-w-full"
+        />
       </div>
     </div>
   );

@@ -8,8 +8,11 @@ components you actually import.
 It's part of [**Vui Starter**](https://github.com/myviliha/vui-starter), a free
 and open-source admin design system.
 
-- 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com)
+- 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com) — a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
 - 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
+- ❤️ **Sponsor:** [github.com/sponsors/myviliha](https://github.com/sponsors/myviliha)
+
+[![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
 
 ## Install
 
