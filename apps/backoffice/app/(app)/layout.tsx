@@ -1,11 +1,11 @@
 import { PageChromeProvider } from "@viliha/vui-ui/record-view";
-import { FOOTER_NOTICE, FOOTER_OVERRIDDEN, SITE } from "@/lib/seo";
 import {
   AppSidebar,
   MobileNav,
   SidebarProvider,
 } from "@/app/_components/app-sidebar";
 import { TopBar } from "@/app/_components/top-bar";
+import { SiteFooter } from "@/app/_components/site-footer";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
@@ -40,28 +40,8 @@ export default function AppLayout({
                     (no remount/flash) and each page keeps its live state. */}
                 <KeepAliveTabs>{children}</KeepAliveTabs>
               </div>
-              <footer className="hidden shrink-0 border-t border-border bg-background px-4 py-1 text-center text-[10px] text-muted-foreground md:block">
-                {FOOTER_OVERRIDDEN ? (
-                  FOOTER_NOTICE
-                ) : (
-                  <>
-                    © {SITE.copyrightYear}{" "}
-                    {SITE.companyUrl ? (
-                      <a
-                        href={SITE.companyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline-offset-2 hover:text-foreground hover:underline"
-                      >
-                        {SITE.company}
-                      </a>
-                    ) : (
-                      SITE.company
-                    )}{" "}
-                    · {SITE.license}
-                  </>
-                )}
-              </footer>
+              {/* Hidden on mobile (the bottom nav owns that space). */}
+              <SiteFooter className="hidden md:block" />
             </div>
           </PageChromeProvider>
           <MobileNav />

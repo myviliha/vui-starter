@@ -53,7 +53,7 @@ export default function AuthDocPage() {
         <li><code>AuthCardBody</code>: the fields (roomy, consistent spacing)</li>
         <li><code>AuthCardFooter</code>: the primary action(s) (muted background)</li>
         <li><code>AuthCardAside</code>: secondary nav (e.g. &quot;Create an account&quot;), set off by its own divider</li>
-        <li><code>Field</code>: a labelled field; pass <code>required</code> for the <code>*</code> marker, <code>error</code> for inline errors</li>
+        <li><code>Field</code>: a labelled field — label sits <strong>beside</strong> the input on one row (matching the app&apos;s <code>RecordForm</code>); pass <code>required</code> for the <code>*</code> marker, <code>error</code>/<code>hint</code> for text under the input</li>
       </Ul>
 
       <H2>Build a screen</H2>
@@ -111,10 +111,16 @@ export default function SignIn() {
 </AuthCard>`}</CodeBlock>
 
       <Note title="Layout">
-        Auth screens render inside <code>app/auth/layout.tsx</code>: centered,
-        with the logo and footer, and separate from the app shell. Add a new
-        screen at <code>app/auth/&lt;name&gt;/page.tsx</code> and it inherits the
-        layout.
+        Auth screens render inside <code>app/auth/layout.tsx</code>: a brand
+        header (<code>AuthHeader</code> — logo top-left, theme toggle right) and
+        the same footer as the app shell (<code>SiteFooter</code>, full width),
+        with the card centered between them — so moving between auth and the
+        dashboard doesn&apos;t feel like a different site. Add a new screen at{" "}
+        <code>app/auth/&lt;name&gt;/page.tsx</code> and it inherits the layout.
+        The <code>not-found</code> (404) and <code>error</code> (500) pages reuse
+        the same <code>AuthHeader</code> + <code>SiteFooter</code> shell; the 404
+        sends signed-in users to the dashboard and everyone else to sign-in
+        (<code>lib/auth-state.ts</code>).
       </Note>
 
       <Note title="Required fields">

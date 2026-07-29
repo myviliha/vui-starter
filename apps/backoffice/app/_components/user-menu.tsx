@@ -11,6 +11,7 @@ import {
 
 import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
 import { MenuItem } from "@viliha/vui-ui/menu";
+import { setSignedIn } from "@/lib/auth-state";
 import { ThemeToggle } from "./theme-toggle";
 
 // ponytail: no auth in the demo — mock the signed-in user. Swap for the real
@@ -98,7 +99,14 @@ export function UserMenu() {
             <span className="text-muted-foreground">Appearance</span>
             <ThemeToggle />
           </div>
-          <MenuItem as={Link} href="/auth/signin" onClick={() => setOpen(false)}>
+          <MenuItem
+            as={Link}
+            href="/auth/signin"
+            onClick={() => {
+              setSignedIn(false); // clear the demo session (see lib/auth-state.ts)
+              setOpen(false);
+            }}
+          >
             <ExitIcon className="size-4 text-rose-500" />
             Sign out
           </MenuItem>

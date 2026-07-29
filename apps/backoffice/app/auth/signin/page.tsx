@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeftIcon as ArrowLeft,
   CheckCircledIcon as ShieldCheck,
-  EnvelopeClosedIcon as Mail,
   LockClosedIcon as Fingerprint,
   LockClosedIcon as KeyRound,
 } from "@radix-ui/react-icons";
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
+import { setSignedIn } from "@/lib/auth-state";
 import { BrandName } from "@/app/_components/brand";
 import {
   AuthCard,
@@ -25,7 +25,7 @@ import {
   OrDivider,
 } from "@/app/_components/auth";
 
-type View = "main" | "magic-sent" | "sso" | "2fa";
+type View = "main" | "sso" | "2fa";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -33,49 +33,30 @@ export default function SignInPage() {
   const router = useRouter();
   const [view, setView] = React.useState<View>("main");
   const [email, setEmail] = React.useState("");
-  const [emailError, setEmailError] = React.useState<string>();
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState<string>();
   const [orgId, setOrgId] = React.useState("");
   const [code, setCode] = React.useState("");
   const [busy, setBusy] = React.useState(false);
 
-  function sendMagicLink(e: React.FormEvent) {
+  function signIn(e: React.FormEvent) {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
-      setEmailError("Enter a valid email address.");
+      setError("Enter a valid email address.");
       return;
     }
-    setEmailError(undefined);
-    setView("magic-sent");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    setError(undefined);
+    finish();
   }
 
   function finish() {
     setBusy(true);
+    setSignedIn(true); // mark the demo session (see lib/auth-state.ts)
     router.push("/dashboard");
-  }
-
-  if (view === "magic-sent") {
-    return (
-      <AuthCard>
-        <AuthCardHeader
-          icon={<Mail className="size-6" />}
-          title="Check your email"
-          description={
-            <>
-              Sign-in link sent to{" "}
-              <span className="font-medium text-foreground">{email}</span>
-            </>
-          }
-        />
-        <AuthCardFooter className="space-y-2">
-          <Button variant="outline" className="w-full" onClick={() => undefined}>
-            Resend link
-          </Button>
-          <Button variant="ghost" className="w-full" onClick={() => setView("main")}>
-            Use a different email
-          </Button>
-        </AuthCardFooter>
-      </AuthCard>
-    );
   }
 
   if (view === "sso") {
@@ -166,7 +147,7 @@ export default function SignInPage() {
   // main
   return (
     <AuthCard>
-      <form onSubmit={sendMagicLink}>
+      <form onSubmit={signIn}>
         <AuthCardHeader title="Sign in to your account" />
         <AuthCardBody className="space-y-4">
           <div className="space-y-4">
@@ -196,7 +177,7 @@ export default function SignInPage() {
 
           <OrDivider />
 
-          <Field label="Work email" htmlFor="email" required error={emailError}>
+          <Field label="Email" htmlFor="email" required>
             <Input
               id="email"
               type="email"
@@ -206,11 +187,30 @@ export default function SignInPage() {
               autoComplete="email"
             />
           </Field>
+          <Field label="Password" htmlFor="password" required>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+              autoComplete="current-password"
+            />
+          </Field>
+          {/* Forgot password — primary color, aligned under the input. */}
+          <div className="text-right">
+            <Link
+              href="/auth/forgot-password"
+              className="font-medium text-primary hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
+          {error && <p className="text-destructive">{error}</p>}
         </AuthCardBody>
         <AuthCardFooter>
           <Button type="submit" className="w-full">
-            <Mail className="size-4" />
-            Email me a magic link
+            Sign in
           </Button>
           <AuthCardAside>
             New to <BrandName />?{" "}

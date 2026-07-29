@@ -55,20 +55,24 @@ export function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-1.5">
+    // Label beside the input on one row (matches the app's RecordForm), with
+    // any hint/error flowing under the input in the same right-hand column.
+    <div className="flex gap-3">
       <label
         htmlFor={htmlFor}
-        className="flex items-center gap-1 font-medium leading-relaxed"
+        className="flex w-32 shrink-0 items-center gap-1 font-medium leading-relaxed"
       >
         {label}
         {required && <RequiredMark />}
       </label>
-      {children}
-      {error ? (
-        <p className="text-destructive">{error}</p>
-      ) : hint ? (
-        <p className="text-muted-foreground">{hint}</p>
-      ) : null}
+      <div className="min-w-0 flex-1 space-y-1.5">
+        {children}
+        {error ? (
+          <p className="text-destructive">{error}</p>
+        ) : hint ? (
+          <p className="text-muted-foreground">{hint}</p>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -16,7 +16,7 @@ Turborepo + pnpm monorepo. One app + one published library:
 | --- | --- |
 | New reusable component | `packages/ui/src/<name>.tsx` → auto-exported as `@viliha/vui-ui/<name>` (the `./*` export map; **no barrel edit needed**) |
 | New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout`. **Pick a page type** (see "Page types" below) and state which; for a record form default to **slide-over**. |
-| New auth page | `apps/backoffice/app/auth/<name>/page.tsx` |
+| New auth page | `apps/backoffice/app/auth/<name>/page.tsx` — inherits the auth shell (`AuthHeader` logo bar + `SiteFooter`). Build fields with `Field` (label-beside-input) from `_components/auth.tsx`; don't hand-roll |
 | shadcn component | `npx shadcn@latest add <name>` (from the backoffice dir) → `components/ui/` |
 | Design token / color / radius | `packages/ui/src/theme.css` — **never hard-code**, add/read a token |
 | Navigation (sidebar + breadcrumbs) | `apps/backoffice/app/_components/nav-config.ts` — single source; breadcrumbs derive from it |
@@ -29,6 +29,7 @@ Turborepo + pnpm monorepo. One app + one published library:
 - **Navigation** → `nav-config.ts` (sidebar + breadcrumb trail both derive from it).
 - **Page layout / section cards / dialogs / menus / datatable** → documented at docs `/layout` and `/data-table`. Reuse `Dialog`, `Menu`, `RecordView`, `ChartContainer` — don't re-implement.
 - **`cn`** → `@viliha/vui-ui/utils`. `utils.ts` is intentional; do not "fix" it.
+- **Site footer** → `_components/site-footer.tsx` (`SiteFooter`). The app shell, auth screens, and the 404/500 pages all render it — edit once. The **auth/404/500 shell** (brand header + footer, no menus) is `AuthHeader` + `SiteFooter`; reuse them, don't rebuild a header/footer per page.
 
 ## Architecture: three layers (Data → Controller → Presentation)
 
