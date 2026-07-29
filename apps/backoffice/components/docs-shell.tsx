@@ -206,7 +206,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
             <span className="hidden sm:inline">Sponsor</span>
           </Link>
           <Link
-            href="/dashboard"
+            href="/demo"
             title="Open the full working demo app"
             className="hidden h-8 items-center rounded-md bg-[var(--button-primary)] px-3 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] transition-colors hover:bg-[var(--button-primary-hover)] sm:flex"
           >

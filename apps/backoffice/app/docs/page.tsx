@@ -65,7 +65,7 @@ export default function DocsHome() {
               Browse Components
             </Button>
           </Link>
-          <Link href="/dashboard">
+          <Link href="/demo">
             <Button variant="outline" size="lg">
               Live Demo
             </Button>
@@ -74,7 +74,7 @@ export default function DocsHome() {
         <p className="mt-4 text-sm text-muted-foreground">
           Prefer to explore first? Every component runs in a full{" "}
           <Link
-            href="/dashboard"
+            href="/demo"
             className="font-medium text-[var(--button-primary)] hover:underline"
           >
             working demo app

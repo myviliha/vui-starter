@@ -286,6 +286,7 @@ single-select, static or async `loadOptions`) · `cascading-combobox`
 (fixed named levels — Region → Country → State → City) · `command` · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `filter-field`
 (two-column `FilterGrid` / `FilterField` layout) · `form` ·
+`field-grid` (two-column `Label │ control` form layout) ·
 `hover-card` · `input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` ·
 `menu` · `popover` · `progress` · `radio-group` · `required-mark` ·
 `scroll-area` · `select` · `separator` · `sheet` · `skeleton` · `slider` ·
@@ -293,7 +294,8 @@ single-select, static or async `loadOptions`) · `cascading-combobox`
 (multi-step wizard indicator) · `switch` · `tabs` · `textarea` · `toggle` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
-`RecordForm`) · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
+`RecordForm`) · `wizard` (multi-step wizard scaffold — `Wizard` + `WizardSection`)
+· plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 Components ported from shadcn/ui (Radix-based) are being brought into the package
 so you don't need a separate `shadcn add`. Batch 1: `accordion`, `label`,

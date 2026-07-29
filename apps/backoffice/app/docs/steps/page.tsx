@@ -79,26 +79,67 @@ function Steps(props: {
   className?: string;
 });`}</CodeBlock>
 
-      <Note title="Build the wizard around it">
-        <code>Steps</code> is only the indicator. Pair it with your own step
-        state and render each step&apos;s body from <code>Input</code>,{" "}
-        <code>Select</code>, or the shared <code>Field</code> in a section card
-        with a Back/Next footer. A full example lives at{" "}
-        <code>/register-business</code>; see the{" "}
-        <a
-          href="/docs/layout"
-          className="font-medium text-foreground underline"
-        >
+      <H2>Wizard scaffold</H2>
+      <P>
+        <code>Steps</code> is only the indicator. For a full multi-step form use
+        the <strong>wizard scaffold</strong> (<code>@viliha/vui-ui/wizard</code>) —
+        it&apos;s <strong>layout only</strong>, so you keep your own step index,
+        field state, and logic and drop any components inside. <code>Wizard</code>{" "}
+        gives you the stepper, a scrolling body, and a Back/Next footer;{" "}
+        <code>WizardSection</code> is a bordered title/icon card — put{" "}
+        <strong>one or many per step</strong>. Fields go in a{" "}
+        <code>FieldGrid</code> as the two-column{" "}
+        <code>Label&nbsp;*&nbsp;│&nbsp;control</code> standard (from{" "}
+        <code>@viliha/vui-ui/field-grid</code>).
+      </P>
+      <CodeBlock title="wizard.tsx">{`import { Wizard, WizardSection } from "@viliha/vui-ui/wizard";
+import { FieldGrid, Field } from "@viliha/vui-ui/field-grid";
+import { Input } from "@viliha/vui-ui/input";
+
+const STEPS = [
+  { label: "Organization", description: "Business details" },
+  { label: "Account", description: "Your credentials" },
+  { label: "Review", description: "Confirm details" },
+];
+
+function Onboarding() {
+  const [step, setStep] = useState(0);
+  const last = step === STEPS.length - 1;
+
+  return (
+    <Wizard
+      steps={STEPS}
+      current={step}
+      onBack={() => setStep((s) => s - 1)}
+      onNext={() => (last ? submit() : setStep((s) => s + 1))}
+      backDisabled={step === 0}
+      nextLabel={last ? "Create account" : undefined}
+    >
+      {step === 0 && (
+        <WizardSection title="Basic Information" icon={Building}>
+          <FieldGrid>
+            <Field label="Name" htmlFor="name" required>
+              <Input id="name" value={name} onChange={onName} />
+            </Field>
+          </FieldGrid>
+        </WizardSection>
+      )}
+      {/* …more steps / sections… */}
+    </Wizard>
+  );
+}`}</CodeBlock>
+      <Note title="Layout, not a form engine">
+        The scaffold never touches your data — no values, validation, or
+        submission. That stays yours; the wizard just guarantees the structure
+        and the two-column field design. A live example is the{" "}
+        <a href="/demo" className="font-medium text-foreground underline">
+          /steps
+        </a>{" "}
+        page in the demo, and the{" "}
+        <a href="/docs/layout" className="font-medium text-foreground underline">
           Multi-step wizard
         </a>{" "}
-        pattern and the{" "}
-        <a
-          href="/docs/templates"
-          className="font-medium text-foreground underline"
-        >
-          workflow template
-        </a>
-        .
+        pattern.
       </Note>
 
       <DocPager

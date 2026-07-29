@@ -458,6 +458,17 @@ Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colo
 
 ---
 
+# Multi-step wizards & form layout
+
+**Wizard scaffold** (`@viliha/vui-ui/wizard`): `Wizard` + `WizardSection`. It's a **layout scaffold, not a data-driven form** — you own the step index, field state, and all logic; the scaffold gives the standard structure (stepper + scrolling body + Back/Next footer, and bordered section cards). Never hand-roll the frame or a bare `Steps` + `<div>`s.
+
+- `Wizard` — pass `steps` (named steps → the stepper), `current` (your index), `onBack`/`onNext`, `nextDisabled`/`backDisabled`, and optional `nextLabel`/`backLabel` nodes (override the final step's button). Render the active step's body as children. `footer` replaces the whole footer; `hideFooter` drops it (e.g. a success screen).
+- `WizardSection` — a bordered `title`/`icon`/`description` card. **A step can hold one or many** — stack several `WizardSection`s per step as the business logic needs.
+
+**Two-column field layout** (`@viliha/vui-ui/field-grid`): `FieldGrid` + `Field` — the **form design standard**: two columns, `Label *` │ control on one row, labels left-aligned and sized to `max-content` (no dead space), aligned across rows. Wrap a section's fields in `<FieldGrid>` and give each `<Field label required hint htmlFor>` its own control. This is the same two-column standard as the filter panel (`filter-field`) and auth screens — use it for every wizard/section form; don't rebuild a label+control row or use a wide fixed label column.
+
+---
+
 # Authentication
 
 The package ships an **auth contract**, not an auth engine. Bundling a provider

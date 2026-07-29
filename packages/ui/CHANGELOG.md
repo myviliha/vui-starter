@@ -7,6 +7,27 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.34.0 — 2026-07-29
+
+### Added
+
+- **`@viliha/vui-ui/wizard` — a multi-step wizard layout scaffold.** `Wizard`
+  renders the stepper (from `steps` + `current`), a scrolling body for the
+  active step, and a Back/Next footer; `WizardSection` is a bordered
+  title/icon section. You own the step index, field state, and all logic and
+  drop any components inside — it's layout only, not a data-driven form.
+- **`@viliha/vui-ui/field-grid` — `FieldGrid` + `Field`.** The form design
+  standard: **two columns, `Label *` │ control on one row**, labels
+  left-aligned and sized to `max-content` (no dead space) and aligned across
+  rows. Supports `required` and `hint`. Used by the wizard sections and any
+  form that wants the standard two-column layout.
+
+### Changed
+
+- **Reference `/steps` page** rebuilt on `Wizard` / `WizardSection` /
+  `FieldGrid`: fixes the oversized label→control gap (was a fixed 140px label
+  column) and demonstrates one step with multiple sections.
+
 ## 1.33.1 — 2026-07-29
 
 ### Changed
