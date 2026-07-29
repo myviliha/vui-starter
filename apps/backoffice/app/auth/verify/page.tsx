@@ -27,7 +27,7 @@ export default function VerifyPage() {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (code.length !== 6) {
-      setError("Enter all 6 digits.");
+      setError("Enter All 6 Digits.");
       return;
     }
     setError(undefined);
@@ -40,7 +40,7 @@ export default function VerifyPage() {
         <AuthCardHeader
           icon={<Shield className="size-6" />}
           title="Enter Verification Code"
-          description="We sent a 6-digit code to your email."
+          description="We Sent A 6-Digit Code To Your Email."
         />
         <AuthCardBody className="flex flex-col items-center gap-4">
           <InputOTP
@@ -69,7 +69,7 @@ export default function VerifyPage() {
               onClick={() => setCode("")}
               className="mx-auto block hover:text-foreground"
             >
-              Didn&apos;t get a code? Resend
+              Didn&apos;t Get A Code? Resend
             </button>
             <Link
               href="/auth/signin"

@@ -34,12 +34,12 @@ export default function ResetPasswordPage() {
     if (password.length < 8) {
       setError({
         field: "password",
-        message: "Password must be at least 8 characters.",
+        message: "Password Must Be At Least 8 Characters.",
       });
       return;
     }
     if (password !== confirm) {
-      setError({ field: "confirm", message: "Passwords don't match." });
+      setError({ field: "confirm", message: "Passwords Don't Match." });
       return;
     }
     setError(undefined);
@@ -52,7 +52,7 @@ export default function ResetPasswordPage() {
         <AuthCardHeader
           icon={<CheckCircle className="size-6" />}
           title="Password Updated"
-          description="Your password has been changed. You can sign in now."
+          description="Your Password Has Been Changed. You Can Sign In Now."
         />
         <AuthCardFooter>
           <Link href="/auth/signin" className="block">
@@ -70,7 +70,7 @@ export default function ResetPasswordPage() {
       <form onSubmit={submit}>
         <AuthCardHeader
           title="Set A New Password"
-          description="Choose a strong password you don't use elsewhere."
+          description="Choose A Strong Password You Don't Use Elsewhere."
         />
         <AuthCardBody>
           <FieldGrid>
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
-                placeholder="At least 8 characters"
+                placeholder="At Least 8 Characters"
               />
             </Field>
             <Field
@@ -101,7 +101,7 @@ export default function ResetPasswordPage() {
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 autoComplete="new-password"
-                placeholder="Re-enter password"
+                placeholder="Re-Enter Password"
               />
             </Field>
           </FieldGrid>

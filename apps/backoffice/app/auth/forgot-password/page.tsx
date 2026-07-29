@@ -30,7 +30,7 @@ export default function ForgotPasswordPage() {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
-      setError("Enter a valid email address.");
+      setError("Enter A Valid Email Address.");
       return;
     }
     setError(undefined);
@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
           title="Check Your Email"
           description={
             <>
-              A reset link was sent to{" "}
+              A Reset Link Was Sent To{" "}
               <span className="font-medium text-foreground">{email}</span>
             </>
           }
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
       <form onSubmit={submit}>
         <AuthCardHeader
           title="Reset Your Password"
-          description="Enter your email and we'll send you a reset link."
+          description="Enter Your Email And We'll Send You A Reset Link."
         />
         <AuthCardBody>
           <FieldGrid>

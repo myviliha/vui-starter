@@ -37,13 +37,13 @@ export default function SignUpPage() {
     if (!check.ok) {
       setError(
         check.reason === "public"
-          ? "Please use your work email — personal domains (Gmail, Outlook, …) aren't allowed."
-          : "Enter a valid email address.",
+          ? "Please Use Your Work Email — Personal Domains (Gmail, Outlook, …) Aren't Allowed."
+          : "Enter A Valid Email Address.",
       );
       return;
     }
     if (!robot) {
-      setError("Please confirm you're not a robot.");
+      setError("Please Confirm You're Not A Robot.");
       return;
     }
     setError(undefined);
@@ -58,7 +58,7 @@ export default function SignUpPage() {
           title="Verify Your Email"
           description={
             <>
-              Verification link sent to{" "}
+              Verification Link Sent To{" "}
               <span className="font-medium text-foreground">{email}</span>
             </>
           }
@@ -114,7 +114,7 @@ export default function SignUpPage() {
           </Button>
         </AuthCardBody>
         <AuthCardFooter className="text-center">
-          Already have an account?{" "}
+          Already Have An Account?{" "}
           <Link href="/auth/signin" className="font-medium text-primary hover:underline">
             Sign In
           </Link>

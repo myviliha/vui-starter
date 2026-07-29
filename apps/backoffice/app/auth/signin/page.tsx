@@ -46,13 +46,13 @@ export default function SignInPage() {
   function signIn(e: React.FormEvent) {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
-      setError({ field: "email", message: "Enter a valid email address." });
+      setError({ field: "email", message: "Enter A Valid Email Address." });
       return;
     }
     if (password.length < 8) {
       setError({
         field: "password",
-        message: "Password must be at least 8 characters.",
+        message: "Password Must Be At Least 8 Characters.",
       });
       return;
     }
@@ -115,7 +115,7 @@ export default function SignInPage() {
           <AuthCardHeader
             icon={<ShieldCheck className="size-6" />}
             title="Two-Factor Authentication"
-            description="Enter your 6-digit code"
+            description="Enter Your 6-Digit Code"
           />
           <AuthCardBody>
             <Input
@@ -186,7 +186,7 @@ export default function SignInPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Your password"
+                placeholder="Your Password"
                 autoComplete="current-password"
               />
             </Field>
@@ -233,7 +233,7 @@ export default function SignInPage() {
           </div>
         </AuthCardBody>
         <AuthCardFooter className="text-center">
-          New to <BrandName />?{" "}
+          New To <BrandName />?{" "}
           <Link href="/auth/signup" className="font-medium text-primary hover:underline">
             Create An Account
           </Link>
