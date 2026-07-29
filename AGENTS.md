@@ -141,7 +141,7 @@ To change the trail, edit `nav-config.ts` (structure/order) and the label/color 
 7. **Lists/menus:** use `Menu`/`MenuItem` (bordered-row standard) or the shared `Dropdown`/`Select`; don't hand-roll list borders.
 8. **Icons:** Radix Icons (`@radix-ui/react-icons`) for app chrome; leave shadcn's internal Lucide icons as-is.
 9. **Comment deliberate no-ops** (e.g. clipboard/storage `catch`). Never silently swallow errors elsewhere.
-10. **Changelog + docs on every change (mandatory — see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change.
+10. **Changelog + docs on every change (mandatory — see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change — and, after writing them, you **re-read and humanize** the prose (plain, human voice; no AI tells). See the humanize rule in "Changelog & docs".
 
 ## Changelog & docs — mandatory on every change (never skip)
 
@@ -154,6 +154,7 @@ Any change that adds, changes, removes, or fixes behaviour **must** update the d
    - the reference/agent docs (`README.md`, `CONTRIBUTING.md`, this `AGENTS.md`) when the workflow or rules change.
    - requirement templates in `apps/backoffice/public/templates/**` when a page/feature pattern changes.
 3. **A new `init` scaffolder feature or new demo page** must also be reflected in the shipped `template/` (it regenerates from `apps/backoffice` on publish) and documented in `AGENT.md` + the docs.
+4. **After writing any docs, check and humanize them (mandatory).** Once you've drafted the prose — READMEs, CHANGELOG entries, docs-site pages, reader-facing comments, this file — go back and re-read it before committing, then rewrite anything that sounds machine-generated. This is a required final pass, not optional: use plain, direct language; vary sentence length; cut filler and the usual AI tells ("delve", "seamless", "robust", "leverage", "in today's fast-paced…", "it's worth noting", hedging, padded bullet lists); favour a concrete example over an abstract claim; match the voice already in the repo. If a sentence sounds like boilerplate, rewrite it or delete it. Applies to **every** doc surface above — no exceptions.
 
 If you're unsure whether a doc applies, it does — update it. A change that touches code but no docs/changelog is incomplete.
 
