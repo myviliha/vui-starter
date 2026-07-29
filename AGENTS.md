@@ -168,16 +168,34 @@ Any change that adds, changes, removes, or fixes behaviour **must** update the d
 
 If you're unsure whether a doc applies, it does, so update it. A change that touches code but no docs/changelog is incomplete.
 
-## Verify before "done" (must pass)
+## Verify before "done": the local CI gate (mandatory before every push)
+
+Run the same checks CI runs, **locally, before you push a feature branch**. `main`
+must stay green and deployable, so a branch is not ready to push (and not ready
+for the author to merge) until all of these pass:
 
 ```bash
+pnpm install --frozen-lockfile           # what CI runs first; fails if the lockfile drifted
 pnpm --filter @viliha/vui-ui check-types
+pnpm --filter @viliha/vui-ui lint
 pnpm --filter backoffice lint            # eslint --max-warnings 0
 pnpm --filter backoffice build           # or the app you changed
-pnpm --filter @viliha/vui-ui test      # if you changed testable logic
+pnpm --filter @viliha/vui-ui test        # if you changed testable logic
 ```
 
+If `pnpm install --frozen-lockfile` fails, `package.json` and `pnpm-lock.yaml`
+disagree. Fix the dependency the right way (below); never paper over it with
+`--no-frozen-lockfile`, that only hides the same break that will hit CI.
+
 Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs" rule above, and a `packages/ui` version bump if the change ships in the package.
+
+## CI/CD, security & dependencies (locked; do not change)
+
+This setup is known-good and has broken the runners before when touched. Treat it as frozen.
+
+- **Do not modify the GitHub setup.** Leave `.github/workflows/**` alone: CI (`ci.yml`), the Pages deploy (`nextjs.yml`), `publish.yml`, `codeql.yml`, and `security.yml`, along with their `pnpm/action-setup` + `setup-node` versions, the Node/pnpm versions, and the `--frozen-lockfile` install. Do not migrate CI to corepack. If a workflow change is genuinely required, flag it explicitly and get sign-off first; never edit these as a side effect of another task.
+- **Never hand-edit dependencies in `package.json`.** Editing `dependencies` / `devDependencies` by hand desyncs `pnpm-lock.yaml`, and every CI job installs with `--frozen-lockfile`, so it fails before any build runs. Always use `pnpm add` / `pnpm remove` (with `--filter <workspace>` in this monorepo) so both files update together. Changing a version, description, or keywords by hand is fine; changing the dependency lists is not.
+- **Keep the `@repo/eslint-config` and `@repo/typescript-config` workspace devDeps in `packages/ui`.** Its `eslint.config.mjs` imports the first and `tsconfig.json` extends the second, so lint and type-check need them. They never ship: the publish script strips `workspace:*` devDeps before `npm publish`.
 
 ## Git conventions
 
