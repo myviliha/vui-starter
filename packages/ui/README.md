@@ -271,7 +271,8 @@ place. If you'd rather keep a verbatim copy, run
 `breadcrumb` · `breadcrumbs` · `button` · `calendar` · `card` · `chart` (themed
 Recharts wrapper) · `checkbox` · `collapsible` · `combobox` (searchable
 single-select, static or async `loadOptions`) · `command` · `command-palette`
-(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `form` ·
+(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `filter-field`
+(two-column `FilterGrid` / `FilterField` layout) · `form` ·
 `hover-card` · `input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` ·
 `menu` · `popover` · `progress` · `radio-group` · `required-mark` ·
 `scroll-area` · `select` · `separator` · `sheet` · `skeleton` · `slider` ·

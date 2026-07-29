@@ -7,6 +7,26 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.32.0 — 2026-07-29
+
+### Added
+
+- **`@viliha/vui-ui/filter-field` — composable filter layout primitives.**
+  `FilterGrid` + `FilterField` render the theme's enforced filter layout — **two
+  columns: label │ control, one row per field, labels aligned across rows**.
+  Anyone can add a labelled control to a filter panel with them, and the design
+  can't be styled away.
+- **`RecordView` `filterExtras` prop** — inject your own `FilterField` rows into
+  the Filter panel (below the `filterable` fields, in the same grid). The panel
+  now opens when there are `filterable` fields **or** `filterExtras`.
+
+### Changed
+
+- **`RecordView` Filter panel is now two-column by default** (label │ control on
+  one row), replacing the stacked label-above-control layout. Built on the new
+  `FilterGrid`/`FilterField`, so the layout is consistent and enforced whether
+  fields come from `filterable` config or `filterExtras`. Panel widened to fit.
+
 ## 1.31.0 — 2026-07-29
 
 ### Added

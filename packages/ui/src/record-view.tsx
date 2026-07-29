@@ -40,6 +40,7 @@ import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
 import { Combobox } from "./combobox";
+import { FilterGrid, FilterField } from "./filter-field";
 import type { AsyncOption, AsyncOptionSource } from "./use-async-options";
 
 export type { AsyncOption } from "./use-async-options";
@@ -602,6 +603,11 @@ interface RecordViewProps<T extends { id: RowId }> {
   showAdd?: boolean;
   /** Show the Filter panel. Default `true`. */
   showFilter?: boolean;
+  /** Extra rows to add to the Filter panel. Compose with `FilterField`
+   *  (from `@viliha/vui-ui/filter-field`) so they inherit the two-column
+   *  label │ control layout; render inside the same grid, below the
+   *  `filterable` fields. Their state and matching are yours to manage. */
+  filterExtras?: React.ReactNode;
   /** Show the Sort menu. Default `true`. */
   showSort?: boolean;
   /** Show the pagination footer. When `false` in client mode, all rows render
@@ -652,6 +658,7 @@ export function RecordView<T extends { id: RowId }>({
   showExport = true,
   showAdd = true,
   showFilter = true,
+  filterExtras,
   showSort = true,
   showPagination = true,
   showSelection = true,
@@ -1586,16 +1593,18 @@ export function RecordView<T extends { id: RowId }>({
           )}
           {showFilter && (
           <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
-            {filterFields.length > 0 ? (
-              // Per-field mode: a labeled control per `filterable` field, plus
-              // Search / Clear. The panel only gathers values — matching is the
-              // consumer's job via `onFilter` (see the field's `filterable`).
+            {filterFields.length > 0 || filterExtras ? (
+              // Per-field mode: a labeled control per `filterable` field (plus
+              // any `filterExtras`), and Search / Clear. The panel only gathers
+              // values — matching is the consumer's job via `onFilter`.
               <>
-                <div className="flex max-h-[min(28rem,70vh)] w-72 flex-col">
+                <div className="flex max-h-[min(28rem,70vh)] w-96 flex-col">
                   {/* Header: static, full-width separator (from DropdownLabel). */}
                   <DropdownLabel>Filter</DropdownLabel>
-                  {/* Content: the only scrolling region. */}
-                  <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-3">
+                  {/* Content: the only scrolling region. FilterGrid enforces the
+                      theme default — two columns: label │ control, one row per
+                      field, labels aligned across every row. */}
+                  <FilterGrid className="min-h-0 flex-1 overflow-y-auto p-3">
                   {filterFields.map((f) => {
                     const cfg: FieldFilter<T> =
                       typeof f.filterable === "object" ? f.filterable : {};
@@ -1627,10 +1636,8 @@ export function RecordView<T extends { id: RowId }>({
                           }
                         : null;
                     return (
-                      <div key={f.key} className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground">
-                          {label}
-                        </label>
+                      // One row per field via FilterField (label │ control).
+                      <FilterField key={f.key} label={label}>
                         {control === "combobox" ? (
                           <Combobox
                             value={typeof raw === "string" ? raw : ""}
@@ -1692,13 +1699,16 @@ export function RecordView<T extends { id: RowId }>({
                             onChange={(e) => setVal(e.target.value)}
                             placeholder={cfg.placeholder ?? "Contains…"}
                             aria-label={label}
-                            className="h-8"
+                            className="h-8 w-full"
                           />
                         )}
-                      </div>
+                      </FilterField>
                     );
                   })}
-                  </div>
+                  {/* Consumer-added rows — compose with <FilterField> so they
+                      inherit the same two-column layout. */}
+                  {filterExtras}
+                  </FilterGrid>
                   {/* Footer: static, full-width top border, compact buttons. */}
                   <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border p-3">
                     <Button

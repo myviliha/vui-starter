@@ -414,6 +414,26 @@ Dependent/cascading options: make `options` (form) or `filterable.options` (filt
 
 The Filter panel is a single keyword box by default (built in, matches all fields). For a labeled control per field, set `filterable` on the relevant fields and never hand-roll a filter form: `filterable: true` (text) or `filterable: { control, label, placeholder, options }` where `control` is `"text" | "number" | "date" | "select" | "combobox" | "checkbox"`. When any field is filterable the panel shows a control per field plus Search / Clear. It only **collects** values — handle `onFilter(values)` on `RecordView` to run a query or client filter (Search and Clear both call it). Types: `FilterControl`, `FieldFilter`, `FilterValues<T>`. Need a control kind that isn't listed? Extend the `FilterControl` union in the component.
 
+**Layout is fixed: two columns — label │ control, one row per field**, labels aligned across rows. This is the enforced theme default (do not restyle to stacked). It's built from `@viliha/vui-ui/filter-field` (`FilterGrid` + `FilterField`); `RecordView` renders both its `filterable` fields and any custom rows with it.
+
+**Custom filter rows.** To add your own labelled control to the panel, pass `filterExtras` to `RecordView` composed with `FilterField` — never hand-roll the row layout:
+
+```tsx
+import { FilterField } from "@viliha/vui-ui/filter-field";
+
+<RecordView
+  fields={fields}
+  filterExtras={
+    <FilterField label="Created after">
+      <Input type="date" value={after} onChange={(e) => setAfter(e.target.value)} />
+    </FilterField>
+  }
+  onFilter={runQuery}
+/>
+```
+
+Rows appear below the `filterable` fields in the same grid; the panel opens when there are `filterable` fields **or** `filterExtras`. `filterExtras` state/matching is yours (RecordView's Search/Clear drive the `filterable` values only). Building a panel outside RecordView? Wrap your `FilterField`s in `FilterGrid`.
+
 ## Add / edit form
 
 The buffered add/edit form renders in one of two layouts:

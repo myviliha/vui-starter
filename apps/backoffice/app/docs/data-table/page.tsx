@@ -176,7 +176,9 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         matches across every field (built in, nothing to wire). For a labeled
         control per field, mark fields <code>filterable</code>. When any field is
         filterable the panel switches to a control per field plus{" "}
-        <strong>Search</strong> and <strong>Clear</strong>.
+        <strong>Search</strong> and <strong>Clear</strong>. Every row uses the
+        theme&apos;s enforced filter layout — <strong>two columns: label │
+        control, one row per field</strong>, with labels aligned across rows.
       </P>
       <P>
         The control is dynamic, so the front end composes a different filter form
@@ -203,6 +205,33 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <code>options</code>. The exported types are{" "}
         <code>FilterControl</code>, <code>FieldFilter</code>, and{" "}
         <code>FilterValues&lt;T&gt;</code>.
+      </P>
+
+      <H3>Custom filter rows</H3>
+      <P>
+        Need a control the built-in kinds don&apos;t cover? Add your own row with{" "}
+        <code>filterExtras</code>, composed with <code>FilterField</code> from{" "}
+        <code>@viliha/vui-ui/filter-field</code> so it inherits the same
+        two-column layout — never hand-roll the row. It renders below the{" "}
+        <code>filterable</code> fields in the same grid; its state and matching
+        are yours (RecordView&apos;s Search / Clear drive the{" "}
+        <code>filterable</code> values only).
+      </P>
+      <CodeBlock title="filterExtras">{`import { FilterField } from "@viliha/vui-ui/filter-field";
+
+<RecordView
+  fields={fields}
+  filterExtras={
+    <FilterField label="Created after">
+      <Input type="date" value={after} onChange={(e) => setAfter(e.target.value)} />
+    </FilterField>
+  }
+  onFilter={runQuery}
+/>`}</CodeBlock>
+      <P>
+        The two-column layout (<code>FilterGrid</code> + <code>FilterField</code>)
+        is exported, so a filter panel you build outside RecordView follows the
+        same design.
       </P>
       <Note variant="warning" title="Per-field mode doesn't match rows for you">
         The panel <strong>collects</strong> values; it does not filter the table
