@@ -34,9 +34,21 @@ export function PageTitle({
   );
 }
 
+/** Slug for heading anchors, so the On-This-Page TOC can link to them. */
+function slug(children: React.ReactNode): string | undefined {
+  if (typeof children !== "string") return undefined;
+  return children
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 export function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-10 mb-3 scroll-mt-20 border-b border-border pb-2 text-lg font-semibold tracking-tight text-foreground">
+    <h2
+      id={slug(children)}
+      className="mt-10 mb-3 scroll-mt-20 border-b border-border pb-2 text-lg font-semibold tracking-tight text-foreground"
+    >
       {children}
     </h2>
   );
@@ -44,7 +56,10 @@ export function H2({ children }: { children: React.ReactNode }) {
 
 export function H3({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="mt-6 mb-2 scroll-mt-20 text-sm font-semibold tracking-tight text-foreground">
+    <h3
+      id={slug(children)}
+      className="mt-6 mb-2 scroll-mt-20 text-sm font-semibold tracking-tight text-foreground"
+    >
       {children}
     </h3>
   );
