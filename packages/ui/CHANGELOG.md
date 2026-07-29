@@ -7,6 +7,20 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.30.0 — 2026-07-29
+
+### Added
+
+- **shadcn/ui components, batch 4 — completes the set.** Ported into the package
+  (Radix-based, VUI tokens): `aspect-ratio`, `breadcrumb`, `calendar`, `command`,
+  `form`, `progress`, `scroll-area`, `sonner`. New deps: `cmdk` (command),
+  `react-day-picker` (calendar), `react-hook-form` (form), `sonner`.
+  Adaptations to fit VUI: `command` ships the cmdk primitives **without**
+  `CommandDialog` (VUI's `command-palette` is the modal ⌘K menu); `sonner`'s
+  `Toaster` reads the `.dark` class directly instead of `next-themes`;
+  `calendar` uses VUI's `Button`/`buttonVariants`; `theme.css` already carried
+  the tokens these need.
+
 ## 1.29.0 — 2026-07-29
 
 ### Added

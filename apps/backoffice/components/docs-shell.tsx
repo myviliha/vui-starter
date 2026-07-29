@@ -4,13 +4,13 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GitHubLogoIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@viliha/vui-ui/utils";
-import { Shortcut } from "@viliha/vui-ui/kbd";
 import { Wordmark as BrandWordmark } from "@/app/_components/wordmark";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { TableOfContents } from "@/components/table-of-contents";
+import { DocsSearch } from "@/components/docs-search";
 import { COMPONENTS } from "@/app/docs/components/registry";
 
 type NavItem = { label: string; href: string };
@@ -40,19 +40,19 @@ const SECTIONS: NavGroup[] = [
     title: "Customization",
     items: [
       { label: "Theming", href: "/docs/theming" },
-      { label: "Layout & patterns", href: "/docs/layout" },
-      { label: "Navigation & tabs", href: "/docs/navigation" },
+      { label: "Layouts", href: "/docs/layout" },
+      { label: "Navigation", href: "/docs/navigation" },
       { label: "Typeset", href: "/docs/typeset" },
     ],
   },
   {
     title: "Guides",
     items: [
-      { label: "Building with AI agents", href: "/docs/ai-agents" },
-      { label: "Requirement templates", href: "/docs/templates" },
-      { label: "Using shadcn/ui", href: "/docs/shadcn-ui" },
+      { label: "AI Agents", href: "/docs/ai-agents" },
+      { label: "Templates", href: "/docs/templates" },
+      { label: "Shadcn", href: "/docs/shadcn-ui" },
       { label: "Chat", href: "/docs/chat" },
-      { label: "Support & ticketing", href: "/docs/support" },
+      { label: "Support", href: "/docs/support" },
       { label: "Auth screens", href: "/docs/auth" },
     ],
   },
@@ -166,14 +166,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <button
-            type="button"
-            className="hidden h-8 items-center gap-2 rounded-md border border-input bg-muted/40 px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent sm:flex"
-          >
-            <MagnifyingGlassIcon className="size-3.5" />
-            <span className="pr-6">Search documentation…</span>
-            <Shortcut keys={["⌘", "K"]} />
-          </button>
+          <DocsSearch />
           <ThemeToggle />
           <a
             href="https://www.npmjs.com/package/@viliha/vui-ui"

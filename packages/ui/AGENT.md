@@ -483,6 +483,17 @@ Batch 3 (form controls):
 - `@viliha/vui-ui/toggle-group` — `ToggleGroup`, `ToggleGroupItem` (`type="single" | "multiple"`; group variant/size cascade to items)
 - `@viliha/vui-ui/input-otp` — `InputOTP`, `InputOTPGroup`, `InputOTPSlot`, `InputOTPSeparator`
 
+Batch 4 (overlays / data / misc):
+
+- `@viliha/vui-ui/aspect-ratio` — `AspectRatio`
+- `@viliha/vui-ui/breadcrumb` — `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis` (hand-composed; for route-derived app trails use the higher-level `Breadcrumbs`)
+- `@viliha/vui-ui/calendar` — `Calendar` (react-day-picker; `mode="single" | "multiple" | "range"`)
+- `@viliha/vui-ui/command` — `Command`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandSeparator`, `CommandShortcut` (cmdk; **no `CommandDialog`** — use VUI's `command-palette` for a modal ⌘K menu)
+- `@viliha/vui-ui/form` — `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage`, `useFormField` (React Hook Form; validate with RHF `rules` or a zod resolver, both consumer-side)
+- `@viliha/vui-ui/progress` — `Progress`
+- `@viliha/vui-ui/scroll-area` — `ScrollArea`, `ScrollBar`
+- `@viliha/vui-ui/sonner` — `Toaster` (follows the `.dark` class; no next-themes). `toast()` comes from `sonner`.
+
 These use VUI's tokens automatically (no shadcn token duplication needed). More
 components land in later batches; prefer the `@viliha/vui-ui/*` import over a local
 shadcn copy. For anything not yet ported, you can still `shadcn add` it locally.

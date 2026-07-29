@@ -248,14 +248,15 @@ place. If you'd rather keep a verbatim copy, run
 
 ## Components
 
-`accordion` · `alert` · `alert-dialog` · `avatar` · `badge` · `breadcrumbs` ·
-`button` · `card` · `chart` (themed Recharts wrapper) · `checkbox` ·
-`collapsible` · `combobox` (searchable single-select, static or async
-`loadOptions`) · `command-palette`
-(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `hover-card` ·
-`input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` · `menu` ·
-`popover` · `radio-group` · `required-mark` · `select` · `separator` · `sheet` ·
-`skeleton` · `slider` · `steps`
+`accordion` · `alert` · `alert-dialog` · `aspect-ratio` · `avatar` · `badge` ·
+`breadcrumb` · `breadcrumbs` · `button` · `calendar` · `card` · `chart` (themed
+Recharts wrapper) · `checkbox` · `collapsible` · `combobox` (searchable
+single-select, static or async `loadOptions`) · `command` · `command-palette`
+(⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `form` ·
+`hover-card` · `input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` ·
+`menu` · `popover` · `progress` · `radio-group` · `required-mark` ·
+`scroll-area` · `select` · `separator` · `sheet` · `skeleton` · `slider` ·
+`sonner` · `steps`
 (multi-step wizard indicator) · `switch` · `tabs` · `textarea` · `toggle` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
@@ -265,7 +266,9 @@ Components ported from shadcn/ui (Radix-based) are being brought into the packag
 so you don't need a separate `shadcn add`. Batch 1: `accordion`, `label`,
 `separator`, `skeleton`, `switch`, `tabs`. Batch 2: `alert`, `alert-dialog`,
 `collapsible`, `hover-card`, `popover`, `sheet`. Batch 3: `input-otp`,
-`radio-group`, `slider`, `textarea`, `toggle`, `toggle-group`. More on the way.
+`radio-group`, `slider`, `textarea`, `toggle`, `toggle-group`. Batch 4:
+`aspect-ratio`, `breadcrumb`, `calendar`, `command`, `form`, `progress`,
+`scroll-area`, `sonner`. That completes the shadcn/ui set.
 
 ## Theming
 

@@ -34,10 +34,37 @@ export const COMPONENTS: ComponentMeta[] = [
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/alert-dialog",
   },
   {
+    slug: "aspect-ratio",
+    title: "Aspect Ratio",
+    description: "Displays content within a desired ratio.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/aspect-ratio",
+  },
+  {
+    slug: "breadcrumb",
+    title: "Breadcrumb",
+    description: "Displays the path to the current resource using a hierarchy of links.",
+  },
+  {
+    slug: "calendar",
+    title: "Calendar",
+    description:
+      "A date field component that allows users to enter and edit dates.",
+  },
+  {
     slug: "collapsible",
     title: "Collapsible",
     description: "An interactive component which expands/collapses a panel.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/collapsible",
+  },
+  {
+    slug: "command",
+    title: "Command",
+    description: "Fast, composable, unstyled command menu for React.",
+  },
+  {
+    slug: "form",
+    title: "Form",
+    description: "Building forms with React Hook Form and accessible field wiring.",
   },
   {
     slug: "hover-card",
@@ -64,11 +91,24 @@ export const COMPONENTS: ComponentMeta[] = [
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/popover",
   },
   {
+    slug: "progress",
+    title: "Progress",
+    description:
+      "Displays an indicator showing the completion progress of a task.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/progress",
+  },
+  {
     slug: "radio-group",
     title: "Radio Group",
     description:
       "A set of checkable buttons where no more than one can be checked at a time.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/radio-group",
+  },
+  {
+    slug: "scroll-area",
+    title: "Scroll Area",
+    description: "Augments native scroll functionality for custom, cross-browser styling.",
+    radixUrl: "https://www.radix-ui.com/primitives/docs/components/scroll-area",
   },
   {
     slug: "separator",
@@ -94,6 +134,11 @@ export const COMPONENTS: ComponentMeta[] = [
     description:
       "An input where the user selects a value from within a given range.",
     radixUrl: "https://www.radix-ui.com/primitives/docs/components/slider",
+  },
+  {
+    slug: "sonner",
+    title: "Sonner",
+    description: "An opinionated toast component for React.",
   },
   {
     slug: "switch",
