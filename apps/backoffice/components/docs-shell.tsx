@@ -11,6 +11,7 @@ import { Wordmark as BrandWordmark } from "@/app/_components/wordmark";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { TableOfContents } from "@/components/table-of-contents";
 import { DocsSearch } from "@/components/docs-search";
+import { SponsorCard } from "@/components/sponsor-card";
 import { COMPONENTS } from "@/app/docs/components/registry";
 
 type NavItem = { label: string; href: string };
@@ -31,6 +32,7 @@ const SECTIONS: NavGroup[] = [
   {
     title: "Getting started",
     items: [
+      { label: "❤ Sponsor Me", href: "/docs/sponsor" },
       { label: "Introduction", href: "/docs" },
       { label: "Installation", href: "/docs/installation" },
       { label: "Configuration", href: "/docs/configuration" },
@@ -215,7 +217,10 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
             <div className="mx-auto flex max-w-6xl gap-10 px-6 py-10 md:px-10">
               <div className="min-w-0 max-w-3xl flex-1">{children}</div>
               <aside className="hidden w-56 shrink-0 xl:block">
-                <TableOfContents />
+                <div className="sticky top-10 space-y-6">
+                  <TableOfContents />
+                  <SponsorCard />
+                </div>
               </aside>
             </div>
           </main>

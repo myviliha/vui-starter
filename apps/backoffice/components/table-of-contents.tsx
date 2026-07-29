@@ -49,7 +49,7 @@ export function TableOfContents() {
   if (!headings.length) return null;
 
   return (
-    <div className="sticky top-10 text-sm">
+    <div className="text-sm">
       <p className="mb-3 font-medium text-foreground">On This Page</p>
       <ul className="border-l border-border">
         {headings.map((h) => (
