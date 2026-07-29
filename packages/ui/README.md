@@ -288,6 +288,11 @@ to rebrand the entire system:
 }
 ```
 
+## Acknowledgments
+
+Inspired by and a big thank-you to [**shadcn/ui**](https://ui.shadcn.com) and
+[**React**](https://react.dev) — VUI builds on their ideas and components.
+
 ## License
 
 MIT © Suman Bonakurthi

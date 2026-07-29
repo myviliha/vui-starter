@@ -1,6 +1,50 @@
 import type { Metadata } from "next";
+import { ArrowRightIcon, PlusIcon } from "@radix-ui/react-icons";
 
-import { PageTitle, H2, P, Ul, Note, DocPager } from "@/components/doc";
+import { PageTitle, H2, H3, P, Ul, Note, DocPager } from "@/components/doc";
+
+const SPONSORS_URL = "https://github.com/sponsors/myviliha";
+
+/** A single sponsorship tier card linking to the GitHub Sponsors checkout. */
+function TierCard({
+  amount,
+  cadence,
+  perk,
+  featured,
+}: {
+  amount: string;
+  cadence?: string;
+  perk: string;
+  featured?: boolean;
+}) {
+  return (
+    <a
+      href={SPONSORS_URL}
+      target="_blank"
+      rel="noreferrer"
+      className={
+        "group flex flex-col rounded-xl border bg-card p-5 transition-colors hover:bg-accent/40 " +
+        (featured
+          ? "border-[var(--button-primary)]/60 ring-1 ring-[var(--button-primary)]/20"
+          : "border-border hover:border-[var(--button-primary)]/50")
+      }
+    >
+      <div className="flex items-baseline gap-1">
+        <span className="text-2xl font-semibold tracking-tight text-foreground">
+          {amount}
+        </span>
+        {cadence && (
+          <span className="text-sm text-muted-foreground">{cadence}</span>
+        )}
+      </div>
+      <p className="mt-2 flex-1 text-sm text-muted-foreground">{perk}</p>
+      <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--button-primary)]">
+        Sponsor
+        <ArrowRightIcon className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+      </span>
+    </a>
+  );
+}
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/sponsor/" },
@@ -48,6 +92,28 @@ export default function SponsorPage() {
         />
       </div>
 
+      <H2>Sponsors</H2>
+      <P>Sponsors are featured here — be the first to claim a spot.</P>
+      <div className="mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-dashed border-border p-6">
+        <a
+          href={SPONSORS_URL}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Become the first sponsor"
+          className="grid size-14 shrink-0 place-items-center rounded-full border-2 border-dashed border-[var(--button-primary)]/40 text-[var(--button-primary)] transition-colors hover:border-[var(--button-primary)] hover:bg-[var(--button-primary)]/5"
+        >
+          <PlusIcon className="size-6" />
+        </a>
+        <div>
+          <p className="text-sm font-medium text-foreground">
+            Be the first sponsor
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Your avatar and a link to your site will appear right here.
+          </p>
+        </div>
+      </div>
+
       <H2>Why sponsor</H2>
       <P>
         VUI is developed and maintained by a small, independent team. There is no
@@ -64,27 +130,61 @@ export default function SponsorPage() {
 
       <H2>Tiers</H2>
       <P>
-        One-time or monthly tiers — from a coffee to a logo placement — are listed
-        on the{" "}
-        <a
-          href="https://github.com/sponsors/myviliha"
-          target="_blank"
-          rel="noreferrer"
-          className="font-medium text-[var(--button-primary)] hover:underline"
-        >
-          GitHub Sponsors page
-        </a>
-        . Sponsoring at any level genuinely helps.
+        Monthly or one-time — pick what fits. Custom amounts start at $1, and
+        every card links straight to GitHub Sponsors checkout.
       </P>
+
+      <H3>Monthly</H3>
+      <div className="mb-6 grid gap-3 sm:grid-cols-2">
+        <TierCard amount="$5" cadence="/mo" perk="Access to private repositories" />
+        <TierCard
+          amount="$6"
+          cadence="/mo"
+          perk="Have your bug reports prioritized"
+          featured
+        />
+      </div>
+
+      <H3>One-time</H3>
+      <div className="mb-6 grid gap-3 sm:grid-cols-2">
+        <TierCard amount="$10" perk="One bug or medium-sized bounty" />
+        <TierCard
+          amount="$100"
+          perk="Large contract project — contact me!"
+          featured
+        />
+      </div>
 
       <Note title="Thank you" variant="tip">
         Every sponsorship — big or small — directly funds the next release. Thank
         you for supporting open source.
       </Note>
 
-      <DocPager
-        next={{ label: "Introduction", href: "/docs" }}
-      />
+      <H2>Inspired by</H2>
+      <P>
+        A big thank-you to{" "}
+        <a
+          href="https://ui.shadcn.com"
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-[var(--button-primary)] hover:underline"
+        >
+          shadcn/ui
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://react.dev"
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-[var(--button-primary)] hover:underline"
+        >
+          React
+        </a>{" "}
+        — VUI builds on their ideas and components, and wouldn&apos;t exist
+        without them.
+      </P>
+
+      <DocPager next={{ label: "Introduction", href: "/docs" }} />
     </article>
   );
 }

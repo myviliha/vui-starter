@@ -12,6 +12,7 @@ import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { TableOfContents } from "@/components/table-of-contents";
 import { DocsSearch } from "@/components/docs-search";
 import { SponsorCard } from "@/components/sponsor-card";
+import { SponsorBanner } from "@/components/sponsor-banner";
 import { COMPONENTS } from "@/app/docs/components/registry";
 
 type NavItem = { label: string; href: string };
@@ -205,6 +206,8 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
       </header>
+
+      <SponsorBanner />
 
       {isHome ? (
         <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>

@@ -11,7 +11,7 @@ export function SponsorCard() {
       {/* Soft glow accents */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-6 -top-8 size-24 rounded-full bg-white/20 blur-2xl"
+        className="pointer-events-none absolute -right-6 -top-8 size-24 animate-pulse rounded-full bg-white/20 blur-2xl"
       />
       <div
         aria-hidden
