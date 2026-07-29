@@ -7,6 +7,18 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.26.2 — 2026-07-29
+
+### Changed
+
+- **Scaffolded auth screens** (shipped in `template/`, from the reference app):
+  sign-in and sign-up now lead with the email/password form and place the
+  Google / passkey / SSO options **below** an "or" divider, for a consistent
+  layout. All auth titles, buttons, labels, and copy are **Title Case**. Fields
+  render label-beside-input in a two-column `FieldGrid`, and validation errors
+  show as a red border + tooltip that auto-clears on edit (no layout shift).
+  No component API change — `src/` is unchanged.
+
 ## 1.26.1 — 2026-07-29
 
 ### Fixed
