@@ -59,11 +59,12 @@ export function useFormFields<K extends string>(
   // Latest rules without resubscribing the callbacks each render.
   const rulesRef = React.useRef(rules);
   rulesRef.current = rules;
-  const run = (
-    k: K,
-    value: string,
-    all: Record<K, string>,
-  ): string | undefined => rulesRef.current[k](value, all) || undefined;
+  // Stable (reads a ref only), so it can be a dependency of the callbacks below.
+  const run = React.useCallback(
+    (k: K, value: string, all: Record<K, string>): string | undefined =>
+      rulesRef.current[k](value, all) || undefined,
+    [],
+  );
 
   const setValue = React.useCallback((k: K, value: string) => {
     setValues((v) => ({ ...v, [k]: value }));
@@ -84,7 +85,7 @@ export function useFormFields<K extends string>(
           [k]: run(k, e.target.value, { ...values, [k]: e.target.value }),
         })),
     }),
-    [values, setValue],
+    [values, setValue, run],
   );
 
   /** Validate every field. Returns true when all pass; sets all inline errors. */
@@ -98,7 +99,7 @@ export function useFormFields<K extends string>(
     }
     setErrors(next);
     return ok;
-  }, [keys, values]);
+  }, [keys, values, run]);
 
   /** Set (or clear) a field's error by hand, e.g. a server "invalid credentials"
    *  reply, surfaced through the same inline channel as validation. */

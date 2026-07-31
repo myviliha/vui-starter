@@ -7,6 +7,14 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.35.1 — 2026-07-31
+
+### Fixed
+
+- **`use-form-fields`** — memoize the internal `run` helper so `bind` and
+  `validate` satisfy `react-hooks/exhaustive-deps` (the package lints with
+  `--max-warnings 0`, so the warning failed CI). No behaviour change.
+
 ## 1.35.0 — 2026-07-31
 
 ### Added
