@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { RecordView } from "@viliha/vui-ui/record-view";
+import { RecordView, type FilterValues } from "@viliha/vui-ui/record-view";
 import { toast } from "@viliha/vui-ui/toast";
+import { type DemoOrganization } from "@/lib/demo-data";
+import { filterRows, reconcile } from "@/lib/use-client-filter";
 
 import {
   fields,
@@ -26,12 +28,16 @@ export function OrganizationsView() {
   const router = useRouter();
   const pathname = usePathname();
   const { data, loading, error, save } = useOrganizations();
+  const [filters, setFilters] = useState<FilterValues<DemoOrganization>>({});
 
   // Surface a load failure as a toast — a UI concern, so it lives here, not in
   // the controller or data layer.
   useEffect(() => {
     if (error) toast.error("Couldn't load organizations", { description: error.message });
   }, [error]);
+
+  // Filter for display only; reconcile edits back into the full list before save.
+  const rows = filterRows(data, filters);
 
   return (
     <RecordView
@@ -48,9 +54,10 @@ export function OrganizationsView() {
       onEdit={(id) => router.push(`/organizations/edit?id=${id}`)}
       formDescription={ORG_FORM_DESCRIPTION}
       fields={fields}
-      initialData={data}
-      data={data}
-      onDataChange={save}
+      initialData={rows}
+      data={rows}
+      onFilter={setFilters}
+      onDataChange={(next) => save(reconcile(data, rows, next))}
       getPrimary={getPrimary}
       makeEmptyRow={makeEmptyRow}
     />

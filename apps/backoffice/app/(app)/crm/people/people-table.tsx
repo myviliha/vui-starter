@@ -11,25 +11,30 @@ import {
 
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { people, type Person } from "@/lib/crm-data";
+import { useClientFilter } from "@/lib/use-client-filter";
 
 const fields: RecordField<Person>[] = [
-  { key: "firstName", label: "First name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "lastName", label: "Last name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "email", label: "Emails", icon: Mail, editable: true, copyable: true, width: 240, group: "General" },
+  { key: "firstName", label: "First name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "lastName", label: "Last name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "email", label: "Emails", icon: Mail, editable: true, copyable: true, width: 240, group: "General", filterable: true },
   { key: "phone", label: "Phones", icon: Phone, editable: true, copyable: true, width: 160, group: "General" },
-  { key: "city", label: "City", icon: MapPin, editable: true, group: "General" },
+  { key: "city", label: "City", icon: MapPin, editable: true, group: "General", filterable: true },
   { key: "jobTitle", label: "Job Title", icon: Briefcase, editable: true, group: "Work" },
-  { key: "company", label: "Company", icon: Building2, editable: true, group: "Work" },
+  { key: "company", label: "Company", icon: Building2, editable: true, group: "Work", filterable: true },
 ];
 
 export function PeopleTable() {
+  const { rows, onFilter, onDataChange } = useClientFilter(people);
   return (
     <RecordView
       title="People"
       singular="Person"
       icon={Contact}
       fields={fields}
-      initialData={people}
+      initialData={rows}
+      data={rows}
+      onFilter={onFilter}
+      onDataChange={onDataChange}
       getPrimary={(row) => ({
         title: `${row.firstName} ${row.lastName}`.trim(),
         subtitle: row.email,

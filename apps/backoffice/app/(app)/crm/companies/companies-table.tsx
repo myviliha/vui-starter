@@ -10,13 +10,14 @@ import {
 
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { companies, type Company } from "@/lib/crm-data";
+import { useClientFilter } from "@/lib/use-client-filter";
 
 const fields: RecordField<Company>[] = [
-  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "domain", label: "Domain", icon: Globe, editable: true, copyable: true, width: 210, group: "General" },
-  { key: "industry", label: "Industry", icon: Factory, editable: true, group: "General" },
-  { key: "city", label: "City", icon: MapPin, editable: true, group: "General" },
-  { key: "country", label: "Country", icon: MapPin, editable: true, group: "General" },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "domain", label: "Domain", icon: Globe, editable: true, copyable: true, width: 210, group: "General", filterable: true },
+  { key: "industry", label: "Industry", icon: Factory, editable: true, group: "General", filterable: true },
+  { key: "city", label: "City", icon: MapPin, editable: true, group: "General", filterable: true },
+  { key: "country", label: "Country", icon: MapPin, editable: true, group: "General", filterable: true },
   {
     key: "employees",
     label: "Employees",
@@ -30,13 +31,17 @@ const fields: RecordField<Company>[] = [
 ];
 
 export function CompaniesTable() {
+  const { rows, onFilter, onDataChange } = useClientFilter(companies);
   return (
     <RecordView
       title="Companies"
       singular="Company"
       icon={Building}
       fields={fields}
-      initialData={companies}
+      initialData={rows}
+      data={rows}
+      onFilter={onFilter}
+      onDataChange={onDataChange}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.domain,

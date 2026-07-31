@@ -15,14 +15,15 @@ import { usePathname } from "next/navigation";
 import { Badge } from "@viliha/vui-ui/badge";
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { branches, type Branch } from "@/lib/mock-data";
+import { useClientFilter } from "@/lib/use-client-filter";
 
 const fields: RecordField<Branch>[] = [
-  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "organization", label: "Organization", icon: Building, editable: true, width: 180, group: "General" },
-  { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "organization", label: "Organization", icon: Building, editable: true, width: 180, group: "General", filterable: true },
+  { key: "code", label: "Code", icon: Hash, editable: true, group: "General", filterable: true },
   { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 220, group: "General" },
   { key: "phone", label: "Phone", icon: Phone, editable: true, copyable: true, width: 160, group: "General" },
-  { key: "city", label: "City", icon: MapPin, editable: true, group: "General" },
+  { key: "city", label: "City", icon: MapPin, editable: true, group: "General", filterable: true },
   {
     key: "isHeadquarters",
     label: "HQ",
@@ -41,6 +42,7 @@ const fields: RecordField<Branch>[] = [
 
 export function BranchesTable() {
   const pathname = usePathname();
+  const { rows, onFilter, onDataChange } = useClientFilter(branches);
   return (
     <RecordView
       persistKey={pathname}
@@ -48,7 +50,10 @@ export function BranchesTable() {
       singular="Branch"
       icon={Network}
       fields={fields}
-      initialData={branches}
+      initialData={rows}
+      data={rows}
+      onFilter={onFilter}
+      onDataChange={onDataChange}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.organization,

@@ -32,10 +32,10 @@ const statusBadge: Record<
 };
 
 export const fields: RecordField<DemoOrganization>[] = [
-  { key: "name", label: "Name", description: "The organization's legal or trading name, shown across the app.", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "url", label: "Domain", description: "Primary web domain, e.g. acme.com — used to group users and match emails.", icon: Globe, editable: true, copyable: true, width: 200, group: "General" },
-  { key: "email", label: "Email", description: "Main contact address for billing and account notices.", icon: Mail, editable: true, required: true, copyable: true, width: 220, group: "General" },
-  { key: "country", label: "Country", description: "Headquarters country. Drives default currency, tax and locale.", icon: MapPin, editable: true, group: "General" },
+  { key: "name", label: "Name", description: "The organization's legal or trading name, shown across the app.", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "url", label: "Domain", description: "Primary web domain, e.g. acme.com, used to group users and match emails.", icon: Globe, editable: true, copyable: true, width: 200, group: "General", filterable: true },
+  { key: "email", label: "Email", description: "Main contact address for billing and account notices.", icon: Mail, editable: true, required: true, copyable: true, width: 220, group: "General", filterable: true },
+  { key: "country", label: "Country", description: "Headquarters country. Drives default currency, tax and locale.", icon: MapPin, editable: true, group: "General", filterable: true },
   {
     key: "branches",
     label: "Branches",
@@ -60,6 +60,7 @@ export const fields: RecordField<DemoOrganization>[] = [
     description: "Account lifecycle: Trial while evaluating, Active once live, Suspended to disable access.",
     icon: CircleDot,
     group: "System",
+    filterable: { control: "select" },
     options: [
       { value: "active", label: "Active" },
       { value: "trial", label: "Trial" },

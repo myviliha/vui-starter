@@ -8,21 +8,26 @@ import {
 
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { businesses, type Business } from "@/lib/mock-data";
+import { useClientFilter } from "@/lib/use-client-filter";
 
 const fields: RecordField<Business>[] = [
-  { key: "title", label: "Title", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
-  { key: "description", label: "Description", icon: AlignLeft, editable: true, width: 360, group: "General" },
+  { key: "title", label: "Title", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "code", label: "Code", icon: Hash, editable: true, group: "General", filterable: true },
+  { key: "description", label: "Description", icon: AlignLeft, editable: true, width: 360, group: "General", filterable: true },
 ];
 
 export function BusinessesTable() {
+  const { rows, onFilter, onDataChange } = useClientFilter(businesses);
   return (
     <RecordView
       title="Businesses"
       singular="Business"
       icon={Briefcase}
       fields={fields}
-      initialData={businesses}
+      initialData={rows}
+      data={rows}
+      onFilter={onFilter}
+      onDataChange={onDataChange}
       getPrimary={(row) => ({
         title: row.title,
         subtitle: row.code,

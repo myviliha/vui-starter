@@ -11,11 +11,12 @@ import { usePathname } from "next/navigation";
 
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { departments, type Department } from "@/lib/mock-data";
+import { useClientFilter } from "@/lib/use-client-filter";
 
 const fields: RecordField<Department>[] = [
-  { key: "title", label: "Title", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "organization", label: "Organization", icon: Building, editable: true, width: 200, group: "General" },
-  { key: "code", label: "Code", icon: Hash, editable: true, group: "General" },
+  { key: "title", label: "Title", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "organization", label: "Organization", icon: Building, editable: true, width: 200, group: "General", filterable: true },
+  { key: "code", label: "Code", icon: Hash, editable: true, group: "General", filterable: true },
   {
     key: "employees",
     label: "Employees",
@@ -30,6 +31,7 @@ const fields: RecordField<Department>[] = [
 
 export function DepartmentsTable() {
   const pathname = usePathname();
+  const { rows, onFilter, onDataChange } = useClientFilter(departments);
   return (
     <RecordView
       persistKey={pathname}
@@ -37,7 +39,10 @@ export function DepartmentsTable() {
       singular="Department"
       icon={LayoutGrid}
       fields={fields}
-      initialData={departments}
+      initialData={rows}
+      data={rows}
+      onFilter={onFilter}
+      onDataChange={onDataChange}
       getPrimary={(row) => ({
         title: row.title,
         subtitle: row.organization,

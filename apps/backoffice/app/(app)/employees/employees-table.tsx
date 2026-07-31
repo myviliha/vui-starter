@@ -12,15 +12,16 @@ import {
 import { Badge } from "@viliha/vui-ui/badge";
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { employees, type DemoEmployee } from "@/lib/demo-data";
+import { useClientFilter } from "@/lib/use-client-filter";
 
 const fields: RecordField<DemoEmployee>[] = [
-  { key: "firstName", label: "First name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "lastName", label: "Last name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 240, group: "General" },
+  { key: "firstName", label: "First name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "lastName", label: "Last name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "email", label: "Email", icon: Mail, editable: true, copyable: true, width: 240, group: "General", filterable: true },
   { key: "code", label: "Code", icon: Hash, editable: true, group: "Work" },
-  { key: "department", label: "Department", editable: true, group: "Work" },
+  { key: "department", label: "Department", editable: true, group: "Work", filterable: true },
   { key: "branch", label: "Branch", icon: Network, editable: true, group: "Work" },
-  { key: "organization", label: "Organization", icon: Building, editable: true, width: 180, group: "Work" },
+  { key: "organization", label: "Organization", icon: Building, editable: true, width: 180, group: "Work", filterable: true },
   {
     key: "isActive",
     label: "Status",
@@ -36,13 +37,17 @@ const fields: RecordField<DemoEmployee>[] = [
 ];
 
 export function EmployeesTable() {
+  const { rows, onFilter, onDataChange } = useClientFilter(employees);
   return (
     <RecordView
       title="Employees"
       singular="Employee"
       icon={Users}
       fields={fields}
-      initialData={employees}
+      initialData={rows}
+      data={rows}
+      onFilter={onFilter}
+      onDataChange={onDataChange}
       getPrimary={(row) => ({
         title: `${row.firstName} ${row.lastName}`.trim(),
         subtitle: row.email,

@@ -8,8 +8,13 @@ import {
   SewingPinFilledIcon as MapPin,
 } from "@radix-ui/react-icons";
 
-import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
+import {
+  RecordView,
+  type FilterValues,
+  type RecordField,
+} from "@viliha/vui-ui/record-view";
 import { markets, type Market } from "@/lib/mock-data";
+import { filterRows, reconcile } from "@/lib/use-client-filter";
 
 function formatCenter(market: Market): string {
   if (market.centerLatitude === null || market.centerLongitude === null) {
@@ -19,8 +24,8 @@ function formatCenter(market: Market): string {
 }
 
 const fields: RecordField<Market>[] = [
-  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true },
-  { key: "organization", label: "Organization", icon: Building, editable: true, width: 200, group: "General" },
+  { key: "name", label: "Name", editable: true, required: true, group: "General", hideInTable: true, filterable: true },
+  { key: "organization", label: "Organization", icon: Building, editable: true, width: 200, group: "General", filterable: true },
   {
     key: "centerLatitude",
     label: "Center (lat, lng)",
@@ -56,6 +61,7 @@ export function MarketsTable() {
   // first visit. In a real app, set `loading` around your fetch/refetch.
   const [data, setData] = useState<Market[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterValues<Market>>({});
   useEffect(() => {
     const t = setTimeout(() => {
       setData(markets);
@@ -64,6 +70,8 @@ export function MarketsTable() {
     return () => clearTimeout(t);
   }, []);
 
+  const rows = filterRows(data, filters);
+
   return (
     <RecordView
       title="Markets"
@@ -71,9 +79,10 @@ export function MarketsTable() {
       icon={MapPin}
       loading={loading}
       fields={fields}
-      initialData={data}
-      data={data}
-      onDataChange={setData}
+      initialData={rows}
+      data={rows}
+      onFilter={setFilters}
+      onDataChange={(next) => setData((prev) => reconcile(prev, rows, next))}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.organization,
