@@ -29,7 +29,7 @@ export function FilterGrid({
   return (
     <div
       className={cn(
-        "grid grid-cols-[minmax(4.5rem,max-content)_1fr] items-center gap-x-3 gap-y-3",
+        "grid grid-cols-[max-content_1fr] items-center gap-x-3 gap-y-3",
         className,
       )}
     >

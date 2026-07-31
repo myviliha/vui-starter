@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.34.3 — 2026-07-31
+
+### Changed
+
+- **Filter panel** — tighten the gap between a field's label and its control.
+  `FilterGrid`'s label column was `minmax(4.5rem, max-content)`, so short labels
+  like "Name" or "Code" were padded out to 4.5rem and left a wide gap before the
+  input. The column is now plain `max-content`, so it sizes to the label and the
+  control sits right beside it. Labels still align across rows.
+
 ## 1.34.2 — 2026-07-29
 
 ### Changed
