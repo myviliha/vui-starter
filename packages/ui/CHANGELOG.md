@@ -7,6 +7,26 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.36.0 — 2026-07-31
+
+### Added
+
+- **`@viliha/vui-ui/password-input` — `PasswordInput`.** A password field that
+  masks with **`*`** (not the browser's bullet dots) and adds an **eye toggle**
+  to reveal the value. Drop-in for `Input` inside a `Field`: spread `bind(...)`
+  and pass `error` for inline validation, and it owns its right edge so the
+  reveal button and the error icon never collide. It keeps the real value in a
+  text input (native typing/paste/caret) with a monospace asterisk overlay, so
+  browser password-manager autofill won't recognise it — use a plain
+  `<Input type="password" />` when native autofill matters more than the
+  asterisk look. Props: `error`, `maskChar` (default `"*"`), plus all `<input>`
+  props.
+
+### Changed
+
+- **Auth screens use `PasswordInput`** for every password field (sign in, reset
+  password): asterisk mask + show/hide, wired to `useFormFields`.
+
 ## 1.35.1 — 2026-07-31
 
 ### Fixed

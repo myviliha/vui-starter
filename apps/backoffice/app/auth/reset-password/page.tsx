@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { Button } from "@viliha/vui-ui/button";
-import { Input } from "@viliha/vui-ui/input";
+import { PasswordInput } from "@viliha/vui-ui/password-input";
 import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import {
   AuthCard,
@@ -64,30 +64,20 @@ export default function ResetPasswordPage() {
         />
         <AuthCardBody>
           <FieldGrid>
-            <Field
-              label="New Password"
-              htmlFor="password"
-              required
-              error={f.errors.password}
-            >
-              <Input
+            <Field label="New Password" htmlFor="password" required>
+              <PasswordInput
                 id="password"
-                type="password"
                 {...f.bind("password")}
+                error={f.errors.password}
                 autoComplete="new-password"
                 placeholder="At Least 8 Characters"
               />
             </Field>
-            <Field
-              label="Confirm Password"
-              htmlFor="confirm"
-              required
-              error={f.errors.confirm}
-            >
-              <Input
+            <Field label="Confirm Password" htmlFor="confirm" required>
+              <PasswordInput
                 id="confirm"
-                type="password"
                 {...f.bind("confirm")}
+                error={f.errors.confirm}
                 autoComplete="new-password"
                 placeholder="Re-Enter Password"
               />

@@ -12,6 +12,7 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
+import { PasswordInput } from "@viliha/vui-ui/password-input";
 import { useAuth } from "@viliha/vui-ui/auth-context";
 import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import { BrandName } from "@/app/_components/brand";
@@ -179,16 +180,11 @@ export default function SignInPage() {
                 autoComplete="email"
               />
             </Field>
-            <Field
-              label="Password"
-              htmlFor="password"
-              required
-              error={f.errors.password}
-            >
-              <Input
+            <Field label="Password" htmlFor="password" required>
+              <PasswordInput
                 id="password"
-                type="password"
                 {...f.bind("password")}
+                error={f.errors.password}
                 placeholder="Your Password"
                 autoComplete="current-password"
               />

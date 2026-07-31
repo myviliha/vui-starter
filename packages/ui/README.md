@@ -284,7 +284,8 @@ single-select, static or async `loadOptions`) · `cascading-combobox`
 (two-column `FilterGrid` / `FilterField` layout) · `form` ·
 `field-grid` (two-column `Label │ control` form layout with inline validation) ·
 `use-form-fields` (blur + submit validation, single inline error) ·
-`hover-card` · `input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` ·
+`hover-card` · `input` · `input-otp` · `password-input` (asterisk mask +
+show/hide) · `kbd` (key caps + `Shortcut`) · `label` ·
 `menu` · `popover` · `progress` · `radio-group` · `required-mark` ·
 `scroll-area` · `select` · `separator` · `sheet` · `skeleton` · `slider` ·
 `sonner` · `steps`
