@@ -7,6 +7,15 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.37.0 — 2026-07-31
+
+### Added
+
+- **`PasswordInput` `mask` prop (`"asterisk" | "native"`, default `"asterisk"`).**
+  `"asterisk"` keeps the `*` overlay; `"native"` renders a real
+  `type="password"` (bullet dots) that the eye toggle flips to `type="text"`, so
+  browser and password-manager autofill work normally. Pick per usage.
+
 ## 1.36.0 — 2026-07-31
 
 ### Added

@@ -15,28 +15,34 @@ export interface PasswordInputProps
   extends Omit<React.ComponentProps<"input">, "type"> {
   /** Inline validation message: red border + alert-triangle tooltip. Falsy = valid. */
   error?: string;
-  /** Character shown for each hidden character. Default `"*"`. */
+  /** Character shown for each hidden character in `"asterisk"` mode. Default `"*"`. */
   maskChar?: string;
+  /**
+   * How the value is hidden. Default `"asterisk"`.
+   *
+   * - `"asterisk"` draws `maskChar` over a text input, so it masks with `*`
+   *   instead of the browser's bullet dots. Trade-off: it isn't
+   *   `type="password"`, so browser / password-manager autofill won't recognise
+   *   it and screen readers can read the value.
+   * - `"native"` uses a real `type="password"` (bullet dots) that the eye toggle
+   *   flips to `type="text"`. Autofill and password managers work normally.
+   *   Prefer this when native behaviour matters more than the asterisk look.
+   */
+  mask?: "asterisk" | "native";
 }
 
 /**
- * A password field that **masks with `*` (not the browser's bullets)** and has
- * an **eye toggle** to reveal the value. It behaves like {@link Input} (spread
- * `useFormFields` `bind(...)` onto it, pass `error` for the inline validation),
- * and owns its whole right edge so the reveal button and the error icon never
- * collide.
- *
- * How the asterisks work: the real value lives in a text input (so typing,
- * paste, and the caret all behave natively), the input's own text is made
- * transparent, and a monospace overlay draws one `maskChar` per character over
- * it. Trade-off: because it isn't `type="password"`, browser/password-manager
- * autofill won't recognise it. Use a plain `<Input type="password" />` when
- * native autofill matters more than the asterisk look.
+ * A password field with a **show/hide eye toggle**. By default it masks with
+ * `*` (`mask="asterisk"`); pass `mask="native"` for the browser's native
+ * bullet-dot password field (better autofill). It's a drop-in for {@link Input}
+ * inside a `Field`: spread `useFormFields` `bind(...)` onto it and pass `error`.
  *
  * ```tsx
  * <Field label="Password" htmlFor="password" required>
  *   <PasswordInput id="password" {...f.bind("password")} error={f.errors.password} />
  * </Field>
+ *
+ * <PasswordInput mask="native" {...f.bind("password")} />   // native bullets + autofill
  * ```
  */
 export function PasswordInput({
@@ -44,6 +50,7 @@ export function PasswordInput({
   value,
   error,
   maskChar = "*",
+  mask = "asterisk",
   autoComplete = "current-password",
   ...props
 }: PasswordInputProps) {
@@ -51,27 +58,30 @@ export function PasswordInput({
   const errorId = React.useId();
   const text = typeof value === "string" ? value : String(value ?? "");
   const invalid = Boolean(error);
+  const asterisk = mask === "asterisk";
+  // Asterisk mode masks with the overlay while hidden; native mode toggles type.
+  const showOverlay = asterisk && !visible;
 
   return (
     <div className="relative">
       <Input
         {...props}
-        type="text"
+        type={asterisk ? "text" : visible ? "text" : "password"}
         value={value}
         autoComplete={autoComplete}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? errorId : undefined}
         className={cn(
-          "font-mono",
           invalid ? "pr-16" : "pr-9",
+          asterisk && "font-mono",
           // Hide the real characters behind the asterisk overlay; keep the caret.
-          !visible && "text-transparent caret-foreground selection:bg-transparent",
+          showOverlay && "text-transparent caret-foreground selection:bg-transparent",
           className,
         )}
       />
 
       {/* Asterisk mask, drawn over the transparent input text. */}
-      {!visible && (
+      {showOverlay && (
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 left-0 flex items-center whitespace-pre px-2.5 font-mono text-foreground"

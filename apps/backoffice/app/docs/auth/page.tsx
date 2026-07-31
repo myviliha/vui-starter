@@ -251,10 +251,12 @@ const f = useFormFields({
         Use <code>PasswordInput</code> (<code>@viliha/vui-ui/password-input</code>)
         for passwords: it masks with <code>*</code> and adds a show/hide eye
         toggle. It's a drop-in for <code>Input</code> — spread{" "}
-        <code>bind(...)</code> and pass <code>error</code> the same way. (It uses
-        a text input under the hood, so browser password-manager autofill won't
-        recognise it; use a plain <code>&lt;Input type=&quot;password&quot;/&gt;</code>
-        if native autofill matters more than the asterisks.)
+        <code>bind(...)</code> and pass <code>error</code> the same way. The
+        default <code>*</code> mask uses a text input, so password-manager
+        autofill won't recognise it — pass{" "}
+        <code>mask=&quot;native&quot;</code> for the browser's native
+        password field (bullet dots) when autofill matters more than the
+        asterisk look.
       </Note>
 
       <DocPager
