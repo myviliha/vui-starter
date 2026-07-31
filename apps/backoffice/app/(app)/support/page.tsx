@@ -8,6 +8,9 @@ import { cn } from "@viliha/vui-ui/utils";
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
+import { Textarea } from "@viliha/vui-ui/textarea";
+import { Field, FieldGrid } from "@viliha/vui-ui/field-grid";
+import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 
@@ -108,7 +111,11 @@ export default function SupportPage() {
   const [activeId, setActiveId] = React.useState(FIRST_TICKET.id);
   const [query, setQuery] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("all");
-  const [draft, setDraft] = React.useState("");
+  // Validated multiline field: checks on blur + send, one inline error.
+  const reply = useFormFields({
+    reply: (v) =>
+      v.trim().length < 5 ? "A reply must be at least 5 characters." : undefined,
+  });
 
   const active = tickets.find((t) => t.id === activeId) ?? FIRST_TICKET;
   const q = query.trim().toLowerCase();
@@ -123,9 +130,10 @@ export default function SupportPage() {
   const patch = (data: Partial<Ticket>) =>
     setTickets((prev) => prev.map((t) => (t.id === activeId ? { ...t, ...data } : t)));
 
-  const addReply = () => {
-    const text = draft.trim();
-    if (!text) return;
+  const sendReply = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reply.validate()) return; // shows the inline error on the textarea
+    const text = reply.values.reply.trim();
     setTickets((prev) =>
       prev.map((t) =>
         t.id === activeId
@@ -141,7 +149,7 @@ export default function SupportPage() {
           : t,
       ),
     );
-    setDraft("");
+    reply.reset();
   };
 
   return (
@@ -228,23 +236,35 @@ export default function SupportPage() {
                     <Entry key={c.id} author={c.author} kind={c.role} time={c.time} text={c.text} />
                   ))}
                 </div>
-                {/* Reply */}
-                <div className="shrink-0 border-t border-border p-4">
-                  <textarea
-                    value={draft}
-                    onChange={(e) => setDraft(e.target.value)}
-                    placeholder="Write a reply…"
-                    aria-label="Reply"
-                    rows={3}
-                    className="w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  />
+                {/* Reply — a validated multiline field (Textarea) using the
+                    theme's inline-validation feature: blur + submit, one error. */}
+                <form
+                  onSubmit={sendReply}
+                  noValidate
+                  className="shrink-0 border-t border-border p-4"
+                >
+                  <FieldGrid className="grid-cols-1 gap-y-1.5">
+                    <Field
+                      label="Your reply"
+                      htmlFor="reply"
+                      multiline
+                      error={reply.errors.reply}
+                    >
+                      <Textarea
+                        id="reply"
+                        {...reply.bind("reply")}
+                        placeholder="Write a reply…"
+                        rows={3}
+                      />
+                    </Field>
+                  </FieldGrid>
                   <div className="mt-2 flex justify-end">
-                    <Button variant="primary" onClick={addReply} disabled={!draft.trim()}>
+                    <Button type="submit" variant="primary">
                       <PaperPlaneIcon className="size-4" />
                       Send reply
                     </Button>
                   </div>
-                </div>
+                </form>
               </div>
 
               {/* Properties */}
