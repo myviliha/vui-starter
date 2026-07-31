@@ -10,6 +10,7 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
+import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import {
   AuthCard,
   AuthCardAside,
@@ -21,28 +22,17 @@ import {
 } from "@/app/_components/auth";
 
 export default function ResetPasswordPage() {
-  const [password, setPassword] = React.useState("");
-  const [confirm, setConfirm] = React.useState("");
-  const [error, setError] = React.useState<{
-    field: "password" | "confirm";
-    message: string;
-  }>();
+  const f = useFormFields({
+    password: (v) =>
+      v.length < 8 ? "Password Must Be At Least 8 Characters." : undefined,
+    confirm: (v, all) =>
+      v !== all.password ? "Passwords Don't Match." : undefined,
+  });
   const [done, setDone] = React.useState(false);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 8) {
-      setError({
-        field: "password",
-        message: "Password Must Be At Least 8 Characters.",
-      });
-      return;
-    }
-    if (password !== confirm) {
-      setError({ field: "confirm", message: "Passwords Don't Match." });
-      return;
-    }
-    setError(undefined);
+    if (!f.validate()) return;
     setDone(true);
   }
 
@@ -67,7 +57,7 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthCard>
-      <form onSubmit={submit}>
+      <form onSubmit={submit} noValidate>
         <AuthCardHeader
           title="Set A New Password"
           description="Choose A Strong Password You Don't Use Elsewhere."
@@ -78,13 +68,12 @@ export default function ResetPasswordPage() {
               label="New Password"
               htmlFor="password"
               required
-              error={error?.field === "password" ? error.message : undefined}
+              error={f.errors.password}
             >
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...f.bind("password")}
                 autoComplete="new-password"
                 placeholder="At Least 8 Characters"
               />
@@ -93,13 +82,12 @@ export default function ResetPasswordPage() {
               label="Confirm Password"
               htmlFor="confirm"
               required
-              error={error?.field === "confirm" ? error.message : undefined}
+              error={f.errors.confirm}
             >
               <Input
                 id="confirm"
                 type="password"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
+                {...f.bind("confirm")}
                 autoComplete="new-password"
                 placeholder="Re-Enter Password"
               />

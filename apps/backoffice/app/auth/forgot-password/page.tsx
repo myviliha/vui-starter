@@ -10,6 +10,7 @@ import {
 
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
+import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import {
   AuthCard,
   AuthCardAside,
@@ -23,17 +24,15 @@ import {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = React.useState("");
-  const [error, setError] = React.useState<string>();
+  const f = useFormFields({
+    email: (v) =>
+      !EMAIL_RE.test(v.trim()) ? "Enter A Valid Email Address." : undefined,
+  });
   const [sent, setSent] = React.useState(false);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
-      setError("Enter A Valid Email Address.");
-      return;
-    }
-    setError(undefined);
+    if (!f.validate()) return;
     setSent(true);
   }
 
@@ -46,7 +45,7 @@ export default function ForgotPasswordPage() {
           description={
             <>
               A Reset Link Was Sent To{" "}
-              <span className="font-medium text-foreground">{email}</span>
+              <span className="font-medium text-foreground">{f.values.email}</span>
             </>
           }
         />
@@ -65,19 +64,18 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthCard>
-      <form onSubmit={submit}>
+      <form onSubmit={submit} noValidate>
         <AuthCardHeader
           title="Reset Your Password"
           description="Enter Your Email And We'll Send You A Reset Link."
         />
         <AuthCardBody>
           <FieldGrid>
-            <Field label="Work Email" htmlFor="email" required error={error}>
+            <Field label="Work Email" htmlFor="email" required error={f.errors.email}>
               <Input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...f.bind("email")}
                 placeholder="you@company.com"
                 autoComplete="email"
               />

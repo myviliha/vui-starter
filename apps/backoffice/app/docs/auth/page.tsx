@@ -215,6 +215,38 @@ export default function SignIn() {
         one consistent mandatory-field cue across tables, forms, and auth.
       </Note>
 
+      <H2>How do I validate a field?</H2>
+      <P>
+        Validation runs through <strong>one channel only</strong>: the field's
+        inline error (red border + alert-triangle tooltip). Use{" "}
+        <code>useFormFields</code> from{" "}
+        <code>@viliha/vui-ui/use-form-fields</code>. It checks each rule{" "}
+        <strong>on blur</strong> (when you leave the field) and again{" "}
+        <strong>on submit</strong>, clears the error the moment you edit, and
+        works for both <code>Input</code> and <code>Textarea</code>. Set{" "}
+        <code>noValidate</code> on the <code>&lt;form&gt;</code> so the browser's
+        native bubble never fires on top of it.
+      </P>
+      <CodeBlock title="validated sign-in">{`import { useFormFields } from "@viliha/vui-ui/use-form-fields";
+
+const f = useFormFields({
+  email: (v) => (!EMAIL_RE.test(v.trim()) ? "Enter a valid email address." : undefined),
+  password: (v) => (v.length < 8 ? "Password must be at least 8 characters." : undefined),
+  // cross-field: the rule also gets every value
+  confirm: (v, all) => (v !== all.password ? "Passwords don't match." : undefined),
+});
+
+<form noValidate onSubmit={(e) => { e.preventDefault(); if (!f.validate()) return; submit(f.values); }}>
+  <Field label="Email" htmlFor="email" required error={f.errors.email}>
+    <Input id="email" {...f.bind("email")} />        {/* value + onChange + onBlur */}
+  </Field>
+</form>`}</CodeBlock>
+      <P>
+        On a failed server sign-in, push the message into the same inline
+        channel with <code>f.setError(&quot;password&quot;, message)</code> — no
+        separate banner.
+      </P>
+
       <DocPager
         prev={{ label: "Support & ticketing", href: "/docs/support" }}
         next={{ label: "Components", href: "/docs/components" }}

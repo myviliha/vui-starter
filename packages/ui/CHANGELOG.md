@@ -7,6 +7,34 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.35.0 — 2026-07-31
+
+### Added
+
+- **`@viliha/vui-ui/use-form-fields` — inline field validation as a feature.**
+  `useFormFields(rules)` validates text `Input` / `Textarea` fields on **blur
+  and on submit**, surfacing every error through a single channel: the field's
+  own inline error. Spread `bind(key)` onto the control, read `errors[key]`,
+  call `validate()` on submit, and set `noValidate` on the `<form>` so the
+  browser's native bubble can't compete. Rules receive all field values for
+  cross-field checks (e.g. confirm-password). Returns `values`, `errors`,
+  `bind`, `setValue`, `setError`, `validate`, `reset`.
+
+### Changed
+
+- **`Field` (`@viliha/vui-ui/field-grid`) now renders the inline validation
+  error itself** — red border via the control's `aria-invalid`, an
+  alert-triangle tooltip, no layout shift, auto-clear on edit, re-check on
+  blur/submit. Works for `Input` and `Textarea` (`multiline` puts the icon at
+  the top). The reference app's auth `Field` now re-exports this one.
+
+### Fixed
+
+- **Auth screens: no more double validation.** Sign in / up and forgot / reset
+  password set `noValidate` and validate through `useFormFields`, so the
+  browser's native "Please include an '@'…" bubble no longer fires on top of the
+  theme's inline error. Email now validates the moment you leave the field.
+
 ## 1.34.3 — 2026-07-31
 
 ### Changed

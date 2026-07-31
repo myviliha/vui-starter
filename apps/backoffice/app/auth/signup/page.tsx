@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import { useAuth } from "@viliha/vui-ui/auth-context";
+import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import {
   AuthCard,
   AuthCardBody,
@@ -28,27 +29,24 @@ import { checkBusinessEmail } from "@/lib/auth-demo";
 export default function SignUpPage() {
   const router = useRouter();
   const auth = useAuth();
-  const [email, setEmail] = React.useState("");
-  const [error, setError] = React.useState<string>();
+  const f = useFormFields({
+    email: (v) => {
+      const check = checkBusinessEmail(v);
+      if (check.ok) return undefined;
+      return check.reason === "public"
+        ? "Please Use Your Work Email. Personal Domains (Gmail, Outlook, …) Aren't Allowed."
+        : "Enter A Valid Email Address.";
+    },
+  });
   const [robot, setRobot] = React.useState(false);
+  const [robotError, setRobotError] = React.useState<string>();
   const [sent, setSent] = React.useState(false);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const check = checkBusinessEmail(email);
-    if (!check.ok) {
-      setError(
-        check.reason === "public"
-          ? "Please Use Your Work Email — Personal Domains (Gmail, Outlook, …) Aren't Allowed."
-          : "Enter A Valid Email Address.",
-      );
-      return;
-    }
-    if (!robot) {
-      setError("Please Confirm You're Not A Robot.");
-      return;
-    }
-    setError(undefined);
+    const emailOk = f.validate();
+    setRobotError(robot ? undefined : "Please Confirm You're Not A Robot.");
+    if (!emailOk || !robot) return;
     setSent(true);
   }
 
@@ -61,7 +59,7 @@ export default function SignUpPage() {
           description={
             <>
               Verification Link Sent To{" "}
-              <span className="font-medium text-foreground">{email}</span>
+              <span className="font-medium text-foreground">{f.values.email}</span>
             </>
           }
         />
@@ -80,23 +78,31 @@ export default function SignUpPage() {
 
   return (
     <AuthCard>
-      <form onSubmit={submit}>
+      <form onSubmit={submit} noValidate>
         <AuthCardHeader title="Create Your Account" />
         <AuthCardBody className="space-y-4">
           <FieldGrid>
-            <Field label="Work Email" htmlFor="email" required error={error}>
+            <Field label="Work Email" htmlFor="email" required error={f.errors.email}>
               <Input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...f.bind("email")}
                 placeholder="you@company.com"
                 autoComplete="email"
               />
             </Field>
           </FieldGrid>
 
-          <RecaptchaMock checked={robot} onChange={setRobot} />
+          <RecaptchaMock
+            checked={robot}
+            onChange={(v) => {
+              setRobot(v);
+              setRobotError(undefined);
+            }}
+          />
+          {robotError && (
+            <p className="text-xs text-destructive">{robotError}</p>
+          )}
 
           <Button type="submit" className="w-full">
             Create Account

@@ -1,9 +1,5 @@
 import * as React from "react";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-
 import { cn } from "@/lib/utils";
-import { RequiredMark } from "@viliha/vui-ui/required-mark";
-import { Tooltip } from "@viliha/vui-ui/tooltip";
 
 /** Multicolor Google "G" (brand mark — colors are intentional). */
 export function GoogleIcon({ className }: { className?: string }) {
@@ -40,133 +36,11 @@ export function OrDivider({ label = "or" }: { label?: string }) {
   );
 }
 
-/**
- * Two-column layout for a set of `Field`s: labels align in column 1, inputs in
- * column 2, so every input starts at the same x (a clean table look). Wrap a
- * form's fields in this. Column 1 is `max-content` (as wide as the longest
- * label), column 2 fills the rest.
- */
-export function FieldGrid({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className={cn(
-        "grid grid-cols-[max-content_1fr] items-center gap-x-3 gap-y-4",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-}
+// The two-column form layout and the inline-validation Field now live in the
+// package (@viliha/vui-ui/field-grid) so any form gets them as a feature.
+// Re-exported here so the auth screens keep importing from one place.
+export { FieldGrid, Field } from "@viliha/vui-ui/field-grid";
 
-/** Labeled form field with optional required marker / hint / error text. Must
- *  be rendered inside a {@link FieldGrid} — it emits its label and input as two
- *  grid cells (`display: contents`) so labels/inputs line up across rows.
- *
- *  A validation `error` does NOT push layout: the input border turns red and an
- *  alert icon inside the input carries the message in a tooltip (the full text
- *  is also announced to screen readers via `aria-describedby`). */
-export function Field({
-  label,
-  htmlFor,
-  hint,
-  error,
-  required,
-  children,
-}: {
-  label: string;
-  htmlFor?: string;
-  hint?: string;
-  error?: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  const errorId = React.useId();
-  // Auto-clear on edit (built in, so pages get it for free): the moment the user
-  // changes the field, hide the error — red border AND icon — instead of leaving
-  // it up until the next submit. It re-arms when a new validation result arrives
-  // (the `error` value changes) or on the next form submit, so resubmitting a
-  // still-invalid value shows the error again even if the message is identical.
-  const [edited, setEdited] = React.useState(false);
-  React.useEffect(() => setEdited(false), [error]);
-  const showError = Boolean(error) && !edited;
-
-  // Re-validate on submit: reset the edited flag when the enclosing form submits,
-  // so `showError` reflects the parent's fresh validation.
-  const anchorRef = React.useRef<HTMLLabelElement>(null);
-  React.useEffect(() => {
-    const form = anchorRef.current?.closest("form");
-    if (!form) return;
-    const rearm = () => setEdited(false);
-    form.addEventListener("submit", rearm);
-    return () => form.removeEventListener("submit", rearm);
-  }, []);
-
-  // Wire aria-invalid / aria-describedby onto the control, and intercept its
-  // onChange to trigger the auto-clear — the caller wires nothing.
-  const el = React.isValidElement(children)
-    ? (children as React.ReactElement<{
-        "aria-invalid"?: boolean;
-        "aria-describedby"?: string;
-        onChange?: React.ChangeEventHandler<HTMLInputElement>;
-      }>)
-    : null;
-  const control = el
-    ? React.cloneElement(el, {
-        "aria-invalid": showError ? true : undefined,
-        "aria-describedby": showError ? errorId : undefined,
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-          if (error) setEdited(true); // hide the error as soon as they type
-          el.props.onChange?.(e);
-        },
-      })
-    : children;
-
-  return (
-    // display:contents → the label + input become direct cells of the parent
-    // FieldGrid (column 1 = label, column 2 = input), not a nested box.
-    <div className="contents">
-      <label
-        ref={anchorRef}
-        htmlFor={htmlFor}
-        className="flex items-center gap-1 whitespace-nowrap font-medium leading-relaxed"
-      >
-        {label}
-        {required && <RequiredMark />}
-      </label>
-      <div className="min-w-0">
-        {/* The red border/ring comes from the Input's own `aria-invalid` styling
-            (set on `control` above); here we just leave room for the alert icon. */}
-        <div className={cn("relative", showError && "[&_input]:pr-8")}>
-          {control}
-          {showError && (
-            <Tooltip
-              content={error}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-destructive"
-            >
-              <ExclamationTriangleIcon className="size-4" aria-hidden="true" />
-            </Tooltip>
-          )}
-        </div>
-        {/* Full message for screen readers (visual users get the tooltip). */}
-        {showError && (
-          <span id={errorId} className="sr-only">
-            {error}
-          </span>
-        )}
-        {hint && !showError && (
-          <p className="mt-1.5 text-muted-foreground">{hint}</p>
-        )}
-      </div>
-    </div>
-  );
-}
 
 /** Circular icon badge used on confirmation screens ("check your email"). */
 export function IconBadge({ children }: { children: React.ReactNode }) {

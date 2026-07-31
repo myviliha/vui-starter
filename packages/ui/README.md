@@ -282,7 +282,8 @@ single-select, static or async `loadOptions`) · `cascading-combobox`
 (fixed named levels: Region → Country → State → City) · `command` · `command-palette`
 (⌘K launcher) · `dialog` · `confirm-dialog` · `dropdown-menu` · `filter-field`
 (two-column `FilterGrid` / `FilterField` layout) · `form` ·
-`field-grid` (two-column `Label │ control` form layout) ·
+`field-grid` (two-column `Label │ control` form layout with inline validation) ·
+`use-form-fields` (blur + submit validation, single inline error) ·
 `hover-card` · `input` · `input-otp` · `kbd` (key caps + `Shortcut`) · `label` ·
 `menu` · `popover` · `progress` · `radio-group` · `required-mark` ·
 `scroll-area` · `select` · `separator` · `sheet` · `skeleton` · `slider` ·

@@ -13,6 +13,7 @@ import {
 import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import { useAuth } from "@viliha/vui-ui/auth-context";
+import { useFormFields } from "@viliha/vui-ui/use-form-fields";
 import { BrandName } from "@/app/_components/brand";
 import {
   AuthCard,
@@ -34,30 +35,20 @@ export default function SignInPage() {
   const router = useRouter();
   const auth = useAuth();
   const [view, setView] = React.useState<View>("main");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState<{
-    field: "email" | "password";
-    message: string;
-  }>();
+  // One validation channel: inline field errors, checked on blur and on submit.
+  const f = useFormFields({
+    email: (v) =>
+      !EMAIL_RE.test(v.trim()) ? "Enter A Valid Email Address." : undefined,
+    password: (v) =>
+      v.length < 8 ? "Password Must Be At Least 8 Characters." : undefined,
+  });
   const [orgId, setOrgId] = React.useState("");
   const [code, setCode] = React.useState("");
   const [busy, setBusy] = React.useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
-      setError({ field: "email", message: "Enter A Valid Email Address." });
-      return;
-    }
-    if (password.length < 8) {
-      setError({
-        field: "password",
-        message: "Password Must Be At Least 8 Characters.",
-      });
-      return;
-    }
-    setError(undefined);
+    if (!f.validate()) return; // failures show as inline field errors, no banner
     finish();
   }
 
@@ -69,17 +60,17 @@ export default function SignInPage() {
     setBusy(true);
     try {
       await auth.signIn({
-        email: email.trim() || "admin@viliha.example",
-        password: password || "demo-password",
+        email: f.values.email.trim() || "admin@viliha.example",
+        password: f.values.password || "demo-password",
       });
       router.push("/dashboard");
     } catch (err) {
       setBusy(false);
-      setError({
-        field: "password",
-        message:
-          err instanceof Error ? err.message : "Sign In Failed. Please Try Again.",
-      });
+      // Surface the server failure through the same inline channel.
+      f.setError(
+        "password",
+        err instanceof Error ? err.message : "Sign In Failed. Please Try Again.",
+      );
     }
   }
 
@@ -173,21 +164,17 @@ export default function SignInPage() {
   // main
   return (
     <AuthCard>
-      <form onSubmit={handleSubmit}>
+      {/* noValidate: the browser's native bubble must not compete with the
+          theme's single inline error. */}
+      <form onSubmit={handleSubmit} noValidate>
         <AuthCardHeader title="Sign In To Your Account" />
         <AuthCardBody className="space-y-4">
           <FieldGrid>
-            <Field
-              label="Email"
-              htmlFor="email"
-              required
-              error={error?.field === "email" ? error.message : undefined}
-            >
+            <Field label="Email" htmlFor="email" required error={f.errors.email}>
               <Input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...f.bind("email")}
                 placeholder="you@company.com"
                 autoComplete="email"
               />
@@ -196,13 +183,12 @@ export default function SignInPage() {
               label="Password"
               htmlFor="password"
               required
-              error={error?.field === "password" ? error.message : undefined}
+              error={f.errors.password}
             >
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...f.bind("password")}
                 placeholder="Your Password"
                 autoComplete="current-password"
               />
