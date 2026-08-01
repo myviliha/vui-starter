@@ -10,9 +10,9 @@
   },
   "devDependencies": {
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
-    "prettier": "^3.7.4",
-    "turbo": "^2.9.17",
-    "typescript": "5.9.2"
+    "prettier": "^3.9.6",
+    "turbo": "^2.10.7",
+    "typescript": "5.9.3"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
