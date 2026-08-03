@@ -7,6 +7,22 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.37.1 — 2026-08-03
+
+### Fixed
+
+- **`RecordView` server (`manual`) mode now reflects writes and filters without a
+  manual reload.** When a host drives the table server-side and feeds each page
+  through `initialData` (rather than the controlled `data` prop), RecordView
+  seeded its rows once and never reconciled them. So after a create, edit, or
+  delete, the list kept showing the old rows, and typing a Filter value left the
+  full catalog on screen. RecordView now re-syncs its internal rows whenever that
+  seed changes, so a post-mutation refetch or a narrowed filter shows up right
+  away. The controlled `data` path and client-managed tables are unchanged.
+- **Filtered-empty tables read correctly.** With an active per-field filter and
+  no keyword, an empty result now says "No matching records." instead of the
+  first-run "No records yet."
+
 ## 1.37.0 — 2026-07-31
 
 ### Added

@@ -619,6 +619,19 @@ interface RecordViewProps<T extends { id: RowId }> {
   showSelection?: boolean;
 }
 
+/** Empty-table message: a keyword search, active per-field filters, or a
+ *  genuinely empty list read differently. Exported for testing. */
+export function emptyStateLabel<T>(
+  filter: string,
+  filterValues: FilterValues<T>,
+): string {
+  if (filter) return `No results for “${filter}”.`;
+  const hasFieldFilter = Object.values(filterValues).some((v) =>
+    Array.isArray(v) ? v.length > 0 : Boolean(v),
+  );
+  return hasFieldFilter ? "No matching records." : "No records yet.";
+}
+
 export function RecordView<T extends { id: RowId }>({
   title,
   singular,
@@ -766,6 +779,15 @@ export function RecordView<T extends { id: RowId }>({
     },
     [fetching, cacheKey, runFetch, controlled, data, onDataChange],
   );
+  // Manual (server) mode without the controlled `data` prop feeds each page
+  // through `initialData` and refetches via `onQueryChange`. Re-sync the internal
+  // copy whenever that seed changes so a post-mutation reload (create/edit/delete)
+  // or a narrowed filter replaces the stranded optimistic rows — otherwise the
+  // grid keeps showing stale rows until a manual reload. Controlled mode reads
+  // `data` live; client mode keeps its rows (local edits own them).
+  React.useEffect(() => {
+    if (isManual && !controlled) setInternalRows(initialData);
+  }, [isManual, controlled, initialData]);
   const [filter, setFilter] = usePersistentState(
     persistKey ? `${persistKey}::filter` : undefined,
     "",
@@ -2177,7 +2199,7 @@ export function RecordView<T extends { id: RowId }>({
                   colSpan={orderedCols.length + (showSelection ? 3 : 2)}
                   className="h-32 text-center text-muted-foreground"
                 >
-                  {filter ? `No results for “${filter}”.` : "No records yet."}
+                  {emptyStateLabel(filter, filterValues)}
                 </TableCell>
               </TableRow>
             )}
