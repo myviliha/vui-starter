@@ -179,6 +179,18 @@ pnpm --filter @viliha/vui-ui test      # if you changed testable logic
 
 Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs" rule above, and a `packages/ui` version bump if the change ships in the package.
 
+## Knowledge graph (graphify)
+
+This repo ships a prebuilt knowledge graph so an agent can answer "how does X work?" or "what calls Y?" without re-reading the tree. The graph lives at `graphify-out/graph.json` (portable, relative paths, committed) with a human-readable `graphify-out/GRAPH_REPORT.md` next to it.
+
+- **Query it before searching.** For a codebase question, run `graphify query "<question>"` against `graphify-out/graph.json` instead of grepping blind. The graph maps god nodes (`cn`, `RecordView`), communities, and cross-file edges.
+- **Update it with every change.** After a fix or feature lands, refresh the graph incrementally (`graphify --update`, or the `detect_incremental` → AST + semantic re-extract → `build_merge` → write flow). If the merge's fuzzy dedup shrinks the node count and the guard refuses to overwrite `graph.json`, force the write so `graph.json` and `GRAPH_REPORT.md` stay consistent. This sits alongside the CHANGELOG/docs rule, it does not replace it.
+- **What's tracked vs ignored.** Commit `graph.json` and `GRAPH_REPORT.md`. The `cache/`, `manifest.json`, `cost.json`, regenerable `graph.html`, and `.graphify_*` scratch files are machine-specific and git-ignored, so regenerate those locally.
+
+## Working style: build the least that works
+
+Prefer the smallest change that solves the problem. Reach for the standard library or an already-installed dependency before adding a new one, a native platform feature before hand-rolled code, and one line before fifty. Skip speculative abstractions (no interface with one implementation, no config for a value that never changes) and say so in a line rather than building for a future that may not arrive. Non-trivial logic still leaves one runnable check behind. This is the default for both humans and agents here.
+
 ## Git conventions
 
 - Author is **Suman Bonakurthi**. Do **not** add a Claude/AI co-author trailer or attribution.

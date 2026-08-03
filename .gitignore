@@ -42,3 +42,12 @@ yarn-error.log*
 .idea
 # Local bug reports / working artifacts (not part of the OSS repo)
 bugs/
+
+# graphify: commit the portable graph (graph.json) + report; ignore the
+# machine-specific cache/manifest (absolute paths + mtimes), regenerable HTML,
+# and all scratch dotfiles.
+graphify-out/cache/
+graphify-out/manifest.json
+graphify-out/cost.json
+graphify-out/graph.html
+graphify-out/.graphify_*
