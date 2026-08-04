@@ -7,6 +7,26 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.38.0 — 2026-08-04
+
+### Added
+
+- **User-resizable columns are on by default.** `RecordView`'s `resizableColumns`
+  now defaults to the `NEXT_PUBLIC_RESIZABLE_COLUMNS` env var, which is on unless
+  you set it to `0` or `false`. Drag a column's right edge to widen it, so a long
+  value in a narrow column is always reachable. Pass `resizableColumns={false}`
+  on a single view to opt out. Declare the new var in `turbo.json` `globalEnv` if
+  you read `NEXT_PUBLIC_*` inside `packages/ui`.
+
+### Fixed
+
+- **Custom-rendered cells no longer overflow into the next column.** A cell with
+  a `render` function (for example a long status badge like
+  `PARTIALLY_REFUNDED`) clipped to its own column now, matching how plain text
+  cells already truncate. Before, the badge could spill across the column border
+  and cover the neighbouring value. Widen the column by dragging its edge or set
+  the field's `width`.
+
 ## 1.37.1 — 2026-08-03
 
 ### Fixed

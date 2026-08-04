@@ -30,7 +30,7 @@ export default function DataTablePage() {
       <H2>Import</H2>
       <CodeBlock title="terminal">{`import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";`}</CodeBlock>
       <Note title="One component, many features">
-        Editable cells · auto-sizing columns (opt-in resize) · sticky header · sort ·
+        Editable cells · resizable columns (on by default) · sticky header · sort ·
         filter · column show/hide · pagination · row actions (view / edit /
         delete) · required-field markers · buffered add/edit form (slide-over or
         full-page) · bulk actions (set field / delete) · CSV / JSON / Excel / PDF
@@ -108,7 +108,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>formMode</code>: <code>&quot;panel&quot;</code> (default, slide-over) or <code>&quot;page&quot;</code> (full-page form). See form layouts below.</li>
         <li><code>formColumns</code>: <code>1</code> (default) or <code>2</code> field-group columns, in page mode.</li>
         <li><code>formDescription</code>: intro text for the page-form documentation panel.</li>
-        <li><code>resizableColumns</code>: <code>false</code> by default (columns auto-size, no resize handle); set <code>true</code> to let users drag column edges.</li>
+        <li><code>resizableColumns</code>: <strong>on by default</strong> (from <code>NEXT_PUBLIC_RESIZABLE_COLUMNS</code>, unless set to <code>0</code>/<code>false</code>) — users drag a column&apos;s right edge to widen it. Set <code>false</code> to opt a single table out and auto-size instead.</li>
         <li><code>persistKey</code>: a stable key (e.g. the route) that persists the view&apos;s filter / sort / page and the add/edit draft to <code>sessionStorage</code>, so work survives leaving and returning via the open-tabs strip.</li>
         <li><code>onFilter(values)</code>: called from the Filter panel&apos;s Search / Clear when any field is <code>filterable</code> (see Filtering). Receives the per-field values; run your query or client-side filter here.</li>
         <li><code>loading</code>: while <code>true</code>, the table body shows shimmering skeleton rows (for an initial fetch or a refetch). The toolbar stays usable.</li>
@@ -138,7 +138,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>renderInput</code>: render a custom Add/Edit control (checkbox, radio group, anything). Overrides the default; you get <code>{`{ value, onChange, field, invalid }`}</code>.</li>
         <li><code>filterable</code>: expose the field in the Filter panel as a labeled control (see Filtering). <code>true</code> = text input; pass a config to choose the control.</li>
         <li><code>icon</code>: column-header icon.</li>
-        <li><code>width</code>: initial column width (px). Columns auto-size by default; pass <code>resizableColumns</code> on <code>RecordView</code> to let users drag-resize them.</li>
+        <li><code>width</code>: initial column width (px). Columns auto-size otherwise, and users can drag-resize them (on by default via <code>resizableColumns</code>).</li>
         <li><code>align</code>: <code>&quot;left&quot;</code> / <code>&quot;center&quot;</code> / <code>&quot;right&quot;</code> (see below).</li>
       </Ul>
 
@@ -323,7 +323,8 @@ useEffect(() => {
         by env, so every table inherits one setting:
       </P>
       <CodeBlock title=".env">{`NEXT_PUBLIC_DEFAULT_PAGE_SIZE=50   # initial rows per page
-NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling, the selector never offers more`}</CodeBlock>
+NEXT_PUBLIC_MAX_PAGE_SIZE=100      # ceiling, the selector never offers more
+NEXT_PUBLIC_RESIZABLE_COLUMNS=1    # drag column edges to resize; 0/false to disable`}</CodeBlock>
       <P>
         Override per table with the <code>defaultPageSize</code> /{" "}
         <code>maxPageSize</code> props. The important rule:{" "}

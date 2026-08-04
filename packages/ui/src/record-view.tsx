@@ -433,6 +433,15 @@ const MAX_PAGE_SIZE = (() => {
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : Infinity;
 })();
 
+// User column resizing (drag a header's right edge to widen a column). On by
+// default so long values in a narrow column are always reachable; from env
+// (inlined at build) — set NEXT_PUBLIC_RESIZABLE_COLUMNS=0 (or false) to turn it
+// off globally. Override per-view with the `resizableColumns` prop.
+const RESIZABLE_COLUMNS = (() => {
+  const v = process.env.NEXT_PUBLIC_RESIZABLE_COLUMNS;
+  return v !== "0" && v !== "false";
+})();
+
 /** Clip a cell string to `max` characters. Returns the display text and, when
  *  clipped, the full text for a `title` (hover tooltip). */
 function clipCell(value: string, max: number): { text: string; full?: string } {
@@ -521,8 +530,10 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Persist this view's filter / sort / page under this key (e.g. the route),
    *  so the work survives leaving and returning via the open-tabs strip. */
   persistKey?: string;
-  /** Allow dragging column edges to resize them. Off by default — columns
-   *  auto-size, and no resize handle appears on hover. */
+  /** Allow dragging a column's right edge to resize it. Defaults to
+   *  `NEXT_PUBLIC_RESIZABLE_COLUMNS` (on unless set to `0`/`false`), so a long
+   *  value in a narrow column is always reachable. Set `false` to force
+   *  auto-sizing with no resize handle. */
   resizableColumns?: boolean;
   /** Called from the Filter panel's Search (and Clear) when fields are
    *  `filterable`. Receives the collected per-field values; run your own query
@@ -651,7 +662,7 @@ export function RecordView<T extends { id: RowId }>({
   onEdit,
   onFormOpen,
   persistKey,
-  resizableColumns = false,
+  resizableColumns = RESIZABLE_COLUMNS,
   onFilter,
   loading = false,
   manual = false,
@@ -1325,8 +1336,16 @@ export function RecordView<T extends { id: RowId }>({
   function renderCellValue(row: T, field: RecordField<T>) {
     const isEditing = editing?.id === row.id && editing.key === field.key;
     if (field.render) {
+      // Clip to the column box so a wide custom cell (e.g. a long status badge)
+      // never bleeds into the next column. Widen it by dragging the header edge
+      // (resizableColumns) or set the field's `width`.
       return (
-        <div className={cn("px-3 py-1.5", ALIGN_TEXT[alignOf(field.key)])}>
+        <div
+          className={cn(
+            "overflow-hidden px-3 py-1.5",
+            ALIGN_TEXT[alignOf(field.key)],
+          )}
+        >
           {field.render(row)}
         </div>
       );

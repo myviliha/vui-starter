@@ -214,6 +214,17 @@ useEffect(() => {
       </P>
       <CodeBlock title=".env.local">{`NEXT_PUBLIC_MAX_CELL_CHARS="25"`}</CodeBlock>
 
+      <H2>Data-table column resizing</H2>
+      <P>
+        <code>NEXT_PUBLIC_RESIZABLE_COLUMNS</code> lets users drag a{" "}
+        <code>RecordView</code> column&apos;s right edge to resize it. It is{" "}
+        <strong>on by default</strong>, so a long value in a narrow column is
+        always reachable; set it to <code>0</code> (or <code>false</code>) to turn
+        resizing off, or pass <code>resizableColumns={"{false}"}</code> on a
+        single table.
+      </P>
+      <CodeBlock title=".env.local">{`NEXT_PUBLIC_RESIZABLE_COLUMNS="1"`}</CodeBlock>
+
       <Note title="Build-time values">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>{" "}
         into the static export, so set them where your deploy runs{" "}
