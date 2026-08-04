@@ -292,7 +292,9 @@ show/hide) · `kbd` (key caps + `Shortcut`) · `label` ·
 (multi-step wizard indicator) · `switch` · `tabs` · `textarea` · `toggle` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
-`RecordForm`) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)
+`RecordForm`) · `profile-form` (`ProfileForm` — a pre-designed view/edit profile
+page) · `organization-profile` (`organizationProfileFields` preset + `OrgProfile`
+type) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)
 · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 Components ported from shadcn/ui (Radix-based) are being brought into the package

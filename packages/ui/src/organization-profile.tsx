@@ -11,29 +11,69 @@ import {
   SewingPinFilledIcon as MapPin,
 } from "@radix-ui/react-icons";
 
-import { Button } from "@viliha/vui-ui/button";
-import { type IconType, type RecordField } from "@viliha/vui-ui/record-view";
+import { Button } from "./button";
+import { type IconType, type RecordField } from "./record-view";
 
-import { type OrgProfile } from "@/lib/api/organization";
+/**
+ * Organization Profile preset: the field definitions for a company's profile,
+ * ready to drop into `ProfileForm`. Ship your own `data` (of shape `OrgProfile`)
+ * and spread/override `organizationProfileFields` to fit your schema.
+ *
+ * ```tsx
+ * import { ProfileForm } from "@viliha/vui-ui/profile-form";
+ * import { organizationProfileFields, getOrgPrimary, type OrgProfile } from "@viliha/vui-ui/organization-profile";
+ *
+ * <ProfileForm data={org} fields={organizationProfileFields}
+ *   getPrimary={getOrgPrimary} onSave={save} title="Organization" />
+ * ```
+ */
+export type OrgProfile = {
+  id: number;
+  // Organization information
+  legalName: string;
+  displayName: string;
+  orgId: string; // read-only, generated at creation
+  domain: string;
+  registrationNo: string;
+  industry: string;
+  country: string;
+  region: string;
+  description: string;
+  // Brand assets — data URLs (or a CDN URL once wired). Empty = use initials.
+  logo: string;
+  favicon: string;
+  // Contact & address
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+  billingEmail: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  // Localization & units
+  timezone: string;
+  currency: string;
+  dateFormat: string;
+  measurement: string;
+  language: string;
+};
 
-// Shared config for the Organization Profile page. The section titles below are
-// the `group` values — RecordForm renders one section per group, in the order
-// they first appear. Per-field `description` fills the "About" info panel (our
-// equivalent of the reference's "Before you save").
-export const ORG_PROFILE_TITLE = "Organization";
-export const ORG_PROFILE_SINGULAR = "organization profile";
-export const ORG_PROFILE_ICON: IconType = Building2;
-export const ORG_PROFILE_DESCRIPTION =
+export const ORGANIZATION_PROFILE_ICON: IconType = Building2;
+
+export const ORGANIZATION_PROFILE_DESCRIPTION =
   "This is your organization's profile: the company details, branding, contact information and locale that appear across the app, its portal, documents and emails. Switch to Edit to change anything, then Save. Fields marked with * are required.";
 
-/** value === label options (the mock stores display strings). */
+/** value === label options (the demo stores display strings). */
 const opts = (vals: readonly string[]) =>
   vals.map((v) => ({ value: v, label: v }));
 
 /** Logo / favicon control: a preview plus Replace / Remove. Reads the picked
  *  file as a data URL (a real API would upload it and store the returned URL).
- *  Used as `renderInput` (edit) alongside `render` (view). */
-function BrandAsset({
+ *  Used as `renderInput` (edit) alongside `render` (view). Exported so you can
+ *  reuse it for other image fields. */
+export function BrandAsset({
   value,
   onChange,
   square,
@@ -52,7 +92,6 @@ function BrandAsset({
         className={`flex ${box} shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted/40`}
       >
         {value ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={value}
             alt=""
@@ -128,7 +167,7 @@ const DATE_FORMATS = ["MM/DD/YYYY", "DD/MM/YYYY", "YYYY-MM-DD"];
 const MEASUREMENTS = ["Imperial (ft, lb, °F)", "Metric (m, kg, °C)"];
 const LANGUAGES = ["English (US)", "English (UK)", "Français", "日本語"];
 
-export const fields: RecordField<OrgProfile>[] = [
+export const organizationProfileFields: RecordField<OrgProfile>[] = [
   // ── Organization information ──
   {
     key: "legalName",
@@ -326,7 +365,7 @@ export const fields: RecordField<OrgProfile>[] = [
   },
 ];
 
-export function getPrimary(row: OrgProfile) {
+export function getOrgPrimary(row: OrgProfile) {
   return {
     title: row.displayName || row.legalName,
     subtitle: row.domain,

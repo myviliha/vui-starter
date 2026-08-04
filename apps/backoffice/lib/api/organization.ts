@@ -11,38 +11,11 @@
 // organization the signed-in admin manages — its company info, branding, contact
 // details and locale — shown on the Organization Profile page.
 
-export type OrgProfile = {
-  id: number;
-  // Organization information
-  legalName: string;
-  displayName: string;
-  orgId: string; // read-only, generated at creation
-  domain: string;
-  registrationNo: string;
-  industry: string;
-  country: string;
-  region: string;
-  description: string;
-  // Brand assets — data URLs (or a CDN URL once wired). Empty = use initials.
-  logo: string;
-  favicon: string;
-  // Contact & address
-  contactName: string;
-  contactEmail: string;
-  contactPhone: string;
-  billingEmail: string;
-  address1: string;
-  address2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  // Localization & units
-  timezone: string;
-  currency: string;
-  dateFormat: string;
-  measurement: string;
-  language: string;
-};
+// The profile shape ships with the preset. Re-export so the controller and page
+// import it from the data layer as usual.
+import { type OrgProfile } from "@viliha/vui-ui/organization-profile";
+
+export type { OrgProfile };
 
 // The in-memory record. A real backend replaces this with your database.
 let profile: OrgProfile = {

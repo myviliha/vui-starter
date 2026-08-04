@@ -78,7 +78,7 @@ Both come from the same `RecordForm`; **pick one, don't invent a third:**
 
 - **Slide-over (standard / default).** Add/edit/view open as an overlay panel from `RecordView`. Nothing to configure. Uncontrolled (`initialData`). Example: `departments`.
 - **Full-page route.** `formMode="page"` + dedicated `/new` & `/edit` routes rendering `<RecordForm layout="page" columns={1|2} … />`; controlled, config shared via `*-config.tsx`. Adds a breadcrumb bar, a **dynamic Info panel** (from `formDescription` + per-field `description`), and a fixed Save/Cancel footer. Use for long forms or when the flow needs its own URL. Example: `organizations/new`.
-- **Full-page profile (view → edit).** A single record shown read-only, with an **Edit** button that opens the same Cancel + Save footer: `<RecordForm readOnly={mode === "view"} onEdit={…} … />` with `group` section titles. Example: `organization/profile` (the current org's profile — company info, branding, contact, locale).
+- **Full-page profile (view → edit).** A single record shown read-only, with an **Edit** button that opens the same Cancel + Save footer. Don't hand-wire it — use the shipped `ProfileForm` (`@viliha/vui-ui/profile-form`): `<ProfileForm data={…} fields={…} onSave={…} getPrimary={…} title="Organization" />`. For a company profile, spread the `organizationProfileFields` preset (`@viliha/vui-ui/organization-profile`). Example: `organization/profile` (the current org — company info, branding, contact, locale), a thin consumer of both.
 
 When asked to add a page, **state which variant and default to slide-over.** Both inherit the blue Save, header/body/footer separators and token colors from the component — you never copy those styles. Same rule downstream in `packages/ui/AGENT.md`.
 

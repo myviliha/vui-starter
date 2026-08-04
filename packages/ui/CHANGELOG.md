@@ -7,6 +7,32 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.40.0 — 2026-08-04
+
+### Added
+
+- **`@viliha/vui-ui/profile-form` — `ProfileForm`.** A pre-designed profile page
+  you import, like `Steps`. Feed it `fields` (grouped into sections via each
+  field's `group`) and `data`, and it renders the whole thing: a read-only view,
+  an **Edit** button that opens the standard **Cancel + Save** footer, revert on
+  Cancel, the About info panel, and a loading skeleton. No page boilerplate.
+
+  ```tsx
+  import { ProfileForm } from "@viliha/vui-ui/profile-form";
+  import { organizationProfileFields, getOrgPrimary } from "@viliha/vui-ui/organization-profile";
+
+  <ProfileForm data={org} fields={organizationProfileFields}
+    getPrimary={getOrgPrimary} onSave={save} title="Organization" />
+  ```
+
+- **`@viliha/vui-ui/organization-profile` — organization preset.** Ready-made
+  field definitions for a company profile: `organizationProfileFields` (Org
+  information, Brand assets, Contact & address, Localization), the `OrgProfile`
+  type, `getOrgPrimary`, `ORGANIZATION_PROFILE_DESCRIPTION`, and the reusable
+  `BrandAsset` logo/favicon control. Spread or override the fields to fit your
+  schema. The backoffice `/organization/profile` page is now a thin consumer of
+  both.
+
 ## 1.39.0 — 2026-08-04
 
 ### Added

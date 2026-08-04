@@ -37,6 +37,17 @@ export default function DataTablePage() {
         import &amp; export · auto-aligned columns.
       </Note>
 
+      <Note title="Building a profile page?">
+        For a single record shown read-only with an Edit → Cancel + Save flow,
+        don&apos;t hand-wire it — import the pre-designed{" "}
+        <code>ProfileForm</code> from{" "}
+        <code>@viliha/vui-ui/profile-form</code> and feed it{" "}
+        <code>data</code> + <code>fields</code>. For a company profile, spread the{" "}
+        <code>organizationProfileFields</code> preset from{" "}
+        <code>@viliha/vui-ui/organization-profile</code>. The{" "}
+        <code>/organization/profile</code> page is the reference consumer.
+      </Note>
+
       <H2>Full example</H2>
       <P>
         Describe your columns in a <code>fields</code> array, pass your data, and
