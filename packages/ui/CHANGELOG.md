@@ -7,6 +7,26 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.39.0 — 2026-08-04
+
+### Added
+
+- **Form sections take any title.** A `RecordField`'s `group` accepts any string
+  now, not just the four built-in names, and `RecordForm` renders one section per
+  group in the order the groups first appear. So a form can read
+  "Organization information", "Brand assets", "Contact & address" instead of
+  "General"/"Work". Ungrouped fields still fall under "General"; existing forms
+  are unchanged.
+
+### Changed
+
+- **A field can have both a custom view and a custom edit control.** When a field
+  sets both `render` (read-only view) and `renderInput` (edit control),
+  `RecordForm` now shows `render` while viewing and `renderInput` while editing —
+  so a cell like a logo preview or a status badge stays editable in Edit mode.
+  Before, `render` always won and the edit control never appeared. Fields with
+  only one of the two behave exactly as before.
+
 ## 1.38.0 — 2026-08-04
 
 ### Added

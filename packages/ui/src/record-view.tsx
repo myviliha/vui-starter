@@ -66,8 +66,20 @@ import {
 } from "./table-io";
 
 type RowId = string | number;
-type FieldGroup = "General" | "Work" | "Social" | "System";
-const GROUP_ORDER: FieldGroup[] = ["General", "Work", "Social", "System"];
+// A form section title. Any string works — sections render in the order their
+// fields first appear. The four below are the common defaults; a form can use
+// its own (e.g. "Organization information", "Brand assets").
+type FieldGroup = string;
+
+/** Distinct field groups in first-appearance order (ungrouped → "General"). */
+export function orderedGroups<T>(fields: RecordField<T>[]): string[] {
+  const seen: string[] = [];
+  for (const f of fields) {
+    const g = f.group ?? "General";
+    if (!seen.includes(g)) seen.push(g);
+  }
+  return seen;
+}
 
 /** Fixed (non-resizable) leading/trailing column widths, in px. */
 const CHECKBOX_W = 56;
@@ -262,6 +274,9 @@ export interface RecordField<T> {
   /** Column alignment. Omit to auto-align: numbers and short codes (≤ 4 chars)
    *  center, everything else stays left. Set explicitly to override. */
   align?: "left" | "center" | "right";
+  /** Form section this field belongs to. Any title works; sections render in
+   *  the order their fields first appear (ungrouped fields fall under
+   *  "General"). E.g. `"Organization information"`, `"Brand assets"`. */
   group?: FieldGroup;
   /** Initial column width in px (user-resizable via the header handle). */
   width?: number;
@@ -2479,7 +2494,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
-  const formBody = GROUP_ORDER.map((group) => {
+  const formBody = orderedGroups(fields).map((group) => {
     const groupFields = fields.filter((f) => (f.group ?? "General") === group);
     if (groupFields.length === 0) return null;
     return (
@@ -2510,7 +2525,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {f.required && <RequiredMark />}
               </dt>
               <dd className="min-w-0">
-                {f.render ? (
+                {/* `render` is the read-only view; `renderInput` is the edit
+                    control. When a field has both, the edit control wins while
+                    editing so a custom cell (e.g. a logo preview) can still be
+                    replaced in Edit mode. */}
+                {f.render && !(!readOnly && f.editable && f.renderInput) ? (
                   <div>{f.render(draft)}</div>
                 ) : !readOnly && f.editable ? (
                   f.renderInput ? (

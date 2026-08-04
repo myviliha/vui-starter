@@ -99,6 +99,14 @@ export const NAV: NavSection[] = [
     title: "Workspace",
     items: [
       {
+        label: "Organization",
+        icon: Building2,
+        color: "text-emerald-500",
+        children: [
+          { label: "Profile", href: "/organization/profile", icon: Contact, color: "text-emerald-500" },
+        ],
+      },
+      {
         label: "CRM",
         icon: UserCircle,
         color: "text-indigo-500",

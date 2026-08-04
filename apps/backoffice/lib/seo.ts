@@ -77,6 +77,11 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
     description:
       "Settings screen demo: profile, appearance and preferences in the Vui Starter admin template.",
   },
+  "/organization/profile": {
+    title: "Organization Profile",
+    description:
+      "Organization profile template: company information, branding, contact details and locale in a view/edit form, from the Vui Starter admin.",
+  },
   "/organizations": {
     title: "Organizations",
     description:

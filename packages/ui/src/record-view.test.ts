@@ -1,6 +1,29 @@
 import { describe, expect, it } from "vitest";
 
-import { emptyStateLabel } from "./record-view";
+import { emptyStateLabel, orderedGroups, type RecordField } from "./record-view";
+
+describe("orderedGroups", () => {
+  type Row = { id: number; a: string; b: string; c: string; d: string };
+  const f = (key: keyof Row, group?: string): RecordField<Row> =>
+    ({ key, label: key, group }) as RecordField<Row>;
+
+  it("lists groups in first-appearance order", () => {
+    expect(
+      orderedGroups([f("a", "Contact"), f("b", "Brand"), f("c", "Contact")]),
+    ).toEqual(["Contact", "Brand"]);
+  });
+
+  it("buckets ungrouped fields under General", () => {
+    expect(orderedGroups([f("a"), f("b", "Brand"), f("c")])).toEqual([
+      "General",
+      "Brand",
+    ]);
+  });
+
+  it("is empty for no fields", () => {
+    expect(orderedGroups<Row>([])).toEqual([]);
+  });
+});
 
 describe("emptyStateLabel", () => {
   it("reads empty when nothing is filtered", () => {
