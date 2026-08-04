@@ -1,6 +1,40 @@
 import { describe, expect, it } from "vitest";
 
-import { emptyStateLabel, orderedGroups, type RecordField } from "./record-view";
+import {
+  emptyStateLabel,
+  isAsyncLabeled,
+  orderedGroups,
+  type RecordField,
+} from "./record-view";
+
+describe("isAsyncLabeled", () => {
+  const noop = async () => [];
+  const resolve = async () => null;
+  const f = (over: Partial<RecordField<{ id: number; k: string }>>) =>
+    ({ key: "k", label: "K", ...over }) as RecordField<{ id: number; k: string }>;
+
+  it("is true only with loadOptions + resolveOption and no static options", () => {
+    expect(isAsyncLabeled(f({ loadOptions: noop, resolveOption: resolve }))).toBe(
+      true,
+    );
+  });
+
+  it("is false without resolveOption (can't resolve one value)", () => {
+    expect(isAsyncLabeled(f({ loadOptions: noop }))).toBe(false);
+  });
+
+  it("is false when static options exist (label comes from them)", () => {
+    expect(
+      isAsyncLabeled(
+        f({ loadOptions: noop, resolveOption: resolve, options: [] }),
+      ),
+    ).toBe(false);
+  });
+
+  it("is false for a plain field", () => {
+    expect(isAsyncLabeled(f({}))).toBe(false);
+  });
+});
 
 describe("orderedGroups", () => {
   type Row = { id: number; a: string; b: string; c: string; d: string };

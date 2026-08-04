@@ -7,6 +7,19 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.41.1 — 2026-08-05
+
+### Fixed
+
+- **Async choice fields now show their label in read/view mode, not the raw id.**
+  A `RecordField` with `loadOptions`/`resolveOption` (its value is an id) rendered
+  the id (`"5"`) in read mode while edit mode showed the correct title. The read
+  display now resolves the label via `resolveOption` (one record, never the whole
+  list) everywhere a value is shown — form read rows, detail panels and table
+  cells — falling back to the id while it resolves. Static-`options` fields already
+  mapped to their label; this brings async fields in line. The picker itself was
+  never affected.
+
 ## 1.41.0 — 2026-08-04
 
 ### Added

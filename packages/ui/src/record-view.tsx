@@ -41,7 +41,11 @@ import { Input } from "./input";
 import { Select } from "./select";
 import { Combobox } from "./combobox";
 import { FilterGrid, FilterField } from "./filter-field";
-import type { AsyncOption, AsyncOptionSource } from "./use-async-options";
+import {
+  useAsyncOptions,
+  type AsyncOption,
+  type AsyncOptionSource,
+} from "./use-async-options";
 
 export type { AsyncOption } from "./use-async-options";
 import { Tooltip } from "./tooltip";
@@ -407,6 +411,51 @@ function resolveOptions<T>(
   draft: Partial<T>,
 ): { value: string; label: string }[] {
   return typeof opts === "function" ? opts(draft) : (opts ?? []);
+}
+
+/** A field whose stored value is an async id (from `loadOptions`/`resolveOption`
+ *  with no static `options`) — its read display must resolve the id to a label. */
+export function isAsyncLabeled<T>(f: RecordField<T>): boolean {
+  return Boolean(f.loadOptions && f.resolveOption) && !Array.isArray(f.options);
+}
+
+/** Read-mode label for an async-id field. Resolves the set value's label via
+ *  `resolveOption` (one record, never the whole list) and renders it, falling
+ *  back to the raw id while resolving. Used wherever a value is *shown* (form
+ *  read rows, detail panels, table cells) — the edit control already resolves
+ *  its own label. */
+function AsyncFieldValue<T>({
+  field,
+  value,
+  values,
+}: {
+  field: RecordField<T>;
+  value: string;
+  values: Partial<T>;
+}) {
+  // Rebuilt each render (the hook holds it in a ref, so this never refetches);
+  // `open: false` means `loadOptions` is never called — only `resolveOption` runs.
+  const source = React.useMemo<AsyncOptionSource>(
+    () => ({
+      loadOptions: ({ search, signal }) =>
+        field.loadOptions!({ search, signal, values }),
+      resolveOption: field.resolveOption,
+    }),
+    [field, values],
+  );
+  const resetKey = (field.dependsOn ?? [])
+    .map((k) => String((values as Record<string, unknown>)[k] ?? ""))
+    .join(" ");
+  // ponytail: one resolveOption fetch per rendered value; a table with many
+  // async cells resolves each independently. Add a shared cache if that shows up.
+  const { options } = useAsyncOptions({
+    source,
+    open: false,
+    search: "",
+    value,
+    resetKey,
+  });
+  return <>{options.find((o) => o.value === value)?.label ?? value}</>;
 }
 
 // Module-scoped response cache for RecordView's `fetcher` mode. Namespaced by
@@ -1391,6 +1440,22 @@ export function RecordView<T extends { id: RowId }>({
       ? (field.options.find((o) => o.value === value)?.label ?? value)
       : value;
     const clip = clipCell(display, field.maxChars ?? maxCellChars);
+    // Async-id fields resolve their label for the read cell (the edit control
+    // already resolves its own). Everything else uses the clipped text + tooltip.
+    const readContent =
+      isAsyncLabeled(field) && value ? (
+        <span className="truncate">
+          <AsyncFieldValue field={field} value={value} values={row} />
+        </span>
+      ) : clip.full ? (
+        <Tooltip content={clip.full} className="truncate">
+          {clip.text}
+        </Tooltip>
+      ) : (
+        <span className="truncate">
+          {clip.text || <span className="text-muted-foreground">—</span>}
+        </span>
+      );
     const cellKey = `${row.id}:${field.key}`;
     const hoverActions =
       (field.editable || (field.copyable && value)) ? (
@@ -1441,15 +1506,7 @@ export function RecordView<T extends { id: RowId }>({
               ALIGN_BOX[alignOf(field.key)],
             )}
           >
-            {clip.full ? (
-              <Tooltip content={clip.full} className="truncate">
-                {clip.text}
-              </Tooltip>
-            ) : (
-              <span className="truncate">
-                {clip.text || <span className="text-muted-foreground">—</span>}
-              </span>
-            )}
+            {readContent}
           </button>
           {hoverActions}
         </div>
@@ -1462,13 +1519,7 @@ export function RecordView<T extends { id: RowId }>({
           ALIGN_BOX[alignOf(field.key)],
         )}
       >
-        {clip.full ? (
-          <Tooltip content={clip.full} className="truncate">
-            {clip.text}
-          </Tooltip>
-        ) : (
-          <span className="truncate">{clip.text}</span>
-        )}
+        {readContent}
         {hoverActions}
       </div>
     );
@@ -2614,9 +2665,24 @@ function RecordDetailPanel<T extends { id: RowId }>({
                   )
                 ) : (
                   <span className="block whitespace-pre-wrap break-words px-2 py-1.5">
-                    {String(draft[f.key as keyof T] ?? "") || (
-                      <span className="text-muted-foreground">—</span>
-                    )}
+                    {(() => {
+                      const raw = String(draft[f.key as keyof T] ?? "");
+                      if (!raw)
+                        return (
+                          <span className="text-muted-foreground">—</span>
+                        );
+                      // Async id → resolved label; static options → their label;
+                      // otherwise the raw value.
+                      if (isAsyncLabeled(f))
+                        return (
+                          <AsyncFieldValue field={f} value={raw} values={draft} />
+                        );
+                      if (Array.isArray(f.options))
+                        return (
+                          f.options.find((o) => o.value === raw)?.label ?? raw
+                        );
+                      return raw;
+                    })()}
                   </span>
                 )}
               </dd>
