@@ -225,6 +225,18 @@ useEffect(() => {
       </P>
       <CodeBlock title=".env.local">{`NEXT_PUBLIC_RESIZABLE_COLUMNS="1"`}</CodeBlock>
 
+      <H2>Password field masking</H2>
+      <P>
+        <code>NEXT_PUBLIC_PASSWORD_MASK</code> sets how every{" "}
+        <code>PasswordInput</code> hides its value.{" "}
+        <code>&quot;asterisk&quot;</code> (default) draws <code>*</code> over the
+        field for a consistent look; <code>&quot;native&quot;</code> uses the
+        browser&apos;s bullet-dot <code>type=&quot;password&quot;</code> so
+        password managers and autofill work normally. The eye toggle reveals the
+        value in both. Override a single field with the <code>mask</code> prop.
+      </P>
+      <CodeBlock title=".env.local">{`NEXT_PUBLIC_PASSWORD_MASK="asterisk"   # or "native"`}</CodeBlock>
+
       <Note title="Build-time values">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>{" "}
         into the static export, so set them where your deploy runs{" "}

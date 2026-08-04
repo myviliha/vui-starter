@@ -7,6 +7,17 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.41.0 — 2026-08-04
+
+### Added
+
+- **`NEXT_PUBLIC_PASSWORD_MASK` — app-wide default for `PasswordInput`'s mask.**
+  Set it to `native` to make every password field use the browser's bullet-dot
+  `type="password"` (so password managers and autofill work), or leave it
+  `asterisk` (default) for the `*` overlay. The per-field `mask` prop still
+  overrides it. Declare the var in `turbo.json` `globalEnv` if you read
+  `NEXT_PUBLIC_*` inside `packages/ui`. Documented on the Configuration docs page.
+
 ## 1.40.0 — 2026-08-04
 
 ### Added

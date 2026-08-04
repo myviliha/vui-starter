@@ -256,7 +256,8 @@ const f = useFormFields({
         autofill won't recognise it — pass{" "}
         <code>mask=&quot;native&quot;</code> for the browser's native
         password field (bullet dots) when autofill matters more than the
-        asterisk look.
+        asterisk look. To flip the default for every field app-wide, set{" "}
+        <code>NEXT_PUBLIC_PASSWORD_MASK=native</code> (see Configuration).
       </Note>
 
       <DocPager

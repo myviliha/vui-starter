@@ -11,6 +11,17 @@ import { cn } from "./utils";
 import { Input } from "./input";
 import { Tooltip } from "./tooltip";
 
+// `process.env.NEXT_PUBLIC_*` is statically inlined by the consumer's bundler
+// (Next / Vite) at build; declare its shape so this source type-checks on its
+// own (the package ships without @types/node).
+declare const process: { env: Record<string, string | undefined> };
+
+// App-wide default mask, from env (inlined at build). `"native"` uses the
+// browser's bullet-dot `type="password"` (better autofill) everywhere; anything
+// else keeps the asterisk overlay. Override per field with the `mask` prop.
+const DEFAULT_MASK: "asterisk" | "native" =
+  process.env.NEXT_PUBLIC_PASSWORD_MASK === "native" ? "native" : "asterisk";
+
 export interface PasswordInputProps
   extends Omit<React.ComponentProps<"input">, "type"> {
   /** Inline validation message: red border + alert-triangle tooltip. Falsy = valid. */
@@ -18,7 +29,8 @@ export interface PasswordInputProps
   /** Character shown for each hidden character in `"asterisk"` mode. Default `"*"`. */
   maskChar?: string;
   /**
-   * How the value is hidden. Default `"asterisk"`.
+   * How the value is hidden. Defaults to `NEXT_PUBLIC_PASSWORD_MASK`
+   * (`"native"` app-wide, else `"asterisk"`); this prop overrides it per field.
    *
    * - `"asterisk"` draws `maskChar` over a text input, so it masks with `*`
    *   instead of the browser's bullet dots. Trade-off: it isn't
@@ -32,9 +44,10 @@ export interface PasswordInputProps
 }
 
 /**
- * A password field with a **show/hide eye toggle**. By default it masks with
- * `*` (`mask="asterisk"`); pass `mask="native"` for the browser's native
- * bullet-dot password field (better autofill). It's a drop-in for {@link Input}
+ * A password field with a **show/hide eye toggle**. It masks with `*` by
+ * default (`mask="asterisk"`, or set `NEXT_PUBLIC_PASSWORD_MASK=native` to make
+ * every field use the browser's native bullet-dot field app-wide); the `mask`
+ * prop overrides it per field. It's a drop-in for {@link Input}
  * inside a `Field`: spread `useFormFields` `bind(...)` onto it and pass `error`.
  *
  * ```tsx
@@ -50,7 +63,7 @@ export function PasswordInput({
   value,
   error,
   maskChar = "*",
-  mask = "asterisk",
+  mask = DEFAULT_MASK,
   autoComplete = "current-password",
   ...props
 }: PasswordInputProps) {
