@@ -53,10 +53,47 @@ export function reconcile<T extends { id: number | string }>(
  * For data that loads asynchronously into your own state, use the exported
  * `filterRows` / `reconcile` helpers directly (see `markets-table.tsx`).
  */
-export function useClientFilter<T extends { id: number | string }>(source: T[]) {
+/** A row is "blank" when every field but `id` is empty — i.e. an un-saved Add
+ *  that was cancelled. Those shouldn't land in Trash. */
+function isBlankRow<T extends { id: number | string }>(row: T): boolean {
+  return Object.entries(row as Record<string, unknown>).every(
+    ([k, v]) => k === "id" || v === "" || v === false || v == null || v === 0,
+  );
+}
+
+/**
+ * Client-side filtering for a `RecordView` (see the datatable docs), plus
+ * edit/add/delete reconciliation and **Trash/restore**: deleting a row soft-
+ * deletes it into `trashed` (RecordView shows it under the Trash toggle), and
+ * `onRestore` returns it to the live list. `trashSeed` pre-populates Trash so the
+ * view isn't empty on first open.
+ *
+ * ```tsx
+ * const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(source);
+ * <RecordView … data={rows} initialData={rows} onFilter={onFilter}
+ *   onDataChange={onDataChange} showTrash trashedData={trashed} onRestore={onRestore} />
+ * ```
+ */
+export function useClientFilter<T extends { id: number | string }>(
+  source: T[],
+  trashSeed: T[] = [],
+) {
   const [all, setAll] = useState<T[]>(source);
+  const [trashed, setTrashed] = useState<T[]>(trashSeed);
   const [filters, setFilters] = useState<FilterValues<T>>({});
   const rows = useMemo(() => filterRows(all, filters), [all, filters]);
-  const onDataChange = (next: T[]) => setAll((prev) => reconcile(prev, rows, next));
-  return { rows, onFilter: setFilters, onDataChange };
+  const onDataChange = (next: T[]) => {
+    // Rows that vanished are soft-deleted → move them to Trash (skip a blank,
+    // never-saved Add that was cancelled).
+    const nextIds = new Set(next.map((r) => r.id));
+    const removed = rows.filter((r) => !nextIds.has(r.id) && !isBlankRow(r));
+    if (removed.length) setTrashed((t) => [...removed, ...t]);
+    setAll((prev) => reconcile(prev, rows, next));
+  };
+  const onRestore = (toRestore: T[]) => {
+    const ids = new Set(toRestore.map((r) => r.id));
+    setTrashed((t) => t.filter((r) => !ids.has(r.id)));
+    setAll((prev) => reconcile(prev, rows, [...rows, ...toRestore]));
+  };
+  return { rows, trashed, onFilter: setFilters, onDataChange, onRestore };
 }

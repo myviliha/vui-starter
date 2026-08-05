@@ -17,7 +17,7 @@ const fields: RecordField<Country>[] = [
 ];
 
 export function CountriesTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(countries);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(countries);
   return (
     <RecordView
       title="Countries"
@@ -28,6 +28,9 @@ export function CountriesTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.code,

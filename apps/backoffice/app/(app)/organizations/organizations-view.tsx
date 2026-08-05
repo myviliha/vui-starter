@@ -29,6 +29,9 @@ export function OrganizationsView() {
   const pathname = usePathname();
   const { data, loading, error, save } = useOrganizations();
   const [filters, setFilters] = useState<FilterValues<DemoOrganization>>({});
+  // Soft-deleted organizations (the backend owns this in a real app; here it's
+  // local state so the Trash view + Restore are live).
+  const [trashed, setTrashed] = useState<DemoOrganization[]>([]);
 
   // Surface a load failure as a toast — a UI concern, so it lives here, not in
   // the controller or data layer.
@@ -57,7 +60,22 @@ export function OrganizationsView() {
       initialData={rows}
       data={rows}
       onFilter={setFilters}
-      onDataChange={(next) => save(reconcile(data, rows, next))}
+      onDataChange={(next) => {
+        // Deleted rows are soft-deleted into Trash (skip a blank, un-saved add).
+        const nextIds = new Set(next.map((r) => r.id));
+        const removed = rows.filter(
+          (r) => !nextIds.has(r.id) && r.name.trim() !== "",
+        );
+        if (removed.length) setTrashed((t) => [...removed, ...t]);
+        save(reconcile(data, rows, next));
+      }}
+      showTrash
+      trashedData={trashed}
+      onRestore={(toRestore) => {
+        const ids = new Set(toRestore.map((r) => r.id));
+        setTrashed((t) => t.filter((r) => !ids.has(r.id)));
+        save(reconcile(data, rows, [...rows, ...toRestore]));
+      }}
       getPrimary={getPrimary}
       makeEmptyRow={makeEmptyRow}
     />

@@ -17,7 +17,7 @@ const fields: RecordField<Business>[] = [
 ];
 
 export function BusinessesTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(businesses);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(businesses);
   return (
     <RecordView
       title="Businesses"
@@ -28,6 +28,9 @@ export function BusinessesTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: row.title,
         subtitle: row.code,

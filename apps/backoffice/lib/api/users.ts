@@ -57,10 +57,22 @@ const ALL: User[] = Array.from({ length: TOTAL }, (_, i) => {
   };
 });
 
+// Soft-deleted user ids. A real backend stores a `deleted_at`; here a Set stands
+// in. Seeded so the Trash view isn't empty. The `trash: true` query returns only
+// these; the live query excludes them.
+const trashedIds = new Set<number>([3, 8, 21]);
+
+/** Restore soft-deleted users (RecordView's `onRestore`). Refetch shows them
+ *  back in Live and gone from Trash. */
+export function restoreUsers(ids: (number | string)[]): void {
+  for (const id of ids) trashedIds.delete(Number(id));
+}
+
 /**
  * Fetch one page. Filters + sorts + paginates server-side and returns just that
  * page plus the true total. `pageSize` is clamped to MAX_PAGE_SIZE — the client
- * can't pull a bigger page than allowed.
+ * can't pull a bigger page than allowed. `q.trash` returns soft-deleted users
+ * instead of live ones.
  */
 export function listUsers(
   q: ServerQuery<User>,
@@ -69,7 +81,10 @@ export function listUsers(
   const pageSize = Math.min(Math.max(1, q.pageSize), MAX_PAGE_SIZE);
   return new Promise((resolve, reject) => {
     const t = setTimeout(() => {
-      let out = ALL;
+      // Trash view returns only soft-deleted rows; live excludes them.
+      let out = q.trash
+        ? ALL.filter((u) => trashedIds.has(u.id))
+        : ALL.filter((u) => !trashedIds.has(u.id));
 
       const search = q.search.trim().toLowerCase();
       if (search) {

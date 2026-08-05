@@ -17,7 +17,7 @@ const fields: RecordField<Currency>[] = [
 ];
 
 export function CurrenciesTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(currencies);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(currencies);
   return (
     <RecordView
       title="Currencies"
@@ -28,6 +28,9 @@ export function CurrenciesTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.code,

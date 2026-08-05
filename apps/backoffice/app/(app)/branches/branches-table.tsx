@@ -10,7 +10,6 @@ import {
   Share2Icon as Network,
 } from "@radix-ui/react-icons";
 
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { Badge } from "@viliha/vui-ui/badge";
@@ -85,31 +84,20 @@ const fields: RecordField<Branch>[] = [
   },
 ];
 
+// A couple of already-soft-deleted branches so the Trash view isn't empty.
+const SOFT_DELETED: Branch[] = [
+  { id: 101, organization: "Northwind Retail", name: "Boston", code: "BOS", email: "boston@northwind.example.com", phone: "(617) 555-0155", city: "Boston", isHeadquarters: false },
+  { id: 102, organization: "Northwind Retail", name: "Phoenix", code: "PHX", email: "phoenix@northwind.example.com", phone: "(602) 555-0171", city: "Phoenix", isHeadquarters: false },
+];
+
 export function BranchesTable() {
   const pathname = usePathname();
-  const { rows, onFilter, onDataChange: applyChange } = useClientFilter(branches);
-  // Soft-deleted branches. In a real app the backend owns this and the Trash
-  // query returns them; here we keep them in state so the Trash view + Restore
-  // are live. Seeded with a couple so Trash isn't empty.
-  const [trashed, setTrashed] = useState<Branch[]>(() => [
-    { id: 101, organization: "Northwind Retail", name: "Boston", code: "BOS", email: "boston@northwind.example.com", phone: "(617) 555-0155", city: "Boston", isHeadquarters: false },
-    { id: 102, organization: "Northwind Retail", name: "Phoenix", code: "PHX", email: "phoenix@northwind.example.com", phone: "(602) 555-0171", city: "Phoenix", isHeadquarters: false },
-  ]);
-  // Route deletes into Trash (soft delete), skipping a blank un-saved add that
-  // was cancelled. Everything else (edits/adds) passes straight through.
-  const onDataChange = (next: Branch[]) => {
-    const nextIds = new Set(next.map((r) => r.id));
-    const removed = rows.filter(
-      (r) => !nextIds.has(r.id) && r.name.trim() !== "",
-    );
-    if (removed.length) setTrashed((t) => [...removed, ...t]);
-    applyChange(next);
-  };
-  const onRestore = (toRestore: Branch[]) => {
-    const ids = new Set(toRestore.map((r) => r.id));
-    setTrashed((t) => t.filter((r) => !ids.has(r.id)));
-    applyChange([...rows, ...toRestore]); // return them to the live list
-  };
+  // Soft-deleted branches seeded so Trash isn't empty on first open; deleting a
+  // live branch also moves it here. The backend owns this in a real app.
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(
+    branches,
+    SOFT_DELETED,
+  );
   return (
     <RecordView
       persistKey={pathname}

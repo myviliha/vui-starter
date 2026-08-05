@@ -15,7 +15,7 @@ const fields: RecordField<Language>[] = [
 ];
 
 export function LanguagesTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(languages);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(languages);
   return (
     <RecordView
       title="Languages"
@@ -26,6 +26,9 @@ export function LanguagesTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.code,

@@ -14,6 +14,7 @@ import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 
 import {
   listUsers,
+  restoreUsers,
   ROLES,
   STATUSES,
   TEAMS,
@@ -82,6 +83,8 @@ export function UsersView() {
       fields={fields}
       fetcher={listUsers}
       cacheKey="/users"
+      showTrash
+      onRestore={(restored) => restoreUsers(restored.map((u) => u.id))}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.email,

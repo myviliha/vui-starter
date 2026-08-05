@@ -24,7 +24,7 @@ const fields: RecordField<Person>[] = [
 ];
 
 export function PeopleTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(people);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(people);
   return (
     <RecordView
       title="People"
@@ -35,6 +35,9 @@ export function PeopleTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: `${row.firstName} ${row.lastName}`.trim(),
         subtitle: row.email,

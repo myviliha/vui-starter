@@ -37,7 +37,7 @@ const fields: RecordField<DemoEmployee>[] = [
 ];
 
 export function EmployeesTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(employees);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(employees);
   return (
     <RecordView
       title="Employees"
@@ -48,6 +48,9 @@ export function EmployeesTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: `${row.firstName} ${row.lastName}`.trim(),
         subtitle: row.email,

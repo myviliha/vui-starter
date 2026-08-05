@@ -58,6 +58,7 @@ const fields: RecordField<City>[] = [
 
 export function CitiesTable() {
   const [all, setAll] = useState<City[]>(cities);
+  const [trashed, setTrashed] = useState<City[]>([]);
   const [filters, setFilters] = useState<FilterValues<City>>({});
 
   // Demo: match the cascading filter values client-side (swap for a server query).
@@ -72,16 +73,28 @@ export function CitiesTable() {
     [all, filters],
   );
 
+  const reconcileInto = (prev: City[], next: City[]) => {
+    const nextById = new Map(next.map((r) => [r.id, r] as const));
+    const visible = new Set(rows.map((r) => r.id));
+    const kept = prev
+      .filter((r) => !visible.has(r.id) || nextById.has(r.id))
+      .map((r) => nextById.get(r.id) ?? r);
+    const added = next.filter((r) => !prev.some((p) => p.id === r.id));
+    return [...kept, ...added];
+  };
   const handleChange = (next: City[]) => {
-    setAll((prev) => {
-      const nextById = new Map(next.map((r) => [r.id, r] as const));
-      const visible = new Set(rows.map((r) => r.id));
-      const kept = prev
-        .filter((r) => !visible.has(r.id) || nextById.has(r.id))
-        .map((r) => nextById.get(r.id) ?? r);
-      const added = next.filter((r) => !prev.some((p) => p.id === r.id));
-      return [...kept, ...added];
-    });
+    // Deleted rows soft-delete into Trash (skip a blank, un-saved add).
+    const nextIds = new Set(next.map((r) => r.id));
+    const removed = rows.filter(
+      (r) => !nextIds.has(r.id) && r.name.trim() !== "",
+    );
+    if (removed.length) setTrashed((t) => [...removed, ...t]);
+    setAll((prev) => reconcileInto(prev, next));
+  };
+  const handleRestore = (toRestore: City[]) => {
+    const ids = new Set(toRestore.map((r) => r.id));
+    setTrashed((t) => t.filter((r) => !ids.has(r.id)));
+    setAll((prev) => reconcileInto(prev, [...rows, ...toRestore]));
   };
 
   return (
@@ -97,6 +110,9 @@ export function CitiesTable() {
       data={rows}
       onDataChange={handleChange}
       onFilter={setFilters}
+      showTrash
+      trashedData={trashed}
+      onRestore={handleRestore}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.country,

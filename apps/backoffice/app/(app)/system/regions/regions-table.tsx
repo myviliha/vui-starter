@@ -38,6 +38,7 @@ const fields: RecordField<Region>[] = [
 
 export function RegionsTable() {
   const [all, setAll] = useState<Region[]>(regions);
+  const [trashed, setTrashed] = useState<Region[]>([]);
   const [filters, setFilters] = useState<FilterValues<Region>>({});
 
   // Demo: match the per-field values client-side. The component does NOT filter
@@ -58,16 +59,28 @@ export function RegionsTable() {
   );
 
   // Reconcile edits/adds/deletes made on the filtered view back into `all`.
+  const reconcileInto = (prev: Region[], next: Region[]) => {
+    const nextById = new Map(next.map((r) => [r.id, r] as const));
+    const visible = new Set(rows.map((r) => r.id));
+    const kept = prev
+      .filter((r) => !visible.has(r.id) || nextById.has(r.id)) // drop deleted
+      .map((r) => nextById.get(r.id) ?? r); // apply edits
+    const added = next.filter((r) => !prev.some((p) => p.id === r.id));
+    return [...kept, ...added];
+  };
   const handleChange = (next: Region[]) => {
-    setAll((prev) => {
-      const nextById = new Map(next.map((r) => [r.id, r] as const));
-      const visible = new Set(rows.map((r) => r.id));
-      const kept = prev
-        .filter((r) => !visible.has(r.id) || nextById.has(r.id)) // drop deleted
-        .map((r) => nextById.get(r.id) ?? r); // apply edits
-      const added = next.filter((r) => !prev.some((p) => p.id === r.id));
-      return [...kept, ...added];
-    });
+    // Deleted rows soft-delete into Trash (skip a blank, un-saved add).
+    const nextIds = new Set(next.map((r) => r.id));
+    const removed = rows.filter(
+      (r) => !nextIds.has(r.id) && r.name.trim() !== "",
+    );
+    if (removed.length) setTrashed((t) => [...removed, ...t]);
+    setAll((prev) => reconcileInto(prev, next));
+  };
+  const handleRestore = (toRestore: Region[]) => {
+    const ids = new Set(toRestore.map((r) => r.id));
+    setTrashed((t) => t.filter((r) => !ids.has(r.id)));
+    setAll((prev) => reconcileInto(prev, [...rows, ...toRestore]));
   };
 
   return (
@@ -81,6 +94,9 @@ export function RegionsTable() {
       data={rows}
       onDataChange={handleChange}
       onFilter={setFilters}
+      showTrash
+      trashedData={trashed}
+      onRestore={handleRestore}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.code,

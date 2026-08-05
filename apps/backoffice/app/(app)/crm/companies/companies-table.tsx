@@ -31,7 +31,7 @@ const fields: RecordField<Company>[] = [
 ];
 
 export function CompaniesTable() {
-  const { rows, onFilter, onDataChange } = useClientFilter(companies);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(companies);
   return (
     <RecordView
       title="Companies"
@@ -42,6 +42,9 @@ export function CompaniesTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.domain,

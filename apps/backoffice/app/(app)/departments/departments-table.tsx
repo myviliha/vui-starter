@@ -31,7 +31,7 @@ const fields: RecordField<Department>[] = [
 
 export function DepartmentsTable() {
   const pathname = usePathname();
-  const { rows, onFilter, onDataChange } = useClientFilter(departments);
+  const { rows, trashed, onFilter, onDataChange, onRestore } = useClientFilter(departments);
   return (
     <RecordView
       persistKey={pathname}
@@ -43,6 +43,9 @@ export function DepartmentsTable() {
       data={rows}
       onFilter={onFilter}
       onDataChange={onDataChange}
+      showTrash
+      trashedData={trashed}
+      onRestore={onRestore}
       getPrimary={(row) => ({
         title: row.title,
         subtitle: row.organization,

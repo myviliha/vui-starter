@@ -60,6 +60,7 @@ export function MarketsTable() {
   // Demo: simulate loading records from a server so the skeleton state shows on
   // first visit. In a real app, set `loading` around your fetch/refetch.
   const [data, setData] = useState<Market[]>([]);
+  const [trashed, setTrashed] = useState<Market[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FilterValues<Market>>({});
   useEffect(() => {
@@ -82,7 +83,21 @@ export function MarketsTable() {
       initialData={rows}
       data={rows}
       onFilter={setFilters}
-      onDataChange={(next) => setData((prev) => reconcile(prev, rows, next))}
+      onDataChange={(next) => {
+        const nextIds = new Set(next.map((r) => r.id));
+        const removed = rows.filter(
+          (r) => !nextIds.has(r.id) && r.name.trim() !== "",
+        );
+        if (removed.length) setTrashed((t) => [...removed, ...t]);
+        setData((prev) => reconcile(prev, rows, next));
+      }}
+      showTrash
+      trashedData={trashed}
+      onRestore={(toRestore) => {
+        const ids = new Set(toRestore.map((r) => r.id));
+        setTrashed((t) => t.filter((r) => !ids.has(r.id)));
+        setData((prev) => reconcile(prev, rows, [...rows, ...toRestore]));
+      }}
       getPrimary={(row) => ({
         title: row.name,
         subtitle: row.organization,
