@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.42.1 — 2026-08-05
+
+### Changed
+
+- **A built-in `input:"checkbox"` now coexists with `render`.** Like a custom
+  `renderInput`, a field can pair a `render` (the read view — e.g. a status
+  badge in the table) with `input:"checkbox"` (the edit control): the form shows
+  the badge while viewing and the checkbox while editing. The Branches HQ column
+  uses this — badge in the list, checkbox in the Add/Edit form.
+
 ## 1.42.0 — 2026-08-05
 
 ### Added

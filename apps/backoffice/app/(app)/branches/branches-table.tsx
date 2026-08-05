@@ -12,6 +12,7 @@ import {
 
 import { usePathname } from "next/navigation";
 
+import { Badge } from "@viliha/vui-ui/badge";
 import { RecordView, type RecordField } from "@viliha/vui-ui/record-view";
 import { branches, type Branch } from "@/lib/mock-data";
 import { useClientFilter } from "@/lib/use-client-filter";
@@ -69,10 +70,17 @@ const fields: RecordField<Branch>[] = [
     label: "Headquarter",
     description: "Is this the organization's head office?",
     icon: CircleDot,
-    input: "checkbox",
+    input: "checkbox", // checkbox in the Add/Edit form…
     editable: true,
     width: 150,
     group: "System",
+    // …and a badge in the table (render is the read view; the checkbox wins in edit).
+    render: (row) =>
+      row.isHeadquarters ? (
+        <Badge variant="secondary">Headquarters</Badge>
+      ) : (
+        <Badge variant="muted">Branch</Badge>
+      ),
   },
 ];
 

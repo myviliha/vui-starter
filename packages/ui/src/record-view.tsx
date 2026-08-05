@@ -2691,11 +2691,17 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {f.required && <RequiredMark />}
               </dt>
               <dd className="min-w-0">
-                {/* `render` is the read-only view; `renderInput` is the edit
-                    control. When a field has both, the edit control wins while
-                    editing so a custom cell (e.g. a logo preview) can still be
-                    replaced in Edit mode. */}
-                {f.render && !(!readOnly && f.editable && f.renderInput) ? (
+                {/* `render` is the read-only view; the edit control (a custom
+                    `renderInput` or a built-in `input:"checkbox"`) wins while
+                    editing, so a field can show a badge/preview in view and
+                    still be edited (e.g. a HQ badge in the table + a checkbox in
+                    the form). */}
+                {f.render &&
+                !(
+                  !readOnly &&
+                  f.editable &&
+                  (f.renderInput || f.input === "checkbox")
+                ) ? (
                   <div>{f.render(draft)}</div>
                 ) : !readOnly && f.editable ? (
                   f.renderInput ? (
