@@ -28,6 +28,7 @@ import {
   MixerHorizontalIcon as SlidersHorizontal,
   Pencil1Icon as Pencil,
   PlusIcon as Plus,
+  ResetIcon as Restore,
   RowsIcon as Rows3,
   TrashIcon as Trash2,
 } from "@radix-ui/react-icons";
@@ -264,6 +265,9 @@ export type ServerQuery<T> = {
   search: string;
   /** Per-field filter values (from `filterable` fields). */
   filters: FilterValues<T>;
+  /** Trash view active — the host should return soft-deleted rows instead of
+   *  live ones (only meaningful when `showTrash` is enabled). */
+  trash: boolean;
 };
 
 export interface RecordField<T> {
@@ -587,7 +591,7 @@ function clipCell(value: string, max: number): { text: string; full?: string } {
 }
 
 function rvQueryKey<T>(q: ServerQuery<T>): string {
-  return JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters]);
+  return JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters, q.trash]);
 }
 function rvCacheGet(
   ns: string,
@@ -765,6 +769,24 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  selection. `false` also removes drag-to-reorder (it shares the leading
    *  column). Default `true`. */
   showSelection?: boolean;
+  /** Show a **Trash** toggle in the header (left of the Filter control). Off by
+   *  default. Enabling it lets RecordView switch the SAME table between live and
+   *  soft-deleted rows. RecordView is display-only here — it never decides what
+   *  "deleted" means; the host supplies the trashed rows (`trashedData` in client
+   *  mode, or the `trash: true` query in `manual`/`fetcher` mode) and persists
+   *  restores via `onRestore`. */
+  showTrash?: boolean;
+  /** Soft-deleted rows shown while Trash is active in **client mode** (`data` +
+   *  `onDataChange`). Omit in `manual`/`fetcher` mode — there the host returns
+   *  trashed rows for the `trash: true` query instead. */
+  trashedData?: T[];
+  /** Restore rows from Trash — one row (its Restore icon) or the current
+   *  selection (bulk "Restore N selected"), after a confirm. The HOST persists
+   *  the restore via its own API; RecordView clears the selection and refetches
+   *  (`manual`) / expects the host to drop the rows from `trashedData` (client),
+   *  so they leave Trash and return to Live. Providing this prop is what enables
+   *  the Restore actions. Mirrors how `onDataChange` surfaces delete. */
+  onRestore?: (rows: T[]) => void | Promise<void>;
 }
 
 /** Empty-table message: a keyword search, active per-field filters, or a
@@ -823,6 +845,9 @@ export function RecordView<T extends { id: RowId }>({
   showSort = true,
   showPagination = true,
   showSelection = true,
+  showTrash = false,
+  trashedData,
+  onRestore,
 }: RecordViewProps<T>) {
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
@@ -900,7 +925,17 @@ export function RecordView<T extends { id: RowId }>({
   // Abort any in-flight request on unmount.
   React.useEffect(() => () => abortRef.current?.abort(), []);
 
-  const rows = fetching ? fetchedData : controlled ? data : internalRows;
+  // Trash view: show soft-deleted rows instead of live ones. Display-only — the
+  // host supplies them via `trashedData` (client) or the `trash: true` query
+  // (manual/fetcher, where the host swaps `data`/the fetch result).
+  const [trash, setTrash] = React.useState(false);
+  const rows = fetching
+    ? fetchedData
+    : trash && trashedData !== undefined
+      ? trashedData
+      : controlled
+        ? data
+        : internalRows;
   const setRows = React.useCallback(
     (updater: React.SetStateAction<T[]>) => {
       if (fetching) {
@@ -963,6 +998,9 @@ export function RecordView<T extends { id: RowId }>({
   // Row pending delete confirmation.
   const [confirmDeleteId, setConfirmDeleteId] = React.useState<RowId | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
+  // Restore-from-Trash confirms (single row id / current selection), mirroring delete.
+  const [confirmRestoreId, setConfirmRestoreId] = React.useState<RowId | null>(null);
+  const [bulkRestoreOpen, setBulkRestoreOpen] = React.useState(false);
   // Whether the detail panel opened read-only (View) or editable (Edit / Add).
   const [panelReadOnly, setPanelReadOnly] = React.useState(false);
   const [page, setPage] = usePersistentState(
@@ -1158,12 +1196,20 @@ export function RecordView<T extends { id: RowId }>({
     sort,
     search: filter,
     filters: filterValues,
+    trash,
   };
 
-  // Reset to the first page when the filter or page size changes.
+  // Reset to the first page when the filter, page size, or Trash view changes.
   React.useEffect(() => {
     setPage(1);
-  }, [filter, pageSize, setPage]);
+  }, [filter, pageSize, trash, setPage]);
+
+  // Switching between Live and Trash clears the selection (it doesn't carry
+  // across views) and closes any open detail panel.
+  React.useEffect(() => {
+    setSelected(new Set());
+    setActiveId(null);
+  }, [trash]);
 
   // Server mode: report the query so the consumer can fetch. Fires on page,
   // size, sort, and keyword changes (and once on mount for the initial load).
@@ -1178,12 +1224,13 @@ export function RecordView<T extends { id: RowId }>({
       sort,
       search: filter,
       filters: filterValues,
+      trash,
     };
     // `fetcher` owns the fetch; otherwise hand the query to the consumer.
     if (fetching) runFetch(query);
     else onQueryChange?.(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isManual, fetching, safePage, pageSize, sort, filter, onQueryChange, runFetch]);
+  }, [isManual, fetching, safePage, pageSize, sort, filter, trash, onQueryChange, runFetch]);
 
   // Cascading filter options: when the values change, drop any filter value no
   // longer valid once its options recompute (e.g. changing Region invalidates a
@@ -1413,6 +1460,21 @@ export function RecordView<T extends { id: RowId }>({
       return next;
     });
     if (activeId === id) setActiveId(null);
+  }
+  /** Restore rows from Trash. The host persists via `onRestore`; RecordView
+   *  clears the selection and (in fetcher mode) refetches, so the rows leave the
+   *  Trash view. Client-mode hosts drop them from `trashedData`. */
+  function restore(ids: RowId[]) {
+    const set = new Set(ids);
+    const toRestore = rows.filter((r) => set.has(r.id));
+    if (toRestore.length) void onRestore?.(toRestore);
+    setSelected(new Set());
+    if (fetching) {
+      if (cacheKey) RV_CACHE.delete(cacheKey);
+      if (queryRef.current) runFetch(queryRef.current, { background: true });
+    }
+    setConfirmRestoreId(null);
+    setBulkRestoreOpen(false);
   }
   function duplicateRow(id: RowId) {
     const copyId = nextId.current++;
@@ -1717,7 +1779,7 @@ export function RecordView<T extends { id: RowId }>({
             </DropdownItem>
           </Dropdown>
 
-          {showAdd && (onCreate || makeEmptyRow) && (
+          {showAdd && (onCreate || makeEmptyRow) && !trash && (
             <Button variant="primary" size="sm" onClick={addRow} className="ml-1">
               <Plus className="size-4" />
               <span className="hidden sm:inline">{singular}</span>
@@ -1745,7 +1807,9 @@ export function RecordView<T extends { id: RowId }>({
               </button>
             </span>
           ) : (
-            <span className="font-medium">All {title}</span>
+            <span className="font-medium">
+              {trash ? `Trash · ${title}` : `All ${title}`}
+            </span>
           )}
         </div>
         <div className="flex items-center gap-0.5">
@@ -1756,25 +1820,57 @@ export function RecordView<T extends { id: RowId }>({
               icon={<MoreHorizontal className="size-3.5 text-violet-500" />}
             >
               <DropdownLabel>{selected.size} selected</DropdownLabel>
-              {bulkFields.map((f) => (
-                <React.Fragment key={f.key}>
-                  <DropdownLabel>Set {f.label}</DropdownLabel>
-                  {(Array.isArray(f.options) ? f.options : []).map((o) => (
-                    <DropdownItem
-                      key={o.value}
-                      onSelect={() => bulkSetField(f.key, o.value)}
-                    >
-                      {o.label}
-                    </DropdownItem>
+              {trash ? (
+                // Trash view: restore is the only bulk action.
+                onRestore && (
+                  <DropdownItem onSelect={() => setBulkRestoreOpen(true)}>
+                    <span className="flex items-center gap-2 text-[var(--button-primary)]">
+                      <Restore className="size-3.5" /> Restore {selected.size}{" "}
+                      selected
+                    </span>
+                  </DropdownItem>
+                )
+              ) : (
+                <>
+                  {bulkFields.map((f) => (
+                    <React.Fragment key={f.key}>
+                      <DropdownLabel>Set {f.label}</DropdownLabel>
+                      {(Array.isArray(f.options) ? f.options : []).map((o) => (
+                        <DropdownItem
+                          key={o.value}
+                          onSelect={() => bulkSetField(f.key, o.value)}
+                        >
+                          {o.label}
+                        </DropdownItem>
+                      ))}
+                    </React.Fragment>
                   ))}
-                </React.Fragment>
-              ))}
-              <DropdownItem onSelect={() => setBulkDeleteOpen(true)}>
-                <span className="flex items-center gap-2 text-destructive">
-                  <Trash2 className="size-3.5" /> Delete {selected.size} selected
-                </span>
-              </DropdownItem>
+                  <DropdownItem onSelect={() => setBulkDeleteOpen(true)}>
+                    <span className="flex items-center gap-2 text-destructive">
+                      <Trash2 className="size-3.5" /> Delete {selected.size}{" "}
+                      selected
+                    </span>
+                  </DropdownItem>
+                </>
+              )}
             </Dropdown>
+          )}
+          {showTrash && (
+            <button
+              type="button"
+              onClick={() => setTrash((t) => !t)}
+              aria-pressed={trash}
+              aria-label={trash ? "Show live records" : "Show Trash"}
+              className={cn(
+                "inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 font-medium transition-colors",
+                trash
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+              )}
+            >
+              <Trash2 className="size-3.5 text-red-500" />
+              <span className="truncate">Trash</span>
+            </button>
           )}
           {showFilter && (
           <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
@@ -1908,6 +2004,7 @@ export function RecordView<T extends { id: RowId }>({
                           sort,
                           search: filter,
                           filters: {},
+                          trash,
                         };
                         if (fetching) runFetch(q);
                         else if (manual) onQueryChange?.(q);
@@ -1927,6 +2024,7 @@ export function RecordView<T extends { id: RowId }>({
                           sort,
                           search: filter,
                           filters: filterValues,
+                          trash,
                         };
                         if (fetching) runFetch(q);
                         else if (manual) onQueryChange?.(q);
@@ -2333,24 +2431,40 @@ export function RecordView<T extends { id: RowId }>({
                         >
                           <Eye className="size-4 text-blue-500" />
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => openEdit(row.id)}
-                          aria-label={`Edit ${primary.title || singular}`}
-                          title="Edit"
-                          className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
-                        >
-                          <Pencil className="size-4 text-amber-500" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setConfirmDeleteId(row.id)}
-                          aria-label={`Delete ${primary.title || singular}`}
-                          title="Delete"
-                          className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-destructive/10"
-                        >
-                          <Trash2 className="size-4 text-red-500" />
-                        </button>
+                        {!trash && (
+                          <button
+                            type="button"
+                            onClick={() => openEdit(row.id)}
+                            aria-label={`Edit ${primary.title || singular}`}
+                            title="Edit"
+                            className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
+                          >
+                            <Pencil className="size-4 text-amber-500" />
+                          </button>
+                        )}
+                        {trash
+                          ? onRestore && (
+                              <button
+                                type="button"
+                                onClick={() => setConfirmRestoreId(row.id)}
+                                aria-label={`Restore ${primary.title || singular}`}
+                                title="Restore"
+                                className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
+                              >
+                                <Restore className="size-4 text-[var(--button-primary)]" />
+                              </button>
+                            )
+                          : (
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteId(row.id)}
+                                aria-label={`Delete ${primary.title || singular}`}
+                                title="Delete"
+                                className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-destructive/10"
+                              >
+                                <Trash2 className="size-4 text-red-500" />
+                              </button>
+                            )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -2411,31 +2525,50 @@ export function RecordView<T extends { id: RowId }>({
             <ArrowUpRight className="size-3.5" />
             Open record
           </button>
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => {
-              duplicateRow(menu.id);
-              setMenu(null);
-            }}
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground"
-          >
-            <CopyPlus className="size-3.5" />
-            Duplicate
-          </button>
+          {!trash && (
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                duplicateRow(menu.id);
+                setMenu(null);
+              }}
+              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground"
+            >
+              <CopyPlus className="size-3.5" />
+              Duplicate
+            </button>
+          )}
           <div className="my-1 h-px bg-border" />
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => {
-              setConfirmDeleteId(menu.id);
-              setMenu(null);
-            }}
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-destructive hover:bg-destructive/10"
-          >
-            <Trash2 className="size-3.5" />
-            Delete
-          </button>
+          {trash ? (
+            onRestore && (
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setConfirmRestoreId(menu.id);
+                  setMenu(null);
+                }}
+                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-[var(--button-primary)] hover:bg-accent"
+              >
+                <Restore className="size-3.5" />
+                Restore
+              </button>
+            )
+          ) : (
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setConfirmDeleteId(menu.id);
+                setMenu(null);
+              }}
+              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-destructive hover:bg-destructive/10"
+            >
+              <Trash2 className="size-3.5" />
+              Delete
+            </button>
+          )}
         </div>
       )}
 
@@ -2478,6 +2611,47 @@ export function RecordView<T extends { id: RowId }>({
         confirmLabel="Delete"
         onConfirm={bulkDelete}
         onCancel={() => setBulkDeleteOpen(false)}
+      />
+
+      <ConfirmDialog
+        open={confirmRestoreId != null}
+        title={`Restore ${singular.toLowerCase()}?`}
+        description={
+          <>
+            This returns{" "}
+            <span className="font-medium text-foreground">
+              {(() => {
+                const t = rows.find((r) => r.id === confirmRestoreId);
+                return t ? getPrimary(t).title || "this record" : "this record";
+              })()}
+            </span>{" "}
+            to the live list.
+          </>
+        }
+        confirmLabel="Restore"
+        onConfirm={() => {
+          if (confirmRestoreId != null) restore([confirmRestoreId]);
+        }}
+        onCancel={() => setConfirmRestoreId(null)}
+      />
+
+      <ConfirmDialog
+        open={bulkRestoreOpen}
+        title={`Restore ${selected.size} ${
+          selected.size === 1 ? singular.toLowerCase() : title.toLowerCase()
+        }?`}
+        description={
+          <>
+            This returns the{" "}
+            <span className="font-medium text-foreground">
+              {selected.size} selected
+            </span>{" "}
+            record{selected.size === 1 ? "" : "s"} to the live list.
+          </>
+        }
+        confirmLabel="Restore"
+        onConfirm={() => restore([...selected])}
+        onCancel={() => setBulkRestoreOpen(false)}
       />
     </div>
   );

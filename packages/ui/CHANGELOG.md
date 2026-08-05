@@ -7,6 +7,22 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.43.0 — 2026-08-05
+
+### Added
+
+- **Trash mode — view soft-deleted rows and restore them.** Set `showTrash` to
+  add a **Trash** toggle in the header (left of Filter) that switches the same
+  table between live and soft-deleted rows. RecordView is display-only: the host
+  supplies the trashed rows (`trashedData` in client mode, or the new
+  `trash: true` flag on `ServerQuery` for `manual`/`fetcher` mode) and persists
+  restores via **`onRestore(rows)`**. Restore mirrors delete: a per-row Restore
+  icon and a bulk **"Restore N selected"** via the selection checkbox, each with
+  a confirm dialog; on restore RecordView clears the selection and refetches
+  (manual) / expects the host to drop the rows from `trashedData` (client). In
+  Trash the Add button is hidden and row Delete becomes Restore. Demo: the
+  Branches table.
+
 ## 1.42.1 — 2026-08-05
 
 ### Changed
