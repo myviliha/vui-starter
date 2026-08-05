@@ -21,15 +21,17 @@ export interface Branch {
   isHeadquarters: boolean;
 }
 
+// Northwind Retail's US branches — US phone numbers so the Branches form can
+// demo email + US-phone format validation and the Headquarter checkbox.
 export const branches: Branch[] = [
-  { id: 1, organization: "Northwind Retail", name: "Seattle HQ", code: "SEA", email: "sea@northwind.example.com", phone: "+1 206 555 0110", city: "Seattle", isHeadquarters: true },
-  { id: 2, organization: "Northwind Retail", name: "Portland", code: "PDX", email: "pdx@northwind.example.com", phone: "+1 503 555 0134", city: "Portland", isHeadquarters: false },
-  { id: 3, organization: "Sakura Foods", name: "Osaka", code: "OSA", email: "osaka@sakura.example.jp", phone: "+81 6 6555 0177", city: "Osaka", isHeadquarters: true },
-  { id: 4, organization: "Sakura Foods", name: "Tokyo", code: "TYO", email: "tokyo@sakura.example.jp", phone: "+81 3 6555 0188", city: "Tokyo", isHeadquarters: false },
-  { id: 5, organization: "Alpine Logistics", name: "Zürich", code: "ZRH", email: "zurich@alpine.example.ch", phone: "+41 44 555 0143", city: "Zürich", isHeadquarters: true },
-  { id: 6, organization: "Coral Bay Resorts", name: "Cairns", code: "CNS", email: "cairns@coralbay.example.au", phone: "+61 7 5555 0166", city: "Cairns", isHeadquarters: true },
-  { id: 7, organization: "Nordic Wear", name: "Stockholm", code: "STO", email: "sto@nordicwear.example.se", phone: "+46 8 555 0199", city: "Stockholm", isHeadquarters: true },
-  { id: 8, organization: "Lagos Digital", name: "Lagos", code: "LOS", email: "lagos@lagosdigital.example.ng", phone: "+234 1 555 0122", city: "Lagos", isHeadquarters: true },
+  { id: 1, organization: "Northwind Retail", name: "Seattle", code: "SEA", email: "seattle@northwind.example.com", phone: "(206) 555-0110", city: "Seattle", isHeadquarters: true },
+  { id: 2, organization: "Northwind Retail", name: "Portland", code: "PDX", email: "portland@northwind.example.com", phone: "(503) 555-0134", city: "Portland", isHeadquarters: false },
+  { id: 3, organization: "Northwind Retail", name: "San Francisco", code: "SFO", email: "sf@northwind.example.com", phone: "(415) 555-0177", city: "San Francisco", isHeadquarters: false },
+  { id: 4, organization: "Northwind Retail", name: "Austin", code: "AUS", email: "austin@northwind.example.com", phone: "(512) 555-0188", city: "Austin", isHeadquarters: false },
+  { id: 5, organization: "Northwind Retail", name: "Denver", code: "DEN", email: "denver@northwind.example.com", phone: "(303) 555-0143", city: "Denver", isHeadquarters: false },
+  { id: 6, organization: "Northwind Retail", name: "Chicago", code: "CHI", email: "chicago@northwind.example.com", phone: "(312) 555-0166", city: "Chicago", isHeadquarters: false },
+  { id: 7, organization: "Northwind Retail", name: "New York", code: "NYC", email: "ny@northwind.example.com", phone: "(212) 555-0199", city: "New York", isHeadquarters: false },
+  { id: 8, organization: "Northwind Retail", name: "Miami", code: "MIA", email: "miami@northwind.example.com", phone: "(305) 555-0122", city: "Miami", isHeadquarters: false },
 ];
 
 export interface Department {

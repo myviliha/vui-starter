@@ -7,6 +7,21 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.42.0 — 2026-08-05
+
+### Added
+
+- **Field-level validation in the Add/Edit form (slide-over and full-page).** A
+  `RecordField` now takes declarative rules: `min`/`max` (character length, or
+  numeric value for `input:"number"`), `pattern` (regex + `patternMessage`),
+  `format: "email" | "phone"`, a custom `validate(value, draft)`, and `trim`.
+  Rules run on blur and before Save, **block Save** while any field is invalid,
+  and show the message **inline under the field**. `"phone"` also auto-formats
+  the value as `(123) 456-7890` while typing. Previously the form enforced only
+  `required` (and Save wasn't blocked beyond that).
+- **`input: "checkbox"`** — a boolean field renders a real checkbox in the form
+  and shows Yes/No in read/view and table cells.
+
 ## 1.41.1 — 2026-08-05
 
 ### Fixed

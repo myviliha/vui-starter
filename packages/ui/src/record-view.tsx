@@ -310,10 +310,29 @@ export interface RecordField<T> {
     | { value: string; label: string }[]
     | ((draft: Partial<T>) => { value: string; label: string }[]);
   /** Form control for the Add/Edit panel/page. Default `"text"` (auto-growing
-   *  textarea). `"number"`/`"date"` render the matching native input. For a
-   *  field with `options`: default renders a `Select`, and `"combobox"` renders
-   *  a searchable `Combobox` (type-to-filter) — use it for long option lists. */
-  input?: "text" | "number" | "date" | "combobox";
+   *  textarea). `"number"`/`"date"` render the matching native input,
+   *  `"checkbox"` a boolean toggle. For a field with `options`: default renders a
+   *  `Select`, and `"combobox"` renders a searchable `Combobox` (type-to-filter)
+   *  — use it for long option lists. */
+  input?: "text" | "number" | "date" | "combobox" | "checkbox";
+  /** Minimum bound, enforced before Save. For `input:"number"` it's the min
+   *  value; otherwise the min character length. */
+  min?: number;
+  /** Maximum bound, enforced before Save. For `input:"number"` it's the max
+   *  value; otherwise the max character length. */
+  max?: number;
+  /** Regex the value must match (a `RegExp` or a source string). */
+  pattern?: RegExp | string;
+  /** Friendly message shown when `pattern`/`format` fails (else a default). */
+  patternMessage?: string;
+  /** Built-in format check: `"email"` or `"phone"` (US). `"phone"` also
+   *  auto-formats the value as `(123) 456-7890` while typing. */
+  format?: "email" | "phone";
+  /** Custom rule. Return an error message to block Save, or `undefined`/`""`
+   *  when valid. Receives the field value and the whole draft (cross-field). */
+  validate?: (value: string, draft: T) => string | undefined;
+  /** Trim leading/trailing whitespace from this field's value on Save. */
+  trim?: boolean;
   /** Render a custom Add/Edit control — a checkbox, a radio group, a color
    *  picker, anything. Overrides the default control entirely (and takes
    *  priority over `options`/`input`). You get the current string value and an
@@ -411,6 +430,60 @@ function resolveOptions<T>(
   draft: Partial<T>,
 ): { value: string; label: string }[] {
   return typeof opts === "function" ? opts(draft) : (opts ?? []);
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Format US phone digits progressively while typing: 1234567890 →
+ *  (123) 456-7890. Partial input stays readable. Exported for testing. */
+export function formatPhone(value: string): string {
+  const d = value.replace(/\D/g, "").slice(0, 10);
+  if (d.length <= 3) return d;
+  if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
+/**
+ * Validate a field value against its declarative rules — returns the first error
+ * message, or `undefined` when valid. Order: required → min/max → pattern →
+ * format → custom. Exported for testing.
+ */
+export function validateField<T>(
+  field: RecordField<T>,
+  raw: string,
+  draft: T,
+): string | undefined {
+  const value = field.trim ? raw.trim() : raw;
+  const label = field.label;
+  if (field.required && value === "") return `${label} is required`;
+  if (value === "") return undefined; // optional + empty → nothing else to check
+  if (field.input === "number") {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return `${label} must be a number`;
+    if (field.min != null && n < field.min)
+      return `${label} must be at least ${field.min}`;
+    if (field.max != null && n > field.max)
+      return `${label} must be at most ${field.max}`;
+  } else {
+    if (field.min != null && value.length < field.min)
+      return `${label} must be at least ${field.min} characters`;
+    if (field.max != null && value.length > field.max)
+      return `${label} must be at most ${field.max} characters`;
+  }
+  if (field.pattern) {
+    // Drop any global flag so repeated `.test()` calls are stateless.
+    const re =
+      typeof field.pattern === "string"
+        ? new RegExp(field.pattern)
+        : new RegExp(field.pattern.source, field.pattern.flags.replace("g", ""));
+    if (!re.test(value)) return field.patternMessage ?? `${label} is invalid`;
+  }
+  if (field.format === "email" && !EMAIL_RE.test(value))
+    return field.patternMessage ?? "Enter a valid email address";
+  if (field.format === "phone" && value.replace(/\D/g, "").length !== 10)
+    return field.patternMessage ?? "Enter a valid US phone number";
+  if (field.validate) return field.validate(value, draft) || undefined;
+  return undefined;
 }
 
 /** A field whose stored value is an async id (from `loadOptions`/`resolveOption`
@@ -1436,9 +1509,14 @@ export function RecordView<T extends { id: RowId }>({
     const value = String(row[field.key] ?? "");
     // For a choice field, show the option's friendly label (e.g. SYSTEM →
     // "System") while the cell stays editable — no `render`, no read-only.
-    const display = Array.isArray(field.options)
-      ? (field.options.find((o) => o.value === value)?.label ?? value)
-      : value;
+    const display =
+      field.input === "checkbox"
+        ? row[field.key]
+          ? "Yes"
+          : "No"
+        : Array.isArray(field.options)
+          ? (field.options.find((o) => o.value === value)?.label ?? value)
+          : value;
     const clip = clipCell(display, field.maxChars ?? maxCellChars);
     // Async-id fields resolve their label for the read cell (the edit control
     // already resolves its own). Everything else uses the clipped text + tooltip.
@@ -2495,21 +2573,51 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const primary = getPrimary(draft);
   const HeaderIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
 
-  // Required-field validation: keys with an error get a red border on Save.
-  const [errors, setErrors] = React.useState<Set<string>>(new Set());
+  // Field validation: key → inline error message. Rules run on blur + before
+  // Save; once a field has errored it re-checks live as you type (clears when
+  // fixed). Save is blocked while the map is non-empty.
+  const [errors, setErrors] = React.useState<Map<string, string>>(new Map());
   React.useEffect(() => {
-    setErrors(new Set());
+    setErrors(new Map());
   }, [row.id]);
 
-  const setField = (key: keyof T, value: string) => {
+  // Fields whose rules run here (editable, non-custom-render).
+  const editableFields = React.useMemo(
+    () => fields.filter((f) => f.editable && !f.render),
+    [fields],
+  );
+
+  /** Run one field's rules against `next` and set/clear its inline error. */
+  const validateOne = React.useCallback(
+    (field: RecordField<T>, next: T): string | undefined => {
+      const msg = validateField(
+        field,
+        String(next[field.key as keyof T] ?? ""),
+        next,
+      );
+      setErrors((prev) => {
+        const cur = prev.get(field.key);
+        if (cur === msg || (!cur && !msg)) return prev;
+        const m = new Map(prev);
+        if (msg) m.set(field.key, msg);
+        else m.delete(field.key);
+        return m;
+      });
+      return msg;
+    },
+    [],
+  );
+
+  const setField = (key: keyof T, value: string | boolean) => {
     setDraft((d) => ({ ...d, [key]: value }));
-    setErrors((prev) => {
-      if (!prev.has(key as string)) return prev;
-      const next = new Set(prev);
-      next.delete(key as string);
-      return next;
-    });
+    // Live-clear: re-check a field that's already showing an error as it changes.
+    if (errors.has(key as string)) {
+      const field = fields.find((f) => f.key === (key as string));
+      if (field) validateOne(field, { ...draft, [key]: value } as T);
+    }
   };
+
+  const blurField = (field: RecordField<T>) => validateOne(field, draft);
 
   // Play the exit animation, then run the actual close/save when it ends.
   const [closing, setClosing] = React.useState(false);
@@ -2523,19 +2631,26 @@ function RecordDetailPanel<T extends { id: RowId }>({
     layout === "page" ? action() : requestClose(action);
 
   const handleSave = () => {
-    const missing = fields.filter(
-      (f) =>
-        f.required &&
-        f.editable &&
-        !f.render &&
-        String(draft[f.key as keyof T] ?? "").trim() === "",
-    );
-    if (missing.length > 0) {
-      setErrors(new Set(missing.map((f) => f.key)));
+    // Trim flagged fields, then validate everything before saving.
+    let next = draft;
+    for (const f of editableFields) {
+      if (!f.trim) continue;
+      const v = String(next[f.key as keyof T] ?? "");
+      if (v.trim() !== v) next = { ...next, [f.key]: v.trim() } as T;
+    }
+    const found = new Map<string, string>();
+    for (const f of editableFields) {
+      const msg = validateField(f, String(next[f.key as keyof T] ?? ""), next);
+      if (msg) found.set(f.key, msg);
+    }
+    setDraft(next); // reflect trims whether or not the save proceeds
+    if (found.size > 0) {
+      setErrors(found); // block Save; show every message inline
       return;
     }
+    setErrors(new Map());
     clearPersisted(draftKey); // work committed — drop the saved draft
-    dismiss(() => onSave(draft));
+    dismiss(() => onSave(next));
   };
 
   // Cancel/close discards the draft too, so it doesn't reappear next visit.
@@ -2633,11 +2748,27 @@ function RecordDetailPanel<T extends { id: RowId }>({
                         className="w-full"
                       />
                     )
+                  ) : f.input === "checkbox" ? (
+                    <label className="flex h-8 items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(draft[f.key as keyof T])}
+                        onChange={(e) =>
+                          setField(f.key as keyof T, e.target.checked)
+                        }
+                        aria-label={f.label}
+                        className="size-4 accent-[var(--button-primary)]"
+                      />
+                      <span className="text-sm text-muted-foreground">
+                        {draft[f.key as keyof T] ? "Yes" : "No"}
+                      </span>
+                    </label>
                   ) : f.input === "number" || f.input === "date" ? (
                     <Input
                       type={f.input}
                       value={String(draft[f.key as keyof T] ?? "")}
                       onChange={(e) => setField(f.key as keyof T, e.target.value)}
+                      onBlur={() => blurField(f)}
                       aria-label={f.label}
                       aria-invalid={errors.has(f.key) || undefined}
                       className={cn(
@@ -2649,7 +2780,15 @@ function RecordDetailPanel<T extends { id: RowId }>({
                   ) : (
                     <textarea
                       value={String(draft[f.key as keyof T] ?? "")}
-                      onChange={(e) => setField(f.key as keyof T, e.target.value)}
+                      onChange={(e) =>
+                        setField(
+                          f.key as keyof T,
+                          f.format === "phone"
+                            ? formatPhone(e.target.value)
+                            : e.target.value,
+                        )
+                      }
+                      onBlur={() => blurField(f)}
                       aria-label={f.label}
                       aria-invalid={errors.has(f.key) || undefined}
                       placeholder={`Add ${f.label.toLowerCase()}`}
@@ -2666,6 +2805,8 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 ) : (
                   <span className="block whitespace-pre-wrap break-words px-2 py-1.5">
                     {(() => {
+                      if (f.input === "checkbox")
+                        return draft[f.key as keyof T] ? "Yes" : "No";
                       const raw = String(draft[f.key as keyof T] ?? "");
                       if (!raw)
                         return (
@@ -2684,6 +2825,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
                       return raw;
                     })()}
                   </span>
+                )}
+                {!readOnly && errors.get(f.key) && (
+                  <p className="mt-1 text-xs text-destructive">
+                    {errors.get(f.key)}
+                  </p>
                 )}
               </dd>
             </div>
