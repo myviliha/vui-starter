@@ -54,6 +54,15 @@ describe("validateField", () => {
     expect(validateField(f, "taken", row)).toBe("In use");
     expect(validateField(f, "free", row)).toBeUndefined();
   });
+
+  it("multiple: required means at least one; length rules don't apply", () => {
+    // String([]) === "" → required fails; String(["a"]) === "a" → passes.
+    const req = F({ multiple: true, required: true, min: 5 });
+    expect(validateField(req, String([]), row)).toMatch(/required/i);
+    expect(validateField(req, String(["a"]), row)).toBeUndefined();
+    // Optional multi is always valid, and min/max never fire.
+    expect(validateField(F({ multiple: true, min: 5 }), String([]), row)).toBeUndefined();
+  });
 });
 
 describe("formatPhone", () => {

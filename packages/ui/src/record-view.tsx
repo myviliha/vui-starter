@@ -41,6 +41,7 @@ import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
 import { Combobox } from "./combobox";
+import { MultiCombobox } from "./multi-combobox";
 import { FilterGrid, FilterField } from "./filter-field";
 import {
   useAsyncOptions,
@@ -362,6 +363,18 @@ export interface RecordField<T> {
   /** Resolve one already-set value's label without loading the whole list
    *  (edit/view + preselected default). */
   resolveOption?: (value: string) => Promise<AsyncOption | null>;
+  /** Multi-select: the field holds a **set** of option values (`T[key]` is a
+   *  `string[]`). Pairs with `input:"combobox"` (searchable) or static `options`
+   *  — the Add/Edit form renders a multi-select with removable chips, and the
+   *  read cell shows the labels (up to `maxChipsInCell`, then "+N" in a popover).
+   *  `required` means at least one selected. */
+  multiple?: boolean;
+  /** Batch companion to `resolveOption` for `multiple` async fields: resolve the
+   *  labels for all currently-set values in one call (never the whole list). */
+  resolveOptions?: (values: string[]) => Promise<AsyncOption[]>;
+  /** Max chips shown in a `multiple` read cell before collapsing to "+N".
+   *  Default 3. */
+  maxChipsInCell?: number;
   /** Sibling field keys this choice cascades from. A change clears the cached
    *  options + this field's value; the next open re-runs `loadOptions`. */
   dependsOn?: Extract<keyof T, string>[];
@@ -459,6 +472,11 @@ export function validateField<T>(
 ): string | undefined {
   const value = field.trim ? raw.trim() : raw;
   const label = field.label;
+  // Multi-select holds a set (String([]) === ""); only `required` applies —
+  // length/pattern/format bounds are for scalar text.
+  if (field.multiple) {
+    return field.required && value === "" ? `${label} is required` : undefined;
+  }
   if (field.required && value === "") return `${label} is required`;
   if (value === "") return undefined; // optional + empty → nothing else to check
   if (field.input === "number") {
@@ -533,6 +551,70 @@ function AsyncFieldValue<T>({
     resetKey,
   });
   return <>{options.find((o) => o.value === value)?.label ?? value}</>;
+}
+
+/** Read display for a `multiple` field: resolves each value's label (batch via
+ *  the field's `resolveOptions`, or static `options`) and shows up to
+ *  `maxChipsInCell` chips, then "+N" with the full list in a tooltip. */
+function MultiFieldValue<T>({
+  field,
+  values,
+  row,
+}: {
+  field: RecordField<T>;
+  values: string[];
+  row: Partial<T>;
+}) {
+  const source = React.useMemo<AsyncOptionSource | undefined>(
+    () =>
+      field.loadOptions
+        ? {
+            loadOptions: ({ search, signal }) =>
+              field.loadOptions!({ search, signal, values: row }),
+            resolveOptions: field.resolveOptions,
+            resolveOption: field.resolveOption,
+          }
+        : undefined,
+    [field, row],
+  );
+  const resetKey = (field.dependsOn ?? [])
+    .map((k) => String((row as Record<string, unknown>)[k] ?? ""))
+    .join(" ");
+  const { options } = useAsyncOptions({
+    source,
+    open: false,
+    search: "",
+    value: values,
+    resetKey,
+  });
+  const staticOpts = Array.isArray(field.options) ? field.options : [];
+  const labelOf = (v: string) =>
+    options.find((o) => o.value === v)?.label ??
+    staticOpts.find((o) => o.value === v)?.label ??
+    v;
+  const labels = values.map(labelOf);
+  if (!labels.length) return <span className="text-muted-foreground">—</span>;
+  const max = field.maxChipsInCell ?? 3;
+  const shown = labels.slice(0, max);
+  const extra = labels.length - shown.length;
+  const chip =
+    "inline-flex max-w-[10rem] items-center truncate rounded-sm bg-accent px-1.5 py-0.5 text-xs text-accent-foreground";
+  return (
+    <span className="flex flex-wrap items-center gap-1">
+      {shown.map((l, i) => (
+        <span key={i} className={chip}>
+          {l}
+        </span>
+      ))}
+      {extra > 0 && (
+        <Tooltip content={labels.join(", ")}>
+          <span className="inline-flex items-center rounded-sm bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+            +{extra}
+          </span>
+        </Tooltip>
+      )}
+    </span>
+  );
 }
 
 // Module-scoped response cache for RecordView's `fetcher` mode. Namespaced by
@@ -1582,8 +1664,15 @@ export function RecordView<T extends { id: RowId }>({
     const clip = clipCell(display, field.maxChars ?? maxCellChars);
     // Async-id fields resolve their label for the read cell (the edit control
     // already resolves its own). Everything else uses the clipped text + tooltip.
-    const readContent =
-      isAsyncLabeled(field) && value ? (
+    const readContent = field.multiple ? (
+      <span className="overflow-hidden">
+        <MultiFieldValue
+          field={field}
+          values={Array.isArray(row[field.key]) ? (row[field.key] as string[]) : []}
+          row={row}
+        />
+      </span>
+    ) : isAsyncLabeled(field) && value ? (
         <span className="truncate">
           <AsyncFieldValue field={field} value={value} values={row} />
         </span>
@@ -2782,7 +2871,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
     [],
   );
 
-  const setField = (key: keyof T, value: string | boolean) => {
+  const setField = (key: keyof T, value: string | boolean | string[]) => {
     setDraft((d) => ({ ...d, [key]: value }));
     // Live-clear: re-check a field that's already showing an error as it changes.
     if (errors.has(key as string)) {
@@ -2887,7 +2976,33 @@ function RecordDetailPanel<T extends { id: RowId }>({
                       invalid: errors.has(f.key),
                     })
                   ) : f.options || f.loadOptions ? (
-                    f.input === "combobox" ? (
+                    f.multiple ? (
+                      <MultiCombobox
+                        value={
+                          Array.isArray(draft[f.key as keyof T])
+                            ? (draft[f.key as keyof T] as string[])
+                            : []
+                        }
+                        onValueChange={(v) => setField(f.key as keyof T, v)}
+                        {...(f.loadOptions
+                          ? {
+                              source: {
+                                loadOptions: ({ search, signal }) =>
+                                  f.loadOptions!({ search, signal, values: draft }),
+                                resolveOptions: f.resolveOptions,
+                                resolveOption: f.resolveOption,
+                              },
+                              resetKey: (f.dependsOn ?? [])
+                                .map((k) => String(draft[k] ?? ""))
+                                .join(" "),
+                            }
+                          : { options: resolveOptions(f.options, draft) })}
+                        ariaLabel={f.label}
+                        placeholder={`Select ${f.label.toLowerCase()}…`}
+                        invalid={errors.has(f.key)}
+                        className="w-full"
+                      />
+                    ) : f.input === "combobox" ? (
                       <Combobox
                         value={String(draft[f.key as keyof T] ?? "")}
                         onValueChange={(v) => setField(f.key as keyof T, v)}
@@ -2987,6 +3102,18 @@ function RecordDetailPanel<T extends { id: RowId }>({
                     {(() => {
                       if (f.input === "checkbox")
                         return draft[f.key as keyof T] ? "Yes" : "No";
+                      if (f.multiple)
+                        return (
+                          <MultiFieldValue
+                            field={f}
+                            values={
+                              Array.isArray(draft[f.key as keyof T])
+                                ? (draft[f.key as keyof T] as string[])
+                                : []
+                            }
+                            row={draft}
+                          />
+                        );
                       const raw = String(draft[f.key as keyof T] ?? "");
                       if (!raw)
                         return (

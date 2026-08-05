@@ -60,15 +60,17 @@ export interface Market {
   centerLatitude: number | null;
   centerLongitude: number | null;
   radiusMiles: number | null;
+  /** Attached post codes (M2M) — the set the market serves. */
+  postCodes: string[];
 }
 
 export const markets: Market[] = [
-  { id: 1, organization: "Northwind Retail", name: "Pacific Northwest", centerLatitude: 47.6062, centerLongitude: -122.3321, radiusMiles: 150 },
-  { id: 2, organization: "Sakura Foods", name: "Kansai", centerLatitude: 34.6937, centerLongitude: 135.5023, radiusMiles: 60 },
-  { id: 3, organization: "Alpine Logistics", name: "DACH Core", centerLatitude: null, centerLongitude: null, radiusMiles: null },
-  { id: 4, organization: "Coral Bay Resorts", name: "Greater Sydney", centerLatitude: -33.8688, centerLongitude: 151.2093, radiusMiles: 90 },
-  { id: 5, organization: "Nordic Wear", name: "Mälardalen", centerLatitude: 59.3293, centerLongitude: 18.0686, radiusMiles: 75 },
-  { id: 6, organization: "Lagos Digital", name: "Lagos Metro", centerLatitude: 6.5244, centerLongitude: 3.3792, radiusMiles: 40 },
+  { id: 1, organization: "Northwind Retail", name: "Pacific Northwest", centerLatitude: 47.6062, centerLongitude: -122.3321, radiusMiles: 150, postCodes: ["98101", "98052", "97201"] },
+  { id: 2, organization: "Sakura Foods", name: "Kansai", centerLatitude: 34.6937, centerLongitude: 135.5023, radiusMiles: 60, postCodes: [] },
+  { id: 3, organization: "Alpine Logistics", name: "DACH Core", centerLatitude: null, centerLongitude: null, radiusMiles: null, postCodes: [] },
+  { id: 4, organization: "Coral Bay Resorts", name: "Greater Sydney", centerLatitude: -33.8688, centerLongitude: 151.2093, radiusMiles: 90, postCodes: [] },
+  { id: 5, organization: "Nordic Wear", name: "Mälardalen", centerLatitude: 59.3293, centerLongitude: 18.0686, radiusMiles: 75, postCodes: [] },
+  { id: 6, organization: "Lagos Digital", name: "Lagos Metro", centerLatitude: 6.5244, centerLongitude: 3.3792, radiusMiles: 40, postCodes: [] },
 ];
 
 export interface Business {

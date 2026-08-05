@@ -14,6 +14,7 @@ import {
   type RecordField,
 } from "@viliha/vui-ui/record-view";
 import { markets, type Market } from "@/lib/mock-data";
+import { resolvePostCodes, searchPostCodes } from "@/lib/api/post-codes";
 import { filterRows, reconcile } from "@/lib/use-client-filter";
 
 function formatCenter(market: Market): string {
@@ -53,6 +54,22 @@ const fields: RecordField<Market>[] = [
         )}
       </span>
     ),
+  },
+  {
+    // Many-to-many: a searchable, async multi-select. The cell shows up to 3
+    // codes then "+N"; the Add/Edit form renders removable chips.
+    key: "postCodes",
+    label: "Post codes",
+    description:
+      "The set of post codes this market serves — search the remote list and pick any number.",
+    width: 220,
+    group: "System",
+    editable: true,
+    multiple: true,
+    input: "combobox",
+    maxChipsInCell: 3,
+    loadOptions: ({ search, signal }) => searchPostCodes({ search, signal }),
+    resolveOptions: (values) => resolvePostCodes(values),
   },
 ];
 
@@ -110,6 +127,7 @@ export function MarketsTable() {
         centerLatitude: null,
         centerLongitude: null,
         radiusMiles: null,
+        postCodes: [],
       })}
     />
   );

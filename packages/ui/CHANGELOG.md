@@ -7,6 +7,27 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.44.0 — 2026-08-05
+
+### Added
+
+- **`@viliha/vui-ui/multi-combobox` — `MultiCombobox`.** A searchable multi-select
+  (the multi companion to `Combobox`): holds a `string[]`, renders the selection
+  as removable chips, and picking an option toggles it while the popover stays
+  open. Static `options` or an async `source` (fetch on open, debounced search,
+  and **batch** label-resolve of the selected values).
+- **Multi-select `RecordField` (many-to-many form fields).** Set `multiple: true`
+  on a choice field and its value becomes a `string[]`: the Add/Edit form renders
+  the multi-select with chips, and the read cell shows up to `maxChipsInCell`
+  (default 3) labels then "+N" with the full list in a tooltip. Async fields add
+  a batch `resolveOptions(values)` (the plural companion to `resolveOption`).
+  `required` means at least one selected (blocks Save). Reuses the existing
+  `loadOptions` / `dependsOn` contract; nothing loads on mount. Demo: Markets →
+  Post Codes.
+- **`AsyncOptionSource.resolveOptions`** — `useAsyncOptions` now batch-resolves
+  set values in one call when a source provides it (falls back to per-value
+  `resolveOption`).
+
 ## 1.43.0 — 2026-08-05
 
 ### Added
