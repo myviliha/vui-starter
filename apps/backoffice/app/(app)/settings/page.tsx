@@ -20,9 +20,11 @@ import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 import { useChromeConfig } from "@/app/_components/chrome-config";
 import { useVuiPreferences } from "@viliha/vui-ui/config";
+import { useThemeConfig } from "@viliha/vui-ui/theme-provider";
 import {
   CHROME_FEATURES,
   DATA_TABLE_PREFERENCE_FIELDS,
+  THEME_CHOICES,
 } from "@/lib/app-config";
 
 type Theme = "light" | "dark" | "system";
@@ -103,6 +105,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = React.useState(false);
   const { chrome, setFeature, reset } = useChromeConfig();
   const prefs = useVuiPreferences();
+  const themeConfig = useThemeConfig();
 
   React.useEffect(() => {
     try {
@@ -228,6 +231,71 @@ export default function SettingsPage() {
                 <Button variant="outline" onClick={reset}>
                   Reset to defaults
                 </Button>
+              </div>
+            </div>
+          </Section>
+
+          <Section
+            title="Theme"
+            description="Your own colour, font and shape. The organization sets the defaults; anything you change here is yours and follows only you."
+          >
+            <div className="space-y-4 sm:max-w-xl">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium">Primary color</p>
+                  <p className="text-sm text-muted-foreground">
+                    Buttons, links, focus rings and the active nav item.
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  {themeConfig?.presets.map((preset) => {
+                    const color = preset.theme.brand;
+                    const active = themeConfig.theme.brand === color;
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => themeConfig.applyPreset(preset.id)}
+                        aria-label={preset.label}
+                        aria-pressed={active}
+                        title={preset.label}
+                        className={cn(
+                          "size-7 cursor-pointer rounded-full ring-offset-2 ring-offset-background transition-shadow",
+                          active
+                            ? "ring-2 ring-foreground"
+                            : "ring-1 ring-border hover:ring-foreground/40",
+                        )}
+                        style={{ backgroundColor: color }}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+
+              {THEME_CHOICES.map((f) => (
+                <div key={f.key} className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium">{f.label}</p>
+                    <p className="text-sm text-muted-foreground">{f.hint}</p>
+                  </div>
+                  <Select
+                    className="w-48 shrink-0"
+                    aria-label={f.label}
+                    value={themeConfig?.userTheme[f.key] ?? ""}
+                    onValueChange={(v) => themeConfig?.setValue(f.key, v)}
+                    options={f.options}
+                    placeholder="Organization default"
+                  />
+                </div>
+              ))}
+
+              <div className="flex items-center gap-3 pt-1">
+                <Button variant="outline" onClick={() => themeConfig?.reset()}>
+                  Reset to organization theme
+                </Button>
+                {themeConfig?.saving && (
+                  <span className="text-sm text-muted-foreground">Saving…</span>
+                )}
               </div>
             </div>
           </Section>

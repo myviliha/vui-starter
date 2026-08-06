@@ -1,3 +1,9 @@
+import {
+  FONT_FAMILIES,
+  THEME_FIELDS,
+  type ThemeConfig,
+} from "@viliha/vui-ui/theme-config";
+
 /**
  * Top-bar chrome feature flags.
  *
@@ -96,3 +102,30 @@ export const DATA_TABLE_PREFERENCE_FIELDS = [
     ],
   },
 ];
+
+/**
+ * The organization's theme: the brand everyone in it starts from. A real app
+ * loads this with the organization record and passes it to
+ * `ThemeConfigProvider`; the demo hard-codes the shipped blue so there is
+ * something for a personal override to sit on top of.
+ */
+export const ORG_THEME: ThemeConfig = {
+  brand: "#266df0",
+};
+
+/**
+ * The theme controls the Settings page renders as dropdowns. Colour has its own
+ * swatch row, and the asset fields belong on the organization's branding screen
+ * rather than a personal one.
+ */
+export const THEME_CHOICES = THEME_FIELDS.filter(
+  (f) => f.type === "choice" || f.type === "font" || f.type === "length",
+).map((f) => ({
+  key: f.key,
+  label: f.label,
+  hint: f.hint,
+  options:
+    f.type === "font"
+      ? FONT_FAMILIES.map((family) => ({ value: family.id, label: family.label }))
+      : (f.options ?? []),
+}));

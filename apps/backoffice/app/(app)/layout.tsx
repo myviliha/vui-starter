@@ -10,8 +10,9 @@ import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
 import { VuiProvider } from "@viliha/vui-ui/config";
+import { ThemeConfigProvider } from "@viliha/vui-ui/theme-provider";
 import { ChromeConfigProvider } from "@/app/_components/chrome-config";
-import { DATA_TABLE_PREFERENCES } from "@/lib/app-config";
+import { DATA_TABLE_PREFERENCES, ORG_THEME } from "@/lib/app-config";
 import {
   KeepAliveTabs,
   OpenTabsProvider,
@@ -28,6 +29,10 @@ export default function AppLayout({
     // set here, so the demo runs on the preset. `userConfigurable` opens three
     // behaviour keys to the person using the app (Settings → Data tables).
     <VuiProvider userConfigurable={{ behaviour: DATA_TABLE_PREFERENCES }}>
+    {/* Organization theme sets the brand; each person may override it. The demo
+        has no backend, so `source` is omitted and a personal theme stays in this
+        browser. Pass `source={{ load, save }}` to store it per user in your DB. */}
+    <ThemeConfigProvider orgTheme={ORG_THEME}>
     <ChromeConfigProvider>
      <SidebarProvider>
       <QuickActionsProvider>
@@ -59,6 +64,7 @@ export default function AppLayout({
       </QuickActionsProvider>
      </SidebarProvider>
     </ChromeConfigProvider>
+    </ThemeConfigProvider>
     </VuiProvider>
   );
 }

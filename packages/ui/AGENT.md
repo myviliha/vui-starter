@@ -507,6 +507,24 @@ One rule governs what happens next: **an action closes the form when it finishes
 
 To change the footer for every form in the app rather than one screen, set it on the provider (see below). A per-screen `formActions` still wins.
 
+**Theming at runtime: `@viliha/vui-ui/theme-config`.** Colors, font and radius stay in `theme.css`, and this is how those tokens get a runtime source rather than a second styling system. `THEME_FIELDS` is the complete list of what can change (primary colour, text on primary, accent, destructive, background, text, borders, font, text size, radius, logo, favicon); each entry names the CSS variable it writes, so applying a theme is setting variables on an element and every component follows without knowing.
+
+Two layers, and they match how organizations actually work: the organization sets the brand, and each person overrides the parts they care about.
+
+```tsx
+<ThemeConfigProvider
+  orgTheme={org.theme}
+  source={{
+    load: () => api.get(`/users/${me.id}/theme`),
+    save: (theme) => api.put(`/users/${me.id}/theme`, theme),
+  }}
+>
+```
+
+The package never fetches: `source` is your two functions, so the theme lives in your database against whatever identity you use. Omit it and a personal theme stays in `localStorage`. Drive a settings screen from `useThemeConfig()` (`theme`, `userTheme`, `orgTheme`, `setValue`, `applyPreset`, `reset`, `saving`, `error`), and reach for `THEME_PRESETS` for a swatch row.
+
+Three things worth knowing before you extend it. **`--brand` is the only colour a theme sets** for the primary action: the hover state, ring, selection and button shadow derive from it in `theme.css` with `color-mix`, and so does the dark variant, so one saved value covers both modes and they can't drift. **Fonts are self-hosted and loaded by the app** (`next/font` defines the variable named in `FONT_FAMILIES`), so switching makes no request and can't shift the layout. **Run `parseTheme()` on anything from your API**: a stored theme is user input that becomes a CSS variable, and it drops unknown keys and anything containing `;`, braces or angle brackets. Reference: Settings → *Theme* in the backoffice, with `ORG_THEME` in `lib/app-config.ts`.
+
 **One config, layered.** The preconfigured theme is itself a config: `vuiPreset` is a plain value the package applies by default, built from the same API you would use. So nothing is locked and nothing is all-or-nothing. Values resolve **per-instance prop → user preference → `<VuiProvider config>` → `vuiPreset` → package default**, and a layer overrides only the keys it mentions.
 
 ```tsx

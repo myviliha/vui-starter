@@ -101,6 +101,52 @@ export default function ConfigurationPage() {
         <a href="/docs/data-table/">Data table</a> page.
       </Note>
 
+      <H2>How do I let users change the theme?</H2>
+      <P>
+        Wrap the app in <code>ThemeConfigProvider</code>. The organization sets
+        the brand and each person overrides the parts they care about, which is
+        how five people in one organization can each have their own colour while
+        the company default still applies to everyone who hasn&apos;t chosen.
+      </P>
+      <CodeBlock title="app/(app)/layout.tsx">{`import { ThemeConfigProvider } from "@viliha/vui-ui/theme-provider";
+
+<ThemeConfigProvider
+  orgTheme={org.theme}                                  // the company brand
+  source={{                                             // where a personal theme lives
+    load: () => api.get(\`/users/\${me.id}/theme\`),
+    save: (theme) => api.put(\`/users/\${me.id}/theme\`, theme),
+  }}
+>
+  {children}
+</ThemeConfigProvider>`}</CodeBlock>
+      <P>
+        The package never fetches. <code>source</code> is two functions you
+        implement, so the theme is a row in your database like anything else.
+        Omit it and a personal theme stays in that browser, which is what this
+        demo does.
+      </P>
+      <H3>What can change</H3>
+      <P>
+        <code>THEME_FIELDS</code> is the complete list, and each entry names the
+        CSS variable it writes plus the control a settings UI should render, so
+        a settings screen is a <code>.map()</code> over it: primary colour, text
+        on primary, accent, destructive, page background, text, borders, font,
+        text size, corner radius, logo and favicon.
+      </P>
+      <Note title="One brand colour, both modes">
+        A theme sets <code>--brand</code> and nothing else for the primary
+        action. The hover state, focus ring, selection colour and button shadow
+        derive from it in <code>theme.css</code> with <code>color-mix</code>,
+        and so does the dark-mode variant, so one saved value covers light and
+        dark and they cannot drift apart. Text on the brand colour is chosen for
+        you by luminance, so a pale brand gets dark text rather than unreadable
+        white. Fonts come from a curated self-hosted set loaded with{" "}
+        <code>next/font</code>, so switching one makes no network request and
+        cannot shift the layout. Run <code>parseTheme()</code> on whatever your
+        API returns: a stored theme is user input that ends up as a CSS
+        variable.
+      </Note>
+
       <H2>Footer identity</H2>
       <P>
         The app shell renders a slim footer, shared by the app and auth layouts,

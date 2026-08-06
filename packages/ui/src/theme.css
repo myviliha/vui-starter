@@ -36,16 +36,21 @@
   --ring: var(--button-primary);
   /* Per-page accent (overridden by the app per route) — tints module icons. */
   --page-accent: var(--muted-foreground);
+  /* The one brand colour. Everything below derives from it, so a runtime theme
+     (see theme-config.ts) sets this and the hover state, ring, selection and
+     button shadow all follow. Deriving in CSS rather than JS means the dark
+     variant can't drift from the light one. */
+  --brand: #266df0;
   /* Text highlight (::selection) */
-  --selection: #266df0;
-  --selection-foreground: #ffffff;
+  --selection: var(--brand);
+  --selection-foreground: var(--button-primary-foreground);
   /* brand primary action button */
-  --button-primary: #266df0;
-  --button-primary-hover: #215bc4;
+  --button-primary: var(--brand);
+  --button-primary-hover: color-mix(in oklab, var(--brand) 84%, black);
   --button-primary-foreground: #ffffff;
   --button-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.06),
-    0px 2px 4px -2px rgba(38, 109, 240, 0.12),
-    0px 3px 6px -2px rgba(38, 109, 240, 0.08);
+    0px 2px 4px -2px color-mix(in srgb, var(--brand) 12%, transparent),
+    0px 3px 6px -2px color-mix(in srgb, var(--brand) 8%, transparent);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -70,6 +75,10 @@
 }
 
 .dark {
+  /* One saved brand colour covers both modes: dark lifts it rather than storing
+     a second value that could drift. */
+  --button-primary: color-mix(in oklab, var(--brand) 88%, white);
+  --button-primary-hover: color-mix(in oklab, var(--brand) 72%, white);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -105,8 +114,13 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, sans-serif;
+  /* `--font-sans-choice` and `--font-scale` are what a runtime theme sets; unset
+     they fall back to what the package ships. */
+  --font-sans: var(
+    --font-sans-choice,
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif
+  );
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
     monospace;
 
@@ -204,6 +218,8 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    /* Text size as one knob: a runtime theme sets --font-scale. */
+    font-size: calc(1rem * var(--font-scale, 1));
     min-height: 100vh;
     /* Global type baseline: Inter 14px / medium, with ligatures. */
     font-size: 14px;

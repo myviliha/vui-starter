@@ -307,8 +307,37 @@ that validates (primary, by default) commits the draft through `onSave` on the
 way out. `formSlots` puts your own content between fields as a full-width row
 inside the section, so it inherits the card, separators and padding.
 
-Colors, radius, spacing and typography are deliberately not config. They live in
-`theme.css`, which is what keeps every screen looking like one product.
+### Theming per organization and per user
+
+Colors, radius and typography live in `theme.css` rather than in component
+props, which is what keeps every screen looking like one product. Runtime
+theming gives those tokens a source without giving that up:
+
+```tsx
+import { ThemeConfigProvider } from "@viliha/vui-ui/theme-provider";
+
+<ThemeConfigProvider
+  orgTheme={org.theme}
+  source={{
+    load: () => api.get(`/users/${me.id}/theme`),
+    save: (theme) => api.put(`/users/${me.id}/theme`, theme),
+  }}
+>
+  {children}
+</ThemeConfigProvider>;
+```
+
+The organization sets the brand and each person overrides the parts they care
+about. The package never fetches: `source` is two functions you implement, so
+the theme lives in your database. Omit it and a personal theme stays in the
+browser.
+
+`THEME_FIELDS` is the complete list of what can change, each entry naming the
+CSS variable it writes and the control to render for it, so a settings screen is
+a `.map()` over it. `THEME_PRESETS` gives you a swatch row, `FONT_FAMILIES` a
+curated self-hosted set, and `useThemeConfig()` the state to drive both. Run
+`parseTheme()` on anything coming back from your API: a stored theme is user
+input that ends up as a CSS variable.
 
 ## Patterns
 
@@ -372,7 +401,8 @@ show/hide) · `kbd` (key caps + `Shortcut`) · `label` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
 `RecordForm`) · `page` (the standard page frame: header slots + one scrolling
-content region) · `config` (`VuiProvider` + `vuiPreset`: the shipped theme as a
+content region) · `theme-config` + `theme-provider` (runtime theming: brand
+colour, font, radius, logo, stored per user through your own API) · `config` (`VuiProvider` + `vuiPreset`: the shipped theme as a
 config you can override key by key) · `profile-form` (`ProfileForm` — a pre-designed view/edit profile
 page) · `organization-profile` (`organizationProfileFields` preset + `OrgProfile`
 type + the `BrandAsset` image control, which uploads through your `onPick`) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)

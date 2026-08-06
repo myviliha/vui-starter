@@ -106,6 +106,57 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.55.0 — 2026-08-06
+
+### Added
+
+- **Theme configuration: `@viliha/vui-ui/theme-config` + `theme-provider`.** The
+  look of the app is now data, so an organization can set its brand and each
+  person in it can override the parts they care about. `THEME_FIELDS` is the
+  complete list of what can change (primary colour, text on primary, accent,
+  destructive, background, text, borders, font, text size, corner radius, logo,
+  favicon), each entry naming the CSS variable it writes, the control a settings
+  UI should render for it, and a one-line description.
+
+  ```tsx
+  <ThemeConfigProvider
+    orgTheme={org.theme}
+    source={{
+      load: () => api.get(`/users/${me.id}/theme`),
+      save: (theme) => api.put(`/users/${me.id}/theme`, theme),
+    }}
+  >
+  ```
+
+  The package never talks to your database: `source` is two functions you
+  implement, so a theme lives in your API against a user, an organization, or
+  both. Omit `source` and a personal theme stays in `localStorage`, which is
+  what the demo does. `useThemeConfig()` gives a settings screen `theme`,
+  `userTheme`, `orgTheme`, `setValue`, `applyPreset`, `reset`, `saving` and
+  `error`.
+
+- **One brand colour drives the rest.** `--brand` is the single value a theme
+  sets; the hover state, focus ring, selection colour and button shadow derive
+  from it in `theme.css` with `color-mix`, and so does the dark-mode variant.
+  One saved value therefore covers both modes and they cannot drift apart.
+  `readableOn()` picks black or white text for the chosen colour by WCAG
+  luminance, so a light brand doesn't end up with white text on it.
+
+- **`THEME_PRESETS` and `FONT_FAMILIES`.** Six named colour presets for a swatch
+  picker, and a curated set of self-hosted families. Fonts are loaded by the app
+  (`next/font`), so switching one makes no network request and cannot flash or
+  shift the layout. Add a family by loading it and adding an entry.
+
+- **`parseTheme()` runs on anything from your API.** A stored theme is user
+  input that ends up as a CSS variable, so unknown keys, non-strings, and values
+  containing `;`, `{`, `}` or angle brackets are dropped rather than written to
+  the document.
+
+- **Demo:** Settings → *Theme* has the swatch row, font, text size and corner
+  radius, with the organization's theme as the fallback and a reset. The
+  provider is mounted in `(app)/layout.tsx` with `ORG_THEME` from
+  `lib/app-config.ts`.
+
 ## 1.54.0 — 2026-08-06
 
 ### Added
