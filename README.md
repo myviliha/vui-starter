@@ -85,6 +85,11 @@ stand up.
   groups, aligned page headers, a ⌘K command palette (Quick actions) and ⌘⌥K
   global search, a **browser-style open-tabs strip** (⌘-click a nav item to open
   one), and a light/dark theme toggle.
+- **Configured, and still yours to change:** the theme ships finished and nothing
+  in it is locked. `vuiPreset` is the shipped behaviour as a plain value, so the
+  footer buttons of a form, what a row click does, whether delete confirms and
+  how long a saved row stays highlighted are all config, changeable app-wide, per
+  screen, or by the person using the app from the Settings page.
 - **Shipped as TypeScript source:** no build step, tree-shakeable, and your app's
   bundler compiles only what you import.
 - **Ready for AI agents:** the package ships an agent guide (`AGENT.md`) and a
@@ -312,6 +317,31 @@ Each one is optional; anything left unset falls back to the default
 at **build time** and inlined into the export, so set them where your deploy runs
 `pnpm build`. Setting them only at runtime won't take effect.
 
+### Changing how the components behave
+
+Env vars cover branding. Everything else is config, and it starts from what the
+theme already ships:
+
+```tsx
+import { VuiProvider } from "@viliha/vui-ui/config";
+
+<VuiProvider
+  config={{ behaviour: { rowClick: "edit", confirmDiscardWhenDirty: true } }}
+  userConfigurable={{ behaviour: ["rowClick", "flashMs", "confirmDelete"] }}
+>
+  {children}
+</VuiProvider>;
+```
+
+`config` is yours as the developer. `userConfigurable` names the keys you are
+willing to hand to whoever uses the app; those are saved per browser and edited
+on the Settings page, which is how the demo's *Data tables* section works. Values
+resolve per-instance prop → user preference → your config → `vuiPreset` → package
+default, and each layer overrides only the keys it mentions.
+
+Colors, radius, spacing and typography are deliberately not in here. They stay in
+`theme.css`, which is what keeps every screen looking like one product.
+
 ---
 
 ## Components
@@ -320,8 +350,9 @@ at **build time** and inlined into the export, so set them where your deploy run
 `checkbox` · `command-palette` (⌘K command menu) · `dialog` (sectioned modal) ·
 `confirm-dialog` · `dropdown-menu` · `input` · `kbd` (key caps + `Shortcut`) ·
 `menu` (bordered list) · `required-mark` (the `*` marker) · `select` · `table` ·
-`record-view` (the full datatable) · plus the `utils` (`cn`) helper and the
-`theme.css` design tokens.
+`record-view` (the full datatable) · `config` (`VuiProvider` + `vuiPreset`: the
+shipped theme as a config you override key by key) · plus the `utils` (`cn`)
+helper and the `theme.css` design tokens.
 
 ---
 

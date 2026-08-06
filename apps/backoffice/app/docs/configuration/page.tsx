@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/configuration/" },
   title: "Configuration",
   description:
-    "Configure the Vui Starter app per deployment with environment variables: rebrand the footer (company, year, license) with no code changes.",
+    "Configure Vui Starter two ways: environment variables for per-deployment branding, and VuiProvider for how the components behave, app-wide, per screen, or per person.",
 };
 
 export default function ConfigurationPage() {
@@ -24,8 +24,82 @@ export default function ConfigurationPage() {
       <PageTitle
         eyebrow="Getting started"
         title="Configuration"
-        lead="Per-deployment settings live in environment variables, so you can rebrand a clone without editing code. Copy apps/backoffice/.env.example to .env.local and set what you need; everything is optional and falls back to sensible defaults."
+        lead="There are two layers. Environment variables cover per-deployment branding, so you can rebrand a clone without editing code. VuiProvider covers how the components behave. Everything is optional: unset means the theme as shipped."
       />
+
+      <H2>How do I change the way the components behave?</H2>
+      <P>
+        Wrap the app in <code>VuiProvider</code> and set the keys you want. The
+        theme ships finished and nothing in it is locked:{" "}
+        <code>vuiPreset</code> is that finished behaviour as a plain value,
+        applied by default and built from the same API you use, so there is no
+        separate &quot;configurable&quot; set of components beside the
+        opinionated ones.
+      </P>
+      <CodeBlock title="app/(app)/layout.tsx">{`import { VuiProvider } from "@viliha/vui-ui/config";
+
+<VuiProvider
+  config={{ behaviour: { rowClick: "edit", confirmDiscardWhenDirty: true } }}
+  userConfigurable={{ behaviour: ["rowClick", "flashMs", "confirmDelete"] }}
+>
+  {children}
+</VuiProvider>`}</CodeBlock>
+      <P>
+        Values resolve <strong>per-instance prop → user preference → your
+        config → <code>vuiPreset</code> → package default</strong>, and each
+        layer overrides only the keys it names. So changing one thing never
+        means adopting a config file for everything, and a screen that genuinely
+        needs something different says so with a prop and wins.
+      </P>
+
+      <H3>Behaviour keys</H3>
+      <Ul>
+        <li>
+          <code>rowClick</code> (<code>&quot;view&quot;</code> the default,{" "}
+          <code>&quot;edit&quot;</code>, <code>&quot;none&quot;</code>): what
+          clicking a record&apos;s name in a table does.
+        </li>
+        <li>
+          <code>closeOnSave</code> (default <code>true</code>): close the form
+          after a successful save. <code>false</code> keeps it open for the next
+          record.
+        </li>
+        <li>
+          <code>flashMs</code> (default <code>1600</code>): how long a saved row
+          stays highlighted. <code>0</code> turns the highlight off.
+        </li>
+        <li>
+          <code>confirmDelete</code> (default <code>true</code>): ask before
+          deleting a row.
+        </li>
+        <li>
+          <code>confirmDiscardWhenDirty</code> (default <code>false</code>): ask
+          before throwing away unsaved edits.
+        </li>
+      </Ul>
+
+      <H3>Letting the person using the app change some of it</H3>
+      <P>
+        <code>userConfigurable</code> names the keys you are willing to hand
+        over. Those become theirs, saved per browser and merged over your
+        config; anything not listed is ignored on write, so a stale stored value
+        cannot leak back in. Build the settings UI from{" "}
+        <code>useVuiPreferences()</code>, which returns{" "}
+        <code>preferences</code>, <code>userConfigurable</code>,{" "}
+        <code>setPreference</code> and <code>reset</code>. The Settings page&apos;s{" "}
+        <strong>Data tables</strong> section is the working example, and the
+        allow-list lives in <code>lib/app-config.ts</code> beside the top-bar
+        chrome flags it mirrors.
+      </P>
+      <Note title="What is not config">
+        Colors, radius, spacing and typography stay in <code>theme.css</code>.
+        That is not a limitation, it is the point: tokens are what keep twelve
+        screens looking like one product, so restyling means changing a token
+        rather than passing a prop. Form composition has its own props (
+        <code>formActions</code>, <code>formSlots</code>, <code>fullWidth</code>
+        ), covered on the{" "}
+        <a href="/docs/data-table/">Data table</a> page.
+      </Note>
 
       <H2>Footer identity</H2>
       <P>

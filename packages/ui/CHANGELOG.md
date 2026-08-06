@@ -7,6 +7,101 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## Upgrading from 1.44 to 1.52
+
+**Short version: upgrade, restart, change nothing.** Everything from 1.50 on is
+additive, and the four behaviour changes before it are all in the direction of
+"stop showing the user something meaningless". Read this page once, act on the
+one item that applies to you, and skip the rest.
+
+### Do I have to change any code?
+
+Only in one case, and only if you used `BrandAsset` directly:
+
+| If you… | Then | Version |
+| --- | --- | --- |
+| render `<BrandAsset value onChange />` yourself | add `inline` (demo, base64) or `onPick` (real upload). Without either, the control now says it has no uploader instead of quietly storing a 2.7 MB data URI | 1.45.0 |
+| use `organizationProfileFields` | nothing. It keeps `inline`, so it behaves exactly as before | 1.45.0 |
+| pass `onDataChange` alongside `fetcher` | it now actually fires (it never did before). Return a promise from it so the reload waits for your write | 1.49.0 |
+
+Everything else is a default that improved on its own.
+
+### What changed without you asking
+
+These need no code, but you will see them, so here is what and why:
+
+1. **A read-only table lost its Edit pencil** (1.46.0). If no field is
+   `editable`, the row Edit button and the view panel's Edit button are gone,
+   because they opened a form with nothing in it and a Save that wrote nothing.
+   Want it back on a table that has no editable fields? `showEdit`. Want it gone
+   on one that does? `showEdit={false}`.
+2. **Async labels shimmer instead of showing the id** (1.47.0, 1.48.0). A cell
+   backed by `loadOptions` + `resolveOption` used to paint `Region 1` and swap
+   to the label when its fetch landed. It now shows a skeleton, and a reference
+   that resolves to nothing reads `—` rather than sitting on the id forever.
+   Pickers do the same. Nothing to configure.
+3. **Saving in server mode waits for your write** (1.49.0). `fetcher` mode used
+   to invalidate and refetch immediately, racing your POST, so a saved record
+   could appear to revert. Return a promise from `onDataChange` and the reload
+   happens after it settles. Return nothing and you get the old, immediate
+   reload.
+4. **Long chat messages wrap** (1.44.1). One unbroken string no longer pushes a
+   horizontal scrollbar across the conversation.
+
+### What you can do now, if you want to
+
+Nothing here is required. The theme still ships finished, and `vuiPreset` is
+that finished behaviour as a plain value, so anything you don't configure keeps
+working exactly as it does today.
+
+**Step 1: nothing.** Upgrade and restart. You are done unless a row in the
+first table applies to you.
+
+**Step 2: change something app-wide,** when you want to. Mount the provider
+once, and set only the keys you care about:
+
+```tsx
+// app/(app)/layout.tsx
+import { VuiProvider } from "@viliha/vui-ui/config";
+
+<VuiProvider config={{ behaviour: { rowClick: "edit" } }}>{children}</VuiProvider>;
+```
+
+**Step 3: change one screen** with a prop, which always beats the provider:
+
+```tsx
+<RecordView behaviour={{ confirmDelete: false }} … />
+```
+
+**Step 4: let the people using the app change some of it.** Name the keys you
+are willing to hand over; those are saved per browser, and anything you don't
+list is ignored:
+
+```tsx
+<VuiProvider userConfigurable={{ behaviour: ["rowClick", "flashMs", "confirmDelete"] }}>
+```
+
+Build the settings UI from `useVuiPreferences()`. The demo's Settings page has a
+*Data tables* section doing exactly this.
+
+**Step 5: add a footer button** without rebuilding the form:
+
+```tsx
+<RecordView
+  formActions={(defaults) => [...defaults, { id: "archive", label: "Archive", … }]}
+/>
+```
+
+**Step 6: put your own content between fields** with `formSlots`, and give a
+field the whole row with `fullWidth`.
+
+### What did not change, and will not
+
+Colors, radius, spacing and typography stay in `theme.css`. `fields` stays the
+data contract that drives the table, the filter panel, import/export and the
+form together, which is why slots are a separate prop rather than entries in it.
+No component was renamed, no export was removed, and no prop was made required.
+
 ## 1.52.0 — 2026-08-06
 
 ### Added

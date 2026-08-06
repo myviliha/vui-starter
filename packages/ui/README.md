@@ -235,6 +235,81 @@ That same `fields` array also drives `RecordForm`, the Add/Edit/View screen, alo
 with its Info panel (built from `formDescription` and each field's `description`).
 See the [Data table docs](https://vui.viliha.com/docs/data-table) for the details.
 
+A few field options worth knowing early: `fullWidth` gives a field the whole form
+row with its label above, `displayValue: (row) => row.country` renders a label
+your payload already carries instead of resolving it, and `filterable` puts the
+field in the Filter panel. For fields backed by an API, `loadOptions` +
+`resolveOption` fetch on demand, and nothing ever paints a raw id: a read cell
+shimmers until the label lands, and a reference that can't be resolved reads `—`.
+
+### Configuring the theme
+
+> **Upgrading from 1.44 or earlier?** All of this is additive: an app that
+> configures nothing keeps working as it did. The one case that needs code is
+> rendering `BrandAsset` yourself, which now wants `inline` or `onPick`. The
+> step-by-step guide is at the top of the
+> [CHANGELOG](https://github.com/myviliha/vui-starter/blob/main/packages/ui/CHANGELOG.md).
+
+
+The theme ships finished and nothing in it is locked. `vuiPreset` is the shipped
+behaviour as a plain value, applied by default and built from the same API you
+would use, so there is no "configurable" variant of a component beside an
+opinionated one. Values resolve **per-instance prop → user preference →
+`<VuiProvider config>` → `vuiPreset` → package default**, and each layer overrides
+only the keys it names.
+
+```tsx
+import { VuiProvider } from "@viliha/vui-ui/config";
+
+<VuiProvider
+  config={{ behaviour: { rowClick: "edit" } }}
+  userConfigurable={{ behaviour: ["rowClick", "flashMs", "confirmDelete"] }}
+>
+  {children}
+</VuiProvider>;
+```
+
+`behaviour` holds what components do rather than how they look: `rowClick`
+(`"view" | "edit" | "none"`), `closeOnSave`, `flashMs` (the saved-row highlight,
+`0` turns it off), `confirmDelete` and `confirmDiscardWhenDirty`. Set it on the
+provider for the app or on `RecordView` for one screen.
+
+`userConfigurable` names the keys you are willing to hand to whoever uses the
+app. Those are saved per browser and merged over your config; anything not listed
+is ignored, so the preconfigured theme stays changeable at runtime without you
+losing control of what may change. Build the settings UI from
+`useVuiPreferences()`.
+
+The form's footer is config too. Cancel and Save are ordinary actions, so you
+change them with the API that builds them:
+
+```tsx
+<RecordView
+  formActions={(defaults) => [
+    ...defaults,
+    {
+      id: "archive",
+      label: "Archive",
+      align: "start",
+      variant: "destructive",
+      confirm: { title: "Archive this record?" },
+      onAct: async (ctx) => { await api.archive(ctx.row.id); },
+    },
+  ]}
+  formSlots={[
+    { id: "hint", after: "vatNumber", render: () => <Alert>We check this with HMRC.</Alert> },
+  ]}
+/>
+```
+
+An action closes the form when it finishes unless it returns `false`, and one
+that validates (primary, by default) commits the draft through `onSave` on the
+way out. `formSlots` puts your own content between fields as a full-width row
+inside the section, so it inherits the card, separators and padding.
+
+Colors, radius, spacing and typography are deliberately not config. They live in
+`theme.css`, which is what keeps every screen looking like one product.
+
 ## Patterns
 
 The reference app composes these primitives into the conventions documented at
@@ -242,6 +317,9 @@ The reference app composes these primitives into the conventions documented at
 
 - **Five page types**: data table, record form (Add / Edit / View), dashboard,
   settings, and kanban board.
+- **Configurable chrome and behaviour**: the seven top-bar affordances toggle via
+  `NEXT_PUBLIC_SHOW_*` or the Settings page, and the data-table behaviour keys
+  are handed to the person using the app the same way.
 - **Command palette**: Quick actions (`⌘K`, navigate pages) and Global search
   (`⌘⌥K`, find records), both built on the exported `CommandPalette`.
 - **Open tabs**: a browser-style strip of opened pages under the top bar

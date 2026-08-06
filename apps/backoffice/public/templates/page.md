@@ -18,6 +18,11 @@ Fields:
 Add/Edit/View: <slide-over (default) | full-page route>
 Info panel:    <per-field help text?  formDescription intro?>
 Actions:       <row actions, bulk actions, import/export?>
+Form footer:   <Cancel + Save (default) | extra actions: name them and say what
+                each does, whether it validates, and whether it closes the form>
+Form extras:   <content between fields (formSlots)?  any full-width field?>
+Behaviour:     <defaults unless stated: name-click opens View, delete confirms,
+                the saved row flashes, Save closes the form>
 
 Test scenarios (happy / unhappy) — generate the real cases from the fields /
 actions above; this is only the shape:

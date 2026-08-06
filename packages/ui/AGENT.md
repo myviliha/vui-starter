@@ -189,6 +189,15 @@ scaffolded files in the repo are two separate things.
    they still line up after the upgrade.
 6. **Verify** before you commit: run type-check, lint, and build.
 
+## Coming from 1.44 or earlier
+
+The config work (1.50 to 1.52) is additive: `vuiPreset` is the shipped behaviour as a value, applied by default, so an app that configures nothing keeps working exactly as it did. There is a full step-by-step guide at the top of the [CHANGELOG](./CHANGELOG.md). The short version:
+
+- **One thing needs code, and only if you render `BrandAsset` yourself** (1.45.0): add `inline` for the demo data-URI behaviour, or `onPick` for a real upload. Without either, the control says it has no uploader rather than storing a multi-megabyte data URI in a field. `organizationProfileFields` keeps `inline`, so a host using the preset does nothing.
+- **If you pass `onDataChange` alongside `fetcher`** (1.49.0): it now actually fires, where it never did before. Return a promise from it so the post-save reload waits for your write instead of racing it.
+- **Defaults that improved on their own**, no code needed: a table with no editable field no longer shows an Edit pencil that opened an empty form (`showEdit` overrides either way); async fields shimmer instead of painting a raw id, and an unresolvable reference reads `—`; long chat messages wrap.
+- **Then configure as much or as little as you like**: `<VuiProvider config>` for the app, a `behaviour` / `formActions` / `formSlots` prop for one screen, `userConfigurable` for the people using it. Skipping all of it is a valid choice, and the most common one.
+
 ---
 
 # Design Tokens

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 
-import { DocPager, PageTitle } from "@/components/doc";
+import { DocPager, Note, PageTitle } from "@/components/doc";
 import { ChangelogView, type Release, type Section } from "./changelog-view";
 
 export const metadata: Metadata = {
@@ -30,7 +30,15 @@ function parseReleases(md: string): Release[] {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i] ?? "";
     if (line.startsWith("## ")) {
-      const [version = "", date = ""] = line.slice(3).split(" — ");
+      const heading = line.slice(3).trim();
+      // Only a version heading starts a release. Prose sections (the upgrade
+      // guide) live in the same file and are rendered by the page, not here.
+      if (!/^\d/.test(heading)) {
+        rel = null;
+        sec = null;
+        continue;
+      }
+      const [version = "", date = ""] = heading.split(" — ");
       rel = { version: version.trim(), date: date.trim(), sections: [], notes: [] };
       releases.push(rel);
       sec = null;
@@ -73,6 +81,20 @@ export default function ChangelogPage() {
         title="Change Log"
         lead="What's new in @viliha/vui-ui: features, changes, and fixes, newest first. Rendered straight from the package changelog, so it always matches what actually shipped. Filter by change type, or browse by release."
       />
+      <Note title="Upgrading from 1.44 to 1.52">
+        Upgrade, restart, change nothing: everything from 1.50 on is additive,
+        and the behaviour changes before it all point the same way, which is to
+        stop showing people something meaningless. One case needs code, and only
+        if you render <code>BrandAsset</code> yourself: add <code>inline</code>{" "}
+        (demo) or <code>onPick</code> (a real upload). The step-by-step guide,
+        including what changed on its own and what you can opt into, is at the
+        top of{" "}
+        <a href="https://github.com/myviliha/vui-starter/blob/main/packages/ui/CHANGELOG.md">
+          the package changelog
+        </a>
+        . For how to configure any of it, see{" "}
+        <a href="/docs/configuration/">Configuration</a>.
+      </Note>
       <ChangelogView releases={releases} />
       <DocPager
         prev={{ label: "Calendar", href: "/docs/calendar" }}

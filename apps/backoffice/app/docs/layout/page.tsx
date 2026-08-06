@@ -229,6 +229,18 @@ const { data, loading, save } = useOrganizations();
 // /organizations/new/page.tsx renders the exported RecordForm directly,
 // using the same fields from organizations-config.tsx.
 <RecordForm isNew fields={fields} row={draft} onSave={…} onCancel={…} />`}</CodeBlock>
+      <Note title="The footer and the body are configurable">
+        Cancel and Save are ordinary actions, so you change them with the API
+        that builds them rather than rebuilding the form:{" "}
+        <code>{`formActions={(defaults) => [...defaults, archive]}`}</code>{" "}
+        adds a button, an array replaces them, and{" "}
+        <code>renderFooter</code> replaces the footer outright. Between the
+        fields, <code>formSlots</code> drops in your own content as a full-width
+        row inside a section, and <code>fullWidth</code> on a field gives it the
+        whole row with its label above. Both variants get all of it, since they
+        are the same component. Details on the{" "}
+        <a href="/docs/data-table/">Data table</a> page.
+      </Note>
       <Shot
         src="/page-types/form-full-page.png"
         alt="Full-page record form: Create organization, with the documentation panel and Save/Cancel footer"
