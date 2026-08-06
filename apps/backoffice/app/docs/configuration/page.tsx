@@ -142,7 +142,11 @@ export default function ConfigurationPage() {
         you by luminance, so a pale brand gets dark text rather than unreadable
         white. Fonts come from a curated self-hosted set loaded with{" "}
         <code>next/font</code>, so switching one makes no network request and
-        cannot shift the layout. Run <code>parseTheme()</code> on whatever your
+        cannot shift the layout. Each entry in <code>FONT_FAMILIES</code> names a
+        CSS variable your root layout has to define; without it the family falls
+        back to a generic stack and the option looks broken rather than missing,
+        so the provider warns about that in development. Run{" "}
+        <code>parseTheme()</code> on whatever your
         API returns: a stored theme is user input that ends up as a CSS
         variable.
       </Note>

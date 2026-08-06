@@ -4,12 +4,16 @@ import * as React from "react";
 
 import {
   applyTheme,
+  FONT_FAMILIES,
   mergeThemes,
   parseTheme,
   THEME_FIELDS,
   THEME_PRESETS,
   type ThemeConfig,
 } from "./theme-config";
+
+// The package ships without @types/node; the consumer's bundler inlines this.
+declare const process: { env: Record<string, string | undefined> };
 
 /**
  * Where a user's theme is stored. The package never fetches: you implement these
@@ -119,6 +123,22 @@ export function ThemeConfigProvider({
   // One effect owns the document's variables, and it restores what it replaced
   // when the theme changes or the provider unmounts.
   React.useEffect(() => applyTheme(theme), [theme]);
+
+  // A family listed in FONT_FAMILIES but never loaded by the app falls back to
+  // its generic stack, so the option looks broken rather than missing. Say so
+  // in development, where the fix (load it in the root layout) is one line.
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !theme.fontSans) return;
+    const family = FONT_FAMILIES.find((f) => f.id === theme.fontSans);
+    if (!family?.variable) return;
+    const loaded = getComputedStyle(document.documentElement).getPropertyValue(
+      family.variable,
+    );
+    if (loaded.trim() === "")
+      console.warn(
+        `[vui] The "${family.label}" font is offered in FONT_FAMILIES but ${family.variable} is not defined, so it falls back to the generic stack. Load it in your root layout (next/font) and put its variable on <html>.`,
+      );
+  }, [theme.fontSans]);
 
   const persist = React.useCallback(
     async (next: ThemeConfig) => {

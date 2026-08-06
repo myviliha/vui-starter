@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   applyTheme,
+  FONT_FAMILIES,
   mergeThemes,
   parseHex,
   parseTheme,
@@ -121,5 +122,28 @@ describe("THEME_FIELDS", () => {
     const vars = THEME_FIELDS.map((f) => f.cssVar);
     expect(new Set(keys).size).toBe(keys.length);
     expect(new Set(vars).size).toBe(vars.length);
+  });
+});
+
+describe("FONT_FAMILIES", () => {
+  it("has a unique id and a fallback stack for every entry", () => {
+    const ids = FONT_FAMILIES.map((f) => f.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const family of FONT_FAMILIES) {
+      expect(family.stack, family.id).not.toBe("");
+      expect(family.label, family.id).not.toBe("");
+    }
+  });
+
+  it("names a CSS variable for every family the app has to load", () => {
+    // "system" is the one that needs no loading. Everything else names a
+    // variable the app must define, or picking it does nothing.
+    for (const family of FONT_FAMILIES) {
+      if (family.id === "system") {
+        expect(family.variable).toBe("");
+        continue;
+      }
+      expect(family.variable, family.id).toMatch(/^--font-[a-z0-9-]+$/);
+    }
   });
 });

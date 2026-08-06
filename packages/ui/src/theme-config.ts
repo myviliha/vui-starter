@@ -192,8 +192,14 @@ export type ThemeConfig = {
 /**
  * The font families an app offers. Self-hosted and loaded by the app (with
  * `next/font`, which sets the CSS variable named here), so switching font makes
- * no network request and can't flash or shift the layout. Add a family by
- * loading it in your app and adding an entry.
+ * no network request and can't flash or shift the layout.
+ *
+ * **Every entry must be loaded by the app.** `variable` names a CSS variable the
+ * app is expected to define; if it doesn't, the family silently falls back to
+ * `stack` and the option looks broken rather than missing. To add one, load it
+ * in your root layout, put its variable on `<html>`, and add an entry here. To
+ * remove one, do the reverse. The demo loads all of these in
+ * `app/layout.tsx`.
  */
 export type FontFamily = {
   id: string;

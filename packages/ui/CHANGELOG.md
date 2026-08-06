@@ -106,6 +106,26 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.56.1 — 2026-08-06
+
+### Fixed
+
+- **Every font in the picker is now actually loaded.** `FONT_FAMILIES` offered
+  Geist and Source Serif, but the demo only loaded Inter and JetBrains Mono, so
+  picking either fell through to the generic stack and looked like nothing
+  happened. Both are now loaded with `next/font` and their variables are on
+  `<html>`, so all four options change the type.
+- **A family that isn't loaded says so.** `ThemeConfigProvider` checks in
+  development that the chosen family's CSS variable is actually defined, and
+  warns with the fix when it isn't. A missing font used to fail silently, which
+  is how the above shipped in the first place.
+
+### Changed
+
+- `FONT_FAMILIES` documents the rule it depends on: every entry names a CSS
+  variable the app is expected to define, so adding a family means loading it in
+  the root layout, not just adding a list entry.
+
 ## 1.56.0 — 2026-08-06
 
 ### Added

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import {
+  Geist,
+  Inter,
+  JetBrains_Mono,
+  Source_Serif_4,
+} from "next/font/google";
 
 import "./globals.css";
 import { themeInitScript } from "./_components/theme-script";
@@ -15,6 +20,20 @@ const inter = Inter({
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+});
+
+// The families a user can switch to (FONT_FAMILIES in @viliha/vui-ui/theme-config).
+// Every option in that picker must be loaded here, or picking it silently falls
+// back to the generic stack. Self-hosted by next/font, so switching costs no
+// request and can't shift the layout.
+const geist = Geist({
+  variable: "--font-geist",
+  subsets: ["latin"],
+});
+
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
 });
 
@@ -97,7 +116,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${geist.variable} ${sourceSerif.variable} font-sans antialiased`}
       >
         <BrandProvider>
           <AppAuthProvider>{children}</AppAuthProvider>
