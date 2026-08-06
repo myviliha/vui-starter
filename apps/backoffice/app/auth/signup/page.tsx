@@ -108,6 +108,25 @@ export default function SignUpPage() {
             Create Account
           </Button>
 
+          {/* Consent line: the links point at the public legal pages. */}
+          <p className="text-center text-xs text-muted-foreground">
+            By creating an account you agree to our{" "}
+            <Link
+              href="/terms/"
+              className="font-medium text-primary hover:underline"
+            >
+              Terms of Use
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/privacy/"
+              className="font-medium text-primary hover:underline"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </p>
+
           {/* Alternative sign-up — below the form, consistent with sign-in. */}
           <OrDivider />
 

@@ -106,6 +106,28 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.56.0 — 2026-08-06
+
+### Added
+
+- **Terms of Use and Privacy Policy pages.** Two public routes, `/terms` and
+  `/privacy`, on a legal shell that reuses the auth screens' brand header and
+  the shared site footer. Unlike the auth screens they are indexable, because
+  people look for them and search engines expect a product to have them: both
+  carry a keyword-led title, description and self-canonical, and both are in the
+  sitemap.
+
+  The text covers what these pages have to cover (accounts, acceptable use, who
+  owns the data, liability, termination; and what is collected, why, how long it
+  is kept, who it goes to, and the rights over it), written to match this app:
+  it names the Trash retention window and says which preferences stay in the
+  browser rather than on a server. Each page ends with a notice saying it is a
+  starting point rather than legal advice, so nobody ships it unread.
+
+- **The footer links to both**, so every surface that renders `SiteFooter` gets
+  them: the app shell, the auth screens, the legal pages themselves and the
+  404/500 pages. The signup form carries the consent line that names them.
+
 ## 1.55.0 — 2026-08-06
 
 ### Added

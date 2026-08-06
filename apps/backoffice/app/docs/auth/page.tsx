@@ -40,6 +40,18 @@ export default function AuthDocPage() {
         <li><code>/auth/reset-password</code>: set a new password</li>
         <li><code>/auth/verify</code>: 6-digit verification code (OTP)</li>
       </Ul>
+      <P>
+        Two public pages sit alongside them on the same brand shell:{" "}
+        <code>/terms</code> and <code>/privacy</code>. They live under{" "}
+        <code>app/(legal)/</code> rather than <code>app/auth/</code> because the
+        auth screens are <code>noindex</code> and legal pages need to be found:
+        both carry their own title, description and canonical, and both are in
+        the sitemap. <code>SiteFooter</code> links them, so every screen in the
+        app has them, and the signup form carries the consent line that names
+        them. Compose new ones from <code>LegalTitle</code>,{" "}
+        <code>LegalSection</code> and <code>LegalList</code>, and add the route
+        to <code>LEGAL_ROUTES</code> in <code>lib/seo.ts</code>.
+      </P>
 
       <H2>The auth contract</H2>
       <P>
