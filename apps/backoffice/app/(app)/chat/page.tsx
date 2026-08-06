@@ -276,7 +276,9 @@ function MessageRow({ msg }: { msg: Msg }) {
           </div>
         )}
         {msg.text && (
-          <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</p>
+          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed">
+            {msg.text}
+          </p>
         )}
       </div>
     </div>

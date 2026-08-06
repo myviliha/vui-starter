@@ -7,6 +7,16 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.44.1 — 2026-08-06
+
+### Fixed
+
+- **Chat: long messages now wrap instead of overflowing.** A message made of one
+  unbroken string (a long URL, a pasted token, keyboard mashing) stretched its
+  row and pushed a horizontal scrollbar onto the whole conversation. The message
+  text now breaks mid-word, so the chat column stays inside its width at any
+  message length.
+
 ## 1.44.0 — 2026-08-05
 
 ### Added
