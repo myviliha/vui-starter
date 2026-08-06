@@ -7,6 +7,29 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.51.0 — 2026-08-06
+
+### Added
+
+- **Behaviour is configurable: `behaviour` on `RecordView` and the provider.**
+  Five things that were hard-coded are now keys, each with a real consumer:
+  `rowClick` (`"view" | "edit" | "none"`, what clicking a record's name does),
+  `closeOnSave` (keep the form open for the next record), `flashMs` (the
+  saved-row highlight, `0` turns it off), `confirmDelete`, and
+  `confirmDiscardWhenDirty` (ask before throwing away unsaved edits, off by
+  default because that is how Cancel has always behaved). The shipped values
+  live in `vuiPreset`, so the components no longer keep private copies of their
+  own defaults.
+- **A user-preference layer: `userConfigurable` + `useVuiPreferences()`.** The
+  preconfigured theme stays changeable by the person using the app, not only by
+  the developer who installed it. List the keys an app is willing to hand over
+  (`userConfigurable={{ behaviour: ["rowClick", "flashMs"] }}`) and those become
+  the user's, saved per browser and merged over the app's config. Anything not
+  listed is ignored on write, so a stale stored value can't leak back in. This
+  generalises what the top-bar chrome toggles already did for seven flags.
+  `useVuiPreferences()` returns `preferences`, `userConfigurable`,
+  `setPreference` and `reset` for building the settings UI.
+
 ## 1.50.0 — 2026-08-06
 
 ### Added

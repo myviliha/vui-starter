@@ -15,7 +15,7 @@ import * as React from "react";
  * mentions:
  *
  * ```
- * package default  ←  vuiPreset  ←  <VuiProvider config>  ←  per-instance prop
+ * package default ← vuiPreset ← <VuiProvider config> ← user preference ← prop
  * ```
  *
  * A per-instance prop always wins, so a screen that genuinely needs something
@@ -33,6 +33,29 @@ import * as React from "react";
  */
 export type VuiConfig = {
   form?: FormConfig;
+  behaviour?: BehaviourConfig;
+};
+
+/**
+ * What the components do, as opposed to how they look. Every key here replaces
+ * something that used to be hard-coded, and every one has a real consumer — the
+ * config is not a place to park settings nothing reads.
+ */
+export type BehaviourConfig = {
+  /** What clicking a row's name does. Default `"view"`. */
+  rowClick?: "view" | "edit" | "none";
+  /** Close the form after a successful save. Set `false` for a form that stays
+   *  open so the next record can be entered. Default `true`. */
+  closeOnSave?: boolean;
+  /** How long a saved row stays highlighted, in milliseconds. `0` turns the
+   *  highlight off. Default `1600`. */
+  flashMs?: number;
+  /** Ask before deleting a row. Default `true`. Turning this off makes delete
+   *  immediate, so only do it where you have an undo. */
+  confirmDelete?: boolean;
+  /** Ask before discarding a form with unsaved edits. Default `false`, which is
+   *  how Cancel has always behaved. */
+  confirmDiscardWhenDirty?: boolean;
 };
 
 /** Form-wide configuration. Grows as later slices land (body composition, …). */
@@ -107,11 +130,19 @@ export type FormAction<T> = {
 };
 
 /**
- * The finished theme, as a value. Empty because every default currently lives in
- * the component that owns it: as later slices move a default here, this is where
- * it lands, and the components keep reading it the same way.
+ * The finished theme, as a value. These are the shipped defaults, and the
+ * components read them from here rather than keeping their own copies, which is
+ * what makes "the preconfigured theme is a config" true rather than a slogan.
  */
-export const vuiPreset: VuiConfig = {};
+export const vuiPreset: VuiConfig = {
+  behaviour: {
+    rowClick: "view",
+    closeOnSave: true,
+    flashMs: 1600,
+    confirmDelete: true,
+    confirmDiscardWhenDirty: false,
+  },
+};
 
 /** Identity helper for authoring a config with full type checking. */
 export function defineConfig(config: VuiConfig): VuiConfig {
@@ -132,28 +163,158 @@ export function mergeConfig(...configs: (VuiConfig | undefined)[]): VuiConfig {
   return out;
 }
 
+/**
+ * Which keys the person using the app may change for themselves, per section:
+ * `{ behaviour: ["rowClick", "flashMs"] }`. Nothing is user-editable unless it
+ * is listed here, because "the user can move the Save button" is chaos while
+ * "the user prefers no row highlight" is a feature.
+ */
+export type UserConfigurable = {
+  [K in keyof VuiConfig]?: readonly (keyof NonNullable<VuiConfig[K]>)[];
+};
+
+/** A user's saved choices, same shape as the config but partial throughout. */
+export type VuiPreferences = VuiConfig;
+
 const VuiConfigContext = React.createContext<VuiConfig>(vuiPreset);
+
+type PreferencesCtx = {
+  /** The stored choices, as saved. */
+  preferences: VuiPreferences;
+  /** Which keys this app opened up. Drive a settings UI from it. */
+  userConfigurable: UserConfigurable;
+  /** Set one key. Ignored (with no write) when the app didn't allow it. */
+  setPreference: <K extends keyof VuiConfig>(
+    section: K,
+    key: keyof NonNullable<VuiConfig[K]>,
+    value: unknown,
+  ) => void;
+  /** Forget every stored choice and fall back to the app's config. */
+  reset: () => void;
+};
+
+const VuiPreferencesContext = React.createContext<PreferencesCtx | null>(null);
+
+/** Drop any stored key the app hasn't opened up. Exported for testing. */
+export function filterUserPreferences(
+  preferences: VuiPreferences,
+  userConfigurable: UserConfigurable,
+): VuiConfig {
+  const out: VuiConfig = {};
+  for (const [group, values] of Object.entries(preferences)) {
+    const section = group as keyof VuiConfig;
+    const keys = userConfigurable[section] as readonly string[] | undefined;
+    if (!keys || values == null) continue;
+    const kept = Object.fromEntries(
+      Object.entries(values).filter(([k]) => keys.includes(k)),
+    );
+    if (Object.keys(kept).length)
+      out[section] = kept as VuiConfig[keyof VuiConfig];
+  }
+  return out;
+}
 
 /**
  * Apply a config to everything below. Optional: without it the components use
  * {@link vuiPreset}, which is the theme as shipped.
+ *
+ * Pass `userConfigurable` to let the person using the app override some of it
+ * from inside the app. Their choices are saved per browser and merged over your
+ * config, so the preconfigured theme stays changeable at runtime without the
+ * host giving up control of what may change.
  */
 export function VuiProvider({
   config,
+  userConfigurable,
+  storageKey = "vui.prefs",
   children,
 }: {
   config?: VuiConfig;
+  userConfigurable?: UserConfigurable;
+  /** localStorage key for the user's choices. Default `"vui.prefs"`. */
+  storageKey?: string;
   children: React.ReactNode;
 }) {
-  const value = React.useMemo(
-    () => mergeConfig(vuiPreset, config),
-    [config],
+  const editable = React.useMemo(
+    () => userConfigurable ?? {},
+    [userConfigurable],
   );
+  const [preferences, setPreferences] = React.useState<VuiPreferences>({});
+
+  // Read after mount, so the prerendered HTML and the first client render agree.
+  // A preference that changes something visible settles one frame late, which is
+  // the same trade the top-bar chrome flags make.
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return;
+      const parsed: unknown = JSON.parse(raw);
+      if (parsed && typeof parsed === "object")
+        setPreferences(parsed as VuiPreferences);
+    } catch {
+      // malformed or blocked storage — the app's config stands
+    }
+  }, [storageKey]);
+
+  const setPreference = React.useCallback<PreferencesCtx["setPreference"]>(
+    (section, key, value) => {
+      const keys = editable[section] as readonly string[] | undefined;
+      if (!keys?.includes(key as string)) return; // not open to the user
+      setPreferences((prev) => {
+        const next = {
+          ...prev,
+          [section]: { ...(prev[section] ?? {}), [key]: value },
+        } as VuiPreferences;
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(next));
+        } catch {
+          // storage unavailable — the change stays in memory for this session
+        }
+        return next;
+      });
+    },
+    [editable, storageKey],
+  );
+
+  const reset = React.useCallback(() => {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // ignore storage failures
+    }
+    setPreferences({});
+  }, [storageKey]);
+
+  const value = React.useMemo(
+    () =>
+      mergeConfig(
+        vuiPreset,
+        config,
+        filterUserPreferences(preferences, editable),
+      ),
+    [config, preferences, editable],
+  );
+  const prefsValue = React.useMemo(
+    () => ({ preferences, userConfigurable: editable, setPreference, reset }),
+    [preferences, editable, setPreference, reset],
+  );
+
   return (
     <VuiConfigContext.Provider value={value}>
-      {children}
+      <VuiPreferencesContext.Provider value={prefsValue}>
+        {children}
+      </VuiPreferencesContext.Provider>
     </VuiConfigContext.Provider>
   );
+}
+
+/**
+ * Read and write the user's own choices — for a Settings screen. Returns `null`
+ * when there is no {@link VuiProvider} above, so a settings section can hide
+ * itself rather than crash.
+ */
+export function useVuiPreferences(): PreferencesCtx | null {
+  return React.useContext(VuiPreferencesContext);
 }
 
 /** The resolved config (preset merged with any provider above). */

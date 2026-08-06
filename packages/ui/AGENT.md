@@ -486,7 +486,7 @@ One rule governs what happens next: **an action closes the form when it finishes
 
 To change the footer for every form in the app rather than one screen, set it on the provider (see below). A per-screen `formActions` still wins.
 
-**One config, four layers.** The preconfigured theme is itself a config: `vuiPreset` is a plain value the package applies by default, built from the same API you would use. So nothing is locked and nothing is all-or-nothing. Values resolve **per-instance prop → `<VuiProvider config>` → `vuiPreset` → package default**, and a layer overrides only the keys it mentions.
+**One config, layered.** The preconfigured theme is itself a config: `vuiPreset` is a plain value the package applies by default, built from the same API you would use. So nothing is locked and nothing is all-or-nothing. Values resolve **per-instance prop → user preference → `<VuiProvider config>` → `vuiPreset` → package default**, and a layer overrides only the keys it mentions.
 
 ```tsx
 import { VuiProvider } from "@viliha/vui-ui/config";
@@ -497,6 +497,16 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 ```
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
+
+**Behaviour is config too.** `behaviour` holds what components *do*, as opposed to how they look, and every key replaces something that used to be hard-coded: `rowClick` (`"view" | "edit" | "none"`, what clicking a record's name does), `closeOnSave`, `flashMs` (the saved-row highlight; `0` turns it off), `confirmDelete`, `confirmDiscardWhenDirty`. Set it app-wide on the provider or per table with `behaviour={{ … }}` on `RecordView`.
+
+**Let the people using the app change some of it.** Pass `userConfigurable` and those keys become theirs, saved per browser and merged over your config:
+
+```tsx
+<VuiProvider userConfigurable={{ behaviour: ["rowClick", "flashMs", "confirmDelete"] }}>
+```
+
+Nothing is user-editable unless it is listed, which is the point: "the user prefers no row highlight" is a feature, "the user can move the Save button" is chaos. Build the settings UI from `useVuiPreferences()`, which gives you `preferences`, `userConfigurable`, `setPreference(section, key, value)` and `reset()`. A key that isn't listed is ignored on write, so a stale stored value can't leak back in. Reference: the backoffice Settings page, *Data tables* section.
 
 **Saving against a server: return a promise from `onDataChange`.** It fires on
 every add, edit, delete and restore, in `manual` and `fetcher` mode as well as

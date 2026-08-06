@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-ui",
-  "version": "1.50.0",
+  "version": "1.51.0",
   "description": "Vui UI is a free, token-driven React component library and admin dashboard template for Next.js and Tailwind CSS v4. It bundles the shadcn/ui set plus a full datatable, forms, charts, and auth screens, and ships as TypeScript source so your bundler compiles only what you import.",
   "license": "MIT",
   "author": "Suman Bonakurthi",

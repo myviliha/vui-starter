@@ -53,3 +53,46 @@ export const CHROME_DEFAULTS: Record<ChromeFeature, boolean> = {
   settings: flag(process.env.NEXT_PUBLIC_SHOW_SETTINGS, true),
   userMenu: flag(process.env.NEXT_PUBLIC_SHOW_USER_MENU, true),
 };
+
+/**
+ * Data-table behaviour the person using the app may change for themselves, on
+ * the Settings page. Everything else in the theme's config stays the app's call:
+ * a preference is for how someone likes to work, not for redesigning the screen.
+ */
+export const DATA_TABLE_PREFERENCES = [
+  "rowClick",
+  "flashMs",
+  "confirmDelete",
+] as const;
+
+/** Labels for the Settings controls, in display order. */
+export const DATA_TABLE_PREFERENCE_FIELDS = [
+  {
+    key: "rowClick" as const,
+    label: "Clicking a record name",
+    hint: "Open it for reading, open it for editing, or do nothing.",
+    options: [
+      { value: "view", label: "Open to view" },
+      { value: "edit", label: "Open to edit" },
+      { value: "none", label: "Do nothing" },
+    ],
+  },
+  {
+    key: "flashMs" as const,
+    label: "Highlight a row after saving",
+    hint: "A brief highlight so you can see what changed.",
+    options: [
+      { value: "1600", label: "On" },
+      { value: "0", label: "Off" },
+    ],
+  },
+  {
+    key: "confirmDelete" as const,
+    label: "Ask before deleting",
+    hint: "Turn this off only if you know what you are doing.",
+    options: [
+      { value: "true", label: "Ask first" },
+      { value: "false", label: "Delete straight away" },
+    ],
+  },
+];

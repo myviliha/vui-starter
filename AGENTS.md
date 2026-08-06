@@ -102,6 +102,16 @@ The seven top-bar affordances — **Quick actions, Global search, Help, Document
 
 Gate a feature by reading `useChrome().<feature>` where it renders (hide the control **and** skip its shortcut/palette — see `top-bar.tsx`, `quick-actions.tsx`, `global-search.tsx`). To add a new toggleable feature: add a `ChromeFeature` key + `CHROME_FEATURES` entry + `CHROME_DEFAULTS` line + `turbo.json` env, then gate the render.
 
+## Theme config (`VuiProvider`)
+
+The theme ships configured and stays changeable. `vuiPreset` (`@viliha/vui-ui/config`) is the shipped behaviour as a plain value, applied by default, so there is no separate "configurable" component set. Values resolve **per-instance prop → user preference → `<VuiProvider config>` → `vuiPreset` → package default**, and a layer overrides only the keys it names.
+
+- **App-wide config** → `<VuiProvider config={…}>`, mounted in `(app)/layout.tsx`. Sections: `form` (footer `actions`) and `behaviour` (`rowClick`, `closeOnSave`, `flashMs`, `confirmDelete`, `confirmDiscardWhenDirty`).
+- **Per screen** → `behaviour` / `formActions` / `renderFooter` props on `RecordView`. A prop always wins.
+- **Per person** → `userConfigurable` lists the keys the app hands to whoever is using it; their choices persist in localStorage (`vui.prefs`) and are edited on the Settings page's *Data tables* section via `useVuiPreferences()`. The allow-list lives in `lib/app-config.ts` (`DATA_TABLE_PREFERENCES` + `DATA_TABLE_PREFERENCE_FIELDS`), next to the chrome flags it mirrors.
+
+Colors, radius, spacing and typography are **not** in here: they stay in `theme.css`. Adding a behaviour key is fine when a screen genuinely needs it and the alternative is forking a component; it is not the place for anything the tokens already own. Roadmap for the remaining slices: `docs/proposals/configurable-theme-roadmap.md`.
+
 ## Sidebar sections & groups
 
 The sidebar is driven by `nav-config.ts` (`NAV: NavSection[]`). **Two grouping shapes — use them, don't invent a third:** a **Section** (`NavSection`, `{ title?, items }`) is a top-level band with an optional `title` heading whose items are always visible (static, no collapse — e.g. *Records*, *System*; the first section usually has no title); a **collapsible group** (`NavGroup`, an entry with `children`) is a parent row with a chevron that **hides/unhides** its nested links and auto-opens when a child is active (e.g. *Auth*, *CRM*, *System*) — use it to keep the sidebar short. A group parent has no page of its own, so its breadcrumb points at its first child (see `SECTION_INDEX`). When adding a page, add it to `NAV` and mirror its color in `route-meta.ts`; default to an existing Section and only add a Group when nesting several related sub-pages. Full write-up at docs `/navigation`.

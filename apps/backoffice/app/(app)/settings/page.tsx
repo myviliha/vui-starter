@@ -19,7 +19,11 @@ import { Switch } from "@viliha/vui-ui/switch";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 import { useChromeConfig } from "@/app/_components/chrome-config";
-import { CHROME_FEATURES } from "@/lib/app-config";
+import { useVuiPreferences } from "@viliha/vui-ui/config";
+import {
+  CHROME_FEATURES,
+  DATA_TABLE_PREFERENCE_FIELDS,
+} from "@/lib/app-config";
 
 type Theme = "light" | "dark" | "system";
 
@@ -98,6 +102,7 @@ export default function SettingsPage() {
   const [notifyWeekly, setNotifyWeekly] = React.useState(true);
   const [saved, setSaved] = React.useState(false);
   const { chrome, setFeature, reset } = useChromeConfig();
+  const prefs = useVuiPreferences();
 
   React.useEffect(() => {
     try {
@@ -221,6 +226,51 @@ export default function SettingsPage() {
               ))}
               <div className="pt-1">
                 <Button variant="outline" onClick={reset}>
+                  Reset to defaults
+                </Button>
+              </div>
+            </div>
+          </Section>
+
+          <Section
+            title="Data tables"
+            description="How record lists behave for you. Saved to this browser, and only these are yours to change: the rest of the layout is the app's."
+          >
+            <div className="space-y-3 sm:max-w-xl">
+              {DATA_TABLE_PREFERENCE_FIELDS.map((f) => {
+                const current = prefs?.preferences.behaviour?.[f.key];
+                return (
+                  <div
+                    key={f.key}
+                    className="flex items-center justify-between gap-4"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium">{f.label}</p>
+                      <p className="text-sm text-muted-foreground">{f.hint}</p>
+                    </div>
+                    <Select
+                      className="w-48 shrink-0"
+                      aria-label={f.label}
+                      value={current == null ? "" : String(current)}
+                      onValueChange={(v) =>
+                        prefs?.setPreference(
+                          "behaviour",
+                          f.key,
+                          f.key === "flashMs"
+                            ? Number(v)
+                            : f.key === "confirmDelete"
+                              ? v === "true"
+                              : v,
+                        )
+                      }
+                      options={f.options}
+                      placeholder="App default"
+                    />
+                  </div>
+                );
+              })}
+              <div className="pt-1">
+                <Button variant="outline" onClick={() => prefs?.reset()}>
                   Reset to defaults
                 </Button>
               </div>

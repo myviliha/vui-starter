@@ -43,11 +43,13 @@ import { Select } from "./select";
 import { Skeleton } from "./skeleton";
 import {
   useResolved,
+  type BehaviourConfig,
   type FormAction,
   type FormActionContext,
   type FormActionsConfig,
 } from "./config";
 export type {
+  BehaviourConfig,
   FormAction,
   FormActionContext,
   FormActionsConfig,
@@ -888,6 +890,10 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
    *  `makeEmptyRow`). Default `true`. */
   showAdd?: boolean;
+  /** Behaviour overrides for this table only: what a row click does, whether
+   *  delete confirms, how long the saved-row highlight lasts, and so on. Falls
+   *  back to `VuiProvider`'s `behaviour`, then to the shipped defaults. */
+  behaviour?: BehaviourConfig;
   /** Footer buttons for the add/edit/view form. An array replaces Cancel + Save
    *  (or Close + Edit in view mode); a function receives those defaults so you
    *  can add, reorder or swap one without restating the rest:
@@ -999,6 +1005,7 @@ export function RecordView<T extends { id: RowId }>({
   showImport = true,
   showExport = true,
   showAdd = true,
+  behaviour: behaviourProp,
   formActions,
   renderFooter,
   showEdit,
@@ -1011,6 +1018,7 @@ export function RecordView<T extends { id: RowId }>({
   trashedData,
   onRestore,
 }: RecordViewProps<T>) {
+  const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   // No editable field means the Edit form would open empty, so the affordance
   // is hidden unless the host asks for it explicitly.
   const canEdit = showEditActions(fields, showEdit);
@@ -1594,12 +1602,17 @@ export function RecordView<T extends { id: RowId }>({
   function saveForm(updated: T) {
     setRows((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
     // Flash the saved row so the change is unmistakable.
-    setFlashId(updated.id);
-    window.setTimeout(() => {
-      setFlashId((current) => (current === updated.id ? null : current));
-    }, 1600);
+    const flashMs = behaviour.flashMs ?? 1600;
+    if (flashMs > 0) {
+      setFlashId(updated.id);
+      window.setTimeout(() => {
+        setFlashId((current) => (current === updated.id ? null : current));
+      }, flashMs);
+    }
     setNewRowId(null);
-    setActiveId(null);
+    // `closeOnSave: false` keeps the form open on the record just saved, for a
+    // flow that enters several in a row.
+    if (behaviour.closeOnSave ?? true) setActiveId(null);
   }
   /** Discard the form; drop the row entirely if it was never saved. */
   function cancelForm() {
@@ -1661,6 +1674,18 @@ export function RecordView<T extends { id: RowId }>({
       setRows((prev) => [...imported, ...prev]);
       setPage(1);
     }
+  }
+  /** What a click on the row's name does. `none` leaves the name inert, for a
+   *  table where opening a record is not the point. */
+  const rowClick = behaviour.rowClick ?? "view";
+  function openRow(id: RowId) {
+    if (rowClick === "view") openView(id);
+    else if (rowClick === "edit") openEdit(id);
+  }
+  /** Delete, asking first unless the app turned the confirm off. */
+  function requestDelete(id: RowId) {
+    if (behaviour.confirmDelete ?? true) setConfirmDeleteId(id);
+    else deleteRow(id);
   }
   function deleteRow(id: RowId) {
     setRows((prev) => prev.filter((row) => row.id !== id));
@@ -2609,8 +2634,9 @@ export function RecordView<T extends { id: RowId }>({
                         >
                           <button
                             type="button"
-                            onClick={() => openView(row.id)}
-                            className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60"
+                            onClick={() => openRow(row.id)}
+                            disabled={rowClick === "none"}
+                            className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60 disabled:cursor-default disabled:hover:bg-transparent"
                           >
                             <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
                               {primary.initials}
@@ -2682,7 +2708,7 @@ export function RecordView<T extends { id: RowId }>({
                           : (
                               <button
                                 type="button"
-                                onClick={() => setConfirmDeleteId(row.id)}
+                                onClick={() => requestDelete(row.id)}
                                 aria-label={`Delete ${primary.title || singular}`}
                                 title="Delete"
                                 className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-destructive/10"
@@ -2787,7 +2813,7 @@ export function RecordView<T extends { id: RowId }>({
               type="button"
               role="menuitem"
               onClick={() => {
-                setConfirmDeleteId(menu.id);
+                requestDelete(menu.id);
                 setMenu(null);
               }}
               className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-destructive hover:bg-destructive/10"
@@ -2951,6 +2977,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   crumbs,
 }: DetailPanelProps<T>) {
   const formConfig = useResolved("form", undefined) ?? {};
+  const behaviour = useResolved("behaviour", undefined) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
   // Reset the buffered form only when a *genuinely different* record is opened.
@@ -3067,9 +3094,22 @@ function RecordDetailPanel<T extends { id: RowId }>({
 
 
   // Cancel/close discards the draft too, so it doesn't reappear next visit.
-  const handleCancel = () => {
+  const [confirmDiscard, setConfirmDiscard] = React.useState(false);
+  const discard = () => {
     clearPersisted(draftKey);
     dismiss(onCancel);
+  };
+  const handleCancel = () => {
+    // Only ask when there is something to lose, and only when the app opted in.
+    if (
+      (behaviour.confirmDiscardWhenDirty ?? false) &&
+      !readOnly &&
+      JSON.stringify(draft) !== JSON.stringify(row)
+    ) {
+      setConfirmDiscard(true);
+      return;
+    }
+    discard();
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
@@ -3336,10 +3376,26 @@ function RecordDetailPanel<T extends { id: RowId }>({
       handleCancel(); // closes without committing (Delete, Archive, …)
     }
   };
-  const formFooter = renderFooter ? (
-    renderFooter(actionCtx)
-  ) : (
-    <FormFooter actions={actions} ctx={actionCtx} run={runAction} />
+  const formFooter = (
+    <>
+      {renderFooter ? (
+        renderFooter(actionCtx)
+      ) : (
+        <FormFooter actions={actions} ctx={actionCtx} run={runAction} />
+      )}
+      <ConfirmDialog
+        open={confirmDiscard}
+        title={`Discard your changes to this ${singular.toLowerCase()}?`}
+        description="What you have typed will be lost."
+        confirmLabel="Discard"
+        destructive
+        onConfirm={() => {
+          setConfirmDiscard(false);
+          discard();
+        }}
+        onCancel={() => setConfirmDiscard(false)}
+      />
+    </>
   );
 
   // Full-page form: breadcrumb header → scrollable single column → fixed actions.

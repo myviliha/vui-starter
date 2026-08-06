@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { mergeConfig, type FormAction } from "./config";
+import {
+  filterUserPreferences,
+  mergeConfig,
+  vuiPreset,
+  type FormAction,
+} from "./config";
 import {
   actionRequiresValid,
   defaultFormActions,
@@ -92,6 +97,38 @@ describe("mergeConfig", () => {
   it("ignores undefined layers", () => {
     expect(mergeConfig(undefined, { form: { actions: [] } }, undefined)).toEqual({
       form: { actions: [] },
+    });
+  });
+});
+
+describe("filterUserPreferences", () => {
+  it("keeps only the keys the app opened up", () => {
+    const kept = filterUserPreferences(
+      { behaviour: { rowClick: "edit", closeOnSave: false } },
+      { behaviour: ["rowClick"] },
+    );
+    expect(kept).toEqual({ behaviour: { rowClick: "edit" } });
+  });
+
+  it("drops a whole section the app never opened", () => {
+    expect(
+      filterUserPreferences({ behaviour: { rowClick: "edit" } }, {}),
+    ).toEqual({});
+  });
+
+  it("layers under the app config: preset, then app, then the user", () => {
+    const resolved = mergeConfig(
+      vuiPreset,
+      { behaviour: { rowClick: "edit", flashMs: 500 } },
+      filterUserPreferences(
+        { behaviour: { rowClick: "none", flashMs: 0 } },
+        { behaviour: ["flashMs"] }, // only the highlight is theirs to change
+      ),
+    );
+    expect(resolved.behaviour).toMatchObject({
+      rowClick: "edit", // app's choice stands; the user may not touch it
+      flashMs: 0, // the user's choice wins on a key they own
+      confirmDelete: true, // untouched preset default
     });
   });
 });

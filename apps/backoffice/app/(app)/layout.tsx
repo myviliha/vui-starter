@@ -9,7 +9,9 @@ import { SiteFooter } from "@/app/_components/site-footer";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { QuickActionsProvider } from "@/app/_components/quick-actions";
 import { GlobalSearchProvider } from "@/app/_components/global-search";
+import { VuiProvider } from "@viliha/vui-ui/config";
 import { ChromeConfigProvider } from "@/app/_components/chrome-config";
+import { DATA_TABLE_PREFERENCES } from "@/lib/app-config";
 import {
   KeepAliveTabs,
   OpenTabsProvider,
@@ -22,6 +24,10 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // The theme ships configured; this is where an app changes it. Nothing is
+    // set here, so the demo runs on the preset. `userConfigurable` opens three
+    // behaviour keys to the person using the app (Settings → Data tables).
+    <VuiProvider userConfigurable={{ behaviour: DATA_TABLE_PREFERENCES }}>
     <ChromeConfigProvider>
      <SidebarProvider>
       <QuickActionsProvider>
@@ -53,5 +59,6 @@ export default function AppLayout({
       </QuickActionsProvider>
      </SidebarProvider>
     </ChromeConfigProvider>
+    </VuiProvider>
   );
 }

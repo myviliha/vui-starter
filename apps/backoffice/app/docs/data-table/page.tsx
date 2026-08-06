@@ -459,6 +459,31 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
         wholesale for the rare case the array can&apos;t express.
       </P>
 
+      <Note title="Behaviour is config too">
+        <code>behaviour</code> holds what a table <em>does</em>, as opposed to
+        how it looks, and every key replaces something that used to be
+        hard-coded: <code>rowClick</code> (
+        <code>&quot;view&quot; | &quot;edit&quot; | &quot;none&quot;</code>, what
+        clicking a record&apos;s name does), <code>closeOnSave</code>,{" "}
+        <code>flashMs</code> (the saved-row highlight; <code>0</code> turns it
+        off), <code>confirmDelete</code> and{" "}
+        <code>confirmDiscardWhenDirty</code>. Set it per table with{" "}
+        <code>{`behaviour={{ rowClick: "edit" }}`}</code>, or app-wide on the
+        provider.
+      </Note>
+
+      <Note title="Let the people using the app change some of it">
+        Pass <code>userConfigurable</code> to <code>VuiProvider</code> and those
+        keys become theirs, saved per browser and merged over your config:{" "}
+        <code>{`userConfigurable={{ behaviour: ["rowClick", "flashMs"] }}`}</code>
+        . Nothing is user-editable unless it is listed, which is the point: a
+        person preferring no row highlight is a feature, a person moving the Save
+        button is chaos. Build the UI from <code>useVuiPreferences()</code> —{" "}
+        <code>preferences</code>, <code>setPreference</code> and{" "}
+        <code>reset</code>. The Settings page&apos;s <strong>Data tables</strong>{" "}
+        section is the working example.
+      </Note>
+
       <Note title="One config, four layers">
         The preconfigured theme is itself a config. <code>vuiPreset</code> is a
         plain value the package applies by default, built from the same API you
