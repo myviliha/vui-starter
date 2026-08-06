@@ -553,14 +553,27 @@ const fields = [
           this field&apos;s cached options + value, and the next open re-fetches.
         </li>
         <li>
-          <strong>What a reader sees while that resolve is in flight</strong>: a
-          skeleton, never the stored id. <code>Region 1</code> tells a user
-          nothing, so read cells and view panels shimmer until the label lands.
-          If the resolve comes back empty or fails, the value reads{" "}
-          <code>Unknown</code> with the id in the tooltip, so a broken reference
-          looks broken instead of looking like data. Identical requests in flight
-          at the same moment are shared, so 50 rows on the same id cost one round
-          trip.
+          <code>resolveOptions(values)</code>: resolve a whole set of ids in one
+          call. Every cell of that column painted in the same tick is collected
+          and asked for together, so a 50-row page costs one request instead of
+          50. With only <code>resolveOption</code>, ids already in flight are
+          shared, which still saves the repeats.
+        </li>
+        <li>
+          <code>displayValue(row)</code>: skip resolution altogether. When the
+          payload already carries the label beside the id (
+          <code>{`{ countryId, country }`}</code>), return it and the read display
+          paints instantly with no request. It only supplies the text, so the
+          cell keeps its alignment, truncation and copy button, and the edit
+          control is unaffected.
+        </li>
+        <li>
+          <strong>What a reader sees while a label resolves</strong>: a skeleton,
+          never the stored id. <code>Region 1</code> tells a user nothing, and a
+          uuid tells them less. Read cells, view panels and picker triggers all
+          shimmer until the label lands, and a value that resolves to nothing
+          reads <code>—</code>, because an unresolvable reference is missing data
+          rather than a value.
         </li>
       </Ul>
       <CodeBlock title="async FK picker with a Region → Country cascade">{`const fields = [

@@ -370,9 +370,18 @@ export interface RecordField<T> {
    *  read cell shows the labels (up to `maxChipsInCell`, then "+N" in a popover).
    *  `required` means at least one selected. */
   multiple?: boolean;
-  /** Batch companion to `resolveOption` for `multiple` async fields: resolve the
-   *  labels for all currently-set values in one call (never the whole list). */
+  /** Batch companion to `resolveOption`: resolve the labels for all currently-set
+   *  values in one call (never the whole list). Used for `multiple` fields, and
+   *  for single-value read displays, where the values a table paints in one go
+   *  are collected and asked for together — 50 rows become one request. */
   resolveOptions?: (values: string[]) => Promise<AsyncOption[]>;
+  /** The label to show in read mode, straight from the row. Set this when your
+   *  payload already carries the label next to the id (`{ countryId, country }`)
+   *  and the field never resolves anything: it paints instantly, with no
+   *  request. Unlike `render` it only supplies the text, so the cell keeps its
+   *  alignment, copy button and truncation. Return `""` for "no value". Read
+   *  displays only — the edit control is unaffected. */
+  displayValue?: (row: Partial<T>) => string;
   /** Max chips shown in a `multiple` read cell before collapsing to "+N".
    *  Default 3. */
   maxChipsInCell?: number;
@@ -536,6 +545,9 @@ function AsyncFieldValue<T>({
     () => ({
       loadOptions: ({ search, signal }) =>
         field.loadOptions!({ search, signal, values }),
+      // With `resolveOptions`, every cell of this column that paints in the same
+      // tick is resolved by one call instead of one call each.
+      resolveOptions: field.resolveOptions,
       resolveOption: field.resolveOption,
     }),
     [field, values],
@@ -555,18 +567,14 @@ function AsyncFieldValue<T>({
   const label = options.find((o) => o.value === value)?.label;
   if (label !== undefined) return <>{label}</>;
   if (resolving) return <Skeleton className="h-4 w-24" />;
-  return <UnknownValue value={value} />;
+  return <MissingValue />;
 }
 
-/** A value whose label could not be resolved (deleted record, failed request).
- *  Says so instead of leaving the id on screen, but keeps the id in the tooltip
- *  so it's still there when someone goes looking. */
-function UnknownValue({ value }: { value: string }) {
-  return (
-    <span className="text-muted-foreground" title={value}>
-      Unknown
-    </span>
-  );
+/** Nothing to show: an empty value, or a reference whose label never resolved
+ *  (deleted record, failed request). Both are missing data, so both read the
+ *  same. The id is never shown — it isn't a value a reader can use. */
+export function MissingValue() {
+  return <span className="text-muted-foreground">—</span>;
 }
 
 /** Read display for a `multiple` field: resolves each value's label (batch via
@@ -608,11 +616,13 @@ function MultiFieldValue<T>({
     options.find((o) => o.value === v)?.label ??
     staticOpts.find((o) => o.value === v)?.label;
   const resolvedLabels = values.map(labelOf);
-  if (!values.length) return <span className="text-muted-foreground">—</span>;
+  if (!values.length) return <MissingValue />;
   // Same rule as the single value: a skeleton until the labels land, never ids.
   if (resolving && resolvedLabels.some((l) => l === undefined))
     return <Skeleton className="h-4 w-32" />;
-  const labels = resolvedLabels.map((l, i) => l ?? `Unknown (${values[i]})`);
+  // A value that never resolved is dropped rather than shown as an id.
+  const labels = resolvedLabels.filter((l): l is string => l !== undefined);
+  if (!labels.length) return <MissingValue />;
   const max = field.maxChipsInCell ?? 3;
   const shown = labels.slice(0, max);
   const extra = labels.length - shown.length;
@@ -1692,17 +1702,22 @@ export function RecordView<T extends { id: RowId }>({
     // For a choice field, show the option's friendly label (e.g. SYSTEM →
     // "System") while the cell stays editable — no `render`, no read-only.
     const display =
-      field.input === "checkbox"
+      field.displayValue?.(row) ??
+      (field.input === "checkbox"
         ? row[field.key]
           ? "Yes"
           : "No"
         : Array.isArray(field.options)
           ? (field.options.find((o) => o.value === value)?.label ?? value)
-          : value;
+          : value);
     const clip = clipCell(display, field.maxChars ?? maxCellChars);
     // Async-id fields resolve their label for the read cell (the edit control
     // already resolves its own). Everything else uses the clipped text + tooltip.
-    const readContent = field.multiple ? (
+    const readContent = field.displayValue ? (
+      <span className="truncate">
+        {clip.text || <MissingValue />}
+      </span>
+    ) : field.multiple ? (
       <span className="overflow-hidden">
         <MultiFieldValue
           field={field}
@@ -3138,6 +3153,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 ) : (
                   <span className="block whitespace-pre-wrap break-words px-2 py-1.5">
                     {(() => {
+                      // The host already has the label in the row: no resolve.
+                      if (f.displayValue)
+                        return f.displayValue(draft) || <MissingValue />;
                       if (f.input === "checkbox")
                         return draft[f.key as keyof T] ? "Yes" : "No";
                       if (f.multiple)
@@ -3153,10 +3171,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
                           />
                         );
                       const raw = String(draft[f.key as keyof T] ?? "");
-                      if (!raw)
-                        return (
-                          <span className="text-muted-foreground">—</span>
-                        );
+                      if (!raw) return <MissingValue />;
                       // Async id → resolved label; static options → their label;
                       // otherwise the raw value.
                       if (isAsyncLabeled(f))

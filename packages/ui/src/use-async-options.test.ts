@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { share } from "./use-async-options";
+import { batch, share } from "./use-async-options";
 
 describe("share", () => {
   const opts = [{ value: "1", label: "One" }];
@@ -48,5 +48,52 @@ describe("share", () => {
     await share(resolveOption, "1", run);
     await share(resolveOption, "1", run);
     expect(calls).toBe(2);
+  });
+});
+
+describe("batch", () => {
+  it("resolves every id asked for in one tick with a single call", async () => {
+    const calls: string[][] = [];
+    const resolveOptions = (ids: string[]) => {
+      calls.push(ids);
+      return Promise.resolve(ids.map((v) => ({ value: v, label: `L${v}` })));
+    };
+
+    // What a 4-row table does: each cell asks for its own id in the same commit.
+    const rows = await Promise.all([
+      batch(resolveOptions, ["a"]),
+      batch(resolveOptions, ["b"]),
+      batch(resolveOptions, ["a"]),
+      batch(resolveOptions, ["c"]),
+    ]);
+
+    expect(calls).toEqual([["a", "b", "c"]]); // one request, ids deduped
+    expect(rows.map((r) => r.map((o) => o.label))).toEqual([
+      ["La"],
+      ["Lb"],
+      ["La"],
+      ["Lc"],
+    ]);
+  });
+
+  it("starts a new call for the next tick", async () => {
+    let calls = 0;
+    const resolveOptions = (ids: string[]) => {
+      calls++;
+      return Promise.resolve(ids.map((v) => ({ value: v, label: v })));
+    };
+
+    await batch(resolveOptions, ["a"]);
+    await batch(resolveOptions, ["a"]);
+    expect(calls).toBe(2);
+  });
+
+  it("gives every caller an empty result when the source fails", async () => {
+    const resolveOptions = () => Promise.reject(new Error("500"));
+    const [a, b] = await Promise.all([
+      batch(resolveOptions, ["a"]),
+      batch(resolveOptions, ["b"]),
+    ]);
+    expect([a, b]).toEqual([[], []]);
   });
 });

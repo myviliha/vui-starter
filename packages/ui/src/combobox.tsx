@@ -9,6 +9,7 @@ import {
   UpdateIcon as Spinner,
 } from "@radix-ui/react-icons";
 
+import { Skeleton } from "./skeleton";
 import { cn } from "./utils";
 import type { SelectOption } from "./select";
 import { useAsyncOptions, type AsyncOptionSource } from "./use-async-options";
@@ -149,10 +150,12 @@ export function Combobox({
     setActive((i) => Math.min(i, Math.max(0, list.length - 1)));
   }, [list.length]);
 
-  // Selected label: from the (async-resolved or static) options; falls back to
-  // the raw value if nothing resolves it yet.
+  // Selected label: from the (async-resolved or static) options. While an async
+  // label is still resolving the trigger shimmers — it never shows the raw id,
+  // and it never shows the placeholder, which would read as "nothing selected".
   const pool = isAsync ? async.options : (options ?? []);
   const selected = pool.find((o) => o.value === value);
+  const resolvingLabel = Boolean(value) && !selected && async.resolving;
   const commit = (v: string) => {
     onValueChange(v);
     setOpen(false);
@@ -195,9 +198,13 @@ export function Combobox({
           "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background",
         )}
       >
-        <span className={cn("truncate", !selected && "text-muted-foreground")}>
-          {selected ? selected.label : placeholder}
-        </span>
+        {resolvingLabel ? (
+          <Skeleton className="h-4 w-24" />
+        ) : (
+          <span className={cn("truncate", !selected && "text-muted-foreground")}>
+            {selected ? selected.label : placeholder}
+          </span>
+        )}
         <ChevronDown
           className={cn(
             "size-3.5 shrink-0 text-muted-foreground transition-transform",

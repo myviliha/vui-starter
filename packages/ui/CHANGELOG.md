@@ -11,24 +11,35 @@ To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
 ### Fixed
 
-- **Async fields no longer paint the raw id before the label arrives.** A read
-  cell, detail panel or profile row backed by `loadOptions` + `resolveOption`
-  used to render the stored value first, so a page opened as
+- **No component paints a raw id any more.** A read cell, detail panel or
+  profile row backed by `loadOptions` + `resolveOption` used to render the
+  stored value first, so a page opened as
   `Region 1 · Country 1 · Timezone 27` and swapped to real labels as each fetch
-  landed. On a throttled connection those integers sat there for seconds. Read
-  displays now show a skeleton until the label resolves.
-- **A reference that can't be resolved reads `Unknown`, not its id.** If
+  landed. A table of uuids was worse: nothing about the string hints at what it
+  stands for. Read displays now show a skeleton until the label resolves. The
+  same rule reaches `Combobox`, `Select` and `MultiCombobox`: a trigger with an
+  unresolved selection shimmers instead of showing the id (or the placeholder,
+  which read as "nothing selected"), and multi-select chips shimmer instead of
+  listing ids.
+- **A reference that can't be resolved reads `—`, not its id.** If
   `resolveOption` fails or returns nothing, the cell said `Currency 142` forever
-  with no sign anything had gone wrong. It now reads `Unknown` with the id in
-  the tooltip, so a dangling foreign key looks like an error and stays
-  debuggable. Applies to `multiple` fields too.
-- **Identical resolves in flight at the same time are shared.** Every rendered
-  value used to fetch on its own, so a table of 50 rows on the same country id
-  fired 50 requests. They now collapse into one. The entry is dropped as soon as
-  it settles, so nothing is held long enough to go stale.
+  with no sign anything had gone wrong. An unresolvable reference is missing
+  data, so it now reads like every other missing value. Applies to `multiple`
+  fields too.
 
 ### Added
 
+- **`resolveOptions` batches single-value reads.** The batch resolver, until now
+  only used by `multiple` fields, works for ordinary async fields as well: every
+  cell of a column painted in the same tick is collected and resolved in one
+  call, so a 50-row Employees page asks for its Department ids once instead of
+  50 times. With only `resolveOption`, identical ids already in flight are
+  shared, which still removes the repeats.
+- **`displayValue(row)` on `RecordField`** — skip resolution entirely. When your
+  payload already carries the label next to the id (`{ countryId, country }`),
+  return it and the read display paints instantly with zero requests. Unlike
+  `render` it supplies only the text, so the cell keeps its alignment,
+  truncation and copy button, and the edit control is untouched.
 - **`useAsyncOptions` returns `resolving`** — true while a set value's label is
   being resolved (distinct from `loading`, which covers the dropdown's own list
   fetch). Use it to show a skeleton instead of a value your reader can't read.

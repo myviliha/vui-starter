@@ -8,6 +8,7 @@ import {
   UpdateIcon as Spinner,
 } from "@radix-ui/react-icons";
 
+import { Skeleton } from "./skeleton";
 import { cn } from "./utils";
 import { useAsyncOptions, type AsyncOptionSource } from "./use-async-options";
 
@@ -124,6 +125,9 @@ export function Select({
   }, [open]);
 
   const selected = list.find((o) => o.value === value);
+  // A set value whose async label hasn't landed shimmers: showing the id would
+  // be meaningless, and the placeholder would read as "nothing selected".
+  const resolvingLabel = Boolean(value) && !selected && async.resolving;
   const showLoading = isAsync && async.loading && list.length === 0;
   const showError = isAsync && async.error && !async.loading;
 
@@ -142,9 +146,13 @@ export function Select({
           "hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         )}
       >
-        <span className={cn("truncate", !selected && "text-muted-foreground")}>
-          {selected ? selected.label : placeholder}
-        </span>
+        {resolvingLabel ? (
+          <Skeleton className="h-4 w-24" />
+        ) : (
+          <span className={cn("truncate", !selected && "text-muted-foreground")}>
+            {selected ? selected.label : placeholder}
+          </span>
+        )}
         {isAsync && async.loading ? (
           <Spinner className="size-3.5 shrink-0 animate-spin text-muted-foreground" aria-hidden="true" />
         ) : (

@@ -10,6 +10,7 @@ import {
   UpdateIcon as Spinner,
 } from "@radix-ui/react-icons";
 
+import { Skeleton } from "./skeleton";
 import { cn } from "./utils";
 import type { SelectOption } from "./select";
 import { useAsyncOptions, type AsyncOptionSource } from "./use-async-options";
@@ -91,13 +92,14 @@ export function MultiCombobox({
     return q ? opts.filter((o) => o.label.toLowerCase().includes(q)) : opts;
   }, [isAsync, async.options, options, query]);
 
-  // Selected values → labels (from resolved/static options; fall back to the id).
+  // Selected values → labels (from resolved/static options). A value with no
+  // label yet shimmers and then reads "—": the stored id is never shown.
   const pool = React.useMemo(
     () => (isAsync ? async.options : (options ?? [])),
     [isAsync, async.options, options],
   );
   const labelOf = React.useCallback(
-    (v: string) => pool.find((o) => o.value === v)?.label ?? v,
+    (v: string) => pool.find((o) => o.value === v)?.label,
     [pool],
   );
 
@@ -210,11 +212,14 @@ export function MultiCombobox({
                 key={v}
                 className="inline-flex max-w-[12rem] items-center gap-1 rounded-sm bg-accent px-1.5 py-0.5 text-xs text-accent-foreground"
               >
-                <span className="truncate">{labelOf(v)}</span>
+                <span className="truncate">
+                  {labelOf(v) ??
+                    (async.resolving ? <Skeleton className="h-3 w-14" /> : "—")}
+                </span>
                 <span
                   role="button"
                   tabIndex={-1}
-                  aria-label={`Remove ${labelOf(v)}`}
+                  aria-label={`Remove ${labelOf(v) ?? "selection"}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggle(v);
