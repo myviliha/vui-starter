@@ -7,11 +7,11 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
-## Upgrading from 1.44 to 1.52
+## Upgrading from 1.44 to 1.53
 
 **Short version: upgrade, restart, change nothing.** Everything from 1.50 on is
-additive, and the four behaviour changes before it are all in the direction of
-"stop showing the user something meaningless". Read this page once, act on the
+additive, and the behaviour changes before it all point the same way, which is to
+stop showing the user something meaningless. Read this page once, act on the
 one item that applies to you, and skip the rest.
 
 ### Do I have to change any code?
@@ -23,6 +23,7 @@ Only in one case, and only if you used `BrandAsset` directly:
 | render `<BrandAsset value onChange />` yourself | add `inline` (demo, base64) or `onPick` (real upload). Without either, the control now says it has no uploader instead of quietly storing a 2.7 MB data URI | 1.45.0 |
 | use `organizationProfileFields` | nothing. It keeps `inline`, so it behaves exactly as before | 1.45.0 |
 | pass `onDataChange` alongside `fetcher` | it now actually fires (it never did before). Return a promise from it so the reload waits for your write | 1.49.0 |
+| have a bulk "Set {field}" on a field you never marked `editable` | add `editable: true` to keep it. Bulk writes now follow the same rule as the form | 1.53.0 |
 
 Everything else is a default that improved on its own.
 
@@ -95,12 +96,48 @@ Build the settings UI from `useVuiPreferences()`. The demo's Settings page has a
 **Step 6: put your own content between fields** with `formSlots`, and give a
 field the whole row with `fullWidth`.
 
+**Step 7: add "Save & New"** if you enter records in runs, with
+`{ id: "save-new", label: "Save & New", variant: "primary", after: "new" }`.
+
 ### What did not change, and will not
 
 Colors, radius, spacing and typography stay in `theme.css`. `fields` stays the
 data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
+
+## 1.53.0 — 2026-08-06
+
+### Added
+
+- **"Save & New" in one line: `after` on a form action.** A saving action can
+  now say what the form does next: `"close"` (the default, what Save does),
+  `"stay"` on the record just saved, or `"new"` to hand the form a blank record
+  so a run of entries never goes back to the table in between.
+
+  ```tsx
+  formActions={(defaults) => [
+    ...defaults,
+    { id: "save-new", label: "Save & New", variant: "primary", after: "new" },
+  ]}
+  ```
+
+  `after: "new"` needs `makeEmptyRow` on the table and falls back to `"stay"`
+  without it. Staying open no longer plays the slide-out animation, which used
+  to send the panel away and straight back in.
+
+### Fixed
+
+- **A bulk "Set {field}" no longer writes to a field the form won't edit.** The
+  bulk actions were built from any field with static `options`, ignoring
+  `editable`, so a read-only choice column could be changed for every selected
+  row at once. It now needs `editable` as well, matching what the form allows.
+  If a table lost a bulk action here, the field it wrote to was never meant to
+  be editable: mark it `editable: true` to get it back.
+- **A per-table `behaviour` prop now reaches the form, not just the rows.**
+  `confirmDiscardWhenDirty` and `closeOnSave` set on one `RecordView` were read
+  from the provider only, so a per-table override was ignored inside the
+  add/edit panel.
 
 ## 1.52.0 — 2026-08-06
 

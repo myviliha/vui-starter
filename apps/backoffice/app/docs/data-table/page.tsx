@@ -158,7 +158,7 @@ export function OrganizationsTable({ data }: { data: Org[] }) {
         <li><code>sortable</code>: decouple sorting from column visibility. Defaults to sortable when it&apos;s a visible column; set <code>true</code> to sort a field with no column (e.g. a <code>hideInTable</code> name shown via <code>getPrimary</code>), or <code>false</code> to keep a visible column unsortable.</li>
         <li><code>render(row)</code>: custom cell content (badges, formatted numbers…).</li>
         <li><code>description</code>: help text shown in the page-form documentation panel.</li>
-        <li><code>options</code>: makes it a choice field and adds a &quot;Set {`{label}`}&quot; bulk action. Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). The <strong>table cell shows the option&apos;s label</strong> (e.g. <code>SYSTEM</code> → &quot;System&quot;), staying editable, with no <code>render</code> needed. A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
+        <li><code>options</code>: makes it a choice field and, when the field is also <code>editable</code>, adds a &quot;Set {`{label}`}&quot; bulk action (bulk writes follow the same rule as the form). Renders a <code>Select</code> in the form; add <code>input: &quot;combobox&quot;</code> for a searchable <code>Combobox</code> (long lists). The <strong>table cell shows the option&apos;s label</strong> (e.g. <code>SYSTEM</code> → &quot;System&quot;), staying editable, with no <code>render</code> needed. A static array, or a <strong>function of the draft</strong> for dependent/cascading options (see below).</li>
         <li><code>input</code>: form control. <code>&quot;text&quot;</code> (default), <code>&quot;number&quot;</code>, <code>&quot;date&quot;</code>, <code>&quot;checkbox&quot;</code> (boolean → checkbox in the form, Yes/No in cells), or <code>&quot;combobox&quot;</code> (searchable, needs <code>options</code>).</li>
         <li><strong>Validation</strong> — declarative rules that run on blur + before Save, <strong>block Save</strong> while invalid, and show the message inline under the field: <code>min</code>/<code>max</code> (character length, or numeric value for <code>input:&quot;number&quot;</code>), <code>pattern</code> (regex, with <code>patternMessage</code>), <code>format: &quot;email&quot; | &quot;phone&quot;</code> (<code>&quot;phone&quot;</code> also auto-formats as <code>(123) 456-7890</code>), <code>validate(value, draft)</code> (return a message, or nothing when valid), and <code>trim</code> (strip whitespace on Save). Reference: the Branches Add/Edit form.</li>
         <li><code>renderInput</code>: render a custom Add/Edit control (checkbox, radio group, upload, anything); you get <code>{`{ value, onChange, field, invalid }`}</code>. Set it <strong>alongside</strong> <code>render</code> to get a custom view <em>and</em> a custom edit control — the form shows <code>render</code> while viewing and <code>renderInput</code> while editing (e.g. a logo preview you can replace in Edit).</li>
@@ -457,6 +457,18 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
         action therefore closes without saving, and a custom primary action saves
         exactly like Save. <code>renderFooter(ctx)</code> replaces the footer
         wholesale for the rare case the array can&apos;t express.
+      </P>
+      <P>
+        <code>after</code> picks what happens once a saving action succeeds:{" "}
+        <code>&quot;close&quot;</code> (the default),{" "}
+        <code>&quot;stay&quot;</code> on the record just saved, or{" "}
+        <code>&quot;new&quot;</code> for a blank one. That last is all{" "}
+        <strong>Save &amp; New</strong> takes:{" "}
+        <code>
+          {`{ id: "save-new", label: "Save & New", variant: "primary", after: "new" }`}
+        </code>
+        . It needs <code>makeEmptyRow</code> on the table, and falls back to{" "}
+        <code>&quot;stay&quot;</code> without one.
       </P>
 
       <Note title="Put your own content between the fields">

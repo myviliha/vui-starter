@@ -10,6 +10,7 @@ import {
   actionRequiresValid,
   defaultFormActions,
   resolveFormActions,
+  saveOutcome,
 } from "./form-actions";
 
 type Row = { id: number; name: string };
@@ -130,5 +131,21 @@ describe("filterUserPreferences", () => {
       flashMs: 0, // the user's choice wins on a key they own
       confirmDelete: true, // untouched preset default
     });
+  });
+});
+
+describe("saveOutcome", () => {
+  it("closes by default", () => {
+    expect(saveOutcome(undefined, undefined)).toBe("close");
+    expect(saveOutcome(undefined, { closeOnSave: true })).toBe("close");
+  });
+
+  it("stays open when the app turned closeOnSave off", () => {
+    expect(saveOutcome(undefined, { closeOnSave: false })).toBe("stay");
+  });
+
+  it("lets the acting button decide, whatever the app setting", () => {
+    expect(saveOutcome("new", { closeOnSave: true })).toBe("new");
+    expect(saveOutcome("close", { closeOnSave: false })).toBe("close");
   });
 });

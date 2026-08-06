@@ -46,11 +46,13 @@ import {
   type BehaviourConfig,
   type FormAction,
   type FormActionContext,
+  type FormActionOutcome,
   type FormActionsConfig,
   type FormSlot,
 } from "./config";
 export type {
   BehaviourConfig,
+  FormActionOutcome,
   FormSlot,
   FormAction,
   FormActionContext,
@@ -63,6 +65,7 @@ import {
   defaultFormActions,
   FormFooter,
   resolveFormActions,
+  saveOutcome,
 } from "./form-actions";
 import { Combobox } from "./combobox";
 import { MultiCombobox } from "./multi-combobox";
@@ -1634,8 +1637,10 @@ export function RecordView<T extends { id: RowId }>({
     setPanelReadOnly(false);
     setActiveId(id);
   }
-  /** Commit the form's buffered draft back into the table. */
-  function saveForm(updated: T) {
+  /** Commit the form's buffered draft back into the table. `then` comes from the
+   *  action that saved (Save closes, "Save & New" opens a blank row); without
+   *  one it follows `behaviour.closeOnSave`. */
+  function saveForm(updated: T, then?: FormActionOutcome) {
     setRows((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
     // Flash the saved row so the change is unmistakable.
     const flashMs = behaviour.flashMs ?? 1600;
@@ -1646,9 +1651,11 @@ export function RecordView<T extends { id: RowId }>({
       }, flashMs);
     }
     setNewRowId(null);
-    // `closeOnSave: false` keeps the form open on the record just saved, for a
-    // flow that enters several in a row.
-    if (behaviour.closeOnSave ?? true) setActiveId(null);
+    const outcome = saveOutcome(then, behaviour);
+    if (outcome === "close") setActiveId(null);
+    // "new" hands the form straight to a fresh record, so a run of entries
+    // never goes back to the table in between.
+    else if (outcome === "new") addRow();
   }
   /** Discard the form; drop the row entirely if it was never saved. */
   function cancelForm() {
@@ -1791,11 +1798,12 @@ export function RecordView<T extends { id: RowId }>({
 
   const allSelected =
     processed.length > 0 && selected.size === processed.length;
-  // Choice fields (with `options`) power the "Set …" bulk actions.
-  // Only static-array option fields — bulk "Set {label}" has no single draft to
-  // resolve a function-options field against.
+  // Choice fields power the "Set …" bulk actions, and only editable ones: a
+  // field the form won't let you change shouldn't be writable in bulk either.
+  // Static arrays only — bulk "Set {label}" has no single draft to resolve a
+  // function-options field against.
   const bulkFields = fields.filter(
-    (f) => Array.isArray(f.options) && f.options.length > 0,
+    (f) => f.editable && Array.isArray(f.options) && f.options.length > 0,
   );
   // Per-column alignment (auto: numbers + short codes center).
   const columnAligns = React.useMemo(
@@ -1972,6 +1980,7 @@ export function RecordView<T extends { id: RowId }>({
         formActions={formActions}
         renderFooter={renderFooter}
         formSlots={formSlots}
+        behaviour={behaviour}
       />
     );
   }
@@ -2789,6 +2798,7 @@ export function RecordView<T extends { id: RowId }>({
           formActions={formActions}
           renderFooter={renderFooter}
           formSlots={formSlots}
+          behaviour={behaviour}
         />
       )}
 
@@ -2959,8 +2969,9 @@ interface DetailPanelProps<T extends { id: RowId }> {
   readOnly?: boolean;
   /** Switch a read-only panel into edit mode. */
   onEdit?: () => void;
-  /** Commit the buffered draft to the table. */
-  onSave: (row: T) => void;
+  /** Commit the buffered draft to the table. `then` carries the acting
+   *  button's `after`, so "Save & New" can hand the form a blank record. */
+  onSave: (row: T, then?: FormActionOutcome) => void;
   /** Discard the draft (and drop the row if it was never saved). */
   onCancel: () => void;
   /** "panel" = slide-over (default); "page" = full-page form. */
@@ -2989,6 +3000,9 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Your own content between the fields — a callout, a preview, a custom pair
    *  of controls. Each slot renders as a full-width row inside its section. */
   formSlots?: FormSlot<T>[];
+  /** Behaviour, already resolved by the table so a per-table prop reaches the
+   *  form as well as the rows. */
+  behaviour?: BehaviourConfig;
   /** Page-form breadcrumb override (fully configurable). When set, these crumbs
    *  replace the default `Home › {title} › Create/Update {singular}` — so you can
    *  add parents ("Access") or rename the last crumb ("New Role"). Build each
@@ -3016,10 +3030,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
   formActions,
   renderFooter,
   formSlots,
+  behaviour: behaviourProp,
   crumbs,
 }: DetailPanelProps<T>) {
   const formConfig = useResolved("form", undefined) ?? {};
-  const behaviour = useResolved("behaviour", undefined) ?? {};
+  const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
   // Reset the buffered form only when a *genuinely different* record is opened.
@@ -3434,7 +3449,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
     if (keepOpen === false) return; // the action handled its own outcome
     if (actionRequiresValid(action)) {
       clearPersisted(draftKey); // work committed — drop the saved draft
-      dismiss(() => onSave(validated));
+      const outcome = saveOutcome(action.after, behaviour);
+      // Only a closing save plays the slide-out; staying open would animate the
+      // panel away and straight back in.
+      if (outcome === "close") dismiss(() => onSave(validated, outcome));
+      else onSave(validated, outcome);
     } else {
       handleCancel(); // closes without committing (Delete, Archive, …)
     }

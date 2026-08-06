@@ -10,8 +10,10 @@ import {
 import { Button } from "./button";
 import { ConfirmDialog } from "./confirm-dialog";
 import {
+  type BehaviourConfig,
   type FormAction,
   type FormActionContext,
+  type FormActionOutcome,
   type FormActionsConfig,
 } from "./config";
 
@@ -82,6 +84,18 @@ export function resolveFormActions<T>(
 ): FormAction<T>[] {
   if (!config) return defaults;
   return typeof config === "function" ? config(defaults) : config;
+}
+
+/**
+ * What the form does after a successful save: the acting button's `after` if it
+ * named one, otherwise `behaviour.closeOnSave`. One helper so the form and the
+ * table can't disagree about it.
+ */
+export function saveOutcome(
+  after: FormActionOutcome | undefined,
+  behaviour: BehaviourConfig | undefined,
+): FormActionOutcome {
+  return after ?? ((behaviour?.closeOnSave ?? true) ? "close" : "stay");
 }
 
 /** An action validates first when it says so, and by default when it's primary. */

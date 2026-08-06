@@ -120,6 +120,16 @@ export type FormSlot<T> = {
   render: (ctx: FormActionContext<T>) => React.ReactNode;
 };
 
+/** What the form does once an action succeeds. */
+export type FormActionOutcome =
+  /** Close the form. The default, and what Save does. */
+  | "close"
+  /** Keep it open on the record just saved. */
+  | "stay"
+  /** Open a blank record, for entering several in a row ("Save & New").
+   *  Needs `makeEmptyRow` on the table; falls back to "stay" without it. */
+  | "new";
+
 /** One footer button. */
 export type FormAction<T> = {
   /** Stable identity. The shipped actions use `cancel`, `save`, `close`, `edit`,
@@ -145,6 +155,10 @@ export type FormAction<T> = {
    *  `variant: "primary"` and `false` for everything else, which is why Save
    *  validates and Cancel doesn't. */
   requiresValid?: boolean;
+  /** What happens after the action succeeds. Default `"close"`. Set
+   *  `after: "new"` on a saving action to get "Save & New". Ignored when the
+   *  action returns `false`, which means it handled its own outcome. */
+  after?: FormActionOutcome;
   /** Ask before acting. Use it for anything destructive. */
   confirm?: { title: string; body?: string; confirmLabel?: string };
 };
