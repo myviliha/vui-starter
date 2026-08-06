@@ -48,6 +48,18 @@ export default function DataTablePage() {
         <code>/organization/profile</code> page is the reference consumer.
       </Note>
 
+      <Note title="Logo and favicon fields upload through you">
+        The <code>BrandAsset</code> control never touches your storage. Hand it{" "}
+        <code>onPick(file)</code>, save the file wherever your assets live, and
+        return the URL to display:{" "}
+        <code>orgProfileFields(&#123; logo: &#123; onPick &#125; &#125;)</code>.
+        The control shows its own uploading state, enforces <code>maxBytes</code>{" "}
+        before it calls you, and prints a details line from <code>meta</code>.
+        Its <code>inline</code> option stores the image as a base64 data URI and
+        is only for demos with no backend, which is what the prebuilt{" "}
+        <code>organizationProfileFields</code> uses.
+      </Note>
+
       <H2>Full example</H2>
       <P>
         Describe your columns in a <code>fields</code> array, pass your data, and

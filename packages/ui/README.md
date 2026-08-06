@@ -295,7 +295,7 @@ show/hide) · `kbd` (key caps + `Shortcut`) · `label` ·
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
 `RecordForm`) · `profile-form` (`ProfileForm` — a pre-designed view/edit profile
 page) · `organization-profile` (`organizationProfileFields` preset + `OrgProfile`
-type) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)
+type + the `BrandAsset` image control, which uploads through your `onPick`) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)
 · plus the `utils` (`cn`) helper and the `theme.css` design tokens.
 
 Components ported from shadcn/ui (Radix-based) are being brought into the package

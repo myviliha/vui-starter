@@ -7,6 +7,38 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.45.0 — 2026-08-06
+
+### Added
+
+- **`BrandAsset` hands you the `File` instead of a base64 string.** Pass
+  `onPick(file)`, upload it wherever you keep assets, and return the URL to show
+  (`{ url }` or a plain string, or nothing if you drive `value` yourself). The
+  control awaits the promise, shows its own "Uploading…" state, and surfaces a
+  rejection as an inline error. Nothing is uploaded or fetched by the package.
+- **`BrandAsset` props: `onRemove`, `meta`, `accept`, `maxBytes`, `busy`,
+  `inline`.** `meta` prints a details line under the preview (name · format ·
+  dimensions · size · date; dimensions are read off the rendered image when you
+  don't supply them). `accept` now defaults to every image type instead of a
+  fixed PNG/JPEG/SVG list. `maxBytes` rejects an oversized file before `onPick`
+  is called. `busy` lets a host drive the uploading state during a save.
+- **`orgProfileFields(options)`** — the organization profile preset with your
+  uploader wired into the Logo and Favicon fields:
+  `orgProfileFields({ logo: { onPick }, favicon: { onPick } })`. Every other
+  field is untouched, so a profile screen no longer needs a local replacement
+  control just to store an image properly.
+
+### Changed
+
+- **`BrandAsset` no longer writes a base64 data URI by default.** Storing the
+  image inline meant a 2 MB logo became a ~2.7 MB field value: too long for a
+  normal column, invisible to a CDN, and impossible to cache or transform. The
+  data-URI path is still there for demos with no backend, but you now ask for it
+  with `inline`. A control with neither `onPick` nor `inline` says so instead of
+  quietly producing a value that cannot be saved.
+  `organizationProfileFields` (the prebuilt demo preset) keeps `inline`, so the
+  bundled Organization Profile page behaves as before.
+
 ## 1.44.1 — 2026-08-06
 
 ### Fixed

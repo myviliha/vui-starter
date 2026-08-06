@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
   CubeIcon as Building2,
@@ -69,73 +69,225 @@ export const ORGANIZATION_PROFILE_DESCRIPTION =
 const opts = (vals: readonly string[]) =>
   vals.map((v) => ({ value: v, label: v }));
 
-/** Logo / favicon control: a preview plus Replace / Remove. Reads the picked
- *  file as a data URL (a real API would upload it and store the returned URL).
- *  Used as `renderInput` (edit) alongside `render` (view). Exported so you can
- *  reuse it for other image fields. */
-export function BrandAsset({
-  value,
-  onChange,
-  square,
-  readOnly,
-}: {
+/** Details for the line under a brand asset. Every part is optional; only the
+ *  ones you supply are shown. */
+export type BrandAssetMeta = {
+  name?: string;
+  /** File type shown as-is, e.g. `"PNG"`, `"SVG"`. */
+  format?: string;
+  width?: number;
+  height?: number;
+  sizeBytes?: number;
+  uploadedAt?: string | Date;
+};
+
+/** What `onPick` may return: the URL to display, optionally with details for
+ *  the preview line. Return nothing if you drive `value` yourself. */
+export type BrandAssetPick = string | { url: string; meta?: BrandAssetMeta };
+
+export type BrandAssetProps = {
+  /** The URL to display. Whatever you store (an id, a path) is your business —
+   *  the control only renders this. */
   value: string;
-  onChange?: (v: string) => void;
+  /** Called with the picked file. Upload it and return the URL to show. Async
+   *  is fine: the control shows its own busy state until the promise settles,
+   *  and shows the error if it rejects. */
+  onPick?: (
+    file: File,
+  ) => BrandAssetPick | void | Promise<BrandAssetPick | void>;
+  /** Called when Remove is clicked, before the value is cleared. Use it to
+   *  delete the stored asset. */
+  onRemove?: () => void;
+  /** Receives the new URL after a pick, and `""` after Remove. `renderInput`
+   *  wires this to the form value for you. */
+  onChange?: (value: string) => void;
+  /** Details for the current asset, shown under the preview. */
+  meta?: BrandAssetMeta;
+  /** File picker filter. Defaults to every image type. */
+  accept?: string;
+  /** Reject anything larger, before `onPick` is called. */
+  maxBytes?: number;
+  /** Force the busy state, e.g. while a save is in flight. */
+  busy?: boolean;
+  /** Demo escape hatch: with no backend, read the file as a base64 data URI and
+   *  use that as the value. Never ship this against a real API — the whole
+   *  image ends up in the field. */
+  inline?: boolean;
   square?: boolean;
   readOnly?: boolean;
-}) {
+};
+
+const formatBytes = (n: number) =>
+  n >= 1024 * 1024
+    ? `${(n / 1024 / 1024).toFixed(n < 10 * 1024 * 1024 ? 1 : 0)} MB`
+    : `${Math.max(1, Math.round(n / 1024))} KB`;
+
+const fileMeta = (file: File): BrandAssetMeta => ({
+  name: file.name,
+  format: file.type.split("/")[1]?.toUpperCase(),
+  sizeBytes: file.size,
+  uploadedAt: new Date(),
+});
+
+const readDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("Could not read that file."));
+    reader.readAsDataURL(file);
+  });
+
+/** Logo / favicon control: a preview, an optional details line, and
+ *  Replace / Remove. It never uploads anything itself — you hand it an
+ *  `onPick` that stores the file and returns a URL. Used as `renderInput`
+ *  (edit) alongside `render` (view), and exported so you can reuse it for
+ *  other image fields.
+ *
+ * ```tsx
+ * <BrandAsset
+ *   value={org.logoUrl}
+ *   onPick={async (file) => ({ url: (await uploadToS3(file)).url })}
+ *   maxBytes={2 * 1024 * 1024}
+ * />
+ * ``` */
+export function BrandAsset({
+  value,
+  onPick,
+  onRemove,
+  onChange,
+  meta,
+  accept = "image/*",
+  maxBytes,
+  busy,
+  inline,
+  square,
+  readOnly,
+}: BrandAssetProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  // Details from the last pick, kept only while they describe the current
+  // value — so Cancel (which reverts `value`) drops them too.
+  const [picked, setPicked] = useState<{ url: string; meta: BrandAssetMeta }>();
+  const [dims, setDims] = useState<{ width: number; height: number }>();
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  const working = busy || uploading;
+  const info = picked?.url === value ? picked.meta : meta;
+  const width = info?.width ?? dims?.width;
+  const height = info?.height ?? dims?.height;
+  const details = [
+    info?.name,
+    info?.format,
+    width && height ? `${width} × ${height}` : undefined,
+    info?.sizeBytes ? formatBytes(info.sizeBytes) : undefined,
+    info?.uploadedAt
+      ? new Date(info.uploadedAt).toISOString().slice(0, 10)
+      : undefined,
+  ].filter(Boolean);
+
+  async function handleFile(file: File) {
+    setError("");
+    if (maxBytes && file.size > maxBytes) {
+      setError(
+        `That file is ${formatBytes(file.size)}. The limit is ${formatBytes(maxBytes)}.`,
+      );
+      return;
+    }
+    if (!onPick && !inline) {
+      setError("This field has no uploader configured.");
+      return;
+    }
+    setUploading(true);
+    try {
+      const result = onPick
+        ? await onPick(file)
+        : { url: await readDataUrl(file), meta: fileMeta(file) };
+      // Nothing returned means the caller updated `value` itself.
+      if (result) {
+        const url = typeof result === "string" ? result : result.url;
+        const next =
+          typeof result === "string"
+            ? fileMeta(file)
+            : (result.meta ?? fileMeta(file));
+        setPicked({ url, meta: next });
+        setDims(undefined);
+        onChange?.(url);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
   const box = square ? "size-12" : "h-12 w-24";
   return (
-    <div className="flex items-center gap-3">
-      <div
-        className={`flex ${box} shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted/40`}
-      >
-        {value ? (
-          <img
-            src={value}
-            alt=""
-            className="max-h-full max-w-full object-contain"
-          />
-        ) : (
-          <span className="text-xs text-muted-foreground">None</span>
-        )}
-      </div>
-      {!readOnly && (
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            type="button"
-            onClick={() => inputRef.current?.click()}
-          >
-            {value ? "Replace" : "Upload"}
-          </Button>
-          {value && (
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-3">
+        <div
+          className={`flex ${box} shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted/40`}
+        >
+          {value ? (
+            <img
+              src={value}
+              alt=""
+              className="max-h-full max-w-full object-contain"
+              onLoad={(e) =>
+                setDims({
+                  width: e.currentTarget.naturalWidth,
+                  height: e.currentTarget.naturalHeight,
+                })
+              }
+            />
+          ) : (
+            <span className="text-xs text-muted-foreground">None</span>
+          )}
+        </div>
+        {!readOnly && (
+          <div className="flex items-center gap-2">
             <Button
               size="sm"
-              variant="ghost"
               type="button"
-              onClick={() => onChange?.("")}
+              disabled={working}
+              onClick={() => inputRef.current?.click()}
             >
-              Remove
+              {working ? "Uploading…" : value ? "Replace" : "Upload"}
             </Button>
-          )}
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/png,image/jpeg,image/svg+xml"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-              const reader = new FileReader();
-              reader.onload = () => onChange?.(String(reader.result));
-              reader.readAsDataURL(file);
-              e.target.value = ""; // allow re-picking the same file
-            }}
-          />
-        </div>
+            {value && (
+              <Button
+                size="sm"
+                variant="ghost"
+                type="button"
+                disabled={working}
+                onClick={() => {
+                  setError("");
+                  setPicked(undefined);
+                  setDims(undefined);
+                  onRemove?.();
+                  onChange?.("");
+                }}
+              >
+                Remove
+              </Button>
+            )}
+            <input
+              ref={inputRef}
+              type="file"
+              accept={accept}
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                e.target.value = ""; // allow re-picking the same file
+                if (file) void handleFile(file);
+              }}
+            />
+          </div>
+        )}
+      </div>
+      {details.length > 0 && (
+        <p className="text-xs text-muted-foreground">{details.join(" · ")}</p>
       )}
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 }
@@ -166,6 +318,89 @@ const CURRENCIES = ["USD ($)", "CAD ($)", "GBP (£)", "EUR (€)", "JPY (¥)"];
 const DATE_FORMATS = ["MM/DD/YYYY", "DD/MM/YYYY", "YYYY-MM-DD"];
 const MEASUREMENTS = ["Imperial (ft, lb, °F)", "Metric (m, kg, °C)"];
 const LANGUAGES = ["English (US)", "English (UK)", "Français", "日本語"];
+
+/** How a brand-asset field stores its file. Everything `BrandAsset` takes
+ *  except the props the field itself supplies. */
+export type BrandAssetHost = Omit<
+  BrandAssetProps,
+  "value" | "onChange" | "square" | "readOnly"
+>;
+
+export type OrgProfileFieldOptions = {
+  logo?: BrandAssetHost;
+  favicon?: BrandAssetHost;
+};
+
+const brandAssetField = (
+  key: "logo" | "favicon",
+  label: string,
+  description: string,
+  host: BrandAssetHost,
+  square?: boolean,
+): RecordField<OrgProfile> => ({
+  key,
+  label,
+  description,
+  group: "Brand assets",
+  editable: true,
+  render: (row) => (
+    <BrandAsset {...host} value={row[key]} square={square} readOnly />
+  ),
+  renderInput: ({ value, onChange }) => (
+    <BrandAsset {...host} value={value} onChange={onChange} square={square} />
+  ),
+});
+
+/**
+ * The organization profile fields, with your uploader wired into the Logo and
+ * Favicon controls:
+ *
+ * ```tsx
+ * const fields = orgProfileFields({
+ *   logo: { onPick: async (file) => ({ url: await upload(file) }) },
+ *   favicon: { onPick: async (file) => ({ url: await upload(file) }) },
+ * });
+ * ```
+ *
+ * Pass no options and the brand assets fall back to `inline` (base64 data URI)
+ * mode, which is fine for a demo with no backend and wrong for anything else.
+ * `organizationProfileFields` is that demo default, pre-built.
+ */
+export function orgProfileFields({
+  logo,
+  favicon,
+}: OrgProfileFieldOptions = {}): RecordField<OrgProfile>[] {
+  return organizationProfileFields.map((field) =>
+    field.key === "logo"
+      ? brandAssetField("logo", LOGO.label, LOGO.description, {
+          ...LOGO.host,
+          ...logo,
+        })
+      : field.key === "favicon"
+        ? brandAssetField(
+            "favicon",
+            FAVICON.label,
+            FAVICON.description,
+            { ...FAVICON.host, ...favicon },
+            true,
+          )
+        : field,
+  );
+}
+
+const LOGO = {
+  label: "Logo",
+  description:
+    "Recommended 480 × 160, transparent background. SVG or PNG, max 2 MB. If unset, the organization's initials are used.",
+  host: { inline: true, maxBytes: 2 * 1024 * 1024 } satisfies BrandAssetHost,
+};
+
+const FAVICON = {
+  label: "Favicon",
+  description:
+    "Square, 512 × 512. Used for the browser tab and mobile shortcut. Max 512 KB.",
+  host: { inline: true, maxBytes: 512 * 1024 } satisfies BrandAssetHost,
+};
 
 export const organizationProfileFields: RecordField<OrgProfile>[] = [
   // ── Organization information ──
@@ -244,30 +479,14 @@ export const organizationProfileFields: RecordField<OrgProfile>[] = [
   },
 
   // ── Brand assets ──
-  {
-    key: "logo",
-    label: "Logo",
-    description:
-      "Recommended 480 × 160, transparent background. SVG or PNG, max 2 MB. If unset, the organization's initials are used.",
-    group: "Brand assets",
-    editable: true,
-    render: (row) => <BrandAsset value={row.logo} readOnly />,
-    renderInput: ({ value, onChange }) => (
-      <BrandAsset value={value} onChange={onChange} />
-    ),
-  },
-  {
-    key: "favicon",
-    label: "Favicon",
-    description:
-      "Square, 512 × 512. Used for the browser tab and mobile shortcut. Max 512 KB.",
-    group: "Brand assets",
-    editable: true,
-    render: (row) => <BrandAsset value={row.favicon} square readOnly />,
-    renderInput: ({ value, onChange }) => (
-      <BrandAsset value={value} onChange={onChange} square />
-    ),
-  },
+  brandAssetField("logo", LOGO.label, LOGO.description, LOGO.host),
+  brandAssetField(
+    "favicon",
+    FAVICON.label,
+    FAVICON.description,
+    FAVICON.host,
+    true,
+  ),
 
   // ── Contact & address ──
   {
