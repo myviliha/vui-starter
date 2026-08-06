@@ -40,6 +40,7 @@ import { Button } from "./button";
 import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
+import { Skeleton } from "./skeleton";
 import { Combobox } from "./combobox";
 import { MultiCombobox } from "./multi-combobox";
 import { FilterGrid, FilterField } from "./filter-field";
@@ -515,10 +516,11 @@ export function isAsyncLabeled<T>(f: RecordField<T>): boolean {
 }
 
 /** Read-mode label for an async-id field. Resolves the set value's label via
- *  `resolveOption` (one record, never the whole list) and renders it, falling
- *  back to the raw id while resolving. Used wherever a value is *shown* (form
- *  read rows, detail panels, table cells) — the edit control already resolves
- *  its own label. */
+ *  `resolveOption` (one record, never the whole list) and renders it, showing a
+ *  skeleton until it lands — never the raw id, which means nothing to a reader.
+ *  A value that resolves to nothing reads "Unknown" (the id stays in the
+ *  tooltip). Used wherever a value is *shown* (form read rows, detail panels,
+ *  table cells) — the edit control already resolves its own label. */
 function AsyncFieldValue<T>({
   field,
   value,
@@ -541,16 +543,30 @@ function AsyncFieldValue<T>({
   const resetKey = (field.dependsOn ?? [])
     .map((k) => String((values as Record<string, unknown>)[k] ?? ""))
     .join(" ");
-  // ponytail: one resolveOption fetch per rendered value; a table with many
-  // async cells resolves each independently. Add a shared cache if that shows up.
-  const { options } = useAsyncOptions({
+  // One resolveOption per distinct value: identical in-flight requests are
+  // shared inside the hook, so N cells on the same id cost one round trip.
+  const { options, resolving } = useAsyncOptions({
     source,
     open: false,
     search: "",
     value,
     resetKey,
   });
-  return <>{options.find((o) => o.value === value)?.label ?? value}</>;
+  const label = options.find((o) => o.value === value)?.label;
+  if (label !== undefined) return <>{label}</>;
+  if (resolving) return <Skeleton className="h-4 w-24" />;
+  return <UnknownValue value={value} />;
+}
+
+/** A value whose label could not be resolved (deleted record, failed request).
+ *  Says so instead of leaving the id on screen, but keeps the id in the tooltip
+ *  so it's still there when someone goes looking. */
+function UnknownValue({ value }: { value: string }) {
+  return (
+    <span className="text-muted-foreground" title={value}>
+      Unknown
+    </span>
+  );
 }
 
 /** Read display for a `multiple` field: resolves each value's label (batch via
@@ -580,7 +596,7 @@ function MultiFieldValue<T>({
   const resetKey = (field.dependsOn ?? [])
     .map((k) => String((row as Record<string, unknown>)[k] ?? ""))
     .join(" ");
-  const { options } = useAsyncOptions({
+  const { options, resolving } = useAsyncOptions({
     source,
     open: false,
     search: "",
@@ -590,10 +606,13 @@ function MultiFieldValue<T>({
   const staticOpts = Array.isArray(field.options) ? field.options : [];
   const labelOf = (v: string) =>
     options.find((o) => o.value === v)?.label ??
-    staticOpts.find((o) => o.value === v)?.label ??
-    v;
-  const labels = values.map(labelOf);
-  if (!labels.length) return <span className="text-muted-foreground">—</span>;
+    staticOpts.find((o) => o.value === v)?.label;
+  const resolvedLabels = values.map(labelOf);
+  if (!values.length) return <span className="text-muted-foreground">—</span>;
+  // Same rule as the single value: a skeleton until the labels land, never ids.
+  if (resolving && resolvedLabels.some((l) => l === undefined))
+    return <Skeleton className="h-4 w-32" />;
+  const labels = resolvedLabels.map((l, i) => l ?? `Unknown (${values[i]})`);
   const max = field.maxChipsInCell ?? 3;
   const shown = labels.slice(0, max);
   const extra = labels.length - shown.length;

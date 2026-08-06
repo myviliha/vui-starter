@@ -7,6 +7,32 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.47.0 — 2026-08-06
+
+### Fixed
+
+- **Async fields no longer paint the raw id before the label arrives.** A read
+  cell, detail panel or profile row backed by `loadOptions` + `resolveOption`
+  used to render the stored value first, so a page opened as
+  `Region 1 · Country 1 · Timezone 27` and swapped to real labels as each fetch
+  landed. On a throttled connection those integers sat there for seconds. Read
+  displays now show a skeleton until the label resolves.
+- **A reference that can't be resolved reads `Unknown`, not its id.** If
+  `resolveOption` fails or returns nothing, the cell said `Currency 142` forever
+  with no sign anything had gone wrong. It now reads `Unknown` with the id in
+  the tooltip, so a dangling foreign key looks like an error and stays
+  debuggable. Applies to `multiple` fields too.
+- **Identical resolves in flight at the same time are shared.** Every rendered
+  value used to fetch on its own, so a table of 50 rows on the same country id
+  fired 50 requests. They now collapse into one. The entry is dropped as soon as
+  it settles, so nothing is held long enough to go stale.
+
+### Added
+
+- **`useAsyncOptions` returns `resolving`** — true while a set value's label is
+  being resolved (distinct from `loading`, which covers the dropdown's own list
+  fetch). Use it to show a skeleton instead of a value your reader can't read.
+
 ## 1.46.0 — 2026-08-06
 
 ### Fixed

@@ -552,6 +552,16 @@ const fields = [
           <code>dependsOn: [parentKey]</code> for cascades: a parent change clears
           this field&apos;s cached options + value, and the next open re-fetches.
         </li>
+        <li>
+          <strong>What a reader sees while that resolve is in flight</strong>: a
+          skeleton, never the stored id. <code>Region 1</code> tells a user
+          nothing, so read cells and view panels shimmer until the label lands.
+          If the resolve comes back empty or fails, the value reads{" "}
+          <code>Unknown</code> with the id in the tooltip, so a broken reference
+          looks broken instead of looking like data. Identical requests in flight
+          at the same moment are shared, so 50 rows on the same id cost one round
+          trip.
+        </li>
       </Ul>
       <CodeBlock title="async FK picker with a Region → Country cascade">{`const fields = [
   { key: "region", label: "Region", input: "combobox",
