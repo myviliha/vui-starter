@@ -498,6 +498,21 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
 
+**Put your own content between the fields.** `formSlots` renders a callout, a preview or a pair of custom controls as a full-width row inside a section, so it inherits the card, the separators and the padding instead of floating beside them:
+
+```tsx
+formSlots={[
+  { id: "vat-hint", after: "vatNumber", render: () => <Alert>We validate this with HMRC.</Alert> },
+  { id: "map", group: "Address", render: (ctx) => <MiniMap postcode={ctx.row.postcode} /> },
+]}
+```
+
+`after` places a slot under that field, in that field's own section. `group` names a section and puts it at the end. Neither means the end of the default section. `render` gets the same context as an action, so a slot can read the live draft.
+
+Slots are a prop on the form, not entries in `fields`, and that is deliberate: `fields` is the data contract that drives the table, the filter panel and import/export as well as the form, so arbitrary markup in it would leak layout into all four.
+
+**`fullWidth` on a field** gives it the whole row: the label sits above a full-width control instead of beside it. Use it for a long textarea, an address block, or a `renderInput` that needs the space.
+
 **Behaviour is config too.** `behaviour` holds what components *do*, as opposed to how they look, and every key replaces something that used to be hard-coded: `rowClick` (`"view" | "edit" | "none"`, what clicking a record's name does), `closeOnSave`, `flashMs` (the saved-row highlight; `0` turns it off), `confirmDelete`, `confirmDiscardWhenDirty`. Set it app-wide on the provider or per table with `behaviour={{ … }}` on `RecordView`.
 
 **Let the people using the app change some of it.** Pass `userConfigurable` and those keys become theirs, saved per browser and merged over your config:

@@ -47,9 +47,11 @@ import {
   type FormAction,
   type FormActionContext,
   type FormActionsConfig,
+  type FormSlot,
 } from "./config";
 export type {
   BehaviourConfig,
+  FormSlot,
   FormAction,
   FormActionContext,
   FormActionsConfig,
@@ -396,6 +398,10 @@ export interface RecordField<T> {
    *  for single-value read displays, where the values a table paints in one go
    *  are collected and asked for together — 50 rows become one request. */
   resolveOptions?: (values: string[]) => Promise<AsyncOption[]>;
+  /** Give this field the whole form row: the label sits above a full-width
+   *  control instead of beside it. For a long textarea, an address block, or a
+   *  custom `renderInput` that needs the space. */
+  fullWidth?: boolean;
   /** The label to show in read mode, straight from the row. Set this when your
    *  payload already carries the label next to the id (`{ countryId, country }`)
    *  and the field never resolves anything: it paints instantly, with no
@@ -543,6 +549,31 @@ export function validateField<T>(
  *  with no static `options`) — its read display must resolve the id to a label. */
 export function isAsyncLabeled<T>(f: RecordField<T>): boolean {
   return Boolean(f.loadOptions && f.resolveOption) && !Array.isArray(f.options);
+}
+
+/**
+ * Place a form's slots within one section, keyed by the field each follows.
+ * The `""` bucket holds the ones with nothing to follow, which close out the
+ * section. `after` puts a slot in that field's own section, `group` names a
+ * section directly, and neither means the default one. Exported for testing.
+ */
+export function groupSlots<T>(
+  fields: RecordField<T>[],
+  slots: FormSlot<T>[] | undefined,
+  group: string,
+): Map<string, FormSlot<T>[]> {
+  const fieldGroup = (key: string) =>
+    fields.find((f) => f.key === key)?.group ?? "General";
+  const byAfter = new Map<string, FormSlot<T>[]>();
+  for (const slot of slots ?? []) {
+    const target =
+      slot.group ?? (slot.after ? fieldGroup(slot.after) : "General");
+    if (target !== group) continue;
+    // Follow the named field only when it is actually in this section.
+    const key = slot.after && fieldGroup(slot.after) === group ? slot.after : "";
+    byAfter.set(key, [...(byAfter.get(key) ?? []), slot]);
+  }
+  return byAfter;
 }
 
 /** Read-mode label for an async-id field. Resolves the set value's label via
@@ -903,6 +934,10 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Replace the form footer outright. The array covers almost everything, so
    *  reach for this only when it genuinely can't express what you need. */
   renderFooter?: (ctx: FormActionContext<T>) => React.ReactNode;
+  /** Your own content between the form's fields — a callout, a preview, a pair
+   *  of custom controls. Each slot renders as a full-width row inside its
+   *  section, so it inherits the card, separators and padding. */
+  formSlots?: FormSlot<T>[];
   /** Show the row Edit (pencil) action and the Edit button on the view panel.
    *  Defaults to whether any field is `editable`, so a read-only list (every
    *  field `editable: false`) gets no Edit affordance instead of one that opens
@@ -1008,6 +1043,7 @@ export function RecordView<T extends { id: RowId }>({
   behaviour: behaviourProp,
   formActions,
   renderFooter,
+  formSlots,
   showEdit,
   showFilter = true,
   filterExtras,
@@ -1935,6 +1971,7 @@ export function RecordView<T extends { id: RowId }>({
         onCancel={cancelForm}
         formActions={formActions}
         renderFooter={renderFooter}
+        formSlots={formSlots}
       />
     );
   }
@@ -2751,6 +2788,7 @@ export function RecordView<T extends { id: RowId }>({
           onCancel={cancelForm}
           formActions={formActions}
           renderFooter={renderFooter}
+          formSlots={formSlots}
         />
       )}
 
@@ -2948,6 +2986,9 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Replace the whole footer. The array covers almost everything, so reach for
    *  this only when it genuinely can't express the layout you need. */
   renderFooter?: (ctx: FormActionContext<T>) => React.ReactNode;
+  /** Your own content between the fields — a callout, a preview, a custom pair
+   *  of controls. Each slot renders as a full-width row inside its section. */
+  formSlots?: FormSlot<T>[];
   /** Page-form breadcrumb override (fully configurable). When set, these crumbs
    *  replace the default `Home › {title} › Create/Update {singular}` — so you can
    *  add parents ("Access") or rename the last crumb ("New Role"). Build each
@@ -2974,6 +3015,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   persistKey,
   formActions,
   renderFooter,
+  formSlots,
   crumbs,
 }: DetailPanelProps<T>) {
   const formConfig = useResolved("form", undefined) ?? {};
@@ -3113,9 +3155,19 @@ function RecordDetailPanel<T extends { id: RowId }>({
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
+  const slotRow = (slot: FormSlot<T>) => (
+    <div
+      key={`slot:${slot.id}`}
+      className="col-span-2 border-t border-border px-3 py-3 leading-relaxed first:border-t-0"
+    >
+      {slot.render(actionCtx)}
+    </div>
+  );
+
   const formBody = orderedGroups(fields).map((group) => {
     const groupFields = fields.filter((f) => (f.group ?? "General") === group);
     if (groupFields.length === 0) return null;
+    const slots = groupSlots(fields, formSlots, group);
     return (
       <section
         key={group}
@@ -3128,13 +3180,20 @@ function RecordDetailPanel<T extends { id: RowId }>({
             longest label (never wraps), controls stay aligned. The panel width
             follows (see the slide-over `sm:w-auto`). */}
         <dl className="grid grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3">
-          {groupFields.map((f) => (
+          {groupFields.flatMap((f) => [
             // Label, icon, required mark and control share one baseline —
             // vertically centered. ponytail: a wrapped textarea grows down and
             // the label centers against it; acceptable for the single-line norm.
             <div
               key={f.key}
-              className="col-span-2 grid grid-cols-subgrid items-center border-t border-border px-3 py-3 leading-relaxed first:border-t-0"
+              className={cn(
+                "col-span-2 border-t border-border px-3 py-3 leading-relaxed first:border-t-0",
+                // Full width stacks the label over the control; the default puts
+                // them on one baseline in the label │ control subgrid.
+                f.fullWidth
+                  ? "flex flex-col gap-1.5"
+                  : "grid grid-cols-subgrid items-center",
+              )}
             >
               <dt className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground">
                 {f.icon && (
@@ -3329,8 +3388,12 @@ function RecordDetailPanel<T extends { id: RowId }>({
                   </p>
                 )}
               </dd>
-            </div>
-          ))}
+            </div>,
+            // Anything the host put after this field.
+            ...(slots.get(f.key) ?? []).map(slotRow),
+          ])}
+          {/* Slots with no `after` close out the section. */}
+          {(slots.get("") ?? []).map(slotRow)}
         </dl>
       </section>
     );

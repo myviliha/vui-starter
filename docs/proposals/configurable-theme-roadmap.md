@@ -1,6 +1,6 @@
 # Making the theme configurable: a roadmap
 
-**Status:** slices 0 and 1 shipped in 1.50.0, slice 4 in 1.51.0; slices 2 and 3 still proposals · **Written:** 2026-08-06 · **Owner:** Suman Bonakurthi
+**Status:** slices 0 and 1 shipped in 1.50.0, slice 4 in 1.51.0, slice 2 partly in 1.52.0; slice 3 still a proposal · **Written:** 2026-08-06 · **Owner:** Suman Bonakurthi
 
 The ask: a host should be able to change and configure everything, including behaviour. A form
 should take any component and any layout, and Save/Cancel should be the host's to define.
@@ -82,13 +82,18 @@ without writing any footer markup and with the standard styling intact.
 
 ---
 
-## Slice 2 — Form body composition
+## Slice 2 — Form body composition (partly shipped, 1.52.0)
 
 **Problem today.** The body is `fields` in `group` order, one control per row. A host cannot put a
 banner between two fields, span a field across both columns, or split a long form into tabs. `render`
 and `renderInput` cover one field's control, not the space around it.
 
-**Shape.** Three additions, smallest first, because the first two probably cover most of it:
+**Shape.** Three additions, smallest first, because the first two probably cover most of it. **The
+first two shipped in 1.52.0**, with two changes of shape worth recording: in a label-beside-control
+grid there is no difference between spanning two columns and spanning the row, so the field prop is
+`fullWidth` rather than `span: 1 | 2 | "full"`; and slots landed as a `formSlots` prop rather than
+entries in the `fields` array, to keep that array a pure data contract. The third is still open, and
+still waiting on a real case:
 
 1. **Field span and per-field width.** `span?: 1 | 2 | "full"` on `RecordField`, honoured by the
    two-column page layout. This is the most requested thing and it is nearly free.

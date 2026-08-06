@@ -100,6 +100,26 @@ export type FormActionContext<T> = {
   edit?: () => void;
 };
 
+/**
+ * Something of your own between the fields of a form: a callout, a preview, a
+ * pair of custom controls. It renders as a full-width row inside the section, so
+ * it inherits the card, the separators and the padding rather than floating
+ * beside them.
+ *
+ * Slots live next to the form, not in the `fields` array, because that array is
+ * the data contract: it drives the table, the filter panel and import/export as
+ * well as the form. Mixing arbitrary markup into it would put layout into all
+ * four.
+ */
+export type FormSlot<T> = {
+  id: string;
+  /** Place it after this field. Omit to put it at the end of `group`. */
+  after?: string;
+  /** Which section it belongs to. Defaults to the last group, or "General". */
+  group?: string;
+  render: (ctx: FormActionContext<T>) => React.ReactNode;
+};
+
 /** One footer button. */
 export type FormAction<T> = {
   /** Stable identity. The shipped actions use `cancel`, `save`, `close`, `edit`,

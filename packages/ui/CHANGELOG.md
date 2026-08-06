@@ -7,6 +7,25 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.52.0 — 2026-08-06
+
+### Added
+
+- **`formSlots` — your own content between a form's fields.** A callout, a
+  preview, a pair of custom controls: each slot renders as a full-width row
+  inside its section, inheriting the card, the separators and the padding rather
+  than floating beside them. `after` places one under a named field, in that
+  field's own section; `group` names a section and puts it at the end. `render`
+  receives the live draft, so a slot can react to what is being typed.
+
+  Slots are a prop on the form rather than entries in `fields`, on purpose:
+  `fields` is the data contract that drives the table, the filter panel and
+  import/export as well as the form, so arbitrary markup in it would leak layout
+  into all four.
+- **`fullWidth` on a `RecordField`** — the field takes the whole form row, with
+  its label above a full-width control instead of beside it. For a long
+  textarea, an address block, or a `renderInput` that needs the space.
+
 ## 1.51.0 — 2026-08-06
 
 ### Added

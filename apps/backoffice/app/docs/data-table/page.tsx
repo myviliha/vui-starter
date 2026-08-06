@@ -459,6 +459,34 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
         wholesale for the rare case the array can&apos;t express.
       </P>
 
+      <Note title="Put your own content between the fields">
+        <code>formSlots</code> renders a callout, a preview or a pair of custom
+        controls as a full-width row inside a section, so it inherits the card,
+        the separators and the padding instead of floating beside them.{" "}
+        <code>after</code> places a slot under that field, in that field&apos;s
+        own section; <code>group</code> names a section and puts it at the end;
+        neither means the end of the default section. The <code>render</code>{" "}
+        callback gets the live draft, so a slot can react to what is typed.
+      </Note>
+
+      <CodeBlock title="a slot and a full-width field">{`<RecordView
+  fields={[
+    { key: "vatNumber", label: "VAT number", editable: true },
+    { key: "notes", label: "Notes", editable: true, fullWidth: true },  // label above, full-width control
+  ]}
+  formSlots={[
+    { id: "vat-hint", after: "vatNumber", render: () => <Alert>We validate this with HMRC.</Alert> },
+  ]}
+  /* … */
+/>`}</CodeBlock>
+
+      <P>
+        Slots are a prop on the form rather than entries in <code>fields</code>,
+        and that is deliberate: <code>fields</code> is the data contract that
+        drives the table, the filter panel and import/export as well as the form,
+        so arbitrary markup in it would leak layout into all four.
+      </P>
+
       <Note title="Behaviour is config too">
         <code>behaviour</code> holds what a table <em>does</em>, as opposed to
         how it looks, and every key replaces something that used to be

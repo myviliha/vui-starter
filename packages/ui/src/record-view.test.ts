@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   emptyStateLabel,
+  groupSlots,
   formatPhone,
   isAsyncLabeled,
   orderedGroups,
@@ -9,6 +10,7 @@ import {
   validateField,
   type RecordField,
 } from "./record-view";
+import { type FormSlot } from "./config";
 
 describe("validateField", () => {
   type Row = {
@@ -208,5 +210,49 @@ describe("showEditActions", () => {
     expect(
       showEditActions([{ key: "name", label: "Name", editable: true }], false),
     ).toBe(false);
+  });
+});
+
+describe("groupSlots", () => {
+  type Row = { id: number; name: string; email: string; note: string };
+  const fields: RecordField<Row>[] = [
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "note", label: "Note", group: "Extra" },
+  ];
+  const slot = (over: Partial<FormSlot<Row>>): FormSlot<Row> => ({
+    id: "s",
+    render: () => null,
+    ...over,
+  });
+  const ids = (m: Map<string, FormSlot<Row>[]>) =>
+    Object.fromEntries([...m].map(([k, v]) => [k, v.map((s) => s.id)]));
+
+  it("follows the named field, in that field's own section", () => {
+    const s = slot({ id: "hint", after: "email" });
+    expect(ids(groupSlots(fields, [s], "General"))).toEqual({ email: ["hint"] });
+    expect(ids(groupSlots(fields, [s], "Extra"))).toEqual({});
+  });
+
+  it("uses the field's group, not the default one", () => {
+    const s = slot({ id: "hint", after: "note" });
+    expect(ids(groupSlots(fields, [s], "Extra"))).toEqual({ note: ["hint"] });
+    expect(ids(groupSlots(fields, [s], "General"))).toEqual({});
+  });
+
+  it("closes out the section when there is nothing to follow", () => {
+    expect(ids(groupSlots(fields, [slot({ id: "end" })], "General"))).toEqual({
+      "": ["end"],
+    });
+  });
+
+  it("takes an explicit group, and falls to the end when the field isn't in it", () => {
+    const s = slot({ id: "banner", group: "Extra", after: "email" });
+    expect(ids(groupSlots(fields, [s], "Extra"))).toEqual({ "": ["banner"] });
+  });
+
+  it("keeps several slots on one field in order", () => {
+    const list = [slot({ id: "a", after: "name" }), slot({ id: "b", after: "name" })];
+    expect(ids(groupSlots(fields, list, "General"))).toEqual({ name: ["a", "b"] });
   });
 });
