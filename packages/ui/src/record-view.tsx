@@ -835,6 +835,11 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
    *  `makeEmptyRow`). Default `true`. */
   showAdd?: boolean;
+  /** Show the row Edit (pencil) action and the Edit button on the view panel.
+   *  Defaults to whether any field is `editable`, so a read-only list (every
+   *  field `editable: false`) gets no Edit affordance instead of one that opens
+   *  an empty form. Set `false` to hide it on an otherwise editable table. */
+  showEdit?: boolean;
   /** Show the Filter panel. Default `true`. */
   showFilter?: boolean;
   /** Extra rows to add to the Filter panel. Compose with `FilterField`
@@ -884,6 +889,16 @@ export function emptyStateLabel<T>(
   return hasFieldFilter ? "No matching records." : "No records yet.";
 }
 
+/** Whether the Edit affordances (row pencil, view-panel Edit) show: the host's
+ *  `showEdit` if given, else whether there is anything to edit. Exported for
+ *  testing. */
+export function showEditActions<T>(
+  fields: RecordField<T>[],
+  showEdit?: boolean,
+): boolean {
+  return showEdit ?? fields.some((f) => f.editable);
+}
+
 export function RecordView<T extends { id: RowId }>({
   title,
   singular,
@@ -922,6 +937,7 @@ export function RecordView<T extends { id: RowId }>({
   showImport = true,
   showExport = true,
   showAdd = true,
+  showEdit,
   showFilter = true,
   filterExtras,
   showSort = true,
@@ -931,6 +947,9 @@ export function RecordView<T extends { id: RowId }>({
   trashedData,
   onRestore,
 }: RecordViewProps<T>) {
+  // No editable field means the Edit form would open empty, so the affordance
+  // is hidden unless the host asks for it explicitly.
+  const canEdit = showEditActions(fields, showEdit);
   const { titleLeading } = React.useContext(PageChromeContext);
   // Surface the page title/icon in the app's global top bar.
   usePageTitle(title, TitleIcon);
@@ -1771,7 +1790,7 @@ export function RecordView<T extends { id: RowId }>({
         icon={TitleIcon}
         getPrimary={getPrimary}
         readOnly={panelReadOnly}
-        onEdit={() => setPanelReadOnly(false)}
+        onEdit={canEdit ? () => setPanelReadOnly(false) : undefined}
         onSave={saveForm}
         onCancel={cancelForm}
       />
@@ -2520,7 +2539,7 @@ export function RecordView<T extends { id: RowId }>({
                         >
                           <Eye className="size-4 text-blue-500" />
                         </button>
-                        {!trash && (
+                        {!trash && canEdit && (
                           <button
                             type="button"
                             onClick={() => openEdit(row.id)}
@@ -2584,7 +2603,7 @@ export function RecordView<T extends { id: RowId }>({
           icon={TitleIcon}
           getPrimary={getPrimary}
           readOnly={panelReadOnly}
-          onEdit={() => setPanelReadOnly(false)}
+          onEdit={canEdit ? () => setPanelReadOnly(false) : undefined}
           onSave={saveForm}
           onCancel={cancelForm}
         />

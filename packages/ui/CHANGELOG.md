@@ -7,6 +7,25 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.46.0 — 2026-08-06
+
+### Fixed
+
+- **A read-only table no longer offers a row Edit button.** The pencil rendered
+  on every row whenever you weren't in Trash, without ever looking at the
+  fields. On a list where nothing is `editable` (a catalog mirror, a
+  subscribe-only list, the demo Users table) it opened a form with no body and a
+  Save that committed nothing. Edit now follows the fields: no editable field,
+  no pencil and no Edit button on the view panel.
+
+### Added
+
+- **`showEdit`** — the row Edit toggle, alongside `showAdd` / `showFilter` /
+  `showSort` and the rest. It's the one that doesn't default to `true`: left
+  unset it follows the fields, as above. Pass `showEdit={false}` to drop Edit
+  from a table that does have editable fields, or `showEdit` to force it on.
+  `onEdit` still redirects the action rather than removing it.
+
 ## 1.45.0 — 2026-08-06
 
 ### Added

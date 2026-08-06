@@ -5,14 +5,26 @@ import {
   formatPhone,
   isAsyncLabeled,
   orderedGroups,
+  showEditActions,
   validateField,
   type RecordField,
 } from "./record-view";
 
 describe("validateField", () => {
-  type Row = { id: number; name: string; code: string; age: string; hq: boolean };
+  type Row = {
+    id: number;
+    name: string;
+    code: string;
+    age: string;
+    hq: boolean;
+  };
   const F = (over: Partial<RecordField<Row>>): RecordField<Row> =>
-    ({ key: "name", label: "Name", editable: true, ...over }) as RecordField<Row>;
+    ({
+      key: "name",
+      label: "Name",
+      editable: true,
+      ...over,
+    }) as RecordField<Row>;
   const row = {} as Row;
 
   it("flags a required empty value, passes an optional empty one", () => {
@@ -28,7 +40,13 @@ describe("validateField", () => {
   });
 
   it("enforces min/max as numeric value for input:number", () => {
-    const f = F({ key: "age", label: "Age", input: "number", min: 1, max: 120 });
+    const f = F({
+      key: "age",
+      label: "Age",
+      input: "number",
+      min: 1,
+      max: 120,
+    });
     expect(validateField(f, "0", row)).toMatch(/at least 1/);
     expect(validateField(f, "130", row)).toMatch(/at most 120/);
     expect(validateField(f, "40", row)).toBeUndefined();
@@ -36,17 +54,31 @@ describe("validateField", () => {
 
   it("checks pattern, email and phone formats", () => {
     expect(
-      validateField(F({ pattern: /^[A-Za-z0-9]+$/, patternMessage: "alnum" }), "a-b", row),
+      validateField(
+        F({ pattern: /^[A-Za-z0-9]+$/, patternMessage: "alnum" }),
+        "a-b",
+        row,
+      ),
     ).toBe("alnum");
-    expect(validateField(F({ format: "email" }), "nope", row)).toMatch(/email/i);
-    expect(validateField(F({ format: "email" }), "a@b.co", row)).toBeUndefined();
-    expect(validateField(F({ format: "phone" }), "(123) 456-789", row)).toMatch(/phone/i);
-    expect(validateField(F({ format: "phone" }), "(123) 456-7890", row)).toBeUndefined();
+    expect(validateField(F({ format: "email" }), "nope", row)).toMatch(
+      /email/i,
+    );
+    expect(
+      validateField(F({ format: "email" }), "a@b.co", row),
+    ).toBeUndefined();
+    expect(validateField(F({ format: "phone" }), "(123) 456-789", row)).toMatch(
+      /phone/i,
+    );
+    expect(
+      validateField(F({ format: "phone" }), "(123) 456-7890", row),
+    ).toBeUndefined();
   });
 
   it("trims before validating when trim is set", () => {
     // "  ab  " → "ab" (len 2) fails min 3; without trim the spaces would pass.
-    expect(validateField(F({ trim: true, min: 3 }), "  ab  ", row)).toMatch(/at least 3/);
+    expect(validateField(F({ trim: true, min: 3 }), "  ab  ", row)).toMatch(
+      /at least 3/,
+    );
   });
 
   it("runs a custom validate last", () => {
@@ -61,7 +93,9 @@ describe("validateField", () => {
     expect(validateField(req, String([]), row)).toMatch(/required/i);
     expect(validateField(req, String(["a"]), row)).toBeUndefined();
     // Optional multi is always valid, and min/max never fire.
-    expect(validateField(F({ multiple: true, min: 5 }), String([]), row)).toBeUndefined();
+    expect(
+      validateField(F({ multiple: true, min: 5 }), String([]), row),
+    ).toBeUndefined();
   });
 });
 
@@ -79,12 +113,15 @@ describe("isAsyncLabeled", () => {
   const noop = async () => [];
   const resolve = async () => null;
   const f = (over: Partial<RecordField<{ id: number; k: string }>>) =>
-    ({ key: "k", label: "K", ...over }) as RecordField<{ id: number; k: string }>;
+    ({ key: "k", label: "K", ...over }) as RecordField<{
+      id: number;
+      k: string;
+    }>;
 
   it("is true only with loadOptions + resolveOption and no static options", () => {
-    expect(isAsyncLabeled(f({ loadOptions: noop, resolveOption: resolve }))).toBe(
-      true,
-    );
+    expect(
+      isAsyncLabeled(f({ loadOptions: noop, resolveOption: resolve })),
+    ).toBe(true);
   });
 
   it("is false without resolveOption (can't resolve one value)", () => {
@@ -143,5 +180,33 @@ describe("emptyStateLabel", () => {
 
   it("ignores empty per-field values (no filter really set)", () => {
     expect(emptyStateLabel("", { role: "", team: [] })).toBe("No records yet.");
+  });
+});
+
+describe("showEditActions", () => {
+  type Row = { id: number; name: string };
+  const read: RecordField<Row>[] = [
+    { key: "name", label: "Name" },
+    { key: "id", label: "Id", editable: false },
+  ];
+
+  it("hides Edit when no field is editable", () => {
+    expect(showEditActions(read)).toBe(false);
+  });
+
+  it("shows Edit as soon as one field is editable", () => {
+    expect(
+      showEditActions([
+        ...read,
+        { key: "name", label: "Name", editable: true },
+      ]),
+    ).toBe(true);
+  });
+
+  it("lets the host override either way", () => {
+    expect(showEditActions(read, true)).toBe(true);
+    expect(
+      showEditActions([{ key: "name", label: "Name", editable: true }], false),
+    ).toBe(false);
   });
 });
