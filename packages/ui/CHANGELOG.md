@@ -7,6 +7,43 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.50.0 — 2026-08-06
+
+### Added
+
+- **A config spine: `@viliha/vui-ui/config`.** The preconfigured theme is now
+  itself a config. `vuiPreset` is a plain value the package applies by default,
+  built from the same API a host uses, so there is no "configurable" variant of
+  a component sitting beside an opinionated one. Values resolve
+  **per-instance prop → `<VuiProvider config>` → `vuiPreset` → package
+  default**, and a layer overrides only the keys it mentions, so changing one
+  thing never means adopting a config file for everything. Ships
+  `VuiProvider`, `useVuiConfig`, `defineConfig` and `mergeConfig`. The provider
+  is optional: without it you get the theme exactly as before.
+- **Configurable form footer: `formActions`.** Cancel + Save (Close + Edit while
+  viewing) are ordinary actions now, so you change them with the API that builds
+  them. Pass a function to start from the shipped list
+  (`formActions={(d) => [...d, archive]}`) or an array to replace it. An action
+  takes `label`, `variant`, `icon`, `align` (`start` pins it left, where
+  destructive actions belong), `confirm`, and `visible` / `disabled` predicates
+  reading the live form. Its `onAct` gets `mode`, `row` (the draft), `dirty`,
+  `valid`, `errors`, `close`, `reset` and `edit`, and may be async, with the
+  footer disabled while it settles.
+
+  One rule governs the outcome: an action closes the form when it finishes
+  unless it returns `false`, and an action that validates commits the draft
+  through `onSave` on the way out. Validation defaults on for
+  `variant: "primary"` and off otherwise, which is why Save validates and Cancel
+  doesn't; `requiresValid` overrides it either way.
+- **`renderFooter(ctx)`** — replace the form footer outright, for the rare case
+  the action array can't express what a screen needs.
+
+### Changed
+
+- The form footer renders through the new action list rather than hard-coded
+  buttons. Nothing moves: the same pair, the same blue Save, the same
+  separators, since the shipped actions are what the preset describes.
+
 ## 1.49.0 — 2026-08-06
 
 ### Fixed

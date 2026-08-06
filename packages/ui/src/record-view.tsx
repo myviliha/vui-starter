@@ -41,6 +41,25 @@ import { Checkbox } from "./checkbox";
 import { Input } from "./input";
 import { Select } from "./select";
 import { Skeleton } from "./skeleton";
+import {
+  useResolved,
+  type FormAction,
+  type FormActionContext,
+  type FormActionsConfig,
+} from "./config";
+export type {
+  FormAction,
+  FormActionContext,
+  FormActionsConfig,
+  FormConfig,
+  VuiConfig,
+} from "./config";
+import {
+  actionRequiresValid,
+  defaultFormActions,
+  FormFooter,
+  resolveFormActions,
+} from "./form-actions";
 import { Combobox } from "./combobox";
 import { MultiCombobox } from "./multi-combobox";
 import { FilterGrid, FilterField } from "./filter-field";
@@ -869,6 +888,15 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
    *  `makeEmptyRow`). Default `true`. */
   showAdd?: boolean;
+  /** Footer buttons for the add/edit/view form. An array replaces Cancel + Save
+   *  (or Close + Edit in view mode); a function receives those defaults so you
+   *  can add, reorder or swap one without restating the rest:
+   *  `formActions={(d) => [...d, saveAndNew]}`. Falls back to `VuiProvider`'s
+   *  `form.actions`, then to the shipped pair. */
+  formActions?: FormActionsConfig<T>;
+  /** Replace the form footer outright. The array covers almost everything, so
+   *  reach for this only when it genuinely can't express what you need. */
+  renderFooter?: (ctx: FormActionContext<T>) => React.ReactNode;
   /** Show the row Edit (pencil) action and the Edit button on the view panel.
    *  Defaults to whether any field is `editable`, so a read-only list (every
    *  field `editable: false`) gets no Edit affordance instead of one that opens
@@ -971,6 +999,8 @@ export function RecordView<T extends { id: RowId }>({
   showImport = true,
   showExport = true,
   showAdd = true,
+  formActions,
+  renderFooter,
   showEdit,
   showFilter = true,
   filterExtras,
@@ -1878,6 +1908,8 @@ export function RecordView<T extends { id: RowId }>({
         onEdit={canEdit ? () => setPanelReadOnly(false) : undefined}
         onSave={saveForm}
         onCancel={cancelForm}
+        formActions={formActions}
+        renderFooter={renderFooter}
       />
     );
   }
@@ -2691,6 +2723,8 @@ export function RecordView<T extends { id: RowId }>({
           onEdit={canEdit ? () => setPanelReadOnly(false) : undefined}
           onSave={saveForm}
           onCancel={cancelForm}
+          formActions={formActions}
+          renderFooter={renderFooter}
         />
       )}
 
@@ -2880,6 +2914,14 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Persist the in-progress draft under this key (e.g. the route), so a
    *  half-filled form survives leaving and returning via the open-tabs strip. */
   persistKey?: string;
+  /** Footer buttons. An array replaces Cancel + Save (or Close + Edit in view
+   *  mode); a function receives those defaults so you can add, reorder or swap
+   *  one without restating the rest. Falls back to `VuiProvider`'s
+   *  `form.actions`, then to the shipped pair. */
+  formActions?: FormActionsConfig<T>;
+  /** Replace the whole footer. The array covers almost everything, so reach for
+   *  this only when it genuinely can't express the layout you need. */
+  renderFooter?: (ctx: FormActionContext<T>) => React.ReactNode;
   /** Page-form breadcrumb override (fully configurable). When set, these crumbs
    *  replace the default `Home › {title} › Create/Update {singular}` — so you can
    *  add parents ("Access") or rename the last crumb ("New Role"). Build each
@@ -2904,8 +2946,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
   onHome,
   formDescription,
   persistKey,
+  formActions,
+  renderFooter,
   crumbs,
 }: DetailPanelProps<T>) {
+  const formConfig = useResolved("form", undefined) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
   // Reset the buffered form only when a *genuinely different* record is opened.
@@ -2997,8 +3042,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const dismiss = (action: () => void) =>
     layout === "page" ? action() : requestClose(action);
 
-  const handleSave = () => {
-    // Trim flagged fields, then validate everything before saving.
+  /** Trim flagged fields, then validate everything. Returns the cleaned draft,
+   *  or `null` when a field fails — the messages are already inline by then. */
+  const validateDraft = (): T | null => {
     let next = draft;
     for (const f of editableFields) {
       if (!f.trim) continue;
@@ -3013,12 +3059,12 @@ function RecordDetailPanel<T extends { id: RowId }>({
     setDraft(next); // reflect trims whether or not the save proceeds
     if (found.size > 0) {
       setErrors(found); // block Save; show every message inline
-      return;
+      return null;
     }
     setErrors(new Map());
-    clearPersisted(draftKey); // work committed — drop the saved draft
-    dismiss(() => onSave(next));
+    return next;
   };
+
 
   // Cancel/close discards the draft too, so it doesn't reappear next visit.
   const handleCancel = () => {
@@ -3250,35 +3296,50 @@ function RecordDetailPanel<T extends { id: RowId }>({
     );
   });
 
-  // Footer actions — View shows Close/Edit; Add/Edit shows Cancel/Save.
-  const formFooter = (
-    <div className="flex shrink-0 items-center justify-end gap-2 border-y border-border bg-muted/40 px-4 py-3">
-      {readOnly ? (
-        <>
-          <Button onClick={handleCancel}>
-            <X className="size-4" />
-            Close
-          </Button>
-          {onEdit && (
-            <Button variant="primary" onClick={onEdit}>
-              <Pencil className="size-4" />
-              Edit
-            </Button>
-          )}
-        </>
-      ) : (
-        <>
-          <Button onClick={handleCancel}>
-            <X className="size-4" />
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            <Check className="size-4" />
-            Save
-          </Button>
-        </>
-      )}
-    </div>
+  // Footer actions. The shipped pair (Cancel + Save, or Close + Edit while
+  // viewing) are ordinary actions, so a host's `formActions` starts from them.
+  const actionCtx: FormActionContext<T> = {
+    mode: readOnly ? "view" : isNew ? "create" : "edit",
+    row: draft,
+    dirty: JSON.stringify(draft) !== JSON.stringify(row),
+    valid: errors.size === 0,
+    errors,
+    close: handleCancel,
+    reset: () => {
+      setDraft(row);
+      setErrors(new Map());
+    },
+    edit: onEdit,
+  };
+  const actions = resolveFormActions<T>(
+    defaultFormActions<T>({ readOnly, canEdit: Boolean(onEdit) }),
+    formActions ?? (formConfig.actions as FormActionsConfig<T> | undefined),
+  );
+  /**
+   * Run one action. The rule, in one sentence: an action closes the form when it
+   * finishes unless it returns `false`, and an action that validates (primary,
+   * by default) commits the draft through `onSave` on the way out.
+   *
+   * That is why the shipped Save has an empty `onAct` — committing is this
+   * function's job, so any action a host marks `requiresValid` saves the same
+   * way, with the same validation and the same discarded draft.
+   */
+  const runAction = async (action: FormAction<T>) => {
+    const validated = actionRequiresValid(action) ? validateDraft() : draft;
+    if (!validated) return; // invalid: messages are inline, form stays open
+    const keepOpen = await action.onAct({ ...actionCtx, row: validated });
+    if (keepOpen === false) return; // the action handled its own outcome
+    if (actionRequiresValid(action)) {
+      clearPersisted(draftKey); // work committed — drop the saved draft
+      dismiss(() => onSave(validated));
+    } else {
+      handleCancel(); // closes without committing (Delete, Archive, …)
+    }
+  };
+  const formFooter = renderFooter ? (
+    renderFooter(actionCtx)
+  ) : (
+    <FormFooter actions={actions} ctx={actionCtx} run={runAction} />
   );
 
   // Full-page form: breadcrumb header → scrollable single column → fixed actions.

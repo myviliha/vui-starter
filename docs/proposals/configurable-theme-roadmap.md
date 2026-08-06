@@ -1,6 +1,6 @@
 # Making the theme configurable: a roadmap
 
-**Status:** proposal, nothing built yet · **Written:** 2026-08-06 · **Owner:** Suman Bonakurthi
+**Status:** slices 0 and 1 shipped in 1.50.0; slices 2 to 4 still proposals · **Written:** 2026-08-06 · **Owner:** Suman Bonakurthi
 
 The ask: a host should be able to change and configure everything, including behaviour. A form
 should take any component and any layout, and Save/Cancel should be the host's to define.

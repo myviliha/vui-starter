@@ -464,6 +464,40 @@ The buffered add/edit form renders in one of two layouts:
   `formDescription` and a per-field `description` to show an AWS-style help
   panel beside the form.
 
+**The footer buttons are yours.** `RecordForm` ships Cancel + Save (Close + Edit while viewing) and they are ordinary actions, so you change them with the same API that builds them. Pass `formActions` a function and you get the shipped list to work from:
+
+```tsx
+formActions={(defaults) => [
+  ...defaults,
+  {
+    id: "archive",
+    label: "Archive",
+    align: "start",              // pinned left, where destructive actions belong
+    variant: "destructive",
+    confirm: { title: "Archive this record?" },
+    onAct: async (ctx) => { await api.archive(ctx.row.id); },
+  },
+]}
+```
+
+Pass an array instead and it replaces them outright. Each action takes `label`, `variant`, `icon`, `align`, `confirm`, and `visible` / `disabled` predicates that read the live form: `visible: (ctx) => ctx.mode === "edit"`, `disabled: (ctx) => !ctx.dirty`. The context carries `mode`, `row` (the draft), `dirty`, `valid`, `errors`, `close`, `reset` and `edit`.
+
+One rule governs what happens next: **an action closes the form when it finishes unless it returns `false`, and an action that validates commits the draft through `onSave` on the way out.** Validation is on for `variant: "primary"` and off otherwise, which is why Save validates and Cancel doesn't; set `requiresValid` to override either way. So a destructive action closes without saving, and a custom primary action saves exactly like Save, with the same validation and the same discarded draft. `renderFooter(ctx)` replaces the footer wholesale, for the rare case the array can't express it.
+
+To change the footer for every form in the app rather than one screen, set it on the provider (see below). A per-screen `formActions` still wins.
+
+**One config, four layers.** The preconfigured theme is itself a config: `vuiPreset` is a plain value the package applies by default, built from the same API you would use. So nothing is locked and nothing is all-or-nothing. Values resolve **per-instance prop → `<VuiProvider config>` → `vuiPreset` → package default**, and a layer overrides only the keys it mentions.
+
+```tsx
+import { VuiProvider } from "@viliha/vui-ui/config";
+
+<VuiProvider config={{ form: { actions: (d) => [...d, saveAndNew] } }}>
+  {children}
+</VuiProvider>
+```
+
+The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
+
 **Saving against a server: return a promise from `onDataChange`.** It fires on
 every add, edit, delete and restore, in `manual` and `fetcher` mode as well as
 controlled mode, and it is where you write. Return the promise for that write

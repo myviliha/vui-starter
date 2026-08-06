@@ -416,6 +416,61 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
   fields={fields}
   /* … */
 />`}</CodeBlock>
+      <Note title="Configure the form footer instead of rebuilding the form">
+        <code>RecordForm</code> ships Cancel + Save (Close + Edit while viewing)
+        and they are ordinary actions, so you change them with the same API that
+        builds them. Give <code>formActions</code> a function and you get the
+        shipped list to work from; give it an array and it replaces them.
+      </Note>
+
+      <CodeBlock title="adding an action">{`<RecordView
+  formActions={(defaults) => [
+    ...defaults,
+    {
+      id: "archive",
+      label: "Archive",
+      align: "start",               // pinned left, where destructive actions belong
+      variant: "destructive",
+      confirm: { title: "Archive this record?" },
+      visible: (ctx) => ctx.mode === "edit",
+      onAct: async (ctx) => { await api.archive(ctx.row.id); },
+    },
+  ]}
+  /* … */
+/>`}</CodeBlock>
+
+      <P>
+        Each action takes <code>label</code>, <code>variant</code>,{" "}
+        <code>icon</code>, <code>align</code>, <code>confirm</code>, and{" "}
+        <code>visible</code> / <code>disabled</code> predicates that read the
+        live form. The context carries <code>mode</code>, <code>row</code> (the
+        draft), <code>dirty</code>, <code>valid</code>, <code>errors</code>,{" "}
+        <code>close</code>, <code>reset</code> and <code>edit</code>.
+      </P>
+      <P>
+        One rule governs what happens next: <strong>an action closes the form
+        when it finishes unless it returns <code>false</code>, and an action that
+        validates commits the draft through <code>onSave</code> on the way
+        out.</strong> Validation is on for <code>variant: &quot;primary&quot;</code>{" "}
+        and off otherwise, which is why Save validates and Cancel doesn&apos;t;
+        set <code>requiresValid</code> to override either way. A destructive
+        action therefore closes without saving, and a custom primary action saves
+        exactly like Save. <code>renderFooter(ctx)</code> replaces the footer
+        wholesale for the rare case the array can&apos;t express.
+      </P>
+
+      <Note title="One config, four layers">
+        The preconfigured theme is itself a config. <code>vuiPreset</code> is a
+        plain value the package applies by default, built from the same API you
+        would use, so nothing is locked and nothing is all-or-nothing. Values
+        resolve <strong>per-instance prop → <code>VuiProvider</code> config →{" "}
+        <code>vuiPreset</code> → package default</strong>, and each layer
+        overrides only the keys it mentions. Set{" "}
+        <code>{`<VuiProvider config={{ form: { actions } }}>`}</code> to change
+        every form in the app; a per-screen <code>formActions</code> still wins.
+        Colors, radius and spacing stay in <code>theme.css</code> on purpose.
+      </Note>
+
       <Note title="Return a promise from onDataChange when you save to a server">
         <code>onDataChange</code> fires on every add, edit, delete and restore,
         in <code>manual</code> and <code>fetcher</code> mode as well as
