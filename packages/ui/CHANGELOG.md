@@ -7,6 +7,28 @@ backward-compatible features, **major** for breaking changes.
 
 To upgrade, see [Upgrading](./AGENT.md#upgrading) in the agent guide.
 
+## 1.49.0 — 2026-08-06
+
+### Fixed
+
+- **A save in server mode no longer races the reload.** In `fetcher` mode a
+  mutation invalidated the cache and refetched straight away, before the host's
+  POST/PATCH had landed, so the server answered with pre-write rows and the
+  saved record appeared to revert. Add was the worst of it: the new row showed
+  for a moment and then vanished. `onDataChange` may now return a promise, and
+  RecordView waits for it before reloading. If it rejects, the error goes to
+  `onError` and the table reloads anyway rather than sitting on a row that was
+  never stored.
+
+### Changed
+
+- **`onDataChange` now fires in `manual` and `fetcher` mode too**, not only with
+  controlled `data`. It is the write hook for server-backed tables: return a
+  promise and the reload waits for it. In `manual` mode (where the host owns the
+  fetch) returning a promise also re-emits the current query through
+  `onQueryChange` once the write settles, so the page reloads itself after a
+  save. Returning nothing keeps the previous behaviour everywhere.
+
 ## 1.48.0 — 2026-08-06
 
 ### Fixed

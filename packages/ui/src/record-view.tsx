@@ -763,8 +763,13 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Controlled rows. When set, RecordView renders these and reports edits via
    *  onDataChange instead of holding rows in internal state. */
   data?: T[];
-  /** Receives the next rows array in controlled mode. */
-  onDataChange?: (rows: T[]) => void;
+  /** Receives the next rows array after an add, edit, delete or restore.
+   *
+   *  In `manual`/`fetcher` mode this is your persist hook, and **returning a
+   *  promise matters**: RecordView waits for it before reloading, so the reload
+   *  sees your write instead of racing it. Return nothing and the reload fires
+   *  immediately, which is only right when you persist elsewhere. */
+  onDataChange?: (rows: T[]) => void | Promise<void>;
   /** When set, the "add" button calls this (e.g. navigate to a create route)
    *  instead of opening the built-in form. */
   onCreate?: () => void;
@@ -987,10 +992,18 @@ export function RecordView<T extends { id: RowId }>({
   const fetching = fetcher !== undefined;
   const isManual = manual || fetching;
   const [internalRows, setInternalRows] = React.useState<T[]>(initialData);
+  // Latest internal rows, so a mutation can compute the next array without
+  // taking `internalRows` as a dependency (which would rebuild `setRows`).
+  const internalRef = React.useRef<T[]>(internalRows);
+  internalRef.current = internalRows;
   const controlled = data !== undefined;
 
   // Fetcher-managed state (only used when `fetcher` is set).
   const [fetchedData, setFetchedData] = React.useState<T[]>([]);
+  // Latest fetched rows, so a mutation can compute the next array without
+  // taking `fetchedData` as a dependency (which would rebuild `setRows`).
+  const fetchedRef = React.useRef<T[]>(fetchedData);
+  fetchedRef.current = fetchedData;
   const [fetchedTotal, setFetchedTotal] = React.useState(0);
   const [fetchedLoading, setFetchedLoading] = React.useState(fetching);
   const reqIdRef = React.useRef(0);
@@ -1068,29 +1081,67 @@ export function RecordView<T extends { id: RowId }>({
         : internalRows;
   const setRows = React.useCallback(
     (updater: React.SetStateAction<T[]>) => {
+      const apply = (prev: T[]) =>
+        typeof updater === "function"
+          ? (updater as (p: T[]) => T[])(prev)
+          : updater;
+      /** Reload after the host's write lands. Reloading first would race the
+       *  POST/PATCH and repaint pre-write rows, which is why a save looked
+       *  lost. A host that returns nothing keeps the old, immediate reload. */
+      const afterWrite = (written: void | Promise<void>, reload: () => void) => {
+        if (written && typeof written.then === "function") {
+          void written.then(reload, (err: unknown) => {
+            if (queryRef.current) onError?.(err, queryRef.current);
+            reload(); // the optimistic row didn't persist; show server truth
+          });
+        } else {
+          reload();
+        }
+      };
       if (fetching) {
-        // Optimistic local update, then invalidate the cache and refetch the
+        // Optimistic local update, then invalidate the cache and reload the
         // current query in the background so the table reflects server truth.
-        setFetchedData((prev) =>
-          typeof updater === "function"
-            ? (updater as (p: T[]) => T[])(prev)
-            : updater,
-        );
-        if (cacheKey) RV_CACHE.delete(cacheKey);
-        if (queryRef.current) runFetch(queryRef.current, { background: true });
+        const next = apply(fetchedRef.current);
+        setFetchedData(next);
+        afterWrite(onDataChange?.(next), () => {
+          if (cacheKey) RV_CACHE.delete(cacheKey);
+          if (queryRef.current) runFetch(queryRef.current, { background: true });
+        });
+        return;
+      }
+      if (isManual && !controlled) {
+        // Server mode where the host owns the fetch: mutate locally so the row
+        // is there immediately, then re-emit the query so the host reloads the
+        // page it just wrote. Only a host that returns a promise from
+        // `onDataChange` gets that reload — without one there is nothing to
+        // wait for, and reloading would race a write we can't see.
+        const next = apply(internalRef.current);
+        setInternalRows(next);
+        const written = onDataChange?.(next);
+        if (written && typeof written.then === "function") {
+          afterWrite(written, () => {
+            if (queryRef.current) onQueryChange?.(queryRef.current);
+          });
+        }
         return;
       }
       if (controlled) {
-        const next =
-          typeof updater === "function"
-            ? (updater as (prev: T[]) => T[])(data as T[])
-            : updater;
-        onDataChange?.(next);
+        onDataChange?.(apply(data as T[]));
       } else {
         setInternalRows(updater);
       }
     },
-    [fetching, cacheKey, runFetch, controlled, data, onDataChange],
+    [
+      fetching,
+      isManual,
+      cacheKey,
+      runFetch,
+      controlled,
+      data,
+      onDataChange,
+      onQueryChange,
+      onError,
+    ],
   );
   // Manual (server) mode without the controlled `data` prop feeds each page
   // through `initialData` and refetches via `onQueryChange`. Re-sync the internal

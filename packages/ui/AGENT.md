@@ -464,6 +464,20 @@ The buffered add/edit form renders in one of two layouts:
   `formDescription` and a per-field `description` to show an AWS-style help
   panel beside the form.
 
+**Saving against a server: return a promise from `onDataChange`.** It fires on
+every add, edit, delete and restore, in `manual` and `fetcher` mode as well as
+controlled mode, and it is where you write. Return the promise for that write
+and RecordView waits for it before reloading, so the reload sees your change:
+
+```tsx
+onDataChange={async (rows) => { await api.save(rows); }}
+```
+
+Return nothing and the reload fires immediately, which races your POST and
+repaints the rows the server had before it. That is what makes a save look like
+it was ignored. In `manual` mode a returned promise also re-emits the current
+query through `onQueryChange` once the write settles, so the page reloads itself.
+
 For the form on its own URL, render the exported `RecordForm` on a route and use
 controlled data (`data` + `onDataChange`) with `onCreate` / `onView` / `onEdit`
 to navigate instead of opening the overlay. Breadcrumbs everywhere come from the

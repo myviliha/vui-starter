@@ -416,6 +416,21 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
   fields={fields}
   /* … */
 />`}</CodeBlock>
+      <Note title="Return a promise from onDataChange when you save to a server">
+        <code>onDataChange</code> fires on every add, edit, delete and restore,
+        in <code>manual</code> and <code>fetcher</code> mode as well as
+        controlled mode. Return the promise for your write (
+        <code>{`onDataChange={async (rows) => { await api.save(rows); }}`}</code>
+        ) and RecordView waits for it before reloading, so the reload sees the
+        change. Return nothing and the reload fires immediately, racing your POST
+        and repainting the rows the server had before it &mdash; which is what
+        makes a save look like it was ignored, most visibly on Add, where the new
+        row appears and then disappears. In <code>manual</code> mode a returned
+        promise also re-emits the current query through{" "}
+        <code>onQueryChange</code> once the write settles, so the page reloads
+        itself.
+      </Note>
+
       <Note title="Guard against out-of-order responses">
         A fast user can fire several queries before earlier ones resolve. Track a
         request id (a <code>useRef</code> counter) and ignore a response whose id
