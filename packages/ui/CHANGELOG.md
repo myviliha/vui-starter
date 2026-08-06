@@ -106,6 +106,30 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.54.0 — 2026-08-06
+
+### Added
+
+- **`@viliha/vui-ui/page` — `Page`, the standard page frame.** The shape every
+  screen copies by hand (full-height column, 48px action header with the
+  breadcrumb trail, then the single scrolling `p-4` content region) is now a
+  component with slots:
+
+  ```tsx
+  <Page breadcrumbs={<Breadcrumbs />} actions={<Button>New</Button>}>
+    <section>…</section>
+  </Page>
+  ```
+
+  The frame is fixed on purpose, because it is what makes a dozen screens feel
+  like one app. What varies is what goes in the slots. `footer` pins a bar below
+  the content and outside the scroll, `bare` drops the standard content wrapper
+  for a page that lays itself out (a board), `hideHeader` covers a page with
+  nothing to put up there, and each region takes a `className` for the rest.
+
+  Nothing changes for pages that keep their own markup: this is the first piece
+  of the page-frame work, and the demo dashboard is the first screen using it.
+
 ## 1.53.0 — 2026-08-06
 
 ### Added

@@ -409,6 +409,18 @@ Validate fields declaratively — don't hand-roll a form to get validation. On a
 
 Group fields into form sections with `group`. It takes **any** title, and `RecordForm` renders one section per group in the order the groups first appear — so a profile form can read "Organization information", "Brand assets", "Contact & address", "Localization & units" instead of the default "General". Ungrouped fields fall under "General". Per-field `description` fills the About/info panel beside the form.
 
+**The page frame is a component, not markup to copy.** `Page` (`@viliha/vui-ui/page`) is the standard shape: a full-height column, a 48px action header holding the breadcrumb trail and that page's actions, then the one scrolling `p-4` content region.
+
+```tsx
+import { Page } from "@viliha/vui-ui/page";
+
+<Page breadcrumbs={<Breadcrumbs />} actions={<Button>New organization</Button>}>
+  <section>…</section>
+</Page>
+```
+
+The frame is deliberately fixed: it is what makes a dozen screens feel like one app, so what varies is the slots, not the layout. `footer` pins a bar below the content and outside the scroll (a Save bar), `bare` drops the standard content wrapper when a page lays itself out (a board with its own horizontal scroll), `hideHeader` covers a page with nothing to put up there, and `className` / `headerClassName` / `contentClassName` open each region for the rest. Don't rebuild the frame by hand; if it can't express what a page needs, that's worth fixing in `Page`.
+
 **Profile pages** (a single record shown read-only, with an Edit button that opens the Cancel + Save footer): don't hand-wire the view/edit toggle — import the pre-designed `ProfileForm` (`@viliha/vui-ui/profile-form`). Feed it `data` + `fields` (+ `onSave`, `getPrimary`, `title`) and it owns the view↔edit modes, revert-on-cancel, the info panel and a loading skeleton. For a company profile, spread the ready-made preset: `import { organizationProfileFields, getOrgPrimary, type OrgProfile } from "@viliha/vui-ui/organization-profile"` (Org information / Brand assets / Contact & address / Localization, plus the `BrandAsset` logo/favicon control). The backoffice `/organization/profile` page is the reference consumer.
 
 **Image fields upload through you, not through the package.** `BrandAsset` (the Logo/Favicon control) never touches your storage. Give it `onPick(file)`, put the file wherever assets belong, and return the URL to display: `orgProfileFields({ logo: { onPick: async (file) => ({ url: await upload(file) }) } })`. Store whatever you like in the field, an id or a URL, since the control only renders the `value` you give it back. It handles the rest itself: `maxBytes` rejects an oversized file before you are called, the button shows "Uploading…" until your promise settles, a rejection prints inline, and `meta` (`name`, `format`, `width`, `height`, `sizeBytes`, `uploadedAt`) prints a details line under the preview. Use `accept` to narrow the file types; it allows every image type by default. There is one escape hatch, `inline`, which stores the picked image as a base64 data URI. It exists for demos with no backend. Don't point it at a real API: a 2 MB logo becomes a ~2.7 MB field value that no ordinary column will take. The prebuilt `organizationProfileFields` uses `inline` for exactly that reason, so reach for `orgProfileFields({ … })` as soon as you have somewhere to put the file.

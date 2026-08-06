@@ -371,7 +371,8 @@ show/hide) · `kbd` (key caps + `Shortcut`) · `label` ·
 (multi-step wizard indicator) · `switch` · `tabs` · `textarea` · `toggle` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
-`RecordForm`) · `config` (`VuiProvider` + `vuiPreset`: the shipped theme as a
+`RecordForm`) · `page` (the standard page frame: header slots + one scrolling
+content region) · `config` (`VuiProvider` + `vuiPreset`: the shipped theme as a
 config you can override key by key) · `profile-form` (`ProfileForm` — a pre-designed view/edit profile
 page) · `organization-profile` (`organizationProfileFields` preset + `OrgProfile`
 type + the `BrandAsset` image control, which uploads through your `onPick`) · `wizard` (multi-step wizard scaffold: `Wizard` + `WizardSection`)

@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@viliha/vui-ui/table";
+import { Page } from "@viliha/vui-ui/page";
 import { Breadcrumbs } from "@/app/_components/breadcrumbs";
 import { SetPageTitle } from "@/app/_components/set-page-title";
 import { StatCard } from "@/app/_components/stat-card";
@@ -50,20 +51,17 @@ export default function HomePage() {
   );
 
   return (
-    <div className="flex h-full flex-col">
-      <SetPageTitle title="Home" icon={Home} />
-
-      {/* Action header — breadcrumbs (left) + overview note (right) */}
-      <div className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border px-4">
-        <Breadcrumbs />
+    // The shared page frame: full-height column, action header, one scrolling
+    // `p-4` content region. Every page type composes from it.
+    <Page
+      breadcrumbs={<Breadcrumbs />}
+      actions={
         <span className="hidden truncate text-muted-foreground md:block">
           Overview of organizations, teams, and markets across the platform.
         </span>
-      </div>
-
-      {/* Scrollable content — padded, card sections (matches the settings layout) */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-4 p-4">
+      }
+    >
+      <SetPageTitle title="Home" icon={Home} />
         {/* Stats — bordered cards */}
         <section
           aria-label="Key metrics"
@@ -209,9 +207,7 @@ export default function HomePage() {
             </section>
           </aside>
         </div>
-        </div>
-      </div>
-    </div>
+    </Page>
   );
 }
 
