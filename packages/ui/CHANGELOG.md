@@ -106,6 +106,27 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.62.1 — 2026-08-07
+
+### Fixed
+
+- **The tooltip is a light surface like everything else that floats.** It was
+  shadcn's dark `bg-primary` bubble with white text, which read as a second
+  design system sitting on top of this one, and it became obvious once field
+  help moved onto the label. It now uses `bg-popover` with a border and a
+  shadow, the same surface as menus, popovers, selects and hover cards. The
+  arrow follows, bordered on the two edges facing away from the bubble so it
+  continues the outline instead of drawing a line through it.
+
+- **One backdrop for every overlay.** Dialogs used a themed scrim while alert
+  dialogs, sheets and the command palette painted hard `bg-black`, which over an
+  already-dark background is just a muddy rectangle. All four now use
+  `bg-foreground/25`, so the scrim follows the theme.
+
+  Both are held in place by `src/z-layers.test.ts`, which now also fails the
+  build on a floating panel that isn't `bg-popover` or a backdrop that isn't the
+  themed scrim.
+
 ## 1.62.0 — 2026-08-07
 
 ### Added

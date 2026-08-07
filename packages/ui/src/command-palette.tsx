@@ -136,7 +136,7 @@ export function CommandPalette({
 
   let flatIndex = -1;
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/40 p-4 pt-[12vh]">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center bg-foreground/25 p-4 pt-[12vh]">
       <div
         ref={dialogRef}
         role="dialog"

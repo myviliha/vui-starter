@@ -9,9 +9,14 @@ type ResolvedSide = "top" | "bottom";
 type Placement = { left: number; top: number; side: ResolvedSide };
 
 /**
- * Lightweight styled tooltip matching the shadcn design (dark `bg-primary`
- * bubble + arrow), rendered in a portal with fixed positioning so it floats
+ * Lightweight tooltip, rendered in a portal with fixed positioning so it floats
  * above any scroll/overflow container. No dependency.
+ *
+ * It uses the same surface as every other floating thing in the package:
+ * `bg-popover` with a border and a shadow. shadcn's tooltip is a dark bubble,
+ * which reads as a different design system sitting on top of this one, so it
+ * was brought in line. One surface for menus, popovers, selects and tooltips is
+ * what makes them look like parts of the same product.
  *
  * `side` defaults to `"auto"`: it prefers **bottom** and flips to **top** only
  * when there isn't room below (e.g. the last rows of a table, near the footer).
@@ -101,14 +106,21 @@ export function Tooltip({
           >
             <div
               role="tooltip"
-              className="vui-fade-in relative w-fit max-w-xs text-balance rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground shadow-md"
+              className="vui-fade-in relative w-fit max-w-xs text-balance rounded-md border border-border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md"
             >
               {content}
               <span
                 aria-hidden="true"
                 className={cn(
-                  "absolute left-1/2 size-2 -translate-x-1/2 rotate-45 bg-primary",
-                  pos.side === "bottom" ? "-top-1" : "-bottom-1",
+                  // The arrow is the same surface, with the two edges facing
+                  // the viewer bordered so it reads as part of the bubble.
+                  "absolute left-1/2 size-2 -translate-x-1/2 rotate-45 border-border bg-popover",
+                  // Border only on the two edges pointing away from the bubble,
+                  // so the arrow continues its outline instead of drawing a
+                  // line across the middle.
+                  pos.side === "bottom"
+                    ? "-top-1 border-l border-t"
+                    : "-bottom-1 border-b border-r",
                 )}
               />
             </div>

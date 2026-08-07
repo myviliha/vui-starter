@@ -551,6 +551,8 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
 
+**One surface for everything that floats.** Menus, popovers, selects, hover cards and tooltips all use `bg-popover` with a border and a shadow; every backdrop uses `bg-foreground/25`. Never a dark bubble (shadcn's tooltip default) and never `bg-black`: both ignore the theme and read as a different design system sitting on top of this one. `src/z-layers.test.ts` fails the build on either.
+
 **Anything that floats must clear what opened it, and must be portalled.** A menu inside a slide-over, a confirm raised from a form, a picker at the bottom of a scrolling card: get either wrong and it is invisible or unclickable. Two rules, both non-negotiable:
 
 1. **Use the documented layer.** The scale lives at the top of `theme.css`: 60 slide-over, 70 Dialog, 80 confirm, 100 command palette, 200 pickers and menus, 210 HoverCard, 220 Tooltip, 250 Toast. Never invent a value; `src/z-layers.test.ts` fails the build on anything off the scale, and names the file.

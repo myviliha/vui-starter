@@ -39,6 +39,34 @@ const files = readdirSync(SRC).filter(
   (f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx"),
 );
 
+describe("floating surfaces", () => {
+  it("every floating panel uses the same surface, never a dark bubble", () => {
+    // shadcn's tooltip is dark `bg-primary`, which reads as a second design
+    // system sitting on top of this one. Menus, popovers, selects and tooltips
+    // all use `bg-popover` so they look like parts of one product.
+    for (const file of [
+      "tooltip.tsx",
+      "popover.tsx",
+      "dropdown-menu.tsx",
+      "select.tsx",
+      "hover-card.tsx",
+    ]) {
+      const source = readFileSync(join(SRC, file), "utf8");
+      expect(source, file).toContain("bg-popover");
+      expect(source, file).not.toContain("bg-primary ");
+    }
+  });
+
+  it("every backdrop is the themed scrim, not hard black", () => {
+    // `bg-black/50` over an already-dark background is a muddy rectangle.
+    for (const file of ["dialog.tsx", "alert-dialog.tsx", "sheet.tsx", "command-palette.tsx"]) {
+      const source = readFileSync(join(SRC, file), "utf8");
+      expect(source, file).toContain("bg-foreground/25");
+      expect(source, file).not.toContain("bg-black/");
+    }
+  });
+});
+
 describe("stacking order", () => {
   it("every z-index in the package is on the documented scale", () => {
     const offenders: string[] = [];
