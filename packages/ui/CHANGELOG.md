@@ -106,6 +106,63 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.59.0 — 2026-08-07
+
+### Added
+
+- **`formRows`: a form is rows, and each row says how many sections it holds.**
+  "One column, two rows: two sections on top, three underneath" is now the
+  declaration, near enough word for word:
+
+  ```tsx
+  formRows={[
+    { sections: [{ group: "Customer" }, { group: "Delivery" }] },
+    { sections: [{ group: "Items" }, { group: "Payment" }, { group: "Notes" }] },
+  ]}
+  ```
+
+  A card's width is just how many share its row, so one section on a row fills
+  it and nothing needs spanning. Three to a row is the readable maximum; a
+  fourth wraps rather than squeezing the label column. A section with no fields
+  is dropped, its row with it if that empties the row, and a group nobody placed
+  gets a full-width row rather than disappearing. Omit `formRows` and every
+  section gets its own row, as before.
+
+- **`form.errorDisplay`** — where a validation message appears, `"tooltip"`
+  (new default) or `"text"` (the old behaviour).
+
+### Changed
+
+- **Validation shows on the field, not under it.** A failing control gets a red
+  border and its message moves onto the field's info icon, so hovering says what
+  is wrong. Nothing is printed under the control any more, because that line of
+  red text pushed the rest of the form down while someone was still typing in
+  it, and nothing is raised as a toast, because a toast is gone before they
+  look. The message is still announced to assistive tech: a border colour and a
+  hover aren't available to everyone. Set `form: { errorDisplay: "text" }` to
+  get the old layout back.
+
+- **Everything that floats now clears what opened it.** `Dropdown` rendered in
+  place at `z-40`, so inside a slide-over it was clipped by the scrolling card
+  and sat under the panel: visible sometimes, clickable rarely. It portals to
+  the body now, positioned against its trigger. `AlertDialog` was at `z-50`,
+  under the `z-60` slide-over, so a confirm raised from a form was unreachable;
+  it is at `z-80`. `Popover` moved to the picker layer, `HoverCard` above it,
+  and the datatable's row menu with them.
+
+  The stacking order is a documented scale at the top of `theme.css`, and
+  `src/z-layers.test.ts` fails the build on any value that isn't on it, naming
+  the file. Floating content must also be portalled: a high z-index doesn't save
+  an `absolute` element from the nearest `overflow-hidden`, and every section
+  card has one.
+
+### Deprecated
+
+- **`sectionColumns` and `sections[].span`** (added in 1.58.0). They force one
+  column count on the whole form, which is the thing rows exist to fix. Both
+  still work and go away in 2.0. `formColumns` on a full-page form keeps working
+  too, and now feeds the same row layout.
+
 ## 1.58.0 — 2026-08-07
 
 ### Added

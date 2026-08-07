@@ -105,11 +105,21 @@ export type FormConfig = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actions?: FormActionsConfig<any>;
   /**
-   * How many columns the **sections** flow across: 1, 2 or 3. Default 1.
+   * How a field reports a validation failure. Default `"tooltip"`.
    *
-   * This is the only density setting a form has. Every section card is itself
-   * two columns, `[i] Label *` and the control, one field per row, so a form is
-   * made wider by putting cards side by side rather than by cramming fields.
+   * - `"tooltip"` highlights the control's border and puts the message on the
+   *   field's info icon, so the form never grows a line of red text that shifts
+   *   everything below it while someone is typing.
+   * - `"text"` is the old behaviour: the message under the control.
+   *
+   * Either way the message is also exposed to assistive tech, because a border
+   * colour and a hover are not available to everyone.
+   */
+  errorDisplay?: "tooltip" | "text";
+  /**
+   * @deprecated Since 1.59. Declare `rows` on the form instead: it says which
+   * sections share each row, so the top row can hold two and the next three.
+   * Still works, and goes away in 2.0.
    */
   sectionColumns?: SectionColumns;
 };
@@ -117,21 +127,47 @@ export type FormConfig = {
 /**
  * One section of a form: a titled card holding some of the fields.
  *
- * Sections come from each field's `group` and render in the order the groups
- * first appear. Declare them here when you want to control that order, let one
- * section be wider than the rest, or give a section its own field layout.
+ * A section's width comes from how many share its row, so there is nothing to
+ * set here for size: put one section on a row and it fills the row.
  */
 export type FormSection = {
   /** The `group` on the fields that belong to it. */
   group: string;
   /** A line under the title, for what the section is for. */
   description?: string;
-  /** Columns of the section grid this one takes. `"full"` spans the row, which
-   *  is what a section of long fields usually wants. Default 1. */
+  /**
+   * @deprecated Since 1.59. Width comes from the row now: put the section on a
+   * row of its own instead. Ignored when `rows` is set; still honoured on the
+   * old `sectionColumns` path, which goes away in 2.0.
+   */
   span?: 1 | 2 | 3 | "full";
 };
 
-/** Columns the form's sections flow across. */
+/**
+ * One row of a form: the sections that sit side by side on it, left to right.
+ *
+ * This is how a form gets designed. "Two sections on the top row, three on the
+ * bottom" is that sentence, written down:
+ *
+ * ```tsx
+ * rows={[
+ *   { sections: [{ group: "Customer" }, { group: "Delivery" }] },
+ *   { sections: [{ group: "Items" }, { group: "Payment" }, { group: "Notes" }] },
+ * ]}
+ * ```
+ *
+ * Three sections to a row is the most that stays readable; past that the label
+ * column starts squeezing the control. More than three wrap within the row.
+ */
+export type FormRow = {
+  sections: FormSection[];
+};
+
+/**
+ * @deprecated Since 1.59. Use `rows`, which lets each row hold a different
+ * number of sections rather than forcing one count on the whole form. Removed
+ * in 2.0.
+ */
 export type SectionColumns = 1 | 2 | 3;
 
 

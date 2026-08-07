@@ -44,6 +44,7 @@ import { Skeleton } from "./skeleton";
 import {
   useResolved,
   type BehaviourConfig,
+  type FormRow,
   type FormSection,
   type SectionColumns,
   type FormAction,
@@ -54,6 +55,7 @@ import {
 } from "./config";
 export type {
   BehaviourConfig,
+  FormRow,
   FormSection,
   SectionColumns,
   FormActionOutcome,
@@ -136,6 +138,53 @@ export function orderedSections<T>(
     ...declared.filter((d) => groups.includes(d.group)),
     ...groups.filter((g) => !named.has(g)).map((group) => ({ group })),
   ];
+}
+
+/**
+ * The form's rows, whichever way the host described them.
+ *
+ * `rows` is the way: each row names the sections that sit on it, so the top row
+ * can hold two and the next three. A section with no fields is dropped, and a
+ * group nobody placed gets a row of its own at the end rather than vanishing.
+ *
+ * Without `rows`, the deprecated `sectionColumns` path chunks the sections into
+ * rows of that many, which is the old flow-and-wrap behaviour. Without either,
+ * every section is its own full-width row.
+ *
+ * Exported for testing.
+ */
+export function resolveFormRows<T>(
+  fields: RecordField<T>[],
+  rows: FormRow[] | undefined,
+  sections: FormSection[] | undefined,
+  sectionColumns: SectionColumns | undefined,
+): FormRow[] {
+  const groups = new Set(orderedGroups(fields));
+  const has = (s: FormSection) => groups.has(s.group);
+
+  if (rows?.length) {
+    const placed = new Set<string>();
+    const out: FormRow[] = [];
+    for (const row of rows) {
+      const kept = row.sections.filter((s) => {
+        if (!has(s) || placed.has(s.group)) return false;
+        placed.add(s.group);
+        return true;
+      });
+      if (kept.length) out.push({ sections: kept });
+    }
+    for (const group of groups)
+      if (!placed.has(group)) out.push({ sections: [{ group }] });
+    return out;
+  }
+
+  const ordered = orderedSections(fields, sections);
+  const perRow = sectionColumns ?? 1;
+  if (perRow === 1) return ordered.map((s) => ({ sections: [s] }));
+  const out: FormRow[] = [];
+  for (let i = 0; i < ordered.length; i += perRow)
+    out.push({ sections: ordered.slice(i, i + perRow) });
+  return out;
 }
 
 /** Fixed (non-resizable) leading/trailing column widths, in px. */
@@ -254,12 +303,7 @@ export function usePageTitle(title: string, icon?: IconType) {
  *  or unknown kinds render a text input — extend this union as you add controls
  *  (e.g. `"daterange"`, `"multiselect"`). */
 export type FilterControl =
-  | "text"
-  | "number"
-  | "date"
-  | "select"
-  | "combobox"
-  | "checkbox";
+  "text" | "number" | "date" | "select" | "combobox" | "checkbox";
 
 /** Per-field Filter-panel config. `filterable: true` is shorthand for
  *  `{ control: "text" }`; pass an object to pick the control and shape it, so
@@ -557,7 +601,10 @@ export function validateField<T>(
     const re =
       typeof field.pattern === "string"
         ? new RegExp(field.pattern)
-        : new RegExp(field.pattern.source, field.pattern.flags.replace("g", ""));
+        : new RegExp(
+            field.pattern.source,
+            field.pattern.flags.replace("g", ""),
+          );
     if (!re.test(value)) return field.patternMessage ?? `${label} is invalid`;
   }
   if (field.format === "email" && !EMAIL_RE.test(value))
@@ -575,39 +622,13 @@ export function isAsyncLabeled<T>(f: RecordField<T>): boolean {
 }
 
 /**
- * How many columns of the *section* grid a section takes. A span wider than the
- * grid is clamped by the grid itself, so `span: 3` in a two-column form simply
- * fills the row.
+ * A row of sections. How many share the row is what sets each card's width, so
+ * nothing needs spanning: one section on a row fills it. Rows collapse to a
+ * single column on small screens, and three step through two on the way down.
+ * More than three wrap within the row rather than shrinking past readable.
  */
-const SECTION_SPAN = {
-  1: { 1: "", 2: "", 3: "", full: "" },
-  2: { 1: "", 2: "md:col-span-2", 3: "md:col-span-2", full: "md:col-span-2" },
-  3: {
-    1: "",
-    2: "md:col-span-2",
-    3: "md:col-span-2 xl:col-span-3",
-    full: "md:col-span-2 xl:col-span-3",
-  },
-} as const;
-
-/**
- * A trailing card that would leave a gap stretches to fill its row instead, so
- * a form with an odd number of sections doesn't end in white space.
- *
- * Only used when no section declares its own `span`: once spans are in play the
- * nth-child arithmetic no longer matches what's on screen, and a wrong guess
- * looks worse than the gap.
- */
-const SECTION_STRETCH = {
-  1: "",
-  2: "md:[&:last-child:nth-child(odd)]:col-span-2",
-  3: "md:[&:last-child:nth-child(odd)]:col-span-2 xl:[&:last-child:nth-child(3n+1)]:col-span-3 xl:[&:last-child:nth-child(3n+2)]:col-span-2",
-} as const;
-
-/** The section grid: cards across the form, wrapping onto as many rows as they
- *  need, and collapsing to one column on small screens. */
-const SECTION_GRID = {
-  1: "space-y-5",
+const ROW_GRID = {
+  1: "grid grid-cols-1",
   2: "grid grid-cols-1 items-start gap-5 md:grid-cols-2",
   3: "grid grid-cols-1 items-start gap-5 md:grid-cols-2 xl:grid-cols-3",
 } as const;
@@ -617,7 +638,7 @@ const SECTION_GRID = {
  * one field per row. The label track is `max-content`, so it widens to the
  * longest label in the card and never wraps, and every control in that card
  * starts at the same x. A form is made wider by putting cards side by side
- * (`sectionColumns`), never by cramming more fields into a row.
+ * (a row of sections), never by cramming more fields into a row.
  */
 const FIELD_GRID = "grid-cols-[max-content_minmax(14rem,1fr)]";
 
@@ -644,7 +665,8 @@ export function groupSlots<T>(
       slot.group ?? (slot.after ? fieldGroup(slot.after) : "General");
     if (target !== group) continue;
     // Follow the named field only when it is actually in this section.
-    const key = slot.after && fieldGroup(slot.after) === group ? slot.after : "";
+    const key =
+      slot.after && fieldGroup(slot.after) === group ? slot.after : "";
     byAfter.set(key, [...(byAfter.get(key) ?? []), slot]);
   }
   return byAfter;
@@ -828,7 +850,14 @@ function clipCell(value: string, max: number): { text: string; full?: string } {
 }
 
 function rvQueryKey<T>(q: ServerQuery<T>): string {
-  return JSON.stringify([q.page, q.pageSize, q.sort, q.search, q.filters, q.trash]);
+  return JSON.stringify([
+    q.page,
+    q.pageSize,
+    q.sort,
+    q.search,
+    q.filters,
+    q.trash,
+  ]);
 }
 function rvCacheGet(
   ns: string,
@@ -995,13 +1024,15 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
    *  `makeEmptyRow`). Default `true`. */
   showAdd?: boolean;
-  /** Columns the add/edit form's **sections** flow across: 1, 2 or 3. The form
-   *  is a grid of section cards, each itself a grid of fields. Falls back to
-   *  `form.sectionColumns`, then 1. */
+  /** The add/edit form's rows: which sections sit side by side on each one.
+   *  `formRows={[{ sections: [{ group: "Customer" }, { group: "Delivery" }] }, …]}`
+   *  puts two on the top row; the next row can hold three. Up to three per row
+   *  stay readable. Omit and every section gets a full-width row. */
+  formRows?: FormRow[];
+  /** @deprecated Since 1.59. Use `formRows`, which lets each row hold a different
+   *  number of sections instead of one count for the whole form. */
   sectionColumns?: SectionColumns;
-  /** Declare the form's sections to fix their order, let one span the row, or
-   *  give one its own field layout. Omit and they come from each field's
-   *  `group`, in the order the groups first appear. */
+  /** Section metadata (order, description) when you aren't declaring rows. */
   sections?: FormSection[];
   /** Behaviour overrides for this table only: what a row click does, whether
    *  delete confirms, how long the saved-row highlight lasts, and so on. Falls
@@ -1122,6 +1153,7 @@ export function RecordView<T extends { id: RowId }>({
   showImport = true,
   showExport = true,
   showAdd = true,
+  formRows,
   sectionColumns,
   sections,
   behaviour: behaviourProp,
@@ -1276,7 +1308,10 @@ export function RecordView<T extends { id: RowId }>({
       /** Reload after the host's write lands. Reloading first would race the
        *  POST/PATCH and repaint pre-write rows, which is why a save looked
        *  lost. A host that returns nothing keeps the old, immediate reload. */
-      const afterWrite = (written: void | Promise<void>, reload: () => void) => {
+      const afterWrite = (
+        written: void | Promise<void>,
+        reload: () => void,
+      ) => {
         if (written && typeof written.then === "function") {
           void written.then(reload, (err: unknown) => {
             if (queryRef.current) onError?.(err, queryRef.current);
@@ -1293,7 +1328,8 @@ export function RecordView<T extends { id: RowId }>({
         setFetchedData(next);
         afterWrite(onDataChange?.(next), () => {
           if (cacheKey) RV_CACHE.delete(cacheKey);
-          if (queryRef.current) runFetch(queryRef.current, { background: true });
+          if (queryRef.current)
+            runFetch(queryRef.current, { background: true });
         });
         return;
       }
@@ -1368,10 +1404,14 @@ export function RecordView<T extends { id: RowId }>({
    *  refetch can't take it away mid-edit. */
   const [draftRow, setDraftRow] = React.useState<T | null>(null);
   // Row pending delete confirmation.
-  const [confirmDeleteId, setConfirmDeleteId] = React.useState<RowId | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = React.useState<RowId | null>(
+    null,
+  );
   const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
   // Restore-from-Trash confirms (single row id / current selection), mirroring delete.
-  const [confirmRestoreId, setConfirmRestoreId] = React.useState<RowId | null>(null);
+  const [confirmRestoreId, setConfirmRestoreId] = React.useState<RowId | null>(
+    null,
+  );
   const [bulkRestoreOpen, setBulkRestoreOpen] = React.useState(false);
   // Whether the detail panel opened read-only (View) or editable (Edit / Add).
   const [panelReadOnly, setPanelReadOnly] = React.useState(false);
@@ -1478,25 +1518,25 @@ export function RecordView<T extends { id: RowId }>({
 
   const resizeHandle = (col: string, label: string) =>
     !resizableColumns ? null : (
-    <button
-      type="button"
-      aria-label={`Resize ${label} column`}
-      title="Drag to resize"
-      onMouseDown={(e) => startResize(col, e)}
-      onClick={(e) => e.stopPropagation()}
-      onKeyDown={(e) => {
-        if (e.key === "ArrowLeft") {
-          e.preventDefault();
-          nudgeColumn(col, -1);
-        }
-        if (e.key === "ArrowRight") {
-          e.preventDefault();
-          nudgeColumn(col, 1);
-        }
-      }}
-      className="absolute right-0 top-0 z-10 h-full w-1.5 cursor-col-resize touch-none bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none"
-    />
-  );
+      <button
+        type="button"
+        aria-label={`Resize ${label} column`}
+        title="Drag to resize"
+        onMouseDown={(e) => startResize(col, e)}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            nudgeColumn(col, -1);
+          }
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            nudgeColumn(col, 1);
+          }
+        }}
+        className="absolute right-0 top-0 z-10 h-full w-1.5 cursor-col-resize touch-none bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none"
+      />
+    );
 
   const processed = React.useMemo(() => {
     // Server mode: `rows` is already the filtered/sorted current page — render
@@ -1608,7 +1648,17 @@ export function RecordView<T extends { id: RowId }>({
     if (fetching) runFetch(query);
     else onQueryChange?.(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isManual, fetching, safePage, pageSize, sort, filter, trash, onQueryChange, runFetch]);
+  }, [
+    isManual,
+    fetching,
+    safePage,
+    pageSize,
+    sort,
+    filter,
+    trash,
+    onQueryChange,
+    runFetch,
+  ]);
 
   // Cascading filter options: when the values change, drop any filter value no
   // longer valid once its options recompute (e.g. changing Region invalidates a
@@ -1805,11 +1855,23 @@ export function RecordView<T extends { id: RowId }>({
     const data = processed as Record<string, unknown>[];
     const base = title.toLowerCase().replace(/\s+/g, "-") || "export";
     if (format === "csv")
-      downloadFile(`${base}.csv`, rowsToCSV(ioColumns, data), "text/csv;charset=utf-8");
+      downloadFile(
+        `${base}.csv`,
+        rowsToCSV(ioColumns, data),
+        "text/csv;charset=utf-8",
+      );
     else if (format === "json")
-      downloadFile(`${base}.json`, JSON.stringify(data, null, 2), "application/json");
+      downloadFile(
+        `${base}.json`,
+        JSON.stringify(data, null, 2),
+        "application/json",
+      );
     else if (format === "excel")
-      downloadFile(`${base}.xls`, rowsToTableHTML(ioColumns, data), "application/vnd.ms-excel");
+      downloadFile(
+        `${base}.xls`,
+        rowsToTableHTML(ioColumns, data),
+        "application/vnd.ms-excel",
+      );
     else printTable(title, rowsToTableHTML(ioColumns, data));
   }
   /** Parse an imported CSV/JSON file and prepend the rows to the table. */
@@ -1822,7 +1884,9 @@ export function RecordView<T extends { id: RowId }>({
     try {
       if (file.name.toLowerCase().endsWith(".json")) {
         const parsed: unknown = JSON.parse(text);
-        records = Array.isArray(parsed) ? (parsed as Record<string, unknown>[]) : [];
+        records = Array.isArray(parsed)
+          ? (parsed as Record<string, unknown>[])
+          : [];
       } else {
         records = parseCSV(text);
       }
@@ -1993,33 +2057,33 @@ export function RecordView<T extends { id: RowId }>({
     // Async-id fields resolve their label for the read cell (the edit control
     // already resolves its own). Everything else uses the clipped text + tooltip.
     const readContent = field.displayValue ? (
-      <span className="truncate">
-        {clip.text || <MissingValue />}
-      </span>
+      <span className="truncate">{clip.text || <MissingValue />}</span>
     ) : field.multiple ? (
       <span className="overflow-hidden">
         <MultiFieldValue
           field={field}
-          values={Array.isArray(row[field.key]) ? (row[field.key] as string[]) : []}
+          values={
+            Array.isArray(row[field.key]) ? (row[field.key] as string[]) : []
+          }
           row={row}
         />
       </span>
     ) : isAsyncLabeled(field) && value ? (
-        <span className="truncate">
-          <AsyncFieldValue field={field} value={value} values={row} />
-        </span>
-      ) : clip.full ? (
-        <Tooltip content={clip.full} className="truncate">
-          {clip.text}
-        </Tooltip>
-      ) : (
-        <span className="truncate">
-          {clip.text || <span className="text-muted-foreground">—</span>}
-        </span>
-      );
+      <span className="truncate">
+        <AsyncFieldValue field={field} value={value} values={row} />
+      </span>
+    ) : clip.full ? (
+      <Tooltip content={clip.full} className="truncate">
+        {clip.text}
+      </Tooltip>
+    ) : (
+      <span className="truncate">
+        {clip.text || <span className="text-muted-foreground">—</span>}
+      </span>
+    );
     const cellKey = `${row.id}:${field.key}`;
     const hoverActions =
-      (field.editable || (field.copyable && value)) ? (
+      field.editable || (field.copyable && value) ? (
         <span className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center divide-x divide-border overflow-hidden rounded-sm bg-background shadow-sm ring-1 ring-border opacity-0 transition-opacity group-hover/cell:opacity-100 focus-within:opacity-100">
           {field.copyable && value && (
             <button
@@ -2110,6 +2174,7 @@ export function RecordView<T extends { id: RowId }>({
         renderFooter={renderFooter}
         formSlots={formSlots}
         behaviour={behaviour}
+        formRows={formRows}
         sectionColumns={sectionColumns}
         sections={sections}
       />
@@ -2207,7 +2272,12 @@ export function RecordView<T extends { id: RowId }>({
           </Dropdown>
 
           {showAdd && (onCreate || makeEmptyRow) && !trash && (
-            <Button variant="primary" size="sm" onClick={addRow} className="ml-1">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={addRow}
+              className="ml-1"
+            >
               <Plus className="size-4" />
               <span className="hidden sm:inline">{singular}</span>
             </Button>
@@ -2218,671 +2288,711 @@ export function RecordView<T extends { id: RowId }>({
       {/* Content — padded, bordered card (matches the settings-page layout) */}
       <div className="min-h-0 flex-1 overflow-hidden p-4">
         <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
-      {/* Sub-toolbar */}
-      <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-1.5">
-        <div className="flex items-center gap-2">
-          <ListFilter className="size-4 text-muted-foreground" />
-          {selected.size > 0 ? (
-            <span className="flex items-center gap-2">
-              <span className="font-medium">{selected.size} selected</span>
-              <button
-                type="button"
-                onClick={() => setSelected(new Set())}
-                className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
-              >
-                Clear
-              </button>
-            </span>
-          ) : (
-            <span className="font-medium">
-              {trash ? `Trash · ${title}` : `All ${title}`}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-0.5">
-          {/* Bulk actions — mirror the Options dropdown; shown only with a selection. */}
-          {selected.size > 0 && (
-            <Dropdown
-              label="Actions"
-              icon={<MoreHorizontal className="size-3.5 text-violet-500" />}
-            >
-              <DropdownLabel>{selected.size} selected</DropdownLabel>
-              {trash ? (
-                // Trash view: restore is the only bulk action.
-                onRestore && (
-                  <DropdownItem onSelect={() => setBulkRestoreOpen(true)}>
-                    <span className="flex items-center gap-2 text-[var(--button-primary)]">
-                      <Restore className="size-3.5" /> Restore {selected.size}{" "}
-                      selected
-                    </span>
-                  </DropdownItem>
-                )
+          {/* Sub-toolbar */}
+          <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-1.5">
+            <div className="flex items-center gap-2">
+              <ListFilter className="size-4 text-muted-foreground" />
+              {selected.size > 0 ? (
+                <span className="flex items-center gap-2">
+                  <span className="font-medium">{selected.size} selected</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelected(new Set())}
+                    className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                  >
+                    Clear
+                  </button>
+                </span>
               ) : (
-                <>
-                  {bulkFields.map((f) => (
-                    <React.Fragment key={f.key}>
-                      <DropdownLabel>Set {f.label}</DropdownLabel>
-                      {(Array.isArray(f.options) ? f.options : []).map((o) => (
-                        <DropdownItem
-                          key={o.value}
-                          onSelect={() => bulkSetField(f.key, o.value)}
-                        >
-                          {o.label}
-                        </DropdownItem>
+                <span className="font-medium">
+                  {trash ? `Trash · ${title}` : `All ${title}`}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-0.5">
+              {/* Bulk actions — mirror the Options dropdown; shown only with a selection. */}
+              {selected.size > 0 && (
+                <Dropdown
+                  label="Actions"
+                  icon={<MoreHorizontal className="size-3.5 text-violet-500" />}
+                >
+                  <DropdownLabel>{selected.size} selected</DropdownLabel>
+                  {trash ? (
+                    // Trash view: restore is the only bulk action.
+                    onRestore && (
+                      <DropdownItem onSelect={() => setBulkRestoreOpen(true)}>
+                        <span className="flex items-center gap-2 text-[var(--button-primary)]">
+                          <Restore className="size-3.5" /> Restore{" "}
+                          {selected.size} selected
+                        </span>
+                      </DropdownItem>
+                    )
+                  ) : (
+                    <>
+                      {bulkFields.map((f) => (
+                        <React.Fragment key={f.key}>
+                          <DropdownLabel>Set {f.label}</DropdownLabel>
+                          {(Array.isArray(f.options) ? f.options : []).map(
+                            (o) => (
+                              <DropdownItem
+                                key={o.value}
+                                onSelect={() => bulkSetField(f.key, o.value)}
+                              >
+                                {o.label}
+                              </DropdownItem>
+                            ),
+                          )}
+                        </React.Fragment>
                       ))}
-                    </React.Fragment>
-                  ))}
-                  <DropdownItem onSelect={() => setBulkDeleteOpen(true)}>
-                    <span className="flex items-center gap-2 text-destructive">
-                      <Trash2 className="size-3.5" /> Delete {selected.size}{" "}
-                      selected
-                    </span>
-                  </DropdownItem>
-                </>
+                      <DropdownItem onSelect={() => setBulkDeleteOpen(true)}>
+                        <span className="flex items-center gap-2 text-destructive">
+                          <Trash2 className="size-3.5" /> Delete {selected.size}{" "}
+                          selected
+                        </span>
+                      </DropdownItem>
+                    </>
+                  )}
+                </Dropdown>
               )}
-            </Dropdown>
-          )}
-          {showTrash && (
-            <button
-              type="button"
-              onClick={() => setTrash((t) => !t)}
-              aria-pressed={trash}
-              aria-label={trash ? "Show live records" : "Show Trash"}
-              className={cn(
-                "inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 font-medium transition-colors",
-                trash
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+              {showTrash && (
+                <button
+                  type="button"
+                  onClick={() => setTrash((t) => !t)}
+                  aria-pressed={trash}
+                  aria-label={trash ? "Show live records" : "Show Trash"}
+                  className={cn(
+                    "inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 font-medium transition-colors",
+                    trash
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  )}
+                >
+                  <Trash2 className="size-3.5 text-red-500" />
+                  <span className="truncate">Trash</span>
+                </button>
               )}
-            >
-              <Trash2 className="size-3.5 text-red-500" />
-              <span className="truncate">Trash</span>
-            </button>
-          )}
-          {showFilter && (
-          <Dropdown label="Filter" icon={<ListFilter className="size-3.5 text-amber-500" />}>
-            {filterFields.length > 0 || filterExtras ? (
-              // Per-field mode: a labeled control per `filterable` field (plus
-              // any `filterExtras`), and Search / Clear. The panel only gathers
-              // values — matching is the consumer's job via `onFilter`.
-              <>
-                <div className="flex max-h-[min(28rem,70vh)] w-96 flex-col">
-                  {/* Header: static, full-width separator (from DropdownLabel). */}
-                  <DropdownLabel>Filter</DropdownLabel>
-                  {/* Content: the only scrolling region. FilterGrid enforces the
+              {showFilter && (
+                <Dropdown
+                  label="Filter"
+                  icon={<ListFilter className="size-3.5 text-amber-500" />}
+                >
+                  {filterFields.length > 0 || filterExtras ? (
+                    // Per-field mode: a labeled control per `filterable` field (plus
+                    // any `filterExtras`), and Search / Clear. The panel only gathers
+                    // values — matching is the consumer's job via `onFilter`.
+                    <>
+                      <div className="flex max-h-[min(28rem,70vh)] w-96 flex-col">
+                        {/* Header: static, full-width separator (from DropdownLabel). */}
+                        <DropdownLabel>Filter</DropdownLabel>
+                        {/* Content: the only scrolling region. FilterGrid enforces the
                       theme default — two columns: label │ control, one row per
                       field, labels aligned across every row. */}
-                  <FilterGrid className="min-h-0 flex-1 overflow-y-auto p-3">
-                  {filterFields.map((f) => {
-                    const cfg: FieldFilter<T> =
-                      typeof f.filterable === "object" ? f.filterable : {};
-                    const control = cfg.control ?? "text";
-                    const label = cfg.label ?? f.label;
-                    // Options: cfg's static array or function of the current
-                    // filter values (cascading); fall back to the field's static
-                    // options (a draft-function can't resolve here).
-                    const opts =
-                      typeof cfg.options === "function"
-                        ? cfg.options(filterValues)
-                        : (cfg.options ??
-                          (Array.isArray(f.options) ? f.options : []));
-                    const raw = filterValues[f.key];
-                    const setVal = (v: string | string[]) =>
-                      setFilterValues((prev) => ({ ...prev, [f.key]: v }));
-                    // Async filter options: lazy-load on open instead of `opts`.
-                    const asyncProps: { source: AsyncOptionSource; resetKey: string } | null =
-                      cfg.loadOptions
-                        ? {
-                            source: {
-                              loadOptions: ({ search, signal }) =>
-                                cfg.loadOptions!({ search, signal, values: filterValues }),
-                              resolveOption: cfg.resolveOption,
-                            },
-                            resetKey: (cfg.dependsOn ?? [])
-                              .map((k) => String(filterValues[k] ?? ""))
-                              .join(" "),
-                          }
-                        : null;
-                    return (
-                      // One row per field via FilterField (label │ control).
-                      <FilterField key={f.key} label={label}>
-                        {control === "combobox" ? (
-                          <Combobox
-                            value={typeof raw === "string" ? raw : ""}
-                            onValueChange={setVal}
-                            {...(asyncProps ?? { options: opts })}
-                            ariaLabel={label}
-                            placeholder={
-                              cfg.placeholder ?? `Any ${label.toLowerCase()}`
-                            }
-                            className="w-full"
-                          />
-                        ) : control === "select" ? (
-                          <Select
-                            value={typeof raw === "string" ? raw : ""}
-                            onValueChange={setVal}
-                            {...(asyncProps ?? { options: opts })}
-                            ariaLabel={label}
-                            placeholder={
-                              cfg.placeholder ?? `Any ${label.toLowerCase()}`
-                            }
-                            className="w-full"
-                          />
-                        ) : control === "checkbox" ? (
-                          <div className="flex flex-col gap-1">
-                            {opts.map((o) => {
-                              const arr = Array.isArray(raw) ? raw : [];
-                              const on = arr.includes(o.value);
-                              return (
-                                <label
-                                  key={o.value}
-                                  className="flex items-center gap-2 text-sm"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={on}
-                                    onChange={() =>
-                                      setVal(
-                                        on
-                                          ? arr.filter((v) => v !== o.value)
-                                          : [...arr, o.value],
-                                      )
+                        <FilterGrid className="min-h-0 flex-1 overflow-y-auto p-3">
+                          {filterFields.map((f) => {
+                            const cfg: FieldFilter<T> =
+                              typeof f.filterable === "object"
+                                ? f.filterable
+                                : {};
+                            const control = cfg.control ?? "text";
+                            const label = cfg.label ?? f.label;
+                            // Options: cfg's static array or function of the current
+                            // filter values (cascading); fall back to the field's static
+                            // options (a draft-function can't resolve here).
+                            const opts =
+                              typeof cfg.options === "function"
+                                ? cfg.options(filterValues)
+                                : (cfg.options ??
+                                  (Array.isArray(f.options) ? f.options : []));
+                            const raw = filterValues[f.key];
+                            const setVal = (v: string | string[]) =>
+                              setFilterValues((prev) => ({
+                                ...prev,
+                                [f.key]: v,
+                              }));
+                            // Async filter options: lazy-load on open instead of `opts`.
+                            const asyncProps: {
+                              source: AsyncOptionSource;
+                              resetKey: string;
+                            } | null = cfg.loadOptions
+                              ? {
+                                  source: {
+                                    loadOptions: ({ search, signal }) =>
+                                      cfg.loadOptions!({
+                                        search,
+                                        signal,
+                                        values: filterValues,
+                                      }),
+                                    resolveOption: cfg.resolveOption,
+                                  },
+                                  resetKey: (cfg.dependsOn ?? [])
+                                    .map((k) => String(filterValues[k] ?? ""))
+                                    .join(" "),
+                                }
+                              : null;
+                            return (
+                              // One row per field via FilterField (label │ control).
+                              <FilterField key={f.key} label={label}>
+                                {control === "combobox" ? (
+                                  <Combobox
+                                    value={typeof raw === "string" ? raw : ""}
+                                    onValueChange={setVal}
+                                    {...(asyncProps ?? { options: opts })}
+                                    ariaLabel={label}
+                                    placeholder={
+                                      cfg.placeholder ??
+                                      `Any ${label.toLowerCase()}`
                                     }
+                                    className="w-full"
                                   />
-                                  {o.label}
-                                </label>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          <Input
-                            type={
-                              control === "number"
-                                ? "number"
-                                : control === "date"
-                                  ? "date"
-                                  : "text"
-                            }
-                            value={typeof raw === "string" ? raw : ""}
-                            onChange={(e) => setVal(e.target.value)}
-                            placeholder={cfg.placeholder ?? "Contains…"}
-                            aria-label={label}
-                            className="h-8 w-full"
-                          />
-                        )}
-                      </FilterField>
-                    );
-                  })}
-                  {/* Consumer-added rows — compose with <FilterField> so they
+                                ) : control === "select" ? (
+                                  <Select
+                                    value={typeof raw === "string" ? raw : ""}
+                                    onValueChange={setVal}
+                                    {...(asyncProps ?? { options: opts })}
+                                    ariaLabel={label}
+                                    placeholder={
+                                      cfg.placeholder ??
+                                      `Any ${label.toLowerCase()}`
+                                    }
+                                    className="w-full"
+                                  />
+                                ) : control === "checkbox" ? (
+                                  <div className="flex flex-col gap-1">
+                                    {opts.map((o) => {
+                                      const arr = Array.isArray(raw) ? raw : [];
+                                      const on = arr.includes(o.value);
+                                      return (
+                                        <label
+                                          key={o.value}
+                                          className="flex items-center gap-2 text-sm"
+                                        >
+                                          <input
+                                            type="checkbox"
+                                            checked={on}
+                                            onChange={() =>
+                                              setVal(
+                                                on
+                                                  ? arr.filter(
+                                                      (v) => v !== o.value,
+                                                    )
+                                                  : [...arr, o.value],
+                                              )
+                                            }
+                                          />
+                                          {o.label}
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                ) : (
+                                  <Input
+                                    type={
+                                      control === "number"
+                                        ? "number"
+                                        : control === "date"
+                                          ? "date"
+                                          : "text"
+                                    }
+                                    value={typeof raw === "string" ? raw : ""}
+                                    onChange={(e) => setVal(e.target.value)}
+                                    placeholder={cfg.placeholder ?? "Contains…"}
+                                    aria-label={label}
+                                    className="h-8 w-full"
+                                  />
+                                )}
+                              </FilterField>
+                            );
+                          })}
+                          {/* Consumer-added rows — compose with <FilterField> so they
                       inherit the same two-column layout. */}
-                  {filterExtras}
-                  </FilterGrid>
-                  {/* Footer: static, full-width top border, compact buttons. */}
-                  <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border p-3">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        setFilterValues({});
-                        onFilter?.({});
-                        setPage(1);
-                        const q: ServerQuery<T> = {
-                          page: 1,
-                          pageSize,
-                          sort,
-                          search: filter,
-                          filters: {},
-                          trash,
-                        };
-                        if (fetching) runFetch(q);
-                        else if (manual) onQueryChange?.(q);
-                      }}
-                    >
-                      Clear
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="primary"
-                      onClick={() => {
-                        onFilter?.(filterValues);
-                        setPage(1);
-                        const q: ServerQuery<T> = {
-                          page: 1,
-                          pageSize,
-                          sort,
-                          search: filter,
-                          filters: filterValues,
-                          trash,
-                        };
-                        if (fetching) runFetch(q);
-                        else if (manual) onQueryChange?.(q);
-                      }}
-                    >
-                      <Search className="size-3.5" />
-                      Search
-                    </Button>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <DropdownLabel>Filter by keyword</DropdownLabel>
-                <div className="p-3">
-                  <div className="relative">
-                    <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                      placeholder="Contains…"
-                      aria-label="Filter"
-                      className="h-8 pl-9"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-          </Dropdown>
-          )}
-
-          {showSort && (
-          <Dropdown label="Sort" icon={<CaretSort className="size-3.5 text-blue-500" />}>
-            <DropdownLabel>Sort by</DropdownLabel>
-            {sortFields.map((f) => (
-              <DropdownItem
-                key={f.key}
-                onSelect={() => toggleSort(f.key)}
-                icon={
-                  sort?.key === f.key ? (
-                    sort.dir === "asc" ? (
-                      <CaretUp className="size-3.5" />
-                    ) : (
-                      <CaretDown className="size-3.5" />
-                    )
-                  ) : undefined
-                }
-              >
-                {f.label}
-              </DropdownItem>
-            ))}
-            {sort && (
-              <DropdownItem onSelect={() => setSort(null)}>
-                Clear sort
-              </DropdownItem>
-            )}
-          </Dropdown>
-          )}
-
-          <Dropdown
-            label="Options"
-            icon={<SlidersHorizontal className="size-3.5 text-fuchsia-500" />}
-            align="end"
-          >
-            <DropdownLabel>Visible columns</DropdownLabel>
-            {tableFields.map((f) => (
-              <DropdownItem
-                key={f.key}
-                checked={!hidden.has(f.key)}
-                onSelect={() => toggleHidden(f.key)}
-              >
-                {f.label}
-              </DropdownItem>
-            ))}
-          </Dropdown>
-
-          {/* Pagination */}
-          {showPagination && (
-          <div className="ml-1 flex items-center gap-1 border-l border-border pl-2 text-muted-foreground">
-            <Dropdown
-              label={`${pageSize} / page`}
-              icon={<Rows3 className="size-3.5 text-teal-500" />}
-              align="end"
-            >
-              <DropdownLabel>Rows per page</DropdownLabel>
-              {pageSizeOptions.map((n) => (
-                <DropdownItem
-                  key={n}
-                  checked={pageSize === n}
-                  onSelect={() => setPageSize(n)}
-                >
-                  {n} per page
-                </DropdownItem>
-              ))}
-            </Dropdown>
-            <span className="whitespace-nowrap px-1 tabular-nums">
-              {rangeStart}–{rangeEnd} of {total}
-            </span>
-            <button
-              type="button"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={safePage <= 1}
-              aria-label="Previous page"
-              className="grid size-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:hover:bg-transparent"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={safePage >= totalPages}
-              aria-label="Next page"
-              className="grid size-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:hover:bg-transparent"
-            >
-              <ChevronRight className="size-4" />
-            </button>
-          </div>
-          )}
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="min-h-0 flex-1 overflow-auto">
-        <Table
-          style={{ minWidth: totalWidth, tableLayout: "auto" }}
-          className="w-full"
-        >
-          <TableHeader className="sticky top-0 z-20 bg-background [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:bg-background">
-            <TableRow className="hover:bg-transparent">
-              {showSelection && (
-                <TableHead style={{ width: CHECKBOX_W }} className="p-0">
-                  <div className="flex h-8 items-center gap-2 pl-2 pr-3">
-                    {/* Spacer matching the row drag-grip slot so this checkbox
-                        lines up vertically with the row checkboxes below. */}
-                    <span aria-hidden="true" className="h-6 w-4 shrink-0" />
-                    <Checkbox
-                      checked={allSelected}
-                      onChange={toggleSelectAll}
-                      aria-label="Select all"
-                    />
-                  </div>
-                </TableHead>
-              )}
-              {orderedCols.map((col) => {
-                if (col === IDENTITY_COL) {
-                  const IdIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
-                  const inner = (
-                    <>
-                      <IdIcon className="size-3.5 shrink-0 text-foreground" />
-                      <span className="flex items-center gap-1 whitespace-nowrap">
-                        {nameLabel}
-                        {nameRequired && <RequiredMark />}
-                      </span>
-                      {nameSortKeyResolved &&
-                        (sort?.key === nameSortKeyResolved ? (
-                          sort.dir === "asc" ? (
-                            <CaretUp className="size-3.5 shrink-0" />
-                          ) : (
-                            <CaretDown className="size-3.5 shrink-0" />
-                          )
-                        ) : (
-                          <CaretSort className="size-3.5 shrink-0 text-muted-foreground/50" />
-                        ))}
+                          {filterExtras}
+                        </FilterGrid>
+                        {/* Footer: static, full-width top border, compact buttons. */}
+                        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border p-3">
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setFilterValues({});
+                              onFilter?.({});
+                              setPage(1);
+                              const q: ServerQuery<T> = {
+                                page: 1,
+                                pageSize,
+                                sort,
+                                search: filter,
+                                filters: {},
+                                trash,
+                              };
+                              if (fetching) runFetch(q);
+                              else if (manual) onQueryChange?.(q);
+                            }}
+                          >
+                            Clear
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="primary"
+                            onClick={() => {
+                              onFilter?.(filterValues);
+                              setPage(1);
+                              const q: ServerQuery<T> = {
+                                page: 1,
+                                pageSize,
+                                sort,
+                                search: filter,
+                                filters: filterValues,
+                                trash,
+                              };
+                              if (fetching) runFetch(q);
+                              else if (manual) onQueryChange?.(q);
+                            }}
+                          >
+                            <Search className="size-3.5" />
+                            Search
+                          </Button>
+                        </div>
+                      </div>
                     </>
-                  );
-                  return (
-                    <TableHead
-                      key="__identity"
-                      className="relative w-max"
-                      style={{ width: colWidths[NAME_COL] }}
+                  ) : (
+                    <>
+                      <DropdownLabel>Filter by keyword</DropdownLabel>
+                      <div className="p-3">
+                        <div className="relative">
+                          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                          <Input
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                            placeholder="Contains…"
+                            aria-label="Filter"
+                            className="h-8 pl-9"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </Dropdown>
+              )}
+
+              {showSort && (
+                <Dropdown
+                  label="Sort"
+                  icon={<CaretSort className="size-3.5 text-blue-500" />}
+                >
+                  <DropdownLabel>Sort by</DropdownLabel>
+                  {sortFields.map((f) => (
+                    <DropdownItem
+                      key={f.key}
+                      onSelect={() => toggleSort(f.key)}
+                      icon={
+                        sort?.key === f.key ? (
+                          sort.dir === "asc" ? (
+                            <CaretUp className="size-3.5" />
+                          ) : (
+                            <CaretDown className="size-3.5" />
+                          )
+                        ) : undefined
+                      }
                     >
-                      {nameSortKeyResolved ? (
-                        <button
-                          type="button"
-                          onClick={() => toggleSort(nameSortKeyResolved)}
-                          className="flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground"
-                        >
-                          {inner}
-                        </button>
-                      ) : (
-                        <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
-                          {inner}
-                        </span>
-                      )}
-                      {resizeHandle(NAME_COL, nameLabel)}
-                    </TableHead>
-                  );
-                }
-                const f = col;
-                const HeadIcon = f.icon ?? DEFAULT_FIELD_ICON;
-                const sortable = canSort(f);
-                const headInner = (
-                  <>
-                    <HeadIcon className="size-3.5 shrink-0 text-foreground" />
-                    <span className="flex items-center gap-1 whitespace-nowrap">
                       {f.label}
-                      {f.required && <RequiredMark />}
-                    </span>
-                    {/* Sortable columns always show an indicator: a muted
+                    </DropdownItem>
+                  ))}
+                  {sort && (
+                    <DropdownItem onSelect={() => setSort(null)}>
+                      Clear sort
+                    </DropdownItem>
+                  )}
+                </Dropdown>
+              )}
+
+              <Dropdown
+                label="Options"
+                icon={
+                  <SlidersHorizontal className="size-3.5 text-fuchsia-500" />
+                }
+                align="end"
+              >
+                <DropdownLabel>Visible columns</DropdownLabel>
+                {tableFields.map((f) => (
+                  <DropdownItem
+                    key={f.key}
+                    checked={!hidden.has(f.key)}
+                    onSelect={() => toggleHidden(f.key)}
+                  >
+                    {f.label}
+                  </DropdownItem>
+                ))}
+              </Dropdown>
+
+              {/* Pagination */}
+              {showPagination && (
+                <div className="ml-1 flex items-center gap-1 border-l border-border pl-2 text-muted-foreground">
+                  <Dropdown
+                    label={`${pageSize} / page`}
+                    icon={<Rows3 className="size-3.5 text-teal-500" />}
+                    align="end"
+                  >
+                    <DropdownLabel>Rows per page</DropdownLabel>
+                    {pageSizeOptions.map((n) => (
+                      <DropdownItem
+                        key={n}
+                        checked={pageSize === n}
+                        onSelect={() => setPageSize(n)}
+                      >
+                        {n} per page
+                      </DropdownItem>
+                    ))}
+                  </Dropdown>
+                  <span className="whitespace-nowrap px-1 tabular-nums">
+                    {rangeStart}–{rangeEnd} of {total}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={safePage <= 1}
+                    aria-label="Previous page"
+                    className="grid size-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:hover:bg-transparent"
+                  >
+                    <ChevronLeft className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safePage >= totalPages}
+                    aria-label="Next page"
+                    className="grid size-7 place-items-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:hover:bg-transparent"
+                  >
+                    <ChevronRight className="size-4" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="min-h-0 flex-1 overflow-auto">
+            <Table
+              style={{ minWidth: totalWidth, tableLayout: "auto" }}
+              className="w-full"
+            >
+              <TableHeader className="sticky top-0 z-20 bg-background [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:bg-background">
+                <TableRow className="hover:bg-transparent">
+                  {showSelection && (
+                    <TableHead style={{ width: CHECKBOX_W }} className="p-0">
+                      <div className="flex h-8 items-center gap-2 pl-2 pr-3">
+                        {/* Spacer matching the row drag-grip slot so this checkbox
+                        lines up vertically with the row checkboxes below. */}
+                        <span aria-hidden="true" className="h-6 w-4 shrink-0" />
+                        <Checkbox
+                          checked={allSelected}
+                          onChange={toggleSelectAll}
+                          aria-label="Select all"
+                        />
+                      </div>
+                    </TableHead>
+                  )}
+                  {orderedCols.map((col) => {
+                    if (col === IDENTITY_COL) {
+                      const IdIcon = TitleIcon ?? DEFAULT_FIELD_ICON;
+                      const inner = (
+                        <>
+                          <IdIcon className="size-3.5 shrink-0 text-foreground" />
+                          <span className="flex items-center gap-1 whitespace-nowrap">
+                            {nameLabel}
+                            {nameRequired && <RequiredMark />}
+                          </span>
+                          {nameSortKeyResolved &&
+                            (sort?.key === nameSortKeyResolved ? (
+                              sort.dir === "asc" ? (
+                                <CaretUp className="size-3.5 shrink-0" />
+                              ) : (
+                                <CaretDown className="size-3.5 shrink-0" />
+                              )
+                            ) : (
+                              <CaretSort className="size-3.5 shrink-0 text-muted-foreground/50" />
+                            ))}
+                        </>
+                      );
+                      return (
+                        <TableHead
+                          key="__identity"
+                          className="relative w-max"
+                          style={{ width: colWidths[NAME_COL] }}
+                        >
+                          {nameSortKeyResolved ? (
+                            <button
+                              type="button"
+                              onClick={() => toggleSort(nameSortKeyResolved)}
+                              className="flex h-8 w-full items-center gap-1.5 whitespace-nowrap hover:text-foreground"
+                            >
+                              {inner}
+                            </button>
+                          ) : (
+                            <span className="flex h-8 items-center gap-1.5 whitespace-nowrap">
+                              {inner}
+                            </span>
+                          )}
+                          {resizeHandle(NAME_COL, nameLabel)}
+                        </TableHead>
+                      );
+                    }
+                    const f = col;
+                    const HeadIcon = f.icon ?? DEFAULT_FIELD_ICON;
+                    const sortable = canSort(f);
+                    const headInner = (
+                      <>
+                        <HeadIcon className="size-3.5 shrink-0 text-foreground" />
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                          {f.label}
+                          {f.required && <RequiredMark />}
+                        </span>
+                        {/* Sortable columns always show an indicator: a muted
                         up/down caret by default, a solid caret for the active
                         direction (up = ascending, down = descending). */}
-                    {sortable &&
-                      (sort?.key === f.key ? (
-                        sort.dir === "asc" ? (
-                          <CaretUp className="size-3.5 shrink-0" />
-                        ) : (
-                          <CaretDown className="size-3.5 shrink-0" />
-                        )
-                      ) : (
-                        <CaretSort className="size-3.5 shrink-0 text-muted-foreground/50" />
-                      ))}
-                  </>
-                );
-                const headClass = cn(
-                  "flex h-8 w-full items-center gap-1.5 whitespace-nowrap",
-                  ALIGN_BOX[alignOf(f.key)],
-                );
-                return (
-                  <TableHead
-                    key={f.key}
-                    className="relative w-max"
-                    style={{ width: colWidths[f.key] }}
-                  >
-                    {sortable ? (
-                      <button
-                        type="button"
-                        onClick={() => toggleSort(f.key)}
-                        className={cn(headClass, "hover:text-foreground")}
+                        {sortable &&
+                          (sort?.key === f.key ? (
+                            sort.dir === "asc" ? (
+                              <CaretUp className="size-3.5 shrink-0" />
+                            ) : (
+                              <CaretDown className="size-3.5 shrink-0" />
+                            )
+                          ) : (
+                            <CaretSort className="size-3.5 shrink-0 text-muted-foreground/50" />
+                          ))}
+                      </>
+                    );
+                    const headClass = cn(
+                      "flex h-8 w-full items-center gap-1.5 whitespace-nowrap",
+                      ALIGN_BOX[alignOf(f.key)],
+                    );
+                    return (
+                      <TableHead
+                        key={f.key}
+                        className="relative w-max"
+                        style={{ width: colWidths[f.key] }}
                       >
-                        {headInner}
-                      </button>
-                    ) : (
-                      // Not sortable: a static label, no toggle / hover affordance.
-                      <span className={headClass}>{headInner}</span>
-                    )}
-                    {resizeHandle(f.key, f.label)}
-                  </TableHead>
-                );
-              })}
-              {/* Flex spacer absorbs leftover width so data columns keep their
+                        {sortable ? (
+                          <button
+                            type="button"
+                            onClick={() => toggleSort(f.key)}
+                            className={cn(headClass, "hover:text-foreground")}
+                          >
+                            {headInner}
+                          </button>
+                        ) : (
+                          // Not sortable: a static label, no toggle / hover affordance.
+                          <span className={headClass}>{headInner}</span>
+                        )}
+                        {resizeHandle(f.key, f.label)}
+                      </TableHead>
+                    );
+                  })}
+                  {/* Flex spacer absorbs leftover width so data columns keep their
                   natural size AND the Actions column stays pinned to the right
                   edge. Borderless so no stray divider shows in the gap. */}
-              <TableHead aria-hidden="true" className="w-full border-r-0" />
-              <TableHead
-                style={{ width: ACTIONS_W }}
-                className="sticky right-0 z-30 border-l border-border text-right shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
-              >
-                <span className="flex h-8 items-center justify-center whitespace-nowrap px-2">
-                  Actions
-                </span>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {effectiveLoading ? (
-              // Animated skeleton rows while data loads from the server.
-              Array.from({ length: Math.min(pageSize, 8) }).map((_, i) => (
-                <TableRow key={`skeleton-${i}`} className="hover:bg-transparent">
-                  <TableCell style={{ width: CHECKBOX_W }}>
-                    <div className="mx-2 size-4 vui-shimmer rounded" />
-                  </TableCell>
-                  {orderedCols.map((col) =>
-                    col === IDENTITY_COL ? (
-                      <TableCell
-                        key="__identity"
-                        style={{ width: colWidths[NAME_COL] }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="size-7 shrink-0 vui-shimmer rounded-full" />
-                          <div className="h-3.5 w-32 vui-shimmer rounded" />
-                        </div>
-                      </TableCell>
-                    ) : (
-                      <TableCell
-                        key={col.key}
-                        style={{ width: colWidths[col.key] }}
-                      >
-                        <div className="h-3.5 w-20 vui-shimmer rounded" />
-                      </TableCell>
-                    ),
-                  )}
-                  <TableCell aria-hidden="true" className="border-r-0" />
-                  <TableCell style={{ width: ACTIONS_W }}>
-                    <div className="mx-auto h-4 w-8 vui-shimmer rounded" />
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : processed.length ? (
-              paged.map((row) => {
-                const primary = getPrimary(row);
-                const nameClip = clipCell(primary.title, maxCellChars);
-                return (
-                  <TableRow
-                    key={row.id}
-                    data-active={row.id === activeId}
-                    data-flash={row.id === flashId}
-                    data-dragover={row.id === dragOverId && dragId !== row.id}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      setMenu({ id: row.id, x: e.clientX, y: e.clientY });
-                    }}
-                    onDragOver={(e) => {
-                      if (dragId === null) return;
-                      e.preventDefault();
-                      e.dataTransfer.dropEffect = "move";
-                      setDragOverId(row.id);
-                    }}
-                    onDrop={(e) => {
-                      if (dragId === null) return;
-                      e.preventDefault();
-                      reorder(dragId, row.id);
-                      setDragId(null);
-                      setDragOverId(null);
-                    }}
-                    className="group data-[active=true]:bg-accent/60 data-[dragover=true]:border-t-2 data-[dragover=true]:border-t-primary data-[flash=true]:bg-primary/10"
+                  <TableHead aria-hidden="true" className="w-full border-r-0" />
+                  <TableHead
+                    style={{ width: ACTIONS_W }}
+                    className="sticky right-0 z-30 border-l border-border text-right shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
                   >
-                    {showSelection && (
-                      <TableCell className="p-0" style={{ width: CHECKBOX_W }}>
-                        <div className="flex h-8 items-center gap-2 pl-2 pr-3">
-                          {/* Drag grip — always visible in a light color (so the
+                    <span className="flex h-8 items-center justify-center whitespace-nowrap px-2">
+                      Actions
+                    </span>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {effectiveLoading ? (
+                  // Animated skeleton rows while data loads from the server.
+                  Array.from({ length: Math.min(pageSize, 8) }).map((_, i) => (
+                    <TableRow
+                      key={`skeleton-${i}`}
+                      className="hover:bg-transparent"
+                    >
+                      <TableCell style={{ width: CHECKBOX_W }}>
+                        <div className="mx-2 size-4 vui-shimmer rounded" />
+                      </TableCell>
+                      {orderedCols.map((col) =>
+                        col === IDENTITY_COL ? (
+                          <TableCell
+                            key="__identity"
+                            style={{ width: colWidths[NAME_COL] }}
+                          >
+                            <div className="flex items-center gap-2">
+                              <div className="size-7 shrink-0 vui-shimmer rounded-full" />
+                              <div className="h-3.5 w-32 vui-shimmer rounded" />
+                            </div>
+                          </TableCell>
+                        ) : (
+                          <TableCell
+                            key={col.key}
+                            style={{ width: colWidths[col.key] }}
+                          >
+                            <div className="h-3.5 w-20 vui-shimmer rounded" />
+                          </TableCell>
+                        ),
+                      )}
+                      <TableCell aria-hidden="true" className="border-r-0" />
+                      <TableCell style={{ width: ACTIONS_W }}>
+                        <div className="mx-auto h-4 w-8 vui-shimmer rounded" />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : processed.length ? (
+                  paged.map((row) => {
+                    const primary = getPrimary(row);
+                    const nameClip = clipCell(primary.title, maxCellChars);
+                    return (
+                      <TableRow
+                        key={row.id}
+                        data-active={row.id === activeId}
+                        data-flash={row.id === flashId}
+                        data-dragover={
+                          row.id === dragOverId && dragId !== row.id
+                        }
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          setMenu({ id: row.id, x: e.clientX, y: e.clientY });
+                        }}
+                        onDragOver={(e) => {
+                          if (dragId === null) return;
+                          e.preventDefault();
+                          e.dataTransfer.dropEffect = "move";
+                          setDragOverId(row.id);
+                        }}
+                        onDrop={(e) => {
+                          if (dragId === null) return;
+                          e.preventDefault();
+                          reorder(dragId, row.id);
+                          setDragId(null);
+                          setDragOverId(null);
+                        }}
+                        className="group data-[active=true]:bg-accent/60 data-[dragover=true]:border-t-2 data-[dragover=true]:border-t-primary data-[flash=true]:bg-primary/10"
+                      >
+                        {showSelection && (
+                          <TableCell
+                            className="p-0"
+                            style={{ width: CHECKBOX_W }}
+                          >
+                            <div className="flex h-8 items-center gap-2 pl-2 pr-3">
+                              {/* Drag grip — always visible in a light color (so the
                               reorder affordance is discoverable), darkening on
                               hover. Inline before the checkbox; plain glyph (no
                               icon-chip border) so it doesn't read as a box. */}
-                          <div
-                            draggable
-                            onDragStart={(e) => {
-                              e.dataTransfer.effectAllowed = "move";
-                              e.dataTransfer.setData("text/plain", String(row.id));
-                              setDragId(row.id);
-                            }}
-                            onDragEnd={() => {
-                              setDragId(null);
-                              setDragOverId(null);
-                            }}
-                            aria-label={`Drag ${primary.title || singular} to reorder`}
-                            title="Drag to reorder"
-                            className="flex h-6 w-4 shrink-0 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
-                          >
-                            <GripVertical className="size-3.5 border-transparent bg-transparent" />
-                          </div>
-                          <Checkbox
-                            checked={selected.has(row.id)}
-                            onChange={() => toggleSelect(row.id)}
-                            aria-label={`Select ${primary.title}`}
-                          />
-                        </div>
-                      </TableCell>
-                    )}
-                    {orderedCols.map((col) =>
-                      col === IDENTITY_COL ? (
-                        <TableCell
-                          key="__identity"
-                          className="p-0"
-                          style={{
-                            maxWidth: colWidths[NAME_COL] ?? NAME_DEFAULT_W,
-                          }}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => openRow(row.id)}
-                            disabled={rowClick === "none"}
-                            className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60 disabled:cursor-default disabled:hover:bg-transparent"
-                          >
-                            <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
-                              {primary.initials}
-                            </span>
-                            {nameClip.full ? (
-                              <Tooltip
-                                content={nameClip.full}
-                                className="truncate"
+                              <div
+                                draggable
+                                onDragStart={(e) => {
+                                  e.dataTransfer.effectAllowed = "move";
+                                  e.dataTransfer.setData(
+                                    "text/plain",
+                                    String(row.id),
+                                  );
+                                  setDragId(row.id);
+                                }}
+                                onDragEnd={() => {
+                                  setDragId(null);
+                                  setDragOverId(null);
+                                }}
+                                aria-label={`Drag ${primary.title || singular} to reorder`}
+                                title="Drag to reorder"
+                                className="flex h-6 w-4 shrink-0 cursor-grab items-center justify-center text-muted-foreground/40 transition-colors hover:text-foreground active:cursor-grabbing"
                               >
-                                {nameClip.text}
-                              </Tooltip>
-                            ) : (
-                              <span className="truncate">
-                                {nameClip.text || "—"}
-                              </span>
-                            )}
-                          </button>
-                        </TableCell>
-                      ) : (
-                        <TableCell
-                          key={col.key}
-                          className="p-0"
-                          style={{
-                            maxWidth: colWidths[col.key] ?? fieldDefaultWidth(col),
-                          }}
-                        >
-                          {renderCellValue(row, col)}
-                        </TableCell>
-                      ),
-                    )}
-                    <TableCell aria-hidden="true" className="w-full border-r-0" />
-                    <TableCell
-                      className="sticky right-0 z-10 border-l border-border bg-card p-0 shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
-                      style={{ width: ACTIONS_W }}
-                    >
-                      <div className="flex items-center justify-center gap-0.5 px-2">
-                        <button
-                          type="button"
-                          onClick={() => openView(row.id)}
-                          aria-label={`View ${primary.title || singular}`}
-                          title="View"
-                          className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
-                        >
-                          <Eye className="size-4 text-blue-500" />
-                        </button>
-                        {!trash && canEdit && (
-                          <button
-                            type="button"
-                            onClick={() => openEdit(row.id)}
-                            aria-label={`Edit ${primary.title || singular}`}
-                            title="Edit"
-                            className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
-                          >
-                            <Pencil className="size-4 text-amber-500" />
-                          </button>
+                                <GripVertical className="size-3.5 border-transparent bg-transparent" />
+                              </div>
+                              <Checkbox
+                                checked={selected.has(row.id)}
+                                onChange={() => toggleSelect(row.id)}
+                                aria-label={`Select ${primary.title}`}
+                              />
+                            </div>
+                          </TableCell>
                         )}
-                        {trash
-                          ? onRestore && (
+                        {orderedCols.map((col) =>
+                          col === IDENTITY_COL ? (
+                            <TableCell
+                              key="__identity"
+                              className="p-0"
+                              style={{
+                                maxWidth: colWidths[NAME_COL] ?? NAME_DEFAULT_W,
+                              }}
+                            >
                               <button
                                 type="button"
-                                onClick={() => setConfirmRestoreId(row.id)}
-                                aria-label={`Restore ${primary.title || singular}`}
-                                title="Restore"
+                                onClick={() => openRow(row.id)}
+                                disabled={rowClick === "none"}
+                                className="flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-muted/60 disabled:cursor-default disabled:hover:bg-transparent"
+                              >
+                                <span className="flex size-5 shrink-0 items-center justify-center rounded bg-muted font-medium text-muted-foreground">
+                                  {primary.initials}
+                                </span>
+                                {nameClip.full ? (
+                                  <Tooltip
+                                    content={nameClip.full}
+                                    className="truncate"
+                                  >
+                                    {nameClip.text}
+                                  </Tooltip>
+                                ) : (
+                                  <span className="truncate">
+                                    {nameClip.text || "—"}
+                                  </span>
+                                )}
+                              </button>
+                            </TableCell>
+                          ) : (
+                            <TableCell
+                              key={col.key}
+                              className="p-0"
+                              style={{
+                                maxWidth:
+                                  colWidths[col.key] ?? fieldDefaultWidth(col),
+                              }}
+                            >
+                              {renderCellValue(row, col)}
+                            </TableCell>
+                          ),
+                        )}
+                        <TableCell
+                          aria-hidden="true"
+                          className="w-full border-r-0"
+                        />
+                        <TableCell
+                          className="sticky right-0 z-10 border-l border-border bg-card p-0 shadow-[-8px_0_12px_-8px_rgb(0_0_0/0.12)]"
+                          style={{ width: ACTIONS_W }}
+                        >
+                          <div className="flex items-center justify-center gap-0.5 px-2">
+                            <button
+                              type="button"
+                              onClick={() => openView(row.id)}
+                              aria-label={`View ${primary.title || singular}`}
+                              title="View"
+                              className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
+                            >
+                              <Eye className="size-4 text-blue-500" />
+                            </button>
+                            {!trash && canEdit && (
+                              <button
+                                type="button"
+                                onClick={() => openEdit(row.id)}
+                                aria-label={`Edit ${primary.title || singular}`}
+                                title="Edit"
                                 className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
                               >
-                                <Restore className="size-4 text-[var(--button-primary)]" />
+                                <Pencil className="size-4 text-amber-500" />
                               </button>
-                            )
-                          : (
+                            )}
+                            {trash ? (
+                              onRestore && (
+                                <button
+                                  type="button"
+                                  onClick={() => setConfirmRestoreId(row.id)}
+                                  aria-label={`Restore ${primary.title || singular}`}
+                                  title="Restore"
+                                  className="grid size-7 cursor-pointer place-items-center rounded-sm hover:bg-muted"
+                                >
+                                  <Restore className="size-4 text-[var(--button-primary)]" />
+                                </button>
+                              )
+                            ) : (
                               <button
                                 type="button"
                                 onClick={() => requestDelete(row.id)}
@@ -2893,24 +3003,24 @@ export function RecordView<T extends { id: RowId }>({
                                 <Trash2 className="size-4 text-red-500" />
                               </button>
                             )}
-                      </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow className="hover:bg-transparent">
+                    <TableCell
+                      colSpan={orderedCols.length + (showSelection ? 3 : 2)}
+                      className="h-32 text-center text-muted-foreground"
+                    >
+                      {emptyStateLabel(filter, filterValues)}
                     </TableCell>
                   </TableRow>
-                );
-              })
-            ) : (
-              <TableRow className="hover:bg-transparent">
-                <TableCell
-                  colSpan={orderedCols.length + (showSelection ? 3 : 2)}
-                  className="h-32 text-center text-muted-foreground"
-                >
-                  {emptyStateLabel(filter, filterValues)}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 
@@ -2930,6 +3040,7 @@ export function RecordView<T extends { id: RowId }>({
           renderFooter={renderFooter}
           formSlots={formSlots}
           behaviour={behaviour}
+          formRows={formRows}
           sectionColumns={sectionColumns}
           sections={sections}
         />
@@ -2945,7 +3056,7 @@ export function RecordView<T extends { id: RowId }>({
             top: Math.min(menu.y, window.innerHeight - 140),
             left: Math.min(menu.x, window.innerWidth - 200),
           }}
-          className="fixed z-50 min-w-44 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+          className="fixed z-[200] min-w-44 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
         >
           <button
             type="button"
@@ -3013,7 +3124,9 @@ export function RecordView<T extends { id: RowId }>({
           <>
             This permanently removes{" "}
             <span className="font-medium text-foreground">
-              {deleteTarget ? getPrimary(deleteTarget).title || "this record" : "this record"}
+              {deleteTarget
+                ? getPrimary(deleteTarget).title || "this record"
+                : "this record"}
             </span>
             . This can’t be undone.
           </>
@@ -3030,7 +3143,9 @@ export function RecordView<T extends { id: RowId }>({
       <ConfirmDialog
         open={bulkDeleteOpen}
         title={`Delete ${selected.size} ${
-          selected.size === 1 ? singular.toLowerCase() : `${title.toLowerCase()}`
+          selected.size === 1
+            ? singular.toLowerCase()
+            : `${title.toLowerCase()}`
         }?`}
         description={
           <>
@@ -3097,7 +3212,11 @@ interface DetailPanelProps<T extends { id: RowId }> {
   row: T;
   singular: string;
   icon?: IconType;
-  getPrimary: (row: T) => { title: string; initials: string; subtitle?: string };
+  getPrimary: (row: T) => {
+    title: string;
+    initials: string;
+    subtitle?: string;
+  };
   /** Read-only (View) vs editable (Edit / Add). */
   readOnly?: boolean;
   /** Switch a read-only panel into edit mode. */
@@ -3136,11 +3255,12 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Behaviour, already resolved by the table so a per-table prop reaches the
    *  form as well as the rows. */
   behaviour?: BehaviourConfig;
-  /** Columns the sections flow across (1, 2 or 3). Falls back to the app's
-   *  `form.sectionColumns`, then 1. */
+  /** The form's rows: which sections sit side by side on each one. Up to three
+   *  per row stay readable. */
+  formRows?: FormRow[];
+  /** @deprecated Since 1.59. Use `rows`. */
   sectionColumns?: SectionColumns;
-  /** Declare the sections to control their order, let one span the row, or give
-   *  one its own field layout. Omit and they come from each field's `group`. */
+  /** Section metadata (order, description) when you aren't declaring `rows`. */
   sections?: FormSection[];
   /** Page-form breadcrumb override (fully configurable). When set, these crumbs
    *  replace the default `Home › {title} › Create/Update {singular}` — so you can
@@ -3170,6 +3290,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
   renderFooter,
   formSlots,
   behaviour: behaviourProp,
+  formRows: formRowsProp,
   sectionColumns,
   sections,
   crumbs,
@@ -3177,7 +3298,20 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const formConfig = useResolved("form", undefined) ?? {};
   // Two settings decide the whole form: how many columns the fields flow
   // across, and whether each label sits beside its control or above it.
-  const sectionCols = sectionColumns ?? formConfig.sectionColumns ?? 1;
+  // Errors highlight the control's border and live on the field's info icon by
+  // default: a line of red text under a control pushes the rest of the form
+  // down while someone is still typing in it.
+  const errorDisplay = formConfig.errorDisplay ?? "tooltip";
+  const layoutRows = resolveFormRows(
+    fields,
+    formRowsProp,
+    sections,
+    // `formColumns={2}` (page forms, pre-1.59) meant two sections to a row;
+    // keep honouring it rather than letting a deprecated prop go quietly dead.
+    sectionColumns ??
+      formConfig.sectionColumns ??
+      (layout === "page" && columns === 2 ? 2 : undefined),
+  );
   const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
@@ -3293,7 +3427,6 @@ function RecordDetailPanel<T extends { id: RowId }>({
     return next;
   };
 
-
   // Cancel/close discards the draft too, so it doesn't reappear next visit.
   const [confirmDiscard, setConfirmDiscard] = React.useState(false);
   const discard = () => {
@@ -3324,265 +3457,312 @@ function RecordDetailPanel<T extends { id: RowId }>({
     </div>
   );
 
-  const laidOut = orderedSections(fields, sections);
-  const anySpan = laidOut.some((s) => s.span && s.span !== 1);
-  const formBody = laidOut.map((section) => {
-    const group = section.group;
-    const groupFields = fields.filter((f) => (f.group ?? "General") === group);
-    if (groupFields.length === 0) return null;
-    const slots = groupSlots(fields, formSlots, group);
-    return (
-      <section
-        key={group}
-        className={cn(
-          "overflow-hidden rounded-lg border border-border",
-          SECTION_SPAN[sectionCols][section.span ?? 1],
-          !anySpan && SECTION_STRETCH[sectionCols],
-        )}
-      >
-        <h3 className="border-b border-border bg-muted/40 px-4 py-2.5 font-semibold text-[var(--button-primary)]">
-          {group}
-        </h3>
-        {section.description && (
-          <p className="border-b border-border px-4 py-2.5 text-muted-foreground">
-            {section.description}
-          </p>
-        )}
-        {/* Two columns, one field per row: `[i] Label *` then the control.
-            Hairlines between them so the grid reads at a glance. */}
-        <dl className={cn("grid", FIELD_GRID)}>
-          {groupFields.flatMap((f) => [
-            // Label, icon, required mark and control share one baseline —
-            // vertically centered. ponytail: a wrapped textarea grows down and
-            // the label centers against it; acceptable for the single-line norm.
-            // `items-stretch` so the column rule runs the full height of the
-            // row; the label centres itself inside its own cell.
-            <div
-              key={f.key}
-              className={cn(
-                "col-span-2 grid grid-cols-subgrid items-stretch border-t leading-relaxed first:border-t-0",
-                RULE,
-              )}
-            >
-              <dt
-                className={cn(
-                  "flex items-center gap-2 whitespace-nowrap border-r py-3.5 pl-4 pr-4 text-muted-foreground",
-                  RULE,
-                )}
-              >
-                {/* Help text sits on the label itself, so it's there in a
-                    slide-over too: the full-page Info panel is the only place
-                    it used to appear. Tooltip icon, label, required mark. */}
-                {f.description && (
-                  <Tooltip content={f.description}>
-                    <Info
-                      aria-label={`About ${f.label}`}
-                      className="size-3.5 shrink-0 cursor-help text-muted-foreground/70 hover:text-[var(--button-primary)]"
-                    />
-                  </Tooltip>
-                )}
-                {f.icon && (
-                  <f.icon className="size-3.5 text-[var(--button-primary)]" />
-                )}
-                {f.label}
-                {f.required && <RequiredMark />}
-              </dt>
-              <dd className="flex min-w-0 items-center py-3.5 pl-4 pr-4">
-                {/* `render` is the read-only view; the edit control (a custom
-                    `renderInput` or a built-in `input:"checkbox"`) wins while
-                    editing, so a field can show a badge/preview in view and
-                    still be edited (e.g. a HQ badge in the table + a checkbox in
-                    the form). */}
-                {f.render &&
-                !(
-                  !readOnly &&
-                  f.editable &&
-                  (f.renderInput || f.input === "checkbox")
-                ) ? (
-                  <div>{f.render(draft)}</div>
-                ) : !readOnly && f.editable ? (
-                  f.renderInput ? (
-                    // Consumer-supplied control (checkbox, radio, custom widget).
-                    f.renderInput({
-                      value: String(draft[f.key as keyof T] ?? ""),
-                      onChange: (v) => setField(f.key as keyof T, v),
-                      field: f,
-                      invalid: errors.has(f.key),
-                    })
-                  ) : f.options || f.loadOptions ? (
-                    f.multiple ? (
-                      <MultiCombobox
-                        value={
-                          Array.isArray(draft[f.key as keyof T])
-                            ? (draft[f.key as keyof T] as string[])
-                            : []
-                        }
-                        onValueChange={(v) => setField(f.key as keyof T, v)}
-                        {...(f.loadOptions
-                          ? {
-                              source: {
-                                loadOptions: ({ search, signal }) =>
-                                  f.loadOptions!({ search, signal, values: draft }),
-                                resolveOptions: f.resolveOptions,
-                                resolveOption: f.resolveOption,
-                              },
-                              resetKey: (f.dependsOn ?? [])
-                                .map((k) => String(draft[k] ?? ""))
-                                .join(" "),
-                            }
-                          : { options: resolveOptions(f.options, draft) })}
-                        ariaLabel={f.label}
-                        placeholder={`Select ${f.label.toLowerCase()}…`}
-                        invalid={errors.has(f.key)}
-                        className="w-full"
-                      />
-                    ) : f.input === "combobox" ? (
-                      <Combobox
-                        value={String(draft[f.key as keyof T] ?? "")}
-                        onValueChange={(v) => setField(f.key as keyof T, v)}
-                        {...(f.loadOptions
-                          ? {
-                              source: {
-                                loadOptions: ({ search, signal }) =>
-                                  f.loadOptions!({ search, signal, values: draft }),
-                                resolveOption: f.resolveOption,
-                              },
-                              resetKey: (f.dependsOn ?? [])
-                                .map((k) => String(draft[k] ?? ""))
-                                .join(" "),
-                            }
-                          : { options: resolveOptions(f.options, draft) })}
-                        ariaLabel={f.label}
-                        placeholder={`Select ${f.label.toLowerCase()}…`}
-                        className="w-full"
-                      />
-                    ) : (
-                      <Select
-                        value={String(draft[f.key as keyof T] ?? "")}
-                        onValueChange={(v) => setField(f.key as keyof T, v)}
-                        {...(f.loadOptions
-                          ? {
-                              source: {
-                                loadOptions: ({ search, signal }) =>
-                                  f.loadOptions!({ search, signal, values: draft }),
-                                resolveOption: f.resolveOption,
-                              },
-                              resetKey: (f.dependsOn ?? [])
-                                .map((k) => String(draft[k] ?? ""))
-                                .join(" "),
-                            }
-                          : { options: resolveOptions(f.options, draft) })}
-                        ariaLabel={f.label}
-                        placeholder={`Select ${f.label.toLowerCase()}…`}
-                        className="w-full"
-                      />
-                    )
-                  ) : f.input === "checkbox" ? (
-                    <label className="flex h-8 items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(draft[f.key as keyof T])}
-                        onChange={(e) =>
-                          setField(f.key as keyof T, e.target.checked)
-                        }
-                        aria-label={f.label}
-                        className="size-4 accent-[var(--button-primary)]"
-                      />
-                      <span className="text-sm text-muted-foreground">
-                        {draft[f.key as keyof T] ? "Yes" : "No"}
-                      </span>
-                    </label>
-                  ) : f.input === "number" || f.input === "date" ? (
-                    <Input
-                      type={f.input}
-                      value={String(draft[f.key as keyof T] ?? "")}
-                      onChange={(e) => setField(f.key as keyof T, e.target.value)}
-                      onBlur={() => blurField(f)}
-                      aria-label={f.label}
-                      aria-invalid={errors.has(f.key) || undefined}
-                      className={cn(
-                        "w-full",
-                        errors.has(f.key) &&
-                          "border-destructive focus-visible:ring-destructive",
-                      )}
-                    />
-                  ) : (
-                    <textarea
-                      value={String(draft[f.key as keyof T] ?? "")}
-                      onChange={(e) =>
-                        setField(
-                          f.key as keyof T,
-                          f.format === "phone"
-                            ? formatPhone(e.target.value)
-                            : e.target.value,
-                        )
-                      }
-                      onBlur={() => blurField(f)}
-                      aria-label={f.label}
-                      aria-invalid={errors.has(f.key) || undefined}
-                      placeholder={`Add ${f.label.toLowerCase()}`}
-                      rows={1}
-                      // field-sizing grows the box to fit long/wrapped text
-                      className={cn(
-                        "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
-                        errors.has(f.key)
-                          ? "border-destructive focus-visible:ring-destructive"
-                          : "border-input focus-visible:ring-ring",
-                      )}
-                    />
-                  )
-                ) : (
-                  <span className="block whitespace-pre-wrap break-words px-2 py-1.5">
-                    {(() => {
-                      // The host already has the label in the row: no resolve.
-                      if (f.displayValue)
-                        return f.displayValue(draft) || <MissingValue />;
-                      if (f.input === "checkbox")
-                        return draft[f.key as keyof T] ? "Yes" : "No";
-                      if (f.multiple)
-                        return (
-                          <MultiFieldValue
-                            field={f}
-                            values={
+  /** The message for a field, while editing. */
+  const fieldError = (f: RecordField<T>) =>
+    readOnly ? undefined : errors.get(f.key);
+
+  const formBody = layoutRows.map((row, rowIndex) => (
+    <div
+      key={`row-${rowIndex}`}
+      className={cn(
+        ROW_GRID[Math.min(row.sections.length, 3) as 1 | 2 | 3],
+        rowIndex > 0 && "mt-5",
+      )}
+    >
+      {row.sections.map((section) => {
+        const group = section.group;
+        const groupFields = fields.filter(
+          (f) => (f.group ?? "General") === group,
+        );
+        if (groupFields.length === 0) return null;
+        const slots = groupSlots(fields, formSlots, group);
+        return (
+          <section
+            key={group}
+            className="overflow-hidden rounded-lg border border-border"
+          >
+            <h3 className="border-b border-border bg-muted/40 px-4 py-2.5 font-semibold text-[var(--button-primary)]">
+              {group}
+            </h3>
+            {section.description && (
+              <p className="border-b border-border px-4 py-2.5 text-muted-foreground">
+                {section.description}
+              </p>
+            )}
+            {/* Two columns, one field per row: `[i] Label *` then the control.
+              Hairlines between them so the grid reads at a glance. */}
+            <dl className={cn("grid", FIELD_GRID)}>
+              {groupFields.flatMap((f) => [
+                // Label, icon, required mark and control share one baseline —
+                // vertically centered. ponytail: a wrapped textarea grows down and
+                // the label centers against it; acceptable for the single-line norm.
+                // `items-stretch` so the column rule runs the full height of the
+                // row; the label centres itself inside its own cell.
+                <div
+                  key={f.key}
+                  className={cn(
+                    "col-span-2 grid grid-cols-subgrid items-stretch border-t leading-relaxed first:border-t-0",
+                    RULE,
+                  )}
+                >
+                  <dt
+                    className={cn(
+                      "flex items-center gap-2 whitespace-nowrap border-r py-3.5 pl-4 pr-4 text-muted-foreground",
+                      RULE,
+                    )}
+                  >
+                    {/* One icon, two jobs: the field's help text, and its
+                      error when it has one. Help lives on the label so it's
+                      there in a slide-over, where the Info panel isn't. */}
+                    {(f.description || fieldError(f)) && (
+                      <Tooltip content={fieldError(f) ?? f.description ?? ""}>
+                        <Info
+                          aria-label={
+                            fieldError(f)
+                              ? `${f.label}: ${fieldError(f)}`
+                              : `About ${f.label}`
+                          }
+                          className={cn(
+                            "size-3.5 shrink-0 cursor-help",
+                            fieldError(f)
+                              ? "text-destructive"
+                              : "text-muted-foreground/70 hover:text-[var(--button-primary)]",
+                          )}
+                        />
+                      </Tooltip>
+                    )}
+                    {f.icon && (
+                      <f.icon className="size-3.5 text-[var(--button-primary)]" />
+                    )}
+                    {f.label}
+                    {f.required && <RequiredMark />}
+                  </dt>
+                  <dd className="flex min-w-0 items-center py-3.5 pl-4 pr-4">
+                    {/* `render` is the read-only view; the edit control (a custom
+                      `renderInput` or a built-in `input:"checkbox"`) wins while
+                      editing, so a field can show a badge/preview in view and
+                      still be edited (e.g. a HQ badge in the table + a checkbox in
+                      the form). */}
+                    {f.render &&
+                    !(
+                      !readOnly &&
+                      f.editable &&
+                      (f.renderInput || f.input === "checkbox")
+                    ) ? (
+                      <div>{f.render(draft)}</div>
+                    ) : !readOnly && f.editable ? (
+                      f.renderInput ? (
+                        // Consumer-supplied control (checkbox, radio, custom widget).
+                        f.renderInput({
+                          value: String(draft[f.key as keyof T] ?? ""),
+                          onChange: (v) => setField(f.key as keyof T, v),
+                          field: f,
+                          invalid: errors.has(f.key),
+                        })
+                      ) : f.options || f.loadOptions ? (
+                        f.multiple ? (
+                          <MultiCombobox
+                            value={
                               Array.isArray(draft[f.key as keyof T])
                                 ? (draft[f.key as keyof T] as string[])
                                 : []
                             }
-                            row={draft}
+                            onValueChange={(v) => setField(f.key as keyof T, v)}
+                            {...(f.loadOptions
+                              ? {
+                                  source: {
+                                    loadOptions: ({ search, signal }) =>
+                                      f.loadOptions!({
+                                        search,
+                                        signal,
+                                        values: draft,
+                                      }),
+                                    resolveOptions: f.resolveOptions,
+                                    resolveOption: f.resolveOption,
+                                  },
+                                  resetKey: (f.dependsOn ?? [])
+                                    .map((k) => String(draft[k] ?? ""))
+                                    .join(" "),
+                                }
+                              : { options: resolveOptions(f.options, draft) })}
+                            ariaLabel={f.label}
+                            placeholder={`Select ${f.label.toLowerCase()}…`}
+                            invalid={errors.has(f.key)}
+                            className="w-full"
                           />
-                        );
-                      const raw = String(draft[f.key as keyof T] ?? "");
-                      if (!raw) return <MissingValue />;
-                      // Async id → resolved label; static options → their label;
-                      // otherwise the raw value.
-                      if (isAsyncLabeled(f))
-                        return (
-                          <AsyncFieldValue field={f} value={raw} values={draft} />
-                        );
-                      if (Array.isArray(f.options))
-                        return (
-                          f.options.find((o) => o.value === raw)?.label ?? raw
-                        );
-                      return raw;
-                    })()}
-                  </span>
-                )}
-                {!readOnly && errors.get(f.key) && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {errors.get(f.key)}
-                  </p>
-                )}
-              </dd>
-            </div>,
-            // Anything the host put after this field.
-            ...(slots.get(f.key) ?? []).map(slotRow),
-          ])}
-          {/* Slots with no `after` close out the section. */}
-          {(slots.get("") ?? []).map(slotRow)}
-        </dl>
-      </section>
-    );
-  });
+                        ) : f.input === "combobox" ? (
+                          <Combobox
+                            value={String(draft[f.key as keyof T] ?? "")}
+                            onValueChange={(v) => setField(f.key as keyof T, v)}
+                            {...(f.loadOptions
+                              ? {
+                                  source: {
+                                    loadOptions: ({ search, signal }) =>
+                                      f.loadOptions!({
+                                        search,
+                                        signal,
+                                        values: draft,
+                                      }),
+                                    resolveOption: f.resolveOption,
+                                  },
+                                  resetKey: (f.dependsOn ?? [])
+                                    .map((k) => String(draft[k] ?? ""))
+                                    .join(" "),
+                                }
+                              : { options: resolveOptions(f.options, draft) })}
+                            ariaLabel={f.label}
+                            placeholder={`Select ${f.label.toLowerCase()}…`}
+                            className="w-full"
+                          />
+                        ) : (
+                          <Select
+                            value={String(draft[f.key as keyof T] ?? "")}
+                            onValueChange={(v) => setField(f.key as keyof T, v)}
+                            {...(f.loadOptions
+                              ? {
+                                  source: {
+                                    loadOptions: ({ search, signal }) =>
+                                      f.loadOptions!({
+                                        search,
+                                        signal,
+                                        values: draft,
+                                      }),
+                                    resolveOption: f.resolveOption,
+                                  },
+                                  resetKey: (f.dependsOn ?? [])
+                                    .map((k) => String(draft[k] ?? ""))
+                                    .join(" "),
+                                }
+                              : { options: resolveOptions(f.options, draft) })}
+                            ariaLabel={f.label}
+                            placeholder={`Select ${f.label.toLowerCase()}…`}
+                            className="w-full"
+                          />
+                        )
+                      ) : f.input === "checkbox" ? (
+                        <label className="flex h-8 items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(draft[f.key as keyof T])}
+                            onChange={(e) =>
+                              setField(f.key as keyof T, e.target.checked)
+                            }
+                            aria-label={f.label}
+                            className="size-4 accent-[var(--button-primary)]"
+                          />
+                          <span className="text-sm text-muted-foreground">
+                            {draft[f.key as keyof T] ? "Yes" : "No"}
+                          </span>
+                        </label>
+                      ) : f.input === "number" || f.input === "date" ? (
+                        <Input
+                          type={f.input}
+                          value={String(draft[f.key as keyof T] ?? "")}
+                          onChange={(e) =>
+                            setField(f.key as keyof T, e.target.value)
+                          }
+                          onBlur={() => blurField(f)}
+                          aria-label={f.label}
+                          aria-invalid={errors.has(f.key) || undefined}
+                          className={cn(
+                            "w-full",
+                            errors.has(f.key) &&
+                              "border-destructive focus-visible:ring-destructive",
+                          )}
+                        />
+                      ) : (
+                        <textarea
+                          value={String(draft[f.key as keyof T] ?? "")}
+                          onChange={(e) =>
+                            setField(
+                              f.key as keyof T,
+                              f.format === "phone"
+                                ? formatPhone(e.target.value)
+                                : e.target.value,
+                            )
+                          }
+                          onBlur={() => blurField(f)}
+                          aria-label={f.label}
+                          aria-invalid={errors.has(f.key) || undefined}
+                          placeholder={`Add ${f.label.toLowerCase()}`}
+                          rows={1}
+                          // field-sizing grows the box to fit long/wrapped text
+                          className={cn(
+                            "w-full resize-none rounded-sm border bg-background px-2 py-1.5 outline-none [field-sizing:content] placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-inset",
+                            errors.has(f.key)
+                              ? "border-destructive focus-visible:ring-destructive"
+                              : "border-input focus-visible:ring-ring",
+                          )}
+                        />
+                      )
+                    ) : (
+                      <span className="block whitespace-pre-wrap break-words px-2 py-1.5">
+                        {(() => {
+                          // The host already has the label in the row: no resolve.
+                          if (f.displayValue)
+                            return f.displayValue(draft) || <MissingValue />;
+                          if (f.input === "checkbox")
+                            return draft[f.key as keyof T] ? "Yes" : "No";
+                          if (f.multiple)
+                            return (
+                              <MultiFieldValue
+                                field={f}
+                                values={
+                                  Array.isArray(draft[f.key as keyof T])
+                                    ? (draft[f.key as keyof T] as string[])
+                                    : []
+                                }
+                                row={draft}
+                              />
+                            );
+                          const raw = String(draft[f.key as keyof T] ?? "");
+                          if (!raw) return <MissingValue />;
+                          // Async id → resolved label; static options → their label;
+                          // otherwise the raw value.
+                          if (isAsyncLabeled(f))
+                            return (
+                              <AsyncFieldValue
+                                field={f}
+                                value={raw}
+                                values={draft}
+                              />
+                            );
+                          if (Array.isArray(f.options))
+                            return (
+                              f.options.find((o) => o.value === raw)?.label ??
+                              raw
+                            );
+                          return raw;
+                        })()}
+                      </span>
+                    )}
+                    {fieldError(f) &&
+                      // Default: the border is already red and the message is
+                      // on the icon, so nothing here moves the layout. A colour
+                      // and a hover aren't available to everyone, so the text
+                      // still reaches assistive tech.
+                      (errorDisplay === "text" ? (
+                        <p className="mt-1 text-xs text-destructive">
+                          {fieldError(f)}
+                        </p>
+                      ) : (
+                        <span role="alert" className="sr-only">
+                          {fieldError(f)}
+                        </span>
+                      ))}
+                  </dd>
+                </div>,
+                // Anything the host put after this field.
+                ...(slots.get(f.key) ?? []).map(slotRow),
+              ])}
+              {/* Slots with no `after` close out the section. */}
+              {(slots.get("") ?? []).map(slotRow)}
+            </dl>
+          </section>
+        );
+      })}
+    </div>
+  ));
 
   // Footer actions. The shipped pair (Cancel + Save, or Close + Edit while
   // viewing) are ordinary actions, so a host's `formActions` starts from them.
@@ -3717,17 +3897,8 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {/* The section grid. `sectionColumns` is the setting; the
                     older `columns` (page forms only) still widens a
                     single-column form to two, so nothing existing moves. */}
-                <div
-                  className={cn(
-                    "w-full",
-                    SECTION_GRID[
-                      sectionCols > 1 ? sectionCols : columns === 2 ? 2 : 1
-                    ],
-                    (sectionCols > 1 || columns === 2) && "mx-auto max-w-5xl",
-                  )}
-                >
-                  {formBody}
-                </div>
+                {/* Rows lay themselves out; this only bounds the width. */}
+                <div className="mx-auto w-full max-w-5xl">{formBody}</div>
               </div>
               {formFooter}
             </div>
@@ -3790,14 +3961,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
         </div>
 
         {/* Body — the section grid, one bordered card per field group. */}
-        <div
-          className={cn(
-            "min-h-0 flex-1 overflow-y-auto p-4",
-            SECTION_GRID[sectionCols],
-          )}
-        >
-          {formBody}
-        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">{formBody}</div>
 
         {formFooter}
       </aside>

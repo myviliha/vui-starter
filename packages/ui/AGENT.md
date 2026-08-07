@@ -551,34 +551,34 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
 
-**Form layout is declared, not styled.** A form is a grid of section cards, and every card is the same two columns. Full write-up with a worked example: docs `/form-layout`.
+**Anything that floats must clear what opened it, and must be portalled.** A menu inside a slide-over, a confirm raised from a form, a picker at the bottom of a scrolling card: get either wrong and it is invisible or unclickable. Two rules, both non-negotiable:
+
+1. **Use the documented layer.** The scale lives at the top of `theme.css`: 60 slide-over, 70 Dialog, 80 confirm, 100 command palette, 200 pickers and menus, 210 HoverCard, 220 Tooltip, 250 Toast. Never invent a value; `src/z-layers.test.ts` fails the build on anything off the scale, and names the file.
+2. **Portal it to the body.** A high z-index does not save an `absolute` element from the nearest `overflow-hidden`, and every section card has one. Radix components already portal; hand-rolled ones use `createPortal` with a position measured from the trigger, reflowed on scroll and resize. `Combobox` is the reference.
+
+If a new component genuinely needs a new layer, add it to the scale in `theme.css` with a note on what it has to clear, then to the test. Choosing a number in isolation is how the last four regressions happened.
+
+**Form layout is declared, not styled.** A form is rows; each row says which sections sit side by side. Full write-up with a worked Add Order form: docs `/form-layout`.
 
 ```
-Form                          a grid of section cards
-└─ sectionColumns: 1 | 2 | 3  how many fit across; rows wrap as needed
-   └─ Section card            span: 1 | 2 | 3 | "full"
-      └─ two columns, one field per row:
-
-         ┌──────────────────────┬──────────────────────────┐
-         │ [i]  Label        *  │  [ control              ]│
-         │      Label           │  [ control              ]│
-         └──────────────────────┴──────────────────────────┘
+Form
+└─ Rows           as many as you want
+   └─ Sections    1, 2 or 3 side by side on each row
+      └─ Fields   [i] Label *  |  [ control ]     always one row
 ```
-
-Sections come from each field's `group`. Declare `sections` to fix their order, let one span the row, or add a description line:
 
 ```tsx
 <RecordView
-  sectionColumns={2}
-  sections={[
-    { group: "Customer" },
-    { group: "Delivery" },
-    { group: "Items", span: "full" },
+  formRows={[
+    { sections: [{ group: "Customer" }, { group: "Delivery" }] },
+    { sections: [{ group: "Items" }, { group: "Payment" }, { group: "Notes" }] },
   ]}
   … />
 ```
 
-A declared section with no fields is skipped; a group you didn't declare is appended rather than dropped. `sectionColumns` is also `form.sectionColumns` in `VuiProvider` for a house style. A trailing card that would leave a gap stretches to fill its row, unless you declare spans yourself.
+Fields join a card through their `group`, which is why rows only name groups. One section on a row fills the row, so nothing needs a width. Three to a row is the readable maximum; a fourth wraps. A section with no fields is dropped, and a group nobody placed gets its own row rather than vanishing. Omit `formRows` and every section gets a full-width row.
+
+`sectionColumns` and `sections[].span` are deprecated since 1.59: they force one column count on the whole form, which is what rows exist to fix.
 
 **Inside a card, nothing is configurable, and that's the point.** Two columns, one field per row: tooltip, label and required mark on the left, control on the right. Never stack a label above its control and never add a per-field column count. A form gets wider by putting cards side by side, which is what keeps two screens built by two people looking like one product. The label column widens to the longest label in that card and never wraps, so every control starts at the same x, and hairlines between the columns and rows make the grid legible without drawing the eye.
 

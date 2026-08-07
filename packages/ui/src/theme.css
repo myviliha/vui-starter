@@ -113,6 +113,25 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Stacking order. Anything that floats has to clear whatever opened it, or it
+   is invisible or unclickable: a menu inside a slide-over, a confirm raised
+   from a form, a picker at the bottom of a scrolling card. The scale is fixed
+   and enforced by src/z-layers.test.ts, which fails on any value not listed:
+
+     10 20 30  in-page (sticky headers, cell overlays)
+     55        slide-over backdrop
+     60        slide-over panel, Sheet
+     70        Dialog
+     80        AlertDialog / confirm      clears a Dialog and a slide-over
+     100       command palette
+     200       Select, Combobox, Dropdown, Popover, context menus
+     210       HoverCard
+     220       Tooltip
+     250       Toast
+
+   Position is only half of it: floating content must also be portalled to the
+   body, or the nearest `overflow-hidden` clips it however high its z-index. */
+
 @theme inline {
   /* `--font-sans-choice` and `--font-scale` are what a runtime theme sets; unset
      they fall back to what the package ships. */

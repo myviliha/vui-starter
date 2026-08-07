@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 
 import { cn } from "./utils";
 import { Checkbox } from "./checkbox";
@@ -31,11 +32,49 @@ export function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  // The menu is portalled to the body and positioned against the trigger.
+  // Rendered in place it was clipped by any scrolling ancestor (a form's scroll
+  // region, a section card) and sat under the slide-over, so it was either
+  // invisible or unclickable exactly where it mattered.
+  const [pos, setPos] = React.useState<{
+    top: number;
+    left?: number;
+    right?: number;
+  } | null>(null);
+
+  React.useLayoutEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const el = triggerRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setPos(
+        align === "end"
+          ? { top: r.bottom + 4, right: window.innerWidth - r.right }
+          : { top: r.bottom + 4, left: r.left },
+      );
+    };
+    place();
+    const reflow = () => place();
+    window.addEventListener("scroll", reflow, true);
+    window.addEventListener("resize", reflow);
+    return () => {
+      window.removeEventListener("scroll", reflow, true);
+      window.removeEventListener("resize", reflow);
+    };
+  }, [open, align]);
 
   React.useEffect(() => {
     if (!open) return;
     function onDocMouseDown(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      // The menu is outside `ref` now (it's portalled), so check it too.
+      if (
+        !ref.current?.contains(target) &&
+        !menuRef.current?.contains(target)
+      ) {
         setOpen(false);
       }
     }
@@ -53,6 +92,7 @@ export function Dropdown({
   return (
     <div className="relative" ref={ref}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-haspopup="menu"
@@ -68,16 +108,21 @@ export function Dropdown({
         {icon}
         {label && <span className={cn("truncate", labelClassName)}>{label}</span>}
       </button>
-      {open && (
-        <div
-          className={cn(
-            "vui-pop-in absolute z-40 mt-1 min-w-52 overflow-hidden rounded-md border border-border bg-popover text-left text-sm font-normal text-popover-foreground shadow-md",
-            align === "end" ? "right-0" : "left-0",
-          )}
-        >
-          {children}
-        </div>
-      )}
+      {open &&
+        pos &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={menuRef}
+            style={{ top: pos.top, left: pos.left, right: pos.right }}
+            className={cn(
+              "vui-pop-in fixed z-[200] min-w-52 overflow-hidden rounded-md border border-border bg-popover text-left text-sm font-normal text-popover-foreground shadow-md",
+            )}
+          >
+            {children}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

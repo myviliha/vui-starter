@@ -7,6 +7,7 @@ import {
   isAsyncLabeled,
   orderedGroups,
   orderedSections,
+  resolveFormRows,
   showEditActions,
   validateField,
   type RecordField,
@@ -297,5 +298,77 @@ describe("orderedSections", () => {
     expect(
       groups(orderedSections(fields, [{ group: "Billing" }, { group: "Details" }])),
     ).toEqual(["Details", "Address", "General"]);
+  });
+});
+
+describe("resolveFormRows", () => {
+  type Row = { id: number; a: string; b: string; c: string; d: string };
+  const fields: RecordField<Row>[] = [
+    { key: "a", label: "A", group: "Customer" },
+    { key: "b", label: "B", group: "Delivery" },
+    { key: "c", label: "C", group: "Items" },
+    { key: "d", label: "D", group: "Payment" },
+  ];
+  const shape = (rows: { sections: { group: string }[] }[]) =>
+    rows.map((r) => r.sections.map((s) => s.group));
+
+  it("gives every section its own row when nothing is declared", () => {
+    expect(shape(resolveFormRows(fields, undefined, undefined, undefined))).toEqual([
+      ["Customer"],
+      ["Delivery"],
+      ["Items"],
+      ["Payment"],
+    ]);
+  });
+
+  it("puts two on the top row and three on the next, as declared", () => {
+    const rows = [
+      { sections: [{ group: "Customer" }, { group: "Delivery" }] },
+      { sections: [{ group: "Items" }, { group: "Payment" }] },
+    ];
+    expect(shape(resolveFormRows(fields, rows, undefined, undefined))).toEqual([
+      ["Customer", "Delivery"],
+      ["Items", "Payment"],
+    ]);
+  });
+
+  it("drops a section with no fields, and the row with it if it empties", () => {
+    const rows = [
+      { sections: [{ group: "Nope" }] },
+      { sections: [{ group: "Customer" }, { group: "Gone" }] },
+    ];
+    expect(
+      shape(resolveFormRows(fields, rows, undefined, undefined))[0],
+    ).toEqual(["Customer"]);
+  });
+
+  it("gives a group nobody placed its own row rather than losing it", () => {
+    const rows = [{ sections: [{ group: "Customer" }] }];
+    expect(shape(resolveFormRows(fields, rows, undefined, undefined))).toEqual([
+      ["Customer"],
+      ["Delivery"],
+      ["Items"],
+      ["Payment"],
+    ]);
+  });
+
+  it("ignores a section placed twice", () => {
+    const rows = [
+      { sections: [{ group: "Customer" }] },
+      { sections: [{ group: "Customer" }, { group: "Delivery" }] },
+    ];
+    expect(shape(resolveFormRows(fields, rows, undefined, undefined))).toEqual([
+      ["Customer"],
+      ["Delivery"],
+      ["Items"],
+      ["Payment"],
+    ]);
+  });
+
+  it("chunks by the deprecated sectionColumns when no rows are given", () => {
+    expect(shape(resolveFormRows(fields, undefined, undefined, 2))).toEqual([
+      ["Customer", "Delivery"],
+      ["Items", "Payment"],
+    ]);
   });
 });
