@@ -113,6 +113,15 @@ The theme ships configured and stays changeable. `vuiPreset` (`@viliha/vui-ui/co
 
 Colors, radius, spacing and typography are **not** in here: they stay in `theme.css`. What they do have is a **runtime source**: `ThemeConfigProvider` (`@viliha/vui-ui/theme-provider`) applies a `ThemeConfig` as CSS variables, with the organization's theme as the floor and each user's overrides on top. `THEME_FIELDS` in `theme-config.ts` is the complete themeable list; `ORG_THEME` and `THEME_CHOICES` in `lib/app-config.ts` wire the demo, and Settings → *Theme* is the reference UI. To persist per user, pass `source={{ load, save }}` pointing at your API. Never add a per-component colour prop instead. Adding a behaviour key is fine when a screen genuinely needs it and the alternative is forking a component; it is not the place for anything the tokens already own. Roadmap for the remaining slices: `docs/proposals/configurable-theme-roadmap.md`.
 
+## Organization switcher (multi-tenant)
+
+The sidebar's brand block is the tenant switcher: `OrgSwitcher` (`@viliha/vui-ui/org-switcher`) mounted in `app-sidebar.tsx`, fed by `WorkspaceProvider` (`app/_components/workspace-provider.tsx`) over the `lib/api/workspaces.ts` data layer. Three layers as usual: the API lists the tenants, the provider owns the switch, the component only renders.
+
+- **Switching logic lives in the host**, in `WorkspaceProvider`'s `onSwitch`. It runs before the change and throwing cancels it, so a refused API call doesn't drop someone into a tenant they can't see. The package's default (set current, remember per browser) is what you get without one.
+- **Chrome is config**: `heading`, `currentLabel`, `addLabel`, `showPlan`, `showAdd` under `orgSwitcher` in `VuiProvider`. Don't add a prop for something that belongs there.
+- **The tenant's brand follows the switch**: each `Organization` carries a `theme` that `WorkspaceProvider` hands to `ThemeConfigProvider` as the org layer, under any personal override.
+- **Add organization** goes to `/register-business`, the existing wizard. Don't build a second creation path.
+
 ## Sidebar sections & groups
 
 The sidebar is driven by `nav-config.ts` (`NAV: NavSection[]`). **Two grouping shapes — use them, don't invent a third:** a **Section** (`NavSection`, `{ title?, items }`) is a top-level band with an optional `title` heading whose items are always visible (static, no collapse — e.g. *Records*, *System*; the first section usually has no title); a **collapsible group** (`NavGroup`, an entry with `children`) is a parent row with a chevron that **hides/unhides** its nested links and auto-opens when a child is active (e.g. *Auth*, *CRM*, *System*) — use it to keep the sidebar short. A group parent has no page of its own, so its breadcrumb points at its first child (see `SECTION_INDEX`). When adding a page, add it to `NAV` and mirror its color in `route-meta.ts`; default to an existing Section and only add a Group when nesting several related sub-pages. Full write-up at docs `/navigation`.

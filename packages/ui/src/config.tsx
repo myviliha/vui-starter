@@ -34,7 +34,32 @@ import * as React from "react";
 export type VuiConfig = {
   form?: FormConfig;
   behaviour?: BehaviourConfig;
+  orgSwitcher?: OrgSwitcherConfig;
 };
+
+/**
+ * The organization switcher's chrome. The switching logic itself is not in here
+ * on purpose: that belongs to `OrgProvider`'s `onSwitch`, because it is code
+ * rather than configuration. This is what the control says and shows.
+ */
+export type OrgSwitcherConfig = {
+  /** Heading above the list. Default `"Organizations"`. */
+  heading?: string;
+  /** Badge on the active row. Default `"Current"`. */
+  currentLabel?: string;
+  /** The row that creates one. Default `"Add organization"`. */
+  addLabel?: string;
+  /** Show the plan line under each name. Default `true`; turn it off for an app
+   *  with no billing. */
+  showPlan?: boolean;
+  /** Show the create row at all. Default `true`, and it still needs an `onAdd`
+   *  handler to appear. Set `false` where only an admin may create tenants. */
+  showAdd?: boolean;
+};
+
+/** A tenant's theme, as handed to `ThemeConfigProvider`. Declared loosely here
+ *  so `config` doesn't have to import the theme types. */
+export type ThemeAwareOrgConfig = Record<string, string | undefined>;
 
 /**
  * What the components do, as opposed to how they look. Every key here replaces

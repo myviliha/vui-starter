@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
-  CaretSortIcon as ChevronsUpDown,
   ChevronRightIcon as ChevronRight,
   Cross2Icon as X,
   GearIcon as Settings,
@@ -16,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useBrand } from "./brand";
 import { Menu as MenuPanel } from "@viliha/vui-ui/menu";
 import { Logo } from "./logo";
+import { OrgSwitcher } from "@viliha/vui-ui/org-switcher";
 import { QuickActionsLauncher } from "./quick-actions";
 import { useOpenTabs } from "./open-tabs";
 import {
@@ -102,6 +102,7 @@ function SidebarBody({
   headerAction?: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { brand } = useBrand();
   const [openGroups, setOpenGroups] = React.useState<Set<string>>(() => {
     const open = new Set<string>();
@@ -364,25 +365,15 @@ function SidebarBody({
     <>
       {/* Workspace switcher + collapse toggle (same row) — header */}
       <div className="flex h-12 items-center gap-1 border-b border-sidebar-border bg-background px-3">
-        <button
-          type="button"
-          className={cn(
-            "flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-sidebar-accent",
-            collapsed ? "w-9 shrink-0 justify-center px-0" : "flex-1",
-          )}
-          aria-label="Switch workspace"
-          title={collapsed ? brand.name : undefined}
-        >
-          <Logo variant="mark" className="h-6 w-6 shrink-0" />
-          {!collapsed && (
-            <>
-              <span className="min-w-0 flex-1 truncate text-lg font-bold tracking-tight text-foreground">
-                {brand.name}
-              </span>
-              <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
-            </>
-          )}
-        </button>
+        {/* Product mark + name, with the current tenant underneath. The list,
+            the switch and where "Add organization" goes are all wired in
+            WorkspaceProvider; this is only where it sits. */}
+        <OrgSwitcher
+          logo={<Logo variant="mark" className="h-6 w-6 shrink-0" />}
+          productName={brand.name}
+          collapsed={collapsed}
+          onAdd={() => router.push("/register-business")}
+        />
         {!collapsed && headerAction}
       </div>
 

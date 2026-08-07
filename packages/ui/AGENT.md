@@ -507,6 +507,18 @@ One rule governs what happens next: **an action closes the form when it finishes
 
 To change the footer for every form in the app rather than one screen, set it on the provider (see below). A per-screen `formActions` still wins.
 
+**Multi-tenant apps: the organization switcher.** `OrgSwitcher` (`@viliha/vui-ui/org-switcher`) is the brand block at the top of the sidebar: product mark, product name, current organization underneath, opening the list of organizations the person belongs to with a Current badge, a plan line and a create row.
+
+The design is fixed; the logic is yours. `OrgProvider` ships a working default (pick one, it becomes current and is remembered per browser). Replace it with `onSwitch` when a switch means more:
+
+```tsx
+<OrgProvider organizations={orgs} defaultOrgId={session.orgId}
+  onSwitch={async (org) => { await api.post("/session/org", { id: org.id }); }}>
+  <OrgSwitcher logo={<Logo />} productName="PULSE" onAdd={() => router.push("/register-business")} />
+```
+
+`onSwitch` runs **before** the change and throwing cancels it, so a refused server call leaves someone where they were instead of showing them a tenant they aren't in. Return a promise and the row shows a pending state. Read the current tenant anywhere with `useOrg()` and scope your data layer to it. Labels and whether the plan line and create row appear come from `VuiProvider`'s `orgSwitcher` section; switching logic deliberately isn't config, because it's code. Give each `Organization` a `theme` and switching repaints the app in that tenant's brand, with a personal theme still winning over it.
+
 **Theming at runtime: `@viliha/vui-ui/theme-config`.** Colors, font and radius stay in `theme.css`, and this is how those tokens get a runtime source rather than a second styling system. `THEME_FIELDS` is the complete list of what can change (primary colour, text on primary, accent, destructive, background, text, borders, font, text size, radius, logo, favicon); each entry names the CSS variable it writes, so applying a theme is setting variables on an element and every component follows without knowing.
 
 Two layers, and they match how organizations actually work: the organization sets the brand, and each person overrides the parts they care about.

@@ -106,6 +106,49 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.57.0 — 2026-08-07
+
+### Added
+
+- **`@viliha/vui-ui/org-switcher` — the organization switcher.** The brand block
+  at the top of the sidebar becomes a tenant switcher: product mark, product
+  name, and the current organization underneath, opening a list of the
+  organizations the person belongs to with a Current badge, a plan line with a
+  status icon, and a row that creates a new one.
+
+  The design is fixed so every install reads the same way. **The logic is
+  yours.** `OrgProvider` ships a working default (select an organization, it
+  becomes current and is remembered per browser), and `onSwitch` replaces it
+  when a switch means more than that:
+
+  ```tsx
+  <OrgProvider
+    organizations={orgs}
+    defaultOrgId={session.orgId}
+    onSwitch={async (org) => { await api.post("/session/org", { id: org.id }); }}
+  >
+  ```
+
+  `onSwitch` runs before the change and **throwing cancels it**, so a refused
+  server call leaves someone where they were rather than showing them a tenant
+  they aren't in. Returning a promise shows a pending state on the row while it
+  settles. `useOrg()` gives anything downstream the current organization, so a
+  data layer can scope itself to it.
+
+- **`orgSwitcher` config section.** `heading`, `currentLabel`, `addLabel`,
+  `showPlan` and `showAdd`, resolved through `VuiProvider` like everything else,
+  so an app with no billing turns off the plan line once rather than per screen.
+  Switching logic is deliberately not in here: that is code, not configuration.
+
+- **Switching organization repaints the app.** Each `Organization` can carry a
+  `theme`, handed to `ThemeConfigProvider` as the organization layer, so a
+  tenant's brand follows the switch while a personal override still wins.
+
+- **Demo:** the sidebar's dead "Switch workspace" button is now the real thing,
+  backed by `lib/api/workspaces.ts` (four tenants, each with a plan and a brand
+  colour) and `WorkspaceProvider`, with "Add organization" going to the existing
+  `/register-business` wizard.
+
 ## 1.56.1 — 2026-08-06
 
 ### Fixed

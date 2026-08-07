@@ -401,7 +401,8 @@ show/hide) · `kbd` (key caps + `Shortcut`) · `label` ·
 `toggle-group` · `toast` (global
 notifications) · `tooltip` · `table` · `record-view` (the full datatable +
 `RecordForm`) · `page` (the standard page frame: header slots + one scrolling
-content region) · `theme-config` + `theme-provider` (runtime theming: brand
+content region) · `org-switcher` (multi-tenant switcher for the sidebar: your
+switching logic, our design) · `theme-config` + `theme-provider` (runtime theming: brand
 colour, font, radius, logo, stored per user through your own API) · `config` (`VuiProvider` + `vuiPreset`: the shipped theme as a
 config you can override key by key) · `profile-form` (`ProfileForm` — a pre-designed view/edit profile
 page) · `organization-profile` (`organizationProfileFields` preset + `OrgProfile`
