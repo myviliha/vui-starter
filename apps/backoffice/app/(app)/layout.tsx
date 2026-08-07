@@ -12,7 +12,7 @@ import { GlobalSearchProvider } from "@/app/_components/global-search";
 import { VuiProvider } from "@viliha/vui-ui/config";
 import { WorkspaceProvider } from "@/app/_components/workspace-provider";
 import { ChromeConfigProvider } from "@/app/_components/chrome-config";
-import { DATA_TABLE_PREFERENCES } from "@/lib/app-config";
+import { DATA_TABLE_PREFERENCES, ORG_SWITCHER } from "@/lib/app-config";
 import {
   KeepAliveTabs,
   OpenTabsProvider,
@@ -28,7 +28,10 @@ export default function AppLayout({
     // The theme ships configured; this is where an app changes it. Nothing is
     // set here, so the demo runs on the preset. `userConfigurable` opens three
     // behaviour keys to the person using the app (Settings → Data tables).
-    <VuiProvider userConfigurable={{ behaviour: DATA_TABLE_PREFERENCES }}>
+    <VuiProvider
+      config={{ orgSwitcher: ORG_SWITCHER }}
+      userConfigurable={{ behaviour: DATA_TABLE_PREFERENCES }}
+    >
     {/* The tenant switcher, and the theme that follows it: the current
         organization's brand is the floor, a personal theme overrides it. */}
     <WorkspaceProvider>

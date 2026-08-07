@@ -136,8 +136,19 @@ No component was renamed, no export was removed, and no prop was made required.
   data layer can scope itself to it.
 
 - **`orgSwitcher` config section.** `heading`, `currentLabel`, `addLabel`,
-  `showPlan` and `showAdd`, resolved through `VuiProvider` like everything else,
-  so an app with no billing turns off the plan line once rather than per screen.
+  `addHref`, `showPlan` and `showAdd`, resolved through `VuiProvider` like
+  everything else, so an app with no billing turns off the plan line once rather
+  than per screen.
+
+  **Where "Add organization" goes is config**, not a wired-in route:
+  `addHref` points it at a registration wizard, your own create page or an
+  external signup, set once for the app. The row renders as a real link, so
+  middle-click and "open in new tab" behave; pass `onNavigate` (e.g.
+  `router.push`) to keep an ordinary click on the client router. When creating
+  an organization shouldn't navigate at all, the component's `onAdd` takes over
+  and opens whatever you like. With neither set the row hides instead of
+  rendering dead.
+
   Switching logic is deliberately not in here: that is code, not configuration.
 
 - **Switching organization repaints the app.** Each `Organization` can carry a

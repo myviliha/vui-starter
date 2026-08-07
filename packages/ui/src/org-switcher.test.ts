@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { resolveCurrentId, type Organization } from "./org-switcher";
+import {
+  resolveAddTarget,
+  resolveCurrentId,
+  type Organization,
+} from "./org-switcher";
 
 const orgs: Organization[] = [
   { id: "a", name: "Alpha" },
@@ -24,5 +28,22 @@ describe("resolveCurrentId", () => {
   it("is undefined while the list is still loading", () => {
     expect(resolveCurrentId([], "a")).toBeUndefined();
     expect(resolveCurrentId([], undefined)).toBeUndefined();
+  });
+});
+
+describe("resolveAddTarget", () => {
+  it("prefers a handler, then a per-instance route, then the app's", () => {
+    const onAdd = () => {};
+    expect(resolveAddTarget(onAdd, "/local", "/app")).toEqual({ onAdd });
+    expect(resolveAddTarget(undefined, "/local", "/app")).toEqual({
+      href: "/local",
+    });
+    expect(resolveAddTarget(undefined, undefined, "/app")).toEqual({
+      href: "/app",
+    });
+  });
+
+  it("has no target when nothing is configured, so the row can hide", () => {
+    expect(resolveAddTarget(undefined, undefined, undefined)).toEqual({});
   });
 });

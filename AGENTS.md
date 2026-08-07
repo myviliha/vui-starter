@@ -120,7 +120,7 @@ The sidebar's brand block is the tenant switcher: `OrgSwitcher` (`@viliha/vui-ui
 - **Switching logic lives in the host**, in `WorkspaceProvider`'s `onSwitch`. It runs before the change and throwing cancels it, so a refused API call doesn't drop someone into a tenant they can't see. The package's default (set current, remember per browser) is what you get without one.
 - **Chrome is config**: `heading`, `currentLabel`, `addLabel`, `showPlan`, `showAdd` under `orgSwitcher` in `VuiProvider`. Don't add a prop for something that belongs there.
 - **The tenant's brand follows the switch**: each `Organization` carries a `theme` that `WorkspaceProvider` hands to `ThemeConfigProvider` as the org layer, under any personal override.
-- **Add organization** goes to `/register-business`, the existing wizard. Don't build a second creation path.
+- **Where "Add organization" goes is config**, in `ORG_SWITCHER` (`lib/app-config.ts`), currently `/register-business`. Change the route there, not in `app-sidebar.tsx`. Use the component's `onAdd` only when creating should open a dialog instead of navigating. Don't build a second creation path.
 
 ## Sidebar sections & groups
 

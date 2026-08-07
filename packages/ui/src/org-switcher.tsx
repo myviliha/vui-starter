@@ -204,6 +204,37 @@ const PLAN_ICON = {
   canceled: { Icon: ExclamationTriangleIcon, className: "text-muted-foreground" },
 } as const;
 
+/**
+ * Where the create row points: a handler wins, then this instance's route, then
+ * the app's config. Nothing set means there is no way to create an organization
+ * here, and the row is hidden rather than rendered dead.
+ *
+ * Exported for testing.
+ */
+export function resolveAddTarget(
+  onAdd: (() => void) | undefined,
+  addHref: string | undefined,
+  configuredHref: string | undefined,
+): { onAdd?: () => void; href?: string } {
+  if (onAdd) return { onAdd };
+  const href = addHref ?? configuredHref;
+  return href ? { href } : {};
+}
+
+const ADD_ROW =
+  "flex w-full items-center gap-3 rounded-md px-2.5 py-2 text-left text-muted-foreground transition-colors hover:bg-accent hover:text-foreground";
+
+function AddRowContent({ label }: { label: string }) {
+  return (
+    <>
+      <span className="grid size-9 shrink-0 place-items-center rounded-md border border-dashed border-border">
+        <PlusIcon className="size-4" />
+      </span>
+      <span className="truncate">{label}</span>
+    </>
+  );
+}
+
 /** Square mark for a row: the organization's logo, or its initial. */
 function OrgMark({
   org,
@@ -246,6 +277,8 @@ export function OrgSwitcher({
   productName,
   collapsed = false,
   onAdd,
+  addHref,
+  onNavigate,
   config,
   className,
 }: {
@@ -255,8 +288,15 @@ export function OrgSwitcher({
   productName: string;
   /** Rail mode: the mark only. */
   collapsed?: boolean;
-  /** Where "Add organization" goes. Omit and the row is hidden. */
+  /** Custom behaviour for "Add organization" (open a dialog, start a flow).
+   *  Wins over `addHref`. */
   onAdd?: () => void;
+  /** Where the row goes, overriding `orgSwitcher.addHref` from config for this
+   *  one instance. */
+  addHref?: string;
+  /** Client-side navigation for `addHref` (e.g. `router.push`). Without it the
+   *  link navigates normally, which still works, just with a full page load. */
+  onNavigate?: (href: string) => void;
   /** Per-instance overrides; falls back to `VuiProvider`'s `orgSwitcher`. */
   config?: OrgSwitcherConfig;
   className?: string;
@@ -269,7 +309,9 @@ export function OrgSwitcher({
   const heading = resolved.heading ?? "Organizations";
   const addLabel = resolved.addLabel ?? "Add organization";
   const currentLabel = resolved.currentLabel ?? "Current";
-  const showAdd = (resolved.showAdd ?? true) && Boolean(onAdd);
+  const addTarget = resolveAddTarget(onAdd, addHref, resolved.addHref);
+  const showAdd =
+    (resolved.showAdd ?? true) && Boolean(addTarget.onAdd || addTarget.href);
 
   if (!org) return null; // no OrgProvider above: nothing to switch
   const { organizations, current, currentId, switchTo, switching } = org;
@@ -368,19 +410,36 @@ export function OrgSwitcher({
           <>
             <div className="h-px bg-border" />
             <div className="p-1.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  onAdd?.();
-                }}
-                className="flex w-full items-center gap-3 rounded-md px-2.5 py-2 text-left text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              >
-                <span className="grid size-9 shrink-0 place-items-center rounded-md border border-dashed border-border">
-                  <PlusIcon className="size-4" />
-                </span>
-                <span className="truncate">{addLabel}</span>
-              </button>
+              {/* A route renders as a real link, so middle-click and "open in
+                  new tab" behave; `onNavigate` keeps a normal click on the
+                  client router. A handler renders a button, because there is
+                  nowhere to go. */}
+              {addTarget.onAdd ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    addTarget.onAdd!();
+                  }}
+                  className={ADD_ROW}
+                >
+                  <AddRowContent label={addLabel} />
+                </button>
+              ) : (
+                <a
+                  href={addTarget.href}
+                  onClick={(e) => {
+                    setOpen(false);
+                    if (!onNavigate || e.metaKey || e.ctrlKey || e.shiftKey)
+                      return;
+                    e.preventDefault();
+                    onNavigate(addTarget.href!);
+                  }}
+                  className={ADD_ROW}
+                >
+                  <AddRowContent label={addLabel} />
+                </a>
+              )}
             </div>
           </>
         )}

@@ -1,3 +1,4 @@
+import type { OrgSwitcherConfig } from "@viliha/vui-ui/config";
 import {
   FONT_FAMILIES,
   THEME_FIELDS,
@@ -129,3 +130,16 @@ export const THEME_CHOICES = THEME_FIELDS.filter(
       ? FONT_FAMILIES.map((family) => ({ value: family.id, label: family.label }))
       : (f.options ?? []),
 }));
+
+/**
+ * Organization switcher chrome. The **destination of "Add organization" lives
+ * here**, not in the sidebar, so changing where creating a tenant goes is one
+ * line in one file: a registration wizard, your own create page, or an external
+ * signup. Set `onAdd` on the component instead when it should open a dialog
+ * rather than navigate.
+ */
+export const ORG_SWITCHER: OrgSwitcherConfig = {
+  addHref: "/register-business",
+  addLabel: "Add organization",
+  showPlan: true,
+};

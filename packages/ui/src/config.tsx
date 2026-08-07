@@ -49,6 +49,12 @@ export type OrgSwitcherConfig = {
   currentLabel?: string;
   /** The row that creates one. Default `"Add organization"`. */
   addLabel?: string;
+  /** Where that row goes. A route, so the destination is set once for the app
+   *  rather than wired per screen: a registration wizard, your own create page,
+   *  an external signup. The switcher renders a real link, so middle-click and
+   *  "open in new tab" work. Override the behaviour entirely (a dialog, say)
+   *  with the component's `onAdd`, which wins over this. */
+  addHref?: string;
   /** Show the plan line under each name. Default `true`; turn it off for an app
    *  with no billing. */
   showPlan?: boolean;

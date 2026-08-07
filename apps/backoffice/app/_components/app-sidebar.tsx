@@ -365,14 +365,15 @@ function SidebarBody({
     <>
       {/* Workspace switcher + collapse toggle (same row) — header */}
       <div className="flex h-12 items-center gap-1 border-b border-sidebar-border bg-background px-3">
-        {/* Product mark + name, with the current tenant underneath. The list,
-            the switch and where "Add organization" goes are all wired in
-            WorkspaceProvider; this is only where it sits. */}
+        {/* Product mark + name, with the current tenant underneath. The list
+            and the switch come from WorkspaceProvider; the labels and where
+            "Add organization" goes come from ORG_SWITCHER config. This is only
+            where the control sits. */}
         <OrgSwitcher
           logo={<Logo variant="mark" className="h-6 w-6 shrink-0" />}
           productName={brand.name}
           collapsed={collapsed}
-          onAdd={() => router.push("/register-business")}
+          onNavigate={(href) => router.push(href)}
         />
         {!collapsed && headerAction}
       </div>
