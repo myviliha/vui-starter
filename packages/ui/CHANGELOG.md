@@ -111,32 +111,39 @@ No component was renamed, no export was removed, and no prop was made required.
 ### Added
 
 - **Form layout, declared rather than styled.** A form is a grid of section
-  cards, and each card is a grid of fields. Three settings describe it and the
+  cards, and every card is the same two columns. Two things to declare, and the
   alignment follows:
 
   ```
-  Form
-  └─ Section grid      sectionColumns: 1 | 2 | 3
-     └─ Section card   span: 1 | 2 | 3 | "full"
-        └─ Field grid  fieldColumns: 1 | 2 | 3
-           └─ Field    [i] Label * [control]     always one row
+  Form                          a grid of section cards
+  └─ sectionColumns: 1 | 2 | 3  how many fit across; rows wrap as needed
+     └─ Section card            span: 1 | 2 | 3 | "full"
+        └─ two columns, one field per row:
+
+           ┌──────────────────────┬──────────────────────────┐
+           │ [i]  Label        *  │  [ control              ]│
+           │      Label           │  [ control              ]│
+           └──────────────────────┴──────────────────────────┘
   ```
 
-- **`sectionColumns` + `sections`.** `sectionColumns` flows the section cards
-  across the form; `sections` declares them, so you can fix their order, let one
-  span the row (`span: "full"`, what a card of long fields wants), give one its
-  own field layout, or put a line of description under its title. Omit
-  `sections` and they still come from each field's `group`, as before. A
-  declared section with no fields is skipped, and a group you didn't declare is
-  appended rather than dropped, so adding a field can't make it vanish.
+- **`sectionColumns` + `sections`.** `sectionColumns` flows the cards across the
+  form; `sections` declares them, so you can fix their order, let one span the
+  row (`span: "full"`, what a card of long fields wants), or put a line of
+  description under its title. Omit `sections` and they still come from each
+  field's `group`, as before. A declared section with no fields is skipped, and
+  a group you didn't declare is appended rather than dropped, so adding a field
+  can't make it vanish. A trailing card that would leave a gap stretches to fill
+  its row, unless you declare spans yourself.
 
   This works in the slide-over as well as on full-page forms. `formColumns`
   (page forms, sections in two columns) still behaves as it did, and
-  `sectionColumns` supersedes it.
+  `sectionColumns` supersedes it. Also `form.sectionColumns` in `VuiProvider`
+  for a house style.
 
-- **Both settings are also config**, as `form.sectionColumns` and
-  `form.fieldColumns` in `VuiProvider`, so an app sets its form style once and a
-  screen overrides what it needs.
+- **Field help is a tooltip on the label.** A field with a `description` now
+  shows an info icon before its label, wherever it renders: `[i] Label *` then
+  the control. That text used to reach only the Info panel on full-page forms,
+  so anyone filling in a slide-over never saw it. The panel is unchanged.
 
 - **A requirement template for forms: `templates/form.md`,** on the docs
   Templates page. Copy it, fill in the record, the cards and the fields, and
@@ -146,27 +153,23 @@ No component was renamed, no export was removed, and no prop was made required.
   setting, a worked Add Order form, and how to write field help. Linked from the
   Customization section of the docs nav.
 
-- **`fieldColumns`**, how many fields fit across a card: 1 (the default), 2 or
-  3. A label always sits beside its control, never above it, so the eye runs
-  along one line from the name to the box and a form never mixes two rhythms.
-  You don't align anything: labels get their own auto-width track per column, so
-  it widens to the longest label and every control lines up down the form
-  however long the words are. Multi-column grids collapse to one column on small
-  screens.
-
-- **`fullWidth` on a field** gives it every column of its card, with the label
-  still beside it and the control filling the rest of the row. For a long
-  textarea or an address line.
-
-- **Field help is a tooltip on the label.** A field with a `description` now
-  shows an info icon before its label, wherever it renders. That text used to
-  reach only the Info panel on full-page forms, so anyone filling in a
-  slide-over never saw it. The panel is unchanged.
-
 ### Changed
 
-- Ruled rows between fields are kept for single-column forms and dropped for two
-  and three, where part-width rules read as broken lines rather than separators.
+- **Every field is one row: `[i] Label *` then the control.** Labels are never
+  stacked above their controls, so the eye runs along one line from the name to
+  the box and a form never mixes two rhythms. Hairlines now sit between the two
+  columns and between the rows, light enough to read the grid without drawing
+  the eye.
+- **A form is made wider by putting cards side by side, not by cramming fields
+  into a row.** There is no per-field column count, which is what keeps two
+  screens built by two people looking like one product.
+
+### Removed
+
+- **`fullWidth` on a `RecordField`** (added in 1.52.0). It gave a field the whole
+  row with its label above the control, which the layout above rules out, and
+  with a card that is always label │ control every control already fills its
+  column. Delete the prop; nothing else changes.
 
 ## 1.57.1 — 2026-08-07
 

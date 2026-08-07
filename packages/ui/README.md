@@ -235,8 +235,7 @@ That same `fields` array also drives `RecordForm`, the Add/Edit/View screen, alo
 with its Info panel (built from `formDescription` and each field's `description`).
 See the [Data table docs](https://vui.viliha.com/docs/data-table) for the details.
 
-A few field options worth knowing early: `fullWidth` gives a field the whole form
-row with its label above, `displayValue: (row) => row.country` renders a label
+A few field options worth knowing early: `displayValue: (row) => row.country` renders a label
 your payload already carries instead of resolving it, and `filterable` puts the
 field in the Filter panel. For fields backed by an API, `loadOptions` +
 `resolveOption` fetch on demand, and nothing ever paints a raw id: a read cell

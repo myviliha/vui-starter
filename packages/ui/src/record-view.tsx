@@ -44,7 +44,6 @@ import { Skeleton } from "./skeleton";
 import {
   useResolved,
   type BehaviourConfig,
-  type FieldColumns,
   type FormSection,
   type SectionColumns,
   type FormAction,
@@ -55,7 +54,6 @@ import {
 } from "./config";
 export type {
   BehaviourConfig,
-  FieldColumns,
   FormSection,
   SectionColumns,
   FormActionOutcome,
@@ -427,10 +425,6 @@ export interface RecordField<T> {
    *  for single-value read displays, where the values a table paints in one go
    *  are collected and asked for together — 50 rows become one request. */
   resolveOptions?: (values: string[]) => Promise<AsyncOption[]>;
-  /** Give this field the whole width, across every column, with its label still
-   *  beside the control. For a long textarea, an address line, or a
-   *  `renderInput` that needs the room. */
-  fullWidth?: boolean;
   /** The label to show in read mode, straight from the row. Set this when your
    *  payload already carries the label next to the id (`{ countryId, country }`)
    *  and the field never resolves anything: it paints instantly, with no
@@ -596,43 +590,40 @@ const SECTION_SPAN = {
   },
 } as const;
 
+/**
+ * A trailing card that would leave a gap stretches to fill its row instead, so
+ * a form with an odd number of sections doesn't end in white space.
+ *
+ * Only used when no section declares its own `span`: once spans are in play the
+ * nth-child arithmetic no longer matches what's on screen, and a wrong guess
+ * looks worse than the gap.
+ */
+const SECTION_STRETCH = {
+  1: "",
+  2: "md:[&:last-child:nth-child(odd)]:col-span-2",
+  3: "md:[&:last-child:nth-child(odd)]:col-span-2 xl:[&:last-child:nth-child(3n+1)]:col-span-3 xl:[&:last-child:nth-child(3n+2)]:col-span-2",
+} as const;
+
 /** The section grid: cards across the form, wrapping onto as many rows as they
  *  need, and collapsing to one column on small screens. */
 const SECTION_GRID = {
-  1: "space-y-4",
-  2: "grid grid-cols-1 items-start gap-4 md:grid-cols-2",
-  3: "grid grid-cols-1 items-start gap-4 md:grid-cols-2 xl:grid-cols-3",
+  1: "space-y-5",
+  2: "grid grid-cols-1 items-start gap-5 md:grid-cols-2",
+  3: "grid grid-cols-1 items-start gap-5 md:grid-cols-2 xl:grid-cols-3",
 } as const;
 
 /**
- * The field grid, written out rather than built from a template string so
- * Tailwind sees every class it has to generate.
- *
- * A label and its control always share a row, so each column needs two tracks:
- * a `max-content` label track that widens to the longest label, and the control
- * track. `grid-cols-subgrid` on each field then aligns every control down the
- * form however long the words are.
+ * Every section card is the same two columns: `[i] Label *` and the control,
+ * one field per row. The label track is `max-content`, so it widens to the
+ * longest label in the card and never wraps, and every control in that card
+ * starts at the same x. A form is made wider by putting cards side by side
+ * (`sectionColumns`), never by cramming more fields into a row.
  */
-const GRID = {
-  1: "grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3",
-  2: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(10rem,1fr)_max-content_minmax(10rem,1fr)]",
-  3: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)] xl:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)]",
-} as const;
+const FIELD_GRID = "grid-cols-[max-content_minmax(14rem,1fr)]";
 
-/** A field taking the whole row: every track in the grid. */
-const SPAN_ALL = {
-  1: "col-span-2",
-  2: "md:col-span-4",
-  3: "md:col-span-4 xl:col-span-6",
-} as const;
-
-/** …and its control fills what's left after the label track, so a full-width
- *  field still reads `Label * [control]` instead of dropping the label above. */
-const CONTROL_SPAN = {
-  1: "",
-  2: "md:col-span-3",
-  3: "md:col-span-3 xl:col-span-5",
-} as const;
+/** Hairlines between the two columns and between the rows. Lighter than the
+ *  card's own border: enough to read the grid, not enough to draw the eye. */
+const RULE = "border-border/50";
 
 /**
  * Place a form's slots within one section, keyed by the field each follows.
@@ -1004,10 +995,6 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
    *  `makeEmptyRow`). Default `true`. */
   showAdd?: boolean;
-  /** Columns the add/edit form's fields flow across: 1, 2 or 3. Falls back to
-   *  `VuiProvider`'s `form.fieldColumns`, then 1. Separate from `formColumns`,
-   *  which flows whole sections on a full-page form. */
-  fieldColumns?: FieldColumns;
   /** Columns the add/edit form's **sections** flow across: 1, 2 or 3. The form
    *  is a grid of section cards, each itself a grid of fields. Falls back to
    *  `form.sectionColumns`, then 1. */
@@ -1135,7 +1122,6 @@ export function RecordView<T extends { id: RowId }>({
   showImport = true,
   showExport = true,
   showAdd = true,
-  fieldColumns,
   sectionColumns,
   sections,
   behaviour: behaviourProp,
@@ -2124,7 +2110,6 @@ export function RecordView<T extends { id: RowId }>({
         renderFooter={renderFooter}
         formSlots={formSlots}
         behaviour={behaviour}
-        fieldColumns={fieldColumns}
         sectionColumns={sectionColumns}
         sections={sections}
       />
@@ -2945,7 +2930,6 @@ export function RecordView<T extends { id: RowId }>({
           renderFooter={renderFooter}
           formSlots={formSlots}
           behaviour={behaviour}
-          fieldColumns={fieldColumns}
           sectionColumns={sectionColumns}
           sections={sections}
         />
@@ -3152,9 +3136,6 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Behaviour, already resolved by the table so a per-table prop reaches the
    *  form as well as the rows. */
   behaviour?: BehaviourConfig;
-  /** Columns the fields flow across (1, 2 or 3). Falls back to the app's
-   *  `form.fieldColumns`, then 1. */
-  fieldColumns?: FieldColumns;
   /** Columns the sections flow across (1, 2 or 3). Falls back to the app's
    *  `form.sectionColumns`, then 1. */
   sectionColumns?: SectionColumns;
@@ -3189,7 +3170,6 @@ function RecordDetailPanel<T extends { id: RowId }>({
   renderFooter,
   formSlots,
   behaviour: behaviourProp,
-  fieldColumns,
   sectionColumns,
   sections,
   crumbs,
@@ -3197,7 +3177,6 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const formConfig = useResolved("form", undefined) ?? {};
   // Two settings decide the whole form: how many columns the fields flow
   // across, and whether each label sits beside its control or above it.
-  const formCols = fieldColumns ?? formConfig.fieldColumns ?? 1;
   const sectionCols = sectionColumns ?? formConfig.sectionColumns ?? 1;
   const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
@@ -3335,66 +3314,62 @@ function RecordDetailPanel<T extends { id: RowId }>({
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
-  const slotRow = (slot: FormSlot<T>, cols: FieldColumns) => (
+  const slotRow = (slot: FormSlot<T>) => (
+    // A slot takes both columns: it isn't a label │ control pair.
     <div
       key={`slot:${slot.id}`}
-      className={cn(
-        "px-3 py-3 leading-relaxed",
-        cols === 1 && "border-t border-border first:border-t-0",
-        SPAN_ALL[cols],
-      )}
+      className={cn("col-span-2 border-t px-4 py-3.5 leading-relaxed", RULE)}
     >
       {slot.render(actionCtx)}
     </div>
   );
 
-  const formBody = orderedSections(fields, sections).map((section) => {
+  const laidOut = orderedSections(fields, sections);
+  const anySpan = laidOut.some((s) => s.span && s.span !== 1);
+  const formBody = laidOut.map((section) => {
     const group = section.group;
     const groupFields = fields.filter((f) => (f.group ?? "General") === group);
     if (groupFields.length === 0) return null;
     const slots = groupSlots(fields, formSlots, group);
-    // A section can set its own field layout; otherwise it follows the form.
-    const cols = section.fieldColumns ?? formCols;
     return (
       <section
         key={group}
         className={cn(
           "overflow-hidden rounded-lg border border-border",
           SECTION_SPAN[sectionCols][section.span ?? 1],
+          !anySpan && SECTION_STRETCH[sectionCols],
         )}
       >
-        <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-semibold text-[var(--button-primary)]">
+        <h3 className="border-b border-border bg-muted/40 px-4 py-2.5 font-semibold text-[var(--button-primary)]">
           {group}
         </h3>
         {section.description && (
-          <p className="border-b border-border px-3 py-2 text-muted-foreground">
+          <p className="border-b border-border px-4 py-2.5 text-muted-foreground">
             {section.description}
           </p>
         )}
-        {/* `fieldColumns` is how many fields fit across. A label and its
-            control always share a row: never stacked, so the eye runs along one
-            line from the name to the box. Each column is a label │ control
-            pair, and the label track widens to the longest label so every
-            control lines up down the form. */}
-        <dl className={cn("grid", GRID[cols])}>
+        {/* Two columns, one field per row: `[i] Label *` then the control.
+            Hairlines between them so the grid reads at a glance. */}
+        <dl className={cn("grid", FIELD_GRID)}>
           {groupFields.flatMap((f) => [
             // Label, icon, required mark and control share one baseline —
             // vertically centered. ponytail: a wrapped textarea grows down and
             // the label centers against it; acceptable for the single-line norm.
+            // `items-stretch` so the column rule runs the full height of the
+            // row; the label centres itself inside its own cell.
             <div
               key={f.key}
               className={cn(
-                "grid grid-cols-subgrid items-center px-3 py-3 leading-relaxed",
-                // One column keeps the ruled rows the panel has always had;
-                // more than one drops them, because part-width rules read as
-                // broken lines rather than separators.
-                cols === 1 && "border-t border-border first:border-t-0",
-                // A field owns a label │ control pair, or every track when it
-                // takes the whole row.
-                f.fullWidth ? SPAN_ALL[cols] : "col-span-2",
+                "col-span-2 grid grid-cols-subgrid items-stretch border-t leading-relaxed first:border-t-0",
+                RULE,
               )}
             >
-              <dt className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground">
+              <dt
+                className={cn(
+                  "flex items-center gap-2 whitespace-nowrap border-r py-3.5 pl-4 pr-4 text-muted-foreground",
+                  RULE,
+                )}
+              >
                 {/* Help text sits on the label itself, so it's there in a
                     slide-over too: the full-page Info panel is the only place
                     it used to appear. Tooltip icon, label, required mark. */}
@@ -3412,7 +3387,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {f.label}
                 {f.required && <RequiredMark />}
               </dt>
-              <dd className={cn("min-w-0", f.fullWidth && CONTROL_SPAN[cols])}>
+              <dd className="flex min-w-0 items-center py-3.5 pl-4 pr-4">
                 {/* `render` is the read-only view; the edit control (a custom
                     `renderInput` or a built-in `input:"checkbox"`) wins while
                     editing, so a field can show a badge/preview in view and
@@ -3600,10 +3575,10 @@ function RecordDetailPanel<T extends { id: RowId }>({
               </dd>
             </div>,
             // Anything the host put after this field.
-            ...(slots.get(f.key) ?? []).map((slot) => slotRow(slot, cols)),
+            ...(slots.get(f.key) ?? []).map(slotRow),
           ])}
           {/* Slots with no `after` close out the section. */}
-          {(slots.get("") ?? []).map((slot) => slotRow(slot, cols))}
+          {(slots.get("") ?? []).map(slotRow)}
         </dl>
       </section>
     );

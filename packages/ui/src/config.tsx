@@ -105,26 +105,14 @@ export type FormConfig = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actions?: FormActionsConfig<any>;
   /**
-   * How many columns the fields flow across: 1, 2 or 3. Default 1.
-   *
-   * This is about **fields**, not sections. `formColumns` on a full-page form
-   * still decides whether whole sections sit side by side, and the two compose:
-   * a two-column page of two-column sections is four fields wide, which is
-   * usually too many.
-   */
-  fieldColumns?: FieldColumns;
-  /**
    * How many columns the **sections** flow across: 1, 2 or 3. Default 1.
    *
-   * The form is a grid of section cards; each card is itself a grid of fields
-   * (`fieldColumns`). Declaring both is how a form gets designed: sections
-   * across the page, fields within each one.
+   * This is the only density setting a form has. Every section card is itself
+   * two columns, `[i] Label *` and the control, one field per row, so a form is
+   * made wider by putting cards side by side rather than by cramming fields.
    */
   sectionColumns?: SectionColumns;
 };
-
-/** Columns the form's fields flow across. */
-export type FieldColumns = 1 | 2 | 3;
 
 /**
  * One section of a form: a titled card holding some of the fields.
@@ -141,8 +129,6 @@ export type FormSection = {
   /** Columns of the section grid this one takes. `"full"` spans the row, which
    *  is what a section of long fields usually wants. Default 1. */
   span?: 1 | 2 | 3 | "full";
-  /** Field columns inside this section, overriding the form's. */
-  fieldColumns?: FieldColumns;
 };
 
 /** Columns the form's sections flow across. */

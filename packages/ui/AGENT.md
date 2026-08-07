@@ -551,35 +551,38 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
 
-**Form layout is declared, not styled.** A form is a grid of section cards; each card is a grid of fields. Full write-up with a worked example: docs `/form-layout`.
+**Form layout is declared, not styled.** A form is a grid of section cards, and every card is the same two columns. Full write-up with a worked example: docs `/form-layout`.
 
 ```
-Form
-└─ Section grid      sectionColumns: 1 | 2 | 3
-   └─ Section card   span: 1 | 2 | 3 | "full"
-      └─ Field grid  fieldColumns: 1 | 2 | 3
-         └─ Field    [i] Label * [control]   (always one row, never stacked)
+Form                          a grid of section cards
+└─ sectionColumns: 1 | 2 | 3  how many fit across; rows wrap as needed
+   └─ Section card            span: 1 | 2 | 3 | "full"
+      └─ two columns, one field per row:
+
+         ┌──────────────────────┬──────────────────────────┐
+         │ [i]  Label        *  │  [ control              ]│
+         │      Label           │  [ control              ]│
+         └──────────────────────┴──────────────────────────┘
 ```
 
-Sections come from each field's `group`. Declare `sections` to fix their order, let one span the row, or give one its own field layout:
+Sections come from each field's `group`. Declare `sections` to fix their order, let one span the row, or add a description line:
 
 ```tsx
 <RecordView
   sectionColumns={2}
-  fieldColumns={2}
   sections={[
     { group: "Customer" },
     { group: "Delivery" },
-    { group: "Items", span: "full", fieldColumns: 1 },
+    { group: "Items", span: "full" },
   ]}
   … />
 ```
 
-A declared section with no fields is skipped; a group you didn't declare is appended rather than dropped. Both settings are also `form.sectionColumns` / `form.fieldColumns` in `VuiProvider`, so an app has a house style and a screen can still differ.
+A declared section with no fields is skipped; a group you didn't declare is appended rather than dropped. `sectionColumns` is also `form.sectionColumns` in `VuiProvider` for a house style. A trailing card that would leave a gap stretches to fill its row, unless you declare spans yourself.
 
-**A label always sits beside its control.** There is no stacked option: the eye should run along one line from the name to the box, and a form where some rows stack and others don't reads as broken. `fieldColumns` is the only field-level knob. `fullWidth` gives a field every column of its card with the label still beside it and the control filling the rest, which is what a long textarea wants.
+**Inside a card, nothing is configurable, and that's the point.** Two columns, one field per row: tooltip, label and required mark on the left, control on the right. Never stack a label above its control and never add a per-field column count. A form gets wider by putting cards side by side, which is what keeps two screens built by two people looking like one product. The label column widens to the longest label in that card and never wraps, so every control starts at the same x, and hairlines between the columns and rows make the grid legible without drawing the eye.
 
-You don't align anything yourself: labels get their own auto-width track per column, so it widens to the longest label and every control lines up down the form. Multi-column grids collapse to one column on small screens. Single-column forms keep their ruled row separators; multi-column forms drop them, because a rule spanning one column reads as a broken line.
+**Save and Cancel are pinned.** The section grid is the only scroll region; the footer sits below it and doesn't move, in the slide-over and on full-page forms alike. Nothing to configure.
 
 **Put your own content between the fields.** `formSlots` renders a callout, a preview or a pair of custom controls as a full-width row inside a section, so it inherits the card, the separators and the padding instead of floating beside them:
 
@@ -593,8 +596,6 @@ formSlots={[
 `after` places a slot under that field, in that field's own section. `group` names a section and puts it at the end. Neither means the end of the default section. `render` gets the same context as an action, so a slot can read the live draft.
 
 Slots are a prop on the form, not entries in `fields`, and that is deliberate: `fields` is the data contract that drives the table, the filter panel and import/export as well as the form, so arbitrary markup in it would leak layout into all four.
-
-**`fullWidth` on a field** gives it the whole row: the label sits above a full-width control instead of beside it. Use it for a long textarea, an address block, or a `renderInput` that needs the space.
 
 **Behaviour is config too.** `behaviour` holds what components *do*, as opposed to how they look, and every key replaces something that used to be hard-coded: `rowClick` (`"view" | "edit" | "none"`, what clicking a record's name does), `closeOnSave`, `flashMs` (the saved-row highlight; `0` turns it off), `confirmDelete`, `confirmDiscardWhenDirty`. Set it app-wide on the provider or per table with `behaviour={{ … }}` on `RecordView`.
 

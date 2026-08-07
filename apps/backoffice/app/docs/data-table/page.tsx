@@ -471,46 +471,38 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
         <code>&quot;stay&quot;</code> without one.
       </P>
 
-      <Note title="Form layout: pick the columns, then pick the rows">
-        Two settings arrange an Add or Edit form.{" "}
-        <code>fieldColumns</code> (<code>1</code>, <code>2</code> or{" "}
-        <code>3</code>) is how many fields fit across.{" "}
-        <code>fieldLayout</code> is how each label meets its control:{" "}
-        <code>&quot;inline&quot;</code> is{" "}
-        <code>Label * [control]</code> on one row,{" "}
-        <code>&quot;stacked&quot;</code> puts the label above it. Set them per
-        screen, or once for the app as <code>form.fieldColumns</code> /{" "}
-        <code>form.fieldLayout</code> in <code>VuiProvider</code>. Defaults: one
-        column, inline.
+      <Note title="Form layout: cards across, two columns inside">
+        A form is a grid of section cards. <code>sectionColumns</code> (
+        <code>1</code>, <code>2</code> or <code>3</code>) is how many cards sit
+        across; they wrap onto as many rows as they need.{" "}
+        <code>sections</code> declares the cards, so one can span the row with{" "}
+        <code>span: &quot;full&quot;</code>. Every card is the same two columns,
+        one field per row: <code>[i] Label *</code> then the control. Full
+        write-up on the <a href="/docs/form-layout/">Form layout</a> page.
       </Note>
 
       <CodeBlock title="a two-column Add Order form">{`<RecordView
-  fieldColumns={2}
-  fieldLayout="inline"
+  sectionColumns={2}
+  sections={[
+    { group: "Customer" },
+    { group: "Delivery" },
+    { group: "Items", span: "full" },
+  ]}
   fields={[
-    { key: "customer", label: "Customer", required: true,
+    { key: "customer", label: "Customer", group: "Customer", required: true,
       description: "Who the invoice goes to." },        // → tooltip on the label
-    { key: "orderedAt", label: "Order date", input: "date", required: true },
-    { key: "notes", label: "Notes", fullWidth: true },  // takes the row, stacks
+    { key: "orderedAt", label: "Order date", group: "Customer", input: "date" },
+    { key: "notes", label: "Notes", group: "Items" },
   ]}
   /* … */
 />`}</CodeBlock>
 
       <P>
-        Alignment is handled for you. An inline form gives the labels their own
-        auto-width track per column, so it widens to the longest label and every
-        control lines up down the form. Two and three column forms collapse to
-        one column on small screens, and three steps through two on the way. A
-        single field can differ with <code>layout: &quot;stacked&quot;</code>,
-        which is usually what a long textarea wants, and <code>fullWidth</code>{" "}
-        takes the whole row and stacks automatically.
-      </P>
-      <P>
-        <code>fieldColumns</code> is about <strong>fields</strong>.{" "}
-        <code>formColumns</code> on a full-page form is about whole{" "}
-        <strong>sections</strong> sitting side by side; the two compose, and a
-        two-column page of two-column sections is four fields wide, which is
-        almost always too many.
+        You never align anything. The label column widens to the longest label in
+        that card and never wraps, so every control in the card starts at the
+        same x, and hairlines between the columns and rows make the grid legible
+        without drawing the eye. Multi-column card grids collapse to one column
+        on small screens.
       </P>
 
       <Note title="Field help is a tooltip on the label">
@@ -534,7 +526,7 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
       <CodeBlock title="a slot and a full-width field">{`<RecordView
   fields={[
     { key: "vatNumber", label: "VAT number", editable: true },
-    { key: "notes", label: "Notes", editable: true, fullWidth: true },  // label above, full-width control
+    { key: "notes", label: "Notes", editable: true },
   ]}
   formSlots={[
     { id: "vat-hint", after: "vatNumber", render: () => <Alert>We validate this with HMRC.</Alert> },

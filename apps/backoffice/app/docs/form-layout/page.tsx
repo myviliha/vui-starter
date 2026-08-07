@@ -32,14 +32,20 @@ export default function FormLayoutPage() {
         Three levels, and you configure each one with a single setting. Read it
         from the outside in:
       </P>
-      <CodeBlock title="the model">{`Form
-└─ Section grid        sectionColumns: 1 | 2 | 3      how many section cards fit across
-   └─ Section card     span: 1 | 2 | 3 | "full"       how many columns this card takes
-      └─ Field grid    fieldColumns: 1 | 2 | 3        how many fields fit across
-         └─ Field      [i] Label *   [ control ]      always on one row
+      <CodeBlock title="the model">{`Form                 a grid of section cards
+└─ sectionColumns: 1 | 2 | 3     how many cards fit across; rows wrap as needed
+   └─ Section card               span: 1 | 2 | 3 | "full"
+      └─ always two columns, one field per row:
+
+         ┌──────────────────────┬──────────────────────────┐
+         │ [i]  Label        *  │  [ control              ]│   row 1
+         │ [i]  Label           │  [ control              ]│   row 2
+         │      Label        *  │  [ control              ]│   row 3
+         └──────────────────────┴──────────────────────────┘
+           tooltip · label · *          the control
 
 A label and its control are never stacked. The eye runs along one line
-from the name to the box, and every control lines up down the form.`}</CodeBlock>
+from the name to the box, and every control in a card starts at the same x.`}</CodeBlock>
       <P>
         A field belongs to a section through its <code>group</code>. That is the
         only wiring: put the same <code>group</code> on some fields and they
@@ -48,14 +54,14 @@ from the name to the box, and every control lines up down the form.`}</CodeBlock
 
       <H2>How do I lay out an Add Order form?</H2>
       <P>
-        Declare the sections, then how many fields go across each one. This puts
-        Customer and Delivery side by side, gives Items the full width because
-        its fields are long, and runs two fields per row inside each card.
+        Declare the sections. This puts Customer and Delivery side by side and
+        gives Items the full width because its fields are long. Inside every
+        card the fields stack down in one column of label │ control rows.
       </P>
       <CodeBlock title="order-form.tsx">{`const sections = [
   { group: "Customer" },
   { group: "Delivery" },
-  { group: "Items", span: "full", fieldColumns: 1 },
+  { group: "Items", span: "full" },
 ];
 
 const fields: RecordField<Order>[] = [
@@ -66,14 +72,13 @@ const fields: RecordField<Order>[] = [
   { key: "address", label: "Address", group: "Delivery", editable: true, required: true },
   { key: "dueAt", label: "Due date", group: "Delivery", editable: true, input: "date" },
 
-  { key: "notes", label: "Notes", group: "Items", editable: true, fullWidth: true },
+  { key: "notes", label: "Notes", group: "Items", editable: true },
 ];
 
 <RecordView
   title="Orders"
   singular="Order"
   sectionColumns={2}      // Customer and Delivery side by side
-  fieldColumns={2}        // two fields per row inside a card
   sections={sections}
   fields={fields}
   /* … */
@@ -85,7 +90,11 @@ const fields: RecordField<Order>[] = [
         How many section cards sit across the form: <code>1</code> (the
         default), <code>2</code> or <code>3</code>. Cards wrap onto as many rows
         as they need and collapse to one column on a small screen, so a
-        three-column form steps through two on the way down.
+        three-column form steps through two on the way down. A trailing card
+        that would leave a gap stretches to fill its row, so an odd number of
+        sections doesn&apos;t end in white space. Declaring any{" "}
+        <code>span</code> turns that off, since you are then placing the cards
+        yourself.
       </P>
       <H3>sections</H3>
       <P>
@@ -100,11 +109,6 @@ const fields: RecordField<Order>[] = [
           card of long fields wants.
         </li>
         <li>
-          <code>fieldColumns</code>: its own field count, overriding the
-          form&apos;s. A card of long fields can run one per row while the rest
-          of the form runs two.
-        </li>
-        <li>
           <code>description</code>: a line under the title saying what the
           section is for.
         </li>
@@ -114,25 +118,21 @@ const fields: RecordField<Order>[] = [
         <code>group</code> you forgot to declare is appended rather than
         dropped, so adding a field can never make it disappear.
       </P>
-      <H3>fieldColumns</H3>
+      <H3>Inside a card</H3>
       <P>
-        How many fields fit across inside a card: <code>1</code> (the default),{" "}
-        <code>2</code> or <code>3</code>.
-      </P>
-      <H3>Full-width fields</H3>
-      <P>
-        <code>fullWidth</code> on a field gives it every column of the card. Its
-        label still sits beside it and the control fills the rest of the row, so
-        a long textarea gets the room without breaking the line the eye follows.
+        Not configurable, on purpose. Every card is two columns and one field per
+        row: the tooltip, label and required mark on the left, the control on the
+        right. A form gets wider by putting cards side by side, not by cramming
+        fields into a row, which is what keeps two screens built by two people
+        looking like one product.
       </P>
 
       <Note title="You never align anything yourself">
-        Labels get their own auto-width track per column, so the track widens to
-        the longest label and every control lines up down the form however long
-        the words are. Multi-column grids collapse to one column on small
-        screens. Single-column forms keep the ruled row separators; multi-column
-        forms drop them, because a rule that spans one column reads as a broken
-        line rather than a separator.
+        The label column is sized to its content, so it widens to the longest
+        label in that card and never wraps, and every control in the card starts
+        at the same x. Hairlines sit between the two columns and between the
+        rows, light enough to read the grid without drawing the eye. Card grids
+        collapse to one column on small screens.
       </Note>
 
       <H2>How do I explain a field to whoever fills it in?</H2>
@@ -155,7 +155,7 @@ const fields: RecordField<Order>[] = [
         in one place and a screen can still differ where it needs to:
       </P>
       <CodeBlock title="app/(app)/layout.tsx">{`<VuiProvider
-  config={{ form: { sectionColumns: 2, fieldColumns: 2 } }}
+  config={{ form: { sectionColumns: 2 } }}
 >
   {children}
 </VuiProvider>`}</CodeBlock>
@@ -167,10 +167,9 @@ const fields: RecordField<Order>[] = [
       <Note title="sectionColumns is not formColumns">
         <code>formColumns</code> is an older setting on full-page forms that
         flows sections into two columns; it still works and{" "}
-        <code>sectionColumns</code> supersedes it. Don&apos;t set both. Note
-        that section columns and field columns multiply: a two-column form of
-        two-column sections is four fields wide, which is almost always too
-        many.
+        <code>sectionColumns</code> supersedes it, and it works in the
+        slide-over too rather than only on full-page forms. Don&apos;t set
+        both.
       </Note>
 
       <H2>Is there a template I can hand to an agent?</H2>
