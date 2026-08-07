@@ -796,10 +796,39 @@ function MultiFieldValue<T>({
 
 // Module-scoped response cache for RecordView's `fetcher` mode. Namespaced by
 // `cacheKey` and living outside any component, so a cached page survives a
-// remount / tab switch — the return is instant with no refetch. LRU per
-// namespace (insertion order = recency), optional TTL.
-type RvCacheEntry = { rows: unknown[]; total: number; at: number };
+// remount / tab switch. LRU per namespace (insertion order = recency), with a
+// TTL past which an entry isn't shown at all.
+//
+// A hit is only ever used to paint immediately: the server is asked every time
+// regardless, and the answer replaces what was shown. Before 1.60 a hit
+// returned early and no request was made, so a table could serve the same rows
+// for the life of the page while another user changed them underneath.
+export type RvCacheEntry = { rows: unknown[]; total: number; at: number };
 const RV_CACHE = new Map<string, Map<string, RvCacheEntry>>();
+
+/**
+ * Drop cached pages: everything, or one `cacheKey`.
+ *
+ * RecordView clears the namespace itself after a mutation it performed. Call
+ * this when something *else* changed the data: a websocket event, a bulk job,
+ * an edit made on another screen.
+ */
+export function clearRecordViewCache(cacheKey?: string): void {
+  if (cacheKey) RV_CACHE.delete(cacheKey);
+  else RV_CACHE.clear();
+}
+
+// Keeping a page in memory across a remount is the same feature as keeping the
+// page itself mounted, so it follows the same switch: with keep-alive off there
+// is no cross-mount cache at all.
+const RV_KEEP_ALIVE =
+  process.env.NEXT_PUBLIC_KEEP_ALIVE_TABS !== "0" &&
+  process.env.NEXT_PUBLIC_KEEP_ALIVE_TABS?.toLowerCase() !== "false";
+
+/** How long a cached page may still be painted while it revalidates. Older than
+ *  this and the shimmer shows instead, because a minutes-old table read as
+ *  current is worse than a moment's wait. */
+const RV_DEFAULT_TTL_MS = 60_000;
 
 // Minimum time the loading shimmer stays up per `fetcher` load, so a cache hit
 // (instant, from memory) shows the same animation as a real fetch — consistent
@@ -849,7 +878,9 @@ function clipCell(value: string, max: number): { text: string; full?: string } {
   return { text: value.slice(0, max).trimEnd() + "…", full: value };
 }
 
-function rvQueryKey<T>(q: ServerQuery<T>): string {
+/** Cache identity for a query: same key means same page of the same list.
+ *  Exported for testing. */
+export function rvQueryKey<T>(q: ServerQuery<T>): string {
   return JSON.stringify([
     q.page,
     q.pageSize,
@@ -859,7 +890,9 @@ function rvQueryKey<T>(q: ServerQuery<T>): string {
     q.trash,
   ]);
 }
-function rvCacheGet(
+/** A cached page, if one is there and still young enough to paint. Exported for
+ *  testing. */
+export function rvCacheGet(
   ns: string,
   key: string,
   ttlMs: number,
@@ -876,7 +909,13 @@ function rvCacheGet(
   bucket!.set(key, hit);
   return hit;
 }
-function rvCacheSet(ns: string, key: string, entry: RvCacheEntry, max: number) {
+/** Exported for testing. */
+export function rvCacheSet(
+  ns: string,
+  key: string,
+  entry: RvCacheEntry,
+  max: number,
+) {
   let bucket = RV_CACHE.get(ns);
   if (!bucket) {
     bucket = new Map();
@@ -984,8 +1023,14 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  cached per query and survive remounts / tab switches, so returning to a tab
    *  is instant with no refetch. Omit → no caching (always refetch). */
   cacheKey?: string;
-  /** `fetcher` cache tuning. Default `{ max: 50, ttlMs: 0 }` (LRU, no expiry). */
-  cache?: { max?: number; ttlMs?: number };
+  /** `fetcher` cache tuning, or `false` to never cache a page.
+   *
+   *  A cached page is only ever used to paint instantly: the server is asked on
+   *  every query regardless and its answer replaces what was shown, so the
+   *  cache can't serve stale data as final. `ttlMs` bounds how old a page may
+   *  be to be painted at all (default 60s; older shows the shimmer instead).
+   *  Default `{ max: 50, ttlMs: 60000 }`. Ignored when keep-alive tabs are off. */
+  cache?: false | { max?: number; ttlMs?: number };
   /** Called when a `fetcher` request rejects (non-abort). RecordView keeps the
    *  previously loaded data and clears the loading state. */
   onError?: (error: unknown, query: ServerQuery<T>) => void;
@@ -1199,14 +1244,21 @@ export function RecordView<T extends { id: RowId }>({
   const reqIdRef = React.useRef(0);
   const abortRef = React.useRef<AbortController | null>(null);
   const queryRef = React.useRef<ServerQuery<T> | null>(null);
-  const ttlMs = cache?.ttlMs ?? 0;
-  const cacheMax = cache?.max ?? 50;
+  // Caching is off when the host says so, and when keep-alive is off: both mean
+  // "don't hold this page in memory between visits".
+  const caching = cache !== false && RV_KEEP_ALIVE;
+  const ttlMs = (cache === false ? 0 : cache?.ttlMs) ?? RV_DEFAULT_TTL_MS;
+  const cacheMax = (cache === false ? 0 : cache?.max) ?? 50;
 
   const runFetch = React.useCallback(
     (q: ServerQuery<T>, opts?: { background?: boolean }) => {
       if (!fetcher) return;
       const id = ++reqIdRef.current;
       const started = Date.now();
+      // Set when a cached page was painted, so the revalidation that follows
+      // replaces it the moment it lands instead of waiting out the shimmer's
+      // minimum: there is no shimmer to hold.
+      let painted = false;
       // Reveal the data, but hold the shimmer for a consistent minimum so a
       // cache hit (served from memory, no server call) looks the same as a real
       // fetch — same animation every time, never a confusing blank flash.
@@ -1218,27 +1270,32 @@ export function RecordView<T extends { id: RowId }>({
           setFetchedLoading(false);
         };
         const wait = RV_MIN_LOADING_MS - (Date.now() - started);
-        if (opts?.background || wait <= 0) apply();
+        if (opts?.background || painted || wait <= 0) apply();
         else window.setTimeout(apply, wait);
       };
 
-      // Foreground cache hit: no server round-trip — the data is in memory.
-      if (!opts?.background && cacheKey) {
+      // A hit paints straight away so there's no blank flash, and then the
+      // request goes out anyway. Never `return` here: that was the bug that let
+      // a table show the same rows for the life of the page.
+      if (!opts?.background && caching && cacheKey) {
         const hit = rvCacheGet(cacheKey, rvQueryKey(q), ttlMs);
         if (hit) {
-          setFetchedLoading(true);
-          commit(hit.rows as T[], hit.total);
-          return;
+          setFetchedData(hit.rows as T[]);
+          setFetchedTotal(hit.total);
+          setFetchedLoading(false);
+          painted = true;
         }
       }
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
-      if (!opts?.background) setFetchedLoading(true);
+      // Already showing something: revalidate quietly rather than shimmering
+      // over data the user is reading.
+      if (!opts?.background && !painted) setFetchedLoading(true);
       fetcher(q, controller.signal)
         .then((res) => {
           if (id !== reqIdRef.current) return; // superseded
-          if (cacheKey)
+          if (caching && cacheKey)
             rvCacheSet(
               cacheKey,
               rvQueryKey(q),
@@ -1253,7 +1310,7 @@ export function RecordView<T extends { id: RowId }>({
           onError?.(err, q);
         });
     },
-    [fetcher, cacheKey, ttlMs, cacheMax, onError],
+    [fetcher, cacheKey, caching, ttlMs, cacheMax, onError],
   );
   // Abort any in-flight request on unmount.
   React.useEffect(() => () => abortRef.current?.abort(), []);

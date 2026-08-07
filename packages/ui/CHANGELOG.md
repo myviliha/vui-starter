@@ -106,6 +106,41 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.60.0 — 2026-08-07
+
+### Fixed
+
+- **A cached table could show the same rows forever.** In `fetcher` mode a cache
+  hit returned early and no request was ever made, and the default TTL was `0`,
+  which meant "never expires" rather than "don't cache". So a list would keep
+  serving the page it first loaded for the life of the tab, while other people
+  changed the records underneath. Turning keep-alive tabs off didn't help: the
+  cache is module-scoped and had nothing to do with that flag.
+
+  A cached page is now only ever used to **paint immediately**. The request goes
+  out every time regardless, and the server's answer replaces what was shown, so
+  the cache can make a list appear instantly but can never be the final answer.
+  When a page is painted from cache the shimmer is skipped and the refresh
+  happens quietly underneath, rather than flashing over rows someone is reading.
+
+- **Keep-alive off now really means off.** Holding a page in memory between
+  visits is the same feature as keeping the page mounted, so it follows the same
+  switch: with `NEXT_PUBLIC_KEEP_ALIVE_TABS=0` there is no cross-mount response
+  cache at all.
+
+- **The default TTL is 60 seconds, not forever.** A page older than that isn't
+  painted from cache; the shimmer shows while it loads. A minute-old table read
+  as current is worse than a moment's wait.
+
+### Added
+
+- **`cache={false}`** on `RecordView` turns the response cache off for one
+  table, for the lists where even a moment of last-known data is wrong.
+- **`clearRecordViewCache(cacheKey?)`** drops cached pages, one namespace or all
+  of them. RecordView already clears its own after a mutation; call this when
+  something else changed the data: a websocket event, a bulk job, an edit on
+  another screen.
+
 ## 1.59.0 — 2026-08-07
 
 ### Added

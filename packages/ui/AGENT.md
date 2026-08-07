@@ -609,6 +609,12 @@ Nothing is user-editable unless it is listed, which is the point: "the user pref
 
 **Opening a form is not a data change.** RecordView keeps the unsaved draft out of the row list, so a refetch (a poll, a tab refocus, a mutation elsewhere) can't take the record out from under an open Add form, and creating or discarding a draft never invalidates your cache or triggers a reload. Only a save does. Worth knowing if you build something similar on top: route drafts through local state and mutations through the persist path.
 
+**Caching a server table: the cache paints, the server decides.** `cacheKey` keeps fetched pages in memory so returning to a tab is instant. A cached page is only ever painted immediately; the request still goes out every time and its answer replaces what was shown. That means the cache can never serve stale data as the final state, which it could before 1.60.
+
+Reach for `cache={false}` on a list where even a moment of last-known data is wrong (stock levels, payment status, anything someone acts on). Tune with `cache={{ ttlMs, max }}`: past `ttlMs` (default 60s) a page isn't painted from cache at all and the shimmer shows instead. The whole thing is off when keep-alive tabs are off, because holding a page in memory between visits is that same feature. When something outside the table changes the data (a websocket event, a bulk job, an edit on another screen), call `clearRecordViewCache(cacheKey)`.
+
+**For a system where records change constantly, cache the lookups, not the ledger.** Countries, currencies, tax codes and catalogs are worth caching for minutes. Orders, stock and invoices should be read fresh; give them `cacheKey` for the instant paint if you like, but never a long `ttlMs`, and never assume what you painted is still true.
+
 **Saving against a server: return a promise from `onDataChange`.** It fires on
 every add, edit, delete and restore, in `manual` and `fetcher` mode as well as
 controlled mode, and it is where you write. Return the promise for that write

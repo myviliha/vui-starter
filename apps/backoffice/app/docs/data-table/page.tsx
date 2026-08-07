@@ -313,12 +313,10 @@ useEffect(() => {
         calls your endpoint on every query change, manages{" "}
         <code>data</code> / <code>rowCount</code> / <code>loading</code>, and{" "}
         <strong>caches responses in memory</strong> under <code>cacheKey</code>{" "}
-        (a module-scoped map that survives remounts), so returning to a tab is
-        served from memory with <strong>no server round-trip</strong>. Add{" "}
-        <code>persistKey</code> and the page/sort/filters restore on remount and
-        hit that cache. No <code>data</code>/<code>onQueryChange</code>/
-        <code>loading</code> wiring. The shimmer still shows for a short minimum on
-        every load (cache or server), so the feedback is consistent.
+        (a module-scoped map that survives remounts), so returning to a tab
+        paints instantly. Add <code>persistKey</code> and the page/sort/filters
+        restore on remount too. No <code>data</code>/<code>onQueryChange</code>/
+        <code>loading</code> wiring.
       </P>
       <CodeBlock title="fetcher + cacheKey">{`<RecordView
   fetcher={(query, signal) => fetch(url(query), { signal }).then((r) => r.json())}
@@ -329,7 +327,35 @@ useEffect(() => {
   initialData={[]}
   /* … */
 />`}</CodeBlock>
+      <Note title="The cache paints, the server decides">
+        A cached page is only ever used to <strong>paint immediately</strong>.
+        The request still goes out on every query, and the server&apos;s answer
+        replaces what was shown, so the cache can make a list appear instantly
+        but can never be the final answer. Painting from cache skips the shimmer
+        and refreshes quietly underneath, rather than flashing over rows someone
+        is reading.
+      </Note>
       <Ul>
+        <li>
+          <code>cache={`{false}`}</code> turns it off for a list where even a
+          moment of last-known data is wrong: stock levels, payment status,
+          anything someone acts on immediately.
+        </li>
+        <li>
+          <code>cache={`{{ ttlMs, max }}`}</code> tunes it. Past{" "}
+          <code>ttlMs</code> (default 60s) a page isn&apos;t painted from cache
+          at all and the shimmer shows instead.
+        </li>
+        <li>
+          It is off entirely when keep-alive tabs are off (
+          <code>NEXT_PUBLIC_KEEP_ALIVE_TABS=0</code>), because holding a page in
+          memory between visits is that same feature.
+        </li>
+        <li>
+          <code>clearRecordViewCache(cacheKey?)</code> drops cached pages when
+          something outside the table changed the data: a websocket event, a
+          bulk job, an edit on another screen.
+        </li>
         <li>
           Superseded requests are aborted via the <code>signal</code>, and stale
           responses are ignored, so no out-of-order flicker to handle yourself.

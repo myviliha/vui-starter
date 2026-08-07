@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  clearRecordViewCache,
   emptyStateLabel,
   groupSlots,
   formatPhone,
@@ -8,6 +9,9 @@ import {
   orderedGroups,
   orderedSections,
   resolveFormRows,
+  rvCacheGet,
+  rvCacheSet,
+  rvQueryKey,
   showEditActions,
   validateField,
   type RecordField,
@@ -370,5 +374,47 @@ describe("resolveFormRows", () => {
       ["Customer", "Delivery"],
       ["Items", "Payment"],
     ]);
+  });
+});
+
+describe("fetcher response cache", () => {
+  const NS = "test-ns";
+  const page = { rows: [{ id: 1 }], total: 1 };
+
+  it("expires an entry past its ttl instead of painting it", () => {
+    clearRecordViewCache();
+    rvCacheSet(NS, "q", { ...page, at: Date.now() - 90_000 }, 50);
+    // A minute-old table read as current is worse than a moment's shimmer.
+    expect(rvCacheGet(NS, "q", 60_000)).toBeNull();
+    rvCacheSet(NS, "q", { ...page, at: Date.now() }, 50);
+    expect(rvCacheGet(NS, "q", 60_000)).not.toBeNull();
+  });
+
+  it("evicts the least recently used page past `max`", () => {
+    clearRecordViewCache();
+    for (const key of ["a", "b", "c"])
+      rvCacheSet(NS, key, { ...page, at: Date.now() }, 2);
+    expect(rvCacheGet(NS, "a", 60_000)).toBeNull();
+    expect(rvCacheGet(NS, "c", 60_000)).not.toBeNull();
+  });
+
+  it("clears one namespace, or all of them", () => {
+    rvCacheSet("one", "q", { ...page, at: Date.now() }, 50);
+    rvCacheSet("two", "q", { ...page, at: Date.now() }, 50);
+    clearRecordViewCache("one");
+    expect(rvCacheGet("one", "q", 60_000)).toBeNull();
+    expect(rvCacheGet("two", "q", 60_000)).not.toBeNull();
+    clearRecordViewCache();
+    expect(rvCacheGet("two", "q", 60_000)).toBeNull();
+  });
+
+  it("keys a page by everything that changes what the server returns", () => {
+    const base = { page: 1, pageSize: 25, sort: null, search: "", filters: {}, trash: false };
+    const key = rvQueryKey(base);
+    expect(rvQueryKey({ ...base, page: 2 })).not.toBe(key);
+    expect(rvQueryKey({ ...base, search: "ada" })).not.toBe(key);
+    expect(rvQueryKey({ ...base, filters: { status: "open" } })).not.toBe(key);
+    expect(rvQueryKey({ ...base, trash: true })).not.toBe(key);
+    expect(rvQueryKey({ ...base })).toBe(key);
   });
 });
