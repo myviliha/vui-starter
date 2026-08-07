@@ -124,10 +124,42 @@ export type FormConfig = {
    * A field can override it, so one textarea can stack inside an inline form.
    */
   fieldLayout?: FieldLayout;
+  /**
+   * How many columns the **sections** flow across: 1, 2 or 3. Default 1.
+   *
+   * The form is a grid of section cards; each card is itself a grid of fields
+   * (`fieldColumns`). Declaring both is how a form gets designed: sections
+   * across the page, fields within each one.
+   */
+  sectionColumns?: SectionColumns;
 };
 
 /** Columns the form's fields flow across. */
 export type FieldColumns = 1 | 2 | 3;
+
+/**
+ * One section of a form: a titled card holding some of the fields.
+ *
+ * Sections come from each field's `group` and render in the order the groups
+ * first appear. Declare them here when you want to control that order, let one
+ * section be wider than the rest, or give a section its own field layout.
+ */
+export type FormSection = {
+  /** The `group` on the fields that belong to it. */
+  group: string;
+  /** A line under the title, for what the section is for. */
+  description?: string;
+  /** Columns of the section grid this one takes. `"full"` spans the row, which
+   *  is what a section of long fields usually wants. Default 1. */
+  span?: 1 | 2 | 3 | "full";
+  /** Field columns inside this section, overriding the form's. */
+  fieldColumns?: FieldColumns;
+  /** Field layout inside this section, overriding the form's. */
+  fieldLayout?: FieldLayout;
+};
+
+/** Columns the form's sections flow across. */
+export type SectionColumns = 1 | 2 | 3;
 
 /** Label beside the control, or above it. */
 export type FieldLayout = "inline" | "stacked";

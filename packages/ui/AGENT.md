@@ -551,7 +551,33 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
 
-**Form layout: pick the columns, then pick the rows.** Two settings arrange the whole form and everything aligns from them.
+**Form layout is declared, not styled.** A form is a grid of section cards; each card is a grid of fields. Full write-up with a worked example: docs `/form-layout`.
+
+```
+Form
+└─ Section grid      sectionColumns: 1 | 2 | 3
+   └─ Section card   span: 1 | 2 | 3 | "full"
+      └─ Field grid  fieldColumns: 1 | 2 | 3
+         └─ Field    fieldLayout: "inline" | "stacked"   →  [i] Label * [control]
+```
+
+Sections come from each field's `group`. Declare `sections` to fix their order, let one span the row, or give one its own field layout:
+
+```tsx
+<RecordView
+  sectionColumns={2}
+  fieldColumns={2}
+  sections={[
+    { group: "Customer" },
+    { group: "Delivery" },
+    { group: "Items", span: "full", fieldColumns: 1, fieldLayout: "stacked" },
+  ]}
+  … />
+```
+
+A declared section with no fields is skipped; a group you didn't declare is appended rather than dropped. All three settings are also `form.sectionColumns` / `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`, so an app has a house style and a screen can still differ.
+
+**Field layout: pick the columns, then pick the rows.** Two settings arrange the fields inside a card and everything aligns from them.
 
 ```tsx
 <RecordView fieldColumns={2} fieldLayout="inline" … />

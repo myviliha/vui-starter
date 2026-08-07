@@ -710,7 +710,7 @@ import { Button } from "@viliha/vui-ui/button";
 
       <DocPager
         prev={{ label: "Theming", href: "/docs/theming" }}
-        next={{ label: "Navigation & tabs", href: "/docs/navigation" }}
+        next={{ label: "Form layout", href: "/docs/form-layout" }}
       />
     </article>
   );

@@ -46,6 +46,8 @@ import {
   type BehaviourConfig,
   type FieldColumns,
   type FieldLayout,
+  type FormSection,
+  type SectionColumns,
   type FormAction,
   type FormActionContext,
   type FormActionOutcome,
@@ -56,6 +58,8 @@ export type {
   BehaviourConfig,
   FieldColumns,
   FieldLayout,
+  FormSection,
+  SectionColumns,
   FormActionOutcome,
   FormSlot,
   FormAction,
@@ -116,6 +120,26 @@ export function orderedGroups<T>(fields: RecordField<T>[]): string[] {
     if (!seen.includes(g)) seen.push(g);
   }
   return seen;
+}
+
+/**
+ * The sections to render, in order. Declared sections come first in the order
+ * you wrote them; any group that only exists on the fields is appended, so
+ * adding a field with a new group never makes it disappear.
+ *
+ * Exported for testing.
+ */
+export function orderedSections<T>(
+  fields: RecordField<T>[],
+  declared: FormSection[] | undefined,
+): FormSection[] {
+  const groups = orderedGroups(fields);
+  if (!declared?.length) return groups.map((group) => ({ group }));
+  const named = new Set(declared.map((d) => d.group));
+  return [
+    ...declared.filter((d) => groups.includes(d.group)),
+    ...groups.filter((g) => !named.has(g)).map((group) => ({ group })),
+  ];
 }
 
 /** Fixed (non-resizable) leading/trailing column widths, in px. */
@@ -583,6 +607,35 @@ const GRID = {
   },
 } as const;
 
+/**
+ * How many columns of the *section* grid a section takes. A span wider than the
+ * grid is clamped by the grid itself, so `span: 3` in a two-column form simply
+ * fills the row.
+ */
+const SECTION_SPAN = {
+  1: { 1: "", 2: "", 3: "", full: "" },
+  2: {
+    1: "",
+    2: "md:col-span-2",
+    3: "md:col-span-2",
+    full: "md:col-span-2",
+  },
+  3: {
+    1: "",
+    2: "md:col-span-2",
+    3: "md:col-span-2 xl:col-span-3",
+    full: "md:col-span-2 xl:col-span-3",
+  },
+} as const;
+
+/** The section grid: cards across the form, wrapping onto as many rows as they
+ *  need, and collapsing to one column on small screens. */
+const SECTION_GRID = {
+  1: "space-y-4",
+  2: "grid grid-cols-1 items-start gap-4 md:grid-cols-2",
+  3: "grid grid-cols-1 items-start gap-4 md:grid-cols-2 xl:grid-cols-3",
+} as const;
+
 /** Spanning the whole row: two tracks per column when inline, one when stacked. */
 const SPAN_ALL = {
   inline: {
@@ -986,6 +1039,14 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  label above its control (`"stacked"`). Falls back to `form.fieldLayout`,
    *  then `"inline"`. A field can override it with its own `layout`. */
   fieldLayout?: FieldLayout;
+  /** Columns the add/edit form's **sections** flow across: 1, 2 or 3. The form
+   *  is a grid of section cards, each itself a grid of fields. Falls back to
+   *  `form.sectionColumns`, then 1. */
+  sectionColumns?: SectionColumns;
+  /** Declare the form's sections to fix their order, let one span the row, or
+   *  give one its own field layout. Omit and they come from each field's
+   *  `group`, in the order the groups first appear. */
+  sections?: FormSection[];
   /** Behaviour overrides for this table only: what a row click does, whether
    *  delete confirms, how long the saved-row highlight lasts, and so on. Falls
    *  back to `VuiProvider`'s `behaviour`, then to the shipped defaults. */
@@ -1107,6 +1168,8 @@ export function RecordView<T extends { id: RowId }>({
   showAdd = true,
   fieldColumns,
   fieldLayout,
+  sectionColumns,
+  sections,
   behaviour: behaviourProp,
   formActions,
   renderFooter,
@@ -2095,6 +2158,8 @@ export function RecordView<T extends { id: RowId }>({
         behaviour={behaviour}
         fieldColumns={fieldColumns}
         fieldLayout={fieldLayout}
+        sectionColumns={sectionColumns}
+        sections={sections}
       />
     );
   }
@@ -2915,6 +2980,8 @@ export function RecordView<T extends { id: RowId }>({
           behaviour={behaviour}
           fieldColumns={fieldColumns}
           fieldLayout={fieldLayout}
+          sectionColumns={sectionColumns}
+          sections={sections}
         />
       )}
 
@@ -3125,6 +3192,12 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Label beside the control (`"inline"`) or above it (`"stacked"`). Falls
    *  back to the app's `form.fieldLayout`, then `"inline"`. */
   fieldLayout?: FieldLayout;
+  /** Columns the sections flow across (1, 2 or 3). Falls back to the app's
+   *  `form.sectionColumns`, then 1. */
+  sectionColumns?: SectionColumns;
+  /** Declare the sections to control their order, let one span the row, or give
+   *  one its own field layout. Omit and they come from each field's `group`. */
+  sections?: FormSection[];
   /** Page-form breadcrumb override (fully configurable). When set, these crumbs
    *  replace the default `Home › {title} › Create/Update {singular}` — so you can
    *  add parents ("Access") or rename the last crumb ("New Role"). Build each
@@ -3155,14 +3228,17 @@ function RecordDetailPanel<T extends { id: RowId }>({
   behaviour: behaviourProp,
   fieldColumns,
   fieldLayout,
+  sectionColumns,
+  sections,
   crumbs,
 }: DetailPanelProps<T>) {
   const formConfig = useResolved("form", undefined) ?? {};
   // Two settings decide the whole form: how many columns the fields flow
   // across, and whether each label sits beside its control or above it.
-  const cols = fieldColumns ?? formConfig.fieldColumns ?? 1;
-  const stacked =
+  const formCols = fieldColumns ?? formConfig.fieldColumns ?? 1;
+  const formStacked =
     (fieldLayout ?? formConfig.fieldLayout ?? "inline") === "stacked";
+  const sectionCols = sectionColumns ?? formConfig.sectionColumns ?? 1;
   const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
@@ -3299,7 +3375,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
-  const slotRow = (slot: FormSlot<T>) => (
+  const slotRow = (
+    slot: FormSlot<T>,
+    cols: FieldColumns,
+    stacked: boolean,
+  ) => (
     <div
       key={`slot:${slot.id}`}
       className={cn(
@@ -3312,18 +3392,32 @@ function RecordDetailPanel<T extends { id: RowId }>({
     </div>
   );
 
-  const formBody = orderedGroups(fields).map((group) => {
+  const formBody = orderedSections(fields, sections).map((section) => {
+    const group = section.group;
     const groupFields = fields.filter((f) => (f.group ?? "General") === group);
     if (groupFields.length === 0) return null;
     const slots = groupSlots(fields, formSlots, group);
+    // A section can set its own field layout; otherwise it follows the form.
+    const cols = section.fieldColumns ?? formCols;
+    const stacked = section.fieldLayout
+      ? section.fieldLayout === "stacked"
+      : formStacked;
     return (
       <section
         key={group}
-        className="overflow-hidden rounded-lg border border-border"
+        className={cn(
+          "overflow-hidden rounded-lg border border-border",
+          SECTION_SPAN[sectionCols][section.span ?? 1],
+        )}
       >
         <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-semibold text-[var(--button-primary)]">
           {group}
         </h3>
+        {section.description && (
+          <p className="border-b border-border px-3 py-2 text-muted-foreground">
+            {section.description}
+          </p>
+        )}
         {/* The whole layout comes from two settings. Columns: how many fields
             fit across. Inline: each field is a label │ control pair whose label
             column widens to the longest label, so controls line up down the
@@ -3559,10 +3653,12 @@ function RecordDetailPanel<T extends { id: RowId }>({
               </dd>
             </div>,
             // Anything the host put after this field.
-            ...(slots.get(f.key) ?? []).map(slotRow),
+            ...(slots.get(f.key) ?? []).map((slot) =>
+              slotRow(slot, cols, stacked),
+            ),
           ])}
           {/* Slots with no `after` close out the section. */}
-          {(slots.get("") ?? []).map(slotRow)}
+          {(slots.get("") ?? []).map((slot) => slotRow(slot, cols, stacked))}
         </dl>
       </section>
     );
@@ -3698,13 +3794,16 @@ function RecordDetailPanel<T extends { id: RowId }>({
             {/* Padded, bordered card — matches the datatable content container. */}
             <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card">
               <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+                {/* The section grid. `sectionColumns` is the setting; the
+                    older `columns` (page forms only) still widens a
+                    single-column form to two, so nothing existing moves. */}
                 <div
                   className={cn(
                     "w-full",
-                    columns === 2
-                      ? "mx-auto grid max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2"
-                      : // One column: sections span the full container width.
-                        "space-y-4",
+                    SECTION_GRID[
+                      sectionCols > 1 ? sectionCols : columns === 2 ? 2 : 1
+                    ],
+                    (sectionCols > 1 || columns === 2) && "mx-auto max-w-5xl",
                   )}
                 >
                   {formBody}
@@ -3770,8 +3869,13 @@ function RecordDetailPanel<T extends { id: RowId }>({
           </Button>
         </div>
 
-        {/* Body — one bordered section per field group. */}
-        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+        {/* Body — the section grid, one bordered card per field group. */}
+        <div
+          className={cn(
+            "min-h-0 flex-1 overflow-y-auto p-4",
+            SECTION_GRID[sectionCols],
+          )}
+        >
           {formBody}
         </div>
 

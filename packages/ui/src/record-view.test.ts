@@ -7,6 +7,7 @@ import {
   formatPhone,
   isAsyncLabeled,
   orderedGroups,
+  orderedSections,
   showEditActions,
   validateField,
   type RecordField,
@@ -282,5 +283,47 @@ describe("fieldStacked", () => {
     expect(fieldStacked(F({ fullWidth: true, layout: "inline" }), false)).toBe(
       true,
     );
+  });
+});
+
+describe("orderedSections", () => {
+  type Row = { id: number; a: string; b: string; c: string };
+  const fields: RecordField<Row>[] = [
+    { key: "a", label: "A", group: "Details" },
+    { key: "b", label: "B", group: "Address" },
+    { key: "c", label: "C" }, // no group → "General"
+  ];
+  const groups = (s: { group: string }[]) => s.map((x) => x.group);
+
+  it("follows the fields when nothing is declared", () => {
+    expect(groups(orderedSections(fields, undefined))).toEqual([
+      "Details",
+      "Address",
+      "General",
+    ]);
+  });
+
+  it("uses the declared order, and keeps the options with it", () => {
+    const declared = [
+      { group: "Address", span: "full" as const },
+      { group: "Details" },
+    ];
+    const out = orderedSections(fields, declared);
+    expect(groups(out).slice(0, 2)).toEqual(["Address", "Details"]);
+    expect(out[0]?.span).toBe("full");
+  });
+
+  it("appends a group that was never declared, so a new field can't vanish", () => {
+    expect(groups(orderedSections(fields, [{ group: "Details" }]))).toEqual([
+      "Details",
+      "Address",
+      "General",
+    ]);
+  });
+
+  it("drops a declared section with no fields in it", () => {
+    expect(
+      groups(orderedSections(fields, [{ group: "Billing" }, { group: "Details" }])),
+    ).toEqual(["Details", "Address", "General"]);
   });
 });

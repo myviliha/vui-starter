@@ -44,6 +44,7 @@ const SECTIONS: NavGroup[] = [
     items: [
       { label: "Theming", href: "/docs/theming" },
       { label: "Layouts", href: "/docs/layout" },
+      { label: "Form layout", href: "/docs/form-layout" },
       { label: "Navigation", href: "/docs/navigation" },
       { label: "Typeset", href: "/docs/typeset" },
     ],

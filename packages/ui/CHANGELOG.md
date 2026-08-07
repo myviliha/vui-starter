@@ -110,8 +110,40 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ### Added
 
-- **Form layout: pick the columns, then pick the rows.** Two settings decide how
-  an Add or Edit form is arranged, and everything auto-aligns from there.
+- **Form layout, declared rather than styled.** A form is a grid of section
+  cards, and each card is a grid of fields. Three settings describe it and the
+  alignment follows:
+
+  ```
+  Form
+  └─ Section grid      sectionColumns: 1 | 2 | 3
+     └─ Section card   span: 1 | 2 | 3 | "full"
+        └─ Field grid  fieldColumns: 1 | 2 | 3
+           └─ Field    fieldLayout: "inline" | "stacked"
+  ```
+
+- **`sectionColumns` + `sections`.** `sectionColumns` flows the section cards
+  across the form; `sections` declares them, so you can fix their order, let one
+  span the row (`span: "full"`, what a card of long fields wants), give one its
+  own field layout, or put a line of description under its title. Omit
+  `sections` and they still come from each field's `group`, as before. A
+  declared section with no fields is skipped, and a group you didn't declare is
+  appended rather than dropped, so adding a field can't make it vanish.
+
+  This works in the slide-over as well as on full-page forms. `formColumns`
+  (page forms, sections in two columns) still behaves as it did, and
+  `sectionColumns` supersedes it.
+
+- **Everything above is also config**, as `form.sectionColumns`,
+  `form.fieldColumns` and `form.fieldLayout` in `VuiProvider`, so an app sets
+  its form style once and a screen overrides what it needs.
+
+- **A docs page to build against: `/docs/form-layout`.** The model, each
+  setting, a worked Add Order form, and how to write field help. Linked from the
+  Customization section of the docs nav.
+
+- **Field layout: pick the columns, then pick the rows.** Two settings decide how
+  the fields inside a section are arranged, and everything auto-aligns.
 
   `fieldColumns={1 | 2 | 3}` is how many fields fit across. `fieldLayout` is how
   each label meets its control: `"inline"` puts them on one row

@@ -194,7 +194,7 @@ export default function NavigationDocPage() {
       </P>
 
       <DocPager
-        prev={{ label: "Layout & patterns", href: "/docs/layout" }}
+        prev={{ label: "Form layout", href: "/docs/form-layout" }}
         next={{ label: "Building with AI agents", href: "/docs/ai-agents" }}
       />
     </article>
