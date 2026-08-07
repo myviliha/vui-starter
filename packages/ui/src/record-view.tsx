@@ -2,11 +2,7 @@
 
 import * as React from "react";
 import {
-  CodeIcon as Code,
   DownloadIcon as Download,
-  FileTextIcon as FileText,
-  ReaderIcon as Reader,
-  TableIcon as SheetIcon,
   UploadIcon as Upload,
   ArrowTopRightIcon as ArrowUpRight,
   CaretDownIcon as CaretDown,
@@ -46,6 +42,9 @@ import {
   type BehaviourConfig,
   type FormRow,
   type FormSection,
+  type IoAction,
+  type IoActionsConfig,
+  type IoContext,
   type SectionColumns,
   type FormAction,
   type FormActionContext,
@@ -55,6 +54,9 @@ import {
 } from "./config";
 export type {
   BehaviourConfig,
+  IoAction,
+  IoActionsConfig,
+  IoContext,
   FormRow,
   FormSection,
   SectionColumns,
@@ -66,6 +68,11 @@ export type {
   FormConfig,
   VuiConfig,
 } from "./config";
+import {
+  defaultExportActions,
+  defaultImportActions,
+  resolveIoActions,
+} from "./table-io-actions";
 import {
   actionRequiresValid,
   defaultFormActions,
@@ -95,14 +102,6 @@ import {
 import { Dropdown, DropdownItem, DropdownLabel } from "./dropdown-menu";
 import { ConfirmDialog } from "./confirm-dialog";
 import { RequiredMark } from "./required-mark";
-import {
-  downloadFile,
-  parseCSV,
-  printTable,
-  rowsToCSV,
-  rowsToTableHTML,
-  type IoColumn,
-} from "./table-io";
 
 type RowId = string | number;
 // A form section title. Any string works — sections render in the order their
@@ -1064,6 +1063,14 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  ones you'll typically turn off per page. */
   /** Show the Import (CSV/JSON/Excel) menu. Default `true`. */
   showImport?: boolean;
+  /** What the Import menu offers. An array replaces the shipped entries, a
+   *  function receives them so you can add to them. Point an `onAct` at your
+   *  API to upload the file and let the server do the work. Falls back to
+   *  `VuiProvider`'s `table.importActions`. */
+  importActions?: IoActionsConfig<T>;
+  /** What the Export menu offers, same shape. Use `ctx.query` to ask your API
+   *  for everything that matches rather than the page on screen. */
+  exportActions?: IoActionsConfig<T>;
   /** Show the Export (CSV/Excel/JSON/PDF) menu. Default `true`. */
   showExport?: boolean;
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
@@ -1197,6 +1204,8 @@ export function RecordView<T extends { id: RowId }>({
   identityColumn = "first",
   showImport = true,
   showExport = true,
+  importActions,
+  exportActions,
   showAdd = true,
   formRows,
   sectionColumns,
@@ -1903,71 +1912,58 @@ export function RecordView<T extends { id: RowId }>({
   }
 
   const importRef = React.useRef<HTMLInputElement>(null);
-  const ioColumns: IoColumn[] = fields.map((f) => ({
-    key: f.key,
-    label: f.label,
-  }));
-  /** Export the currently filtered/sorted rows in the chosen format. */
-  function exportData(format: "csv" | "excel" | "json" | "pdf") {
-    const data = processed as Record<string, unknown>[];
-    const base = title.toLowerCase().replace(/\s+/g, "-") || "export";
-    if (format === "csv")
-      downloadFile(
-        `${base}.csv`,
-        rowsToCSV(ioColumns, data),
-        "text/csv;charset=utf-8",
-      );
-    else if (format === "json")
-      downloadFile(
-        `${base}.json`,
-        JSON.stringify(data, null, 2),
-        "application/json",
-      );
-    else if (format === "excel")
-      downloadFile(
-        `${base}.xls`,
-        rowsToTableHTML(ioColumns, data),
-        "application/vnd.ms-excel",
-      );
-    else printTable(title, rowsToTableHTML(ioColumns, data));
-  }
-  /** Parse an imported CSV/JSON file and prepend the rows to the table. */
-  async function onImportFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file || !makeEmptyRow) return; // read-only list — no row factory to import into
-    const text = await file.text();
-    let records: Record<string, unknown>[] = [];
-    try {
-      if (file.name.toLowerCase().endsWith(".json")) {
-        const parsed: unknown = JSON.parse(text);
-        records = Array.isArray(parsed)
-          ? (parsed as Record<string, unknown>[])
-          : [];
-      } else {
-        records = parseCSV(text);
-      }
-    } catch {
-      return;
-    }
-    const byKey = new Map(fields.map((f) => [f.key.toLowerCase(), f.key]));
-    const byLabel = new Map(fields.map((f) => [f.label.toLowerCase(), f.key]));
-    const imported = records.map((rec) => {
-      const row = { ...makeEmptyRow(), id: nextId.current++ } as Record<
-        string,
-        unknown
-      >;
-      for (const [k, v] of Object.entries(rec)) {
-        const key = byKey.get(k.toLowerCase()) ?? byLabel.get(k.toLowerCase());
-        if (key) row[key] = v;
-      }
-      return row as T;
-    });
-    if (imported.length) {
+  // The action waiting on a file: one picker, reused by whichever asked.
+  const pendingImport = React.useRef<IoAction<T> | null>(null);
+  const tableConfig = useResolved("table", undefined) ?? {};
+
+  /** What an Import or Export action gets to work with. Built per use, so it
+   *  always describes what is on screen right now. */
+  const ioContext = (file?: File): IoContext<T> => ({
+    rows: processed,
+    columns: fields.map((f) => ({ key: f.key, label: f.label })),
+    title,
+    query: queryRef.current ?? undefined,
+    file,
+    applyRows: (imported) => {
       setRows((prev) => [...imported, ...prev]);
       setPage(1);
+    },
+    refetch: () => {
+      if (cacheKey) RV_CACHE.delete(cacheKey);
+      if (queryRef.current) runFetch(queryRef.current, { background: true });
+    },
+  });
+
+  const exportMenu = resolveIoActions<T>(
+    defaultExportActions<T>(),
+    exportActions ?? (tableConfig.exportActions as IoActionsConfig<T>),
+  );
+  const importMenu = resolveIoActions<T>(
+    defaultImportActions<T>(makeEmptyRow, () => nextId.current++),
+    importActions ?? (tableConfig.importActions as IoActionsConfig<T>),
+  );
+
+  /** Run one action, opening the file picker first when it asked for a file. */
+  function runIo(action: IoAction<T>) {
+    if (action.pickFile) {
+      pendingImport.current = action;
+      if (importRef.current) {
+        importRef.current.accept = action.accept ?? "";
+        importRef.current.click();
+      }
+      return;
     }
+    void action.onAct(ioContext());
   }
+
+  async function onImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-picking the same file
+    const action = pendingImport.current;
+    pendingImport.current = null;
+    if (file && action) await action.onAct(ioContext(file));
+  }
+
   /** What a click on the row's name does. `none` leaves the name inert, for a
    *  table where opening a record is not the point. */
   const rowClick = behaviour.rowClick ?? "view";
@@ -2245,12 +2241,11 @@ export function RecordView<T extends { id: RowId }>({
       <div className="flex h-12 items-center justify-between border-b border-border px-4">
         <div className="flex items-center gap-2">{titleLeading}</div>
         <div className="flex items-center gap-1.5">
-          {showImport && (
+          {showImport && importMenu.length > 0 && (
             <>
               <input
                 ref={importRef}
                 type="file"
-                accept=".csv,.json"
                 onChange={onImportFile}
                 className="hidden"
                 aria-hidden="true"
@@ -2262,26 +2257,24 @@ export function RecordView<T extends { id: RowId }>({
                 align="end"
               >
                 <DropdownLabel>Import from</DropdownLabel>
-                <DropdownItem onSelect={() => importRef.current?.click()}>
-                  <span className="flex items-center gap-2">
-                    <FileText className="size-3.5" /> CSV
-                  </span>
-                </DropdownItem>
-                <DropdownItem onSelect={() => importRef.current?.click()}>
-                  <span className="flex items-center gap-2">
-                    <Code className="size-3.5" /> JSON
-                  </span>
-                </DropdownItem>
-                <DropdownItem onSelect={() => importRef.current?.click()}>
-                  <span className="flex items-center gap-2">
-                    <SheetIcon className="size-3.5" /> Excel
-                  </span>
-                </DropdownItem>
+                {importMenu
+                  .filter((a) => a.visible?.(ioContext()) ?? true)
+                  .map((action) => (
+                    <DropdownItem
+                      key={action.id}
+                      onSelect={() => runIo(action)}
+                    >
+                      <span className="flex items-center gap-2">
+                        {action.icon && <action.icon className="size-3.5" />}
+                        {action.label}
+                      </span>
+                    </DropdownItem>
+                  ))}
               </Dropdown>
             </>
           )}
 
-          {showExport && (
+          {showExport && exportMenu.length > 0 && (
             <Dropdown
               label="Export"
               labelClassName="hidden sm:inline"
@@ -2289,26 +2282,16 @@ export function RecordView<T extends { id: RowId }>({
               align="end"
             >
               <DropdownLabel>Export as</DropdownLabel>
-              <DropdownItem onSelect={() => exportData("csv")}>
-                <span className="flex items-center gap-2">
-                  <FileText className="size-3.5" /> CSV
-                </span>
-              </DropdownItem>
-              <DropdownItem onSelect={() => exportData("excel")}>
-                <span className="flex items-center gap-2">
-                  <SheetIcon className="size-3.5" /> Excel
-                </span>
-              </DropdownItem>
-              <DropdownItem onSelect={() => exportData("json")}>
-                <span className="flex items-center gap-2">
-                  <Code className="size-3.5" /> JSON
-                </span>
-              </DropdownItem>
-              <DropdownItem onSelect={() => exportData("pdf")}>
-                <span className="flex items-center gap-2">
-                  <Reader className="size-3.5" /> PDF
-                </span>
-              </DropdownItem>
+              {exportMenu
+                .filter((a) => a.visible?.(ioContext()) ?? true)
+                .map((action) => (
+                  <DropdownItem key={action.id} onSelect={() => runIo(action)}>
+                    <span className="flex items-center gap-2">
+                      {action.icon && <action.icon className="size-3.5" />}
+                      {action.label}
+                    </span>
+                  </DropdownItem>
+                ))}
             </Dropdown>
           )}
 

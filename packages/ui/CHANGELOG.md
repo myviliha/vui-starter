@@ -106,6 +106,60 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.62.0 — 2026-08-07
+
+### Added
+
+- **Import and Export are a placeholder you can fill in.** The CSV, Excel, JSON
+  and PDF entries still ship and still work in the browser, but they are now
+  built from the same `IoAction` type a host uses, so replacing them or adding
+  to them is the same API rather than a different one.
+
+  ```tsx
+  <RecordView
+    exportActions={(defaults) => [
+      ...defaults,
+      {
+        id: "server",
+        label: "Everything matching (server)",
+        // The browser only has the page on screen; the query has the rest.
+        onAct: async (ctx) => window.open(await api.exportUrl(ctx.query)),
+      },
+    ]}
+    importActions={[
+      {
+        id: "upload",
+        label: "Upload to server",
+        pickFile: true,
+        accept: ".csv,.xlsx",
+        onAct: async (ctx) => { await api.import(ctx.file!); ctx.refetch(); },
+      },
+    ]}
+  />
+  ```
+
+  An array replaces the menu, a function receives the shipped list so you can
+  add to it, and an empty array hides the menu. `table.importActions` /
+  `table.exportActions` on `VuiProvider` set it for every table at once, so an
+  app can route all of its import and export through its API in one place.
+
+- **`IoContext`, what an action gets to work with**: `rows` (what's on screen,
+  filtered and sorted), `columns`, `title`, `file` for an import, `applyRows`
+  to put records into the table, `refetch` to reload from the server, and
+  **`query`**, the active page, sort, search and filters. That last one matters:
+  in `fetcher` mode the browser only holds the page someone is looking at, so
+  exporting everything that matches means asking your API with the query rather
+  than writing out the rows in memory.
+
+- **`pickFile` on an import action** opens the file picker and hands the file
+  through `ctx.file`, with `accept` filtering what can be chosen. An action
+  without it runs straight away, which is what an API-triggered import wants.
+
+### Changed
+
+- The Import menu is hidden on a list with no `makeEmptyRow`, since there was
+  nowhere for the rows to go. It was previously shown and did nothing.
+
 ## 1.61.0 — 2026-08-07
 
 ### Changed

@@ -327,6 +327,67 @@ useEffect(() => {
   initialData={[]}
   /* … */
 />`}</CodeBlock>
+      <H2>How do I make Import and Export use my API?</H2>
+      <P>
+        Both menus are placeholders with a working default. The CSV, Excel, JSON
+        and PDF entries ship and do the work in the browser, and they are built
+        from the same <code>IoAction</code> type you use, so replacing them or
+        adding to them is the same API rather than a different one.
+      </P>
+      <CodeBlock title="server-side export, server-side import">{`<RecordView
+  exportActions={(defaults) => [
+    ...defaults,                       // keep CSV / Excel / JSON / PDF
+    {
+      id: "server",
+      label: "Everything matching (server)",
+      // The browser only holds the page on screen. ctx.query has the rest:
+      // page, sort, search, filters, trash.
+      onAct: async (ctx) => window.open(await api.exportUrl(ctx.query)),
+    },
+  ]}
+  importActions={[                     // an array replaces the menu entirely
+    {
+      id: "upload",
+      label: "Upload to server",
+      pickFile: true,                  // open the picker, hand it to ctx.file
+      accept: ".csv,.xlsx",
+      onAct: async (ctx) => { await api.import(ctx.file!); ctx.refetch(); },
+    },
+  ]}
+  /* … */
+/>`}</CodeBlock>
+      <Ul>
+        <li>
+          A <strong>function</strong> receives the shipped list so you can add
+          to it; an <strong>array</strong> replaces it; an{" "}
+          <strong>empty array</strong> hides the menu.
+        </li>
+        <li>
+          <code>table.importActions</code> / <code>table.exportActions</code> on{" "}
+          <code>VuiProvider</code> set it for every table at once, so an app can
+          route all of its import and export through its API in one place.
+        </li>
+        <li>
+          <code>pickFile</code> opens the file picker and passes the file as{" "}
+          <code>ctx.file</code>; <code>accept</code> filters what can be chosen.
+          Leave it off and the action runs straight away, which is what an
+          API-triggered import wants.
+        </li>
+        <li>
+          <code>visible(ctx)</code> hides an entry per state, for example
+          offering &quot;Export all&quot; only to an admin.
+        </li>
+      </Ul>
+      <Note title="Exporting more than the page you can see">
+        <code>ctx.rows</code> is what is on screen: filtered, sorted, and in{" "}
+        <code>fetcher</code> mode only the current page. Writing those out and
+        calling it &quot;export all&quot; is the usual mistake. For everything
+        that matches, use <code>ctx.query</code> and ask your API, which is what
+        the example above does. The default entries write{" "}
+        <code>ctx.rows</code>, which is right for a small client-side list and
+        wrong the moment the data outgrows a page.
+      </Note>
+
       <Note title="A wide table says so">
         Both scrollbars stay visible whenever there is somewhere to scroll,
         rather than appearing only once you move. macOS hides overlay scrollbars

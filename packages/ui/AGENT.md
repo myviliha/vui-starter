@@ -611,6 +611,23 @@ Nothing is user-editable unless it is listed, which is the point: "the user pref
 
 **Scroll regions must announce themselves.** macOS hides overlay scrollbars until you scroll, so a wide table reads as if it ends at the last column. Put `vui-scroll` on any element you make scrollable and both bars stay visible whenever there is somewhere to scroll to, in theme colours, with the gutter reserved so nothing shifts when a bar appears. `RecordView` already does this for its table and its form body. Never make something scroll without it.
 
+**Import and Export are a placeholder with a working default.** The CSV / Excel / JSON / PDF entries ship and work in the browser, and they are built from the same `IoAction` type you use, so changing them is the same API:
+
+```tsx
+exportActions={(defaults) => [...defaults, {
+  id: "server", label: "Everything matching",
+  onAct: async (ctx) => window.open(await api.exportUrl(ctx.query)),
+}]}
+importActions={[{
+  id: "upload", label: "Upload to server", pickFile: true, accept: ".csv,.xlsx",
+  onAct: async (ctx) => { await api.import(ctx.file!); ctx.refetch(); },
+}]}
+```
+
+An array replaces the menu, a function edits the shipped list, an empty array hides it. Set `table.importActions` / `table.exportActions` on `VuiProvider` to route every table through your API at once.
+
+`ctx` carries `rows` (what's on screen, filtered and sorted), `columns`, `title`, `file`, `applyRows`, `refetch`, and **`query`**. Use `query` for anything server-side: in `fetcher` mode the browser only holds the page in front of you, so "export all" means asking your API with the query, not writing out the rows in memory. That is the single most common mistake here.
+
 **Caching a server table: the cache paints, the server decides.** `cacheKey` keeps fetched pages in memory so returning to a tab is instant. A cached page is only ever painted immediately; the request still goes out every time and its answer replaces what was shown. That means the cache can never serve stale data as the final state, which it could before 1.60.
 
 Reach for `cache={false}` on a list where even a moment of last-known data is wrong (stock levels, payment status, anything someone acts on). Tune with `cache={{ ttlMs, max }}`: past `ttlMs` (default 60s) a page isn't painted from cache at all and the shimmer shows instead. The whole thing is off when keep-alive tabs are off, because holding a page in memory between visits is that same feature. When something outside the table changes the data (a websocket event, a bulk job, an edit on another screen), call `clearRecordViewCache(cacheKey)`.

@@ -33,6 +33,7 @@ import * as React from "react";
  */
 export type VuiConfig = {
   form?: FormConfig;
+  table?: TableConfig;
   behaviour?: BehaviourConfig;
   orgSwitcher?: OrgSwitcherConfig;
 };
@@ -87,6 +88,20 @@ export type BehaviourConfig = {
   /** Ask before discarding a form with unsaved edits. Default `false`, which is
    *  how Cancel has always behaved. */
   confirmDiscardWhenDirty?: boolean;
+};
+
+/** Datatable configuration. */
+export type TableConfig = {
+  /**
+   * Import and Export menu entries, app-wide. Same shape as `formActions`: an
+   * array replaces what the theme ships, a function receives the shipped list
+   * so you can add to it. Set these once to route every table's import and
+   * export through your API instead of the browser.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  importActions?: IoActionsConfig<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  exportActions?: IoActionsConfig<any>;
 };
 
 /** Form-wide configuration. Grows as later slices land (body composition, …). */
@@ -225,6 +240,66 @@ export type FormActionOutcome =
   /** Open a blank record, for entering several in a row ("Save & New").
    *  Needs `makeEmptyRow` on the table; falls back to "stay" without it. */
   | "new";
+
+/**
+ * What a table can hand an Import or Export action to work with.
+ *
+ * The rows are what's on screen: filtered, sorted, and in `fetcher` mode only
+ * the current page. When you need everything that matches, use `query` and ask
+ * your API, rather than exporting the page someone happens to be looking at.
+ */
+export type IoContext<T> = {
+  /** The rows currently displayed. */
+  rows: T[];
+  /** The fields, in display order, with their labels. */
+  columns: { key: string; label: string }[];
+  /** The list's title, for a filename. */
+  title: string;
+  /** The active query in server mode: page, sort, search, filters, trash. Ask
+   *  your API with this to export or count beyond the current page. */
+  query?: ServerQueryLike;
+  /** The file the person picked. Import only. */
+  file?: File;
+  /** Put rows into the table (import). In server mode, refetch instead. */
+  applyRows: (rows: T[]) => void;
+  /** Ask the table to reload from the server. */
+  refetch: () => void;
+};
+
+/** Loosely typed here so `config` doesn't have to import the table's types. */
+export type ServerQueryLike = {
+  page: number;
+  pageSize: number;
+  search: string;
+  trash: boolean;
+  [key: string]: unknown;
+};
+
+/**
+ * One entry in the Import or Export menu.
+ *
+ * The theme ships working ones (CSV, Excel, JSON, PDF) built from this same
+ * type, so replacing or extending them is the same API, not a different one.
+ * Point `onAct` at your API and the menu becomes a placeholder you filled in.
+ */
+export type IoAction<T> = {
+  id: string;
+  label: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  /** Do the work. Async is fine; the menu closes when it's called. */
+  onAct: (ctx: IoContext<T>) => void | Promise<void>;
+  /** Import only: open the file picker first and hand the file to `onAct`
+   *  through `ctx.file`. Set `accept` to filter what can be chosen. */
+  pickFile?: boolean;
+  accept?: string;
+  /** Hide it for some states, e.g. only offer "Export all" to an admin. */
+  visible?: (ctx: IoContext<T>) => boolean;
+};
+
+/** A list of actions, or a change to the ones the theme ships. */
+export type IoActionsConfig<T> =
+  | IoAction<T>[]
+  | ((defaults: IoAction<T>[]) => IoAction<T>[]);
 
 /** One footer button. */
 export type FormAction<T> = {
