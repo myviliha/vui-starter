@@ -106,6 +106,23 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.57.1 — 2026-08-07
+
+### Fixed
+
+- **The Add form no longer closes itself on a server-backed table.** Clicking
+  "+ {singular}" on a `fetcher` table opened the slide-over and it shut again
+  immediately. Opening a blank form was going through the *mutation* path: it
+  invalidated the cache and refetched, the server answered with a page that has
+  no unsaved draft in it, the row the form was editing vanished, and the panel
+  unmounted. Creating a draft and throwing one away are not data changes, so
+  they now update the local rows only. Reproduced on the demo Data Table page.
+- **A background refetch can't close an open Add form either.** The draft is
+  held outside the row list, so a poll, a tab refocus or a mutation elsewhere
+  landing mid-edit leaves the form alone instead of taking the record out from
+  under it. Saving puts the record back in the list even if a refetch had
+  already dropped it, so nothing typed is lost.
+
 ## 1.57.0 — 2026-08-07
 
 ### Added

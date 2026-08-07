@@ -1156,6 +1156,36 @@ export function RecordView<T extends { id: RowId }>({
       : controlled
         ? data
         : internalRows;
+  /**
+   * Update the rows we render without treating it as a data change: no
+   * `onDataChange`, no cache invalidation, no refetch. Opening a blank Add form
+   * and throwing that draft away are not mutations, and routing them through the
+   * mutation path made a server-backed table refetch immediately, which returned
+   * a page without the draft in it and closed the form the user had just opened.
+   */
+  const setRowsLocal = React.useCallback(
+    (updater: React.SetStateAction<T[]>) => {
+      if (fetching) {
+        setFetchedData((prev) =>
+          typeof updater === "function"
+            ? (updater as (p: T[]) => T[])(prev)
+            : updater,
+        );
+        return;
+      }
+      if (controlled) {
+        const next =
+          typeof updater === "function"
+            ? (updater as (prev: T[]) => T[])(data as T[])
+            : updater;
+        onDataChange?.(next); // the host holds the rows; it must hold the draft
+        return;
+      }
+      setInternalRows(updater);
+    },
+    [fetching, controlled, data, onDataChange],
+  );
+
   const setRows = React.useCallback(
     (updater: React.SetStateAction<T[]>) => {
       const apply = (prev: T[]) =>
@@ -1253,6 +1283,9 @@ export function RecordView<T extends { id: RowId }>({
   const [activeId, setActiveId] = React.useState<RowId | null>(null);
   // A row created via "add" but not yet saved — Cancel/close removes it.
   const [newRowId, setNewRowId] = React.useState<RowId | null>(null);
+  /** The unsaved record an open Add form is editing, kept outside `rows` so a
+   *  refetch can't take it away mid-edit. */
+  const [draftRow, setDraftRow] = React.useState<T | null>(null);
   // Row pending delete confirmation.
   const [confirmDeleteId, setConfirmDeleteId] = React.useState<RowId | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
@@ -1418,7 +1451,13 @@ export function RecordView<T extends { id: RowId }>({
     return out;
   }, [isManual, rows, filter, sort, fields, getPrimary]);
 
-  const activeRow = rows.find((r) => r.id === activeId) ?? null;
+  // A refetch (a mutation elsewhere, a tab refocus, a poll) replaces `rows`
+  // with what the server returned, which never contains an unsaved draft. Fall
+  // back to the draft we're holding so an open Add form survives it.
+  const activeRow =
+    rows.find((r) => r.id === activeId) ??
+    (activeId != null && activeId === newRowId ? draftRow : null) ??
+    null;
   const deleteTarget =
     confirmDeleteId != null
       ? (rows.find((r) => r.id === confirmDeleteId) ?? null)
@@ -1611,7 +1650,8 @@ export function RecordView<T extends { id: RowId }>({
     const row = { ...makeEmptyRow(), id: nextId.current++ };
     onFormOpen?.("create", row);
     // Prepend so the new record is immediately visible at the top…
-    setRows((prev) => [row, ...prev]);
+    setRowsLocal((prev) => [row, ...prev]);
+    setDraftRow(row);
     setPage(1);
     setPanelReadOnly(false);
     setActiveId(row.id);
@@ -1641,7 +1681,14 @@ export function RecordView<T extends { id: RowId }>({
    *  action that saved (Save closes, "Save & New" opens a blank row); without
    *  one it follows `behaviour.closeOnSave`. */
   function saveForm(updated: T, then?: FormActionOutcome) {
-    setRows((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+    setDraftRow(null);
+    setRows((prev) =>
+      // A refetch while the form was open can have dropped the draft; put the
+      // saved record back rather than losing what was just typed.
+      prev.some((r) => r.id === updated.id)
+        ? prev.map((r) => (r.id === updated.id ? updated : r))
+        : [updated, ...prev],
+    );
     // Flash the saved row so the change is unmistakable.
     const flashMs = behaviour.flashMs ?? 1600;
     if (flashMs > 0) {
@@ -1660,8 +1707,9 @@ export function RecordView<T extends { id: RowId }>({
   /** Discard the form; drop the row entirely if it was never saved. */
   function cancelForm() {
     if (activeId != null && activeId === newRowId) {
-      setRows((prev) => prev.filter((r) => r.id !== activeId));
+      setRowsLocal((prev) => prev.filter((r) => r.id !== activeId));
     }
+    setDraftRow(null);
     setNewRowId(null);
     setActiveId(null);
   }

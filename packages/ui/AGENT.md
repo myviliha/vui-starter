@@ -576,6 +576,8 @@ Slots are a prop on the form, not entries in `fields`, and that is deliberate: `
 
 Nothing is user-editable unless it is listed, which is the point: "the user prefers no row highlight" is a feature, "the user can move the Save button" is chaos. Build the settings UI from `useVuiPreferences()`, which gives you `preferences`, `userConfigurable`, `setPreference(section, key, value)` and `reset()`. A key that isn't listed is ignored on write, so a stale stored value can't leak back in. Reference: the backoffice Settings page, *Data tables* section.
 
+**Opening a form is not a data change.** RecordView keeps the unsaved draft out of the row list, so a refetch (a poll, a tab refocus, a mutation elsewhere) can't take the record out from under an open Add form, and creating or discarding a draft never invalidates your cache or triggers a reload. Only a save does. Worth knowing if you build something similar on top: route drafts through local state and mutations through the persist path.
+
 **Saving against a server: return a promise from `onDataChange`.** It fires on
 every add, edit, delete and restore, in `manual` and `fetcher` mode as well as
 controlled mode, and it is where you write. Return the promise for that write
