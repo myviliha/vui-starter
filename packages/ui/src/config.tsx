@@ -114,17 +114,6 @@ export type FormConfig = {
    */
   fieldColumns?: FieldColumns;
   /**
-   * How a field's label meets its control. Default `"inline"`.
-   *
-   * - `"inline"` puts them on one row, `Label * [control]`, with the labels in
-   *   a column that widens to the longest one so every control lines up.
-   * - `"stacked"` puts the label on its own row above the control, which is
-   *   what long values, textareas and address blocks want.
-   *
-   * A field can override it, so one textarea can stack inside an inline form.
-   */
-  fieldLayout?: FieldLayout;
-  /**
    * How many columns the **sections** flow across: 1, 2 or 3. Default 1.
    *
    * The form is a grid of section cards; each card is itself a grid of fields
@@ -154,15 +143,11 @@ export type FormSection = {
   span?: 1 | 2 | 3 | "full";
   /** Field columns inside this section, overriding the form's. */
   fieldColumns?: FieldColumns;
-  /** Field layout inside this section, overriding the form's. */
-  fieldLayout?: FieldLayout;
 };
 
 /** Columns the form's sections flow across. */
 export type SectionColumns = 1 | 2 | 3;
 
-/** Label beside the control, or above it. */
-export type FieldLayout = "inline" | "stacked";
 
 /** What the footer buttons can be: a list, or a change to the shipped list. */
 export type FormActionsConfig<T> =

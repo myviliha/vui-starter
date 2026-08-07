@@ -119,7 +119,7 @@ No component was renamed, no export was removed, and no prop was made required.
   └─ Section grid      sectionColumns: 1 | 2 | 3
      └─ Section card   span: 1 | 2 | 3 | "full"
         └─ Field grid  fieldColumns: 1 | 2 | 3
-           └─ Field    fieldLayout: "inline" | "stacked"
+           └─ Field    [i] Label * [control]     always one row
   ```
 
 - **`sectionColumns` + `sections`.** `sectionColumns` flows the section cards
@@ -134,39 +134,30 @@ No component was renamed, no export was removed, and no prop was made required.
   (page forms, sections in two columns) still behaves as it did, and
   `sectionColumns` supersedes it.
 
-- **Everything above is also config**, as `form.sectionColumns`,
-  `form.fieldColumns` and `form.fieldLayout` in `VuiProvider`, so an app sets
-  its form style once and a screen overrides what it needs.
+- **Both settings are also config**, as `form.sectionColumns` and
+  `form.fieldColumns` in `VuiProvider`, so an app sets its form style once and a
+  screen overrides what it needs.
 
 - **A docs page to build against: `/docs/form-layout`.** The model, each
   setting, a worked Add Order form, and how to write field help. Linked from the
   Customization section of the docs nav.
 
-- **Field layout: pick the columns, then pick the rows.** Two settings decide how
-  the fields inside a section are arranged, and everything auto-aligns.
+- **`fieldColumns`**, how many fields fit across a card: 1 (the default), 2 or
+  3. A label always sits beside its control, never above it, so the eye runs
+  along one line from the name to the box and a form never mixes two rhythms.
+  You don't align anything: labels get their own auto-width track per column, so
+  it widens to the longest label and every control lines up down the form
+  however long the words are. Multi-column grids collapse to one column on small
+  screens.
 
-  `fieldColumns={1 | 2 | 3}` is how many fields fit across. `fieldLayout` is how
-  each label meets its control: `"inline"` puts them on one row
-  (`Label * [control]`), `"stacked"` puts the label on its own row above it.
-  Both are also `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`, so an
-  app sets its house style once and a screen overrides it when it needs to.
-
-  Alignment is handled rather than left to you. Inline forms give the labels
-  their own `max-content` track per column, so the track widens to the longest
-  label and every control lines up down the form however long the words are.
-  Multi-column forms collapse to one column on small screens, and three columns
-  step down to two before that, so a dense form stays usable on a laptop.
-
-- **`layout` on a field** overrides the form for that one field, which is what a
-  long textarea wants inside an otherwise inline form. `fullWidth` still takes
-  the whole row and now stacks automatically, because a label beside a
-  full-width control leaves the control nowhere to go.
+- **`fullWidth` on a field** gives it every column of its card, with the label
+  still beside it and the control filling the rest of the row. For a long
+  textarea or an address line.
 
 - **Field help is a tooltip on the label.** A field with a `description` now
   shows an info icon before its label, wherever it renders. That text used to
   reach only the Info panel on full-page forms, so anyone filling in a
-  slide-over never saw it. The panel is unchanged; this is the same text in the
-  place people actually look.
+  slide-over never saw it. The panel is unchanged.
 
 ### Changed
 

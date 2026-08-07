@@ -45,7 +45,6 @@ import {
   useResolved,
   type BehaviourConfig,
   type FieldColumns,
-  type FieldLayout,
   type FormSection,
   type SectionColumns,
   type FormAction,
@@ -57,7 +56,6 @@ import {
 export type {
   BehaviourConfig,
   FieldColumns,
-  FieldLayout,
   FormSection,
   SectionColumns,
   FormActionOutcome,
@@ -429,12 +427,9 @@ export interface RecordField<T> {
    *  for single-value read displays, where the values a table paints in one go
    *  are collected and asked for together — 50 rows become one request. */
   resolveOptions?: (values: string[]) => Promise<AsyncOption[]>;
-  /** Lay this one field out differently from the rest of the form: `"stacked"`
-   *  puts its label above the control even in an inline form, which is what a
-   *  long textarea usually wants. */
-  layout?: FieldLayout;
-  /** Give this field the whole width, across every column. Pairs with
-   *  `layout: "stacked"` for an address block or a long note. */
+  /** Give this field the whole width, across every column, with its label still
+   *  beside the control. For a long textarea, an address line, or a
+   *  `renderInput` that needs the room. */
   fullWidth?: boolean;
   /** The label to show in read mode, straight from the row. Set this when your
    *  payload already carries the label next to the id (`{ countryId, country }`)
@@ -586,40 +581,13 @@ export function isAsyncLabeled<T>(f: RecordField<T>): boolean {
 }
 
 /**
- * The form grids, written out rather than built from a template string so
- * Tailwind sees every class it has to generate.
- *
- * Inline needs two tracks per column: a `max-content` label track that widens to
- * the longest label, and the control track. `grid-cols-subgrid` on each field
- * then aligns every control down the form. Stacked needs one track per column,
- * because the label sits above its control inside the cell.
- */
-const GRID = {
-  inline: {
-    1: "grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3",
-    2: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(10rem,1fr)_max-content_minmax(10rem,1fr)]",
-    3: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)] xl:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)]",
-  },
-  stacked: {
-    1: "grid-cols-1",
-    2: "grid-cols-1 gap-x-6 md:grid-cols-2",
-    3: "grid-cols-1 gap-x-6 md:grid-cols-2 xl:grid-cols-3",
-  },
-} as const;
-
-/**
  * How many columns of the *section* grid a section takes. A span wider than the
  * grid is clamped by the grid itself, so `span: 3` in a two-column form simply
  * fills the row.
  */
 const SECTION_SPAN = {
   1: { 1: "", 2: "", 3: "", full: "" },
-  2: {
-    1: "",
-    2: "md:col-span-2",
-    3: "md:col-span-2",
-    full: "md:col-span-2",
-  },
+  2: { 1: "", 2: "md:col-span-2", 3: "md:col-span-2", full: "md:col-span-2" },
   3: {
     1: "",
     2: "md:col-span-2",
@@ -636,30 +604,35 @@ const SECTION_GRID = {
   3: "grid grid-cols-1 items-start gap-4 md:grid-cols-2 xl:grid-cols-3",
 } as const;
 
-/** Spanning the whole row: two tracks per column when inline, one when stacked. */
-const SPAN_ALL = {
-  inline: {
-    1: "col-span-2",
-    2: "md:col-span-4",
-    3: "md:col-span-4 xl:col-span-6",
-  },
-  stacked: {
-    1: "col-span-1",
-    2: "md:col-span-2",
-    3: "md:col-span-2 xl:col-span-3",
-  },
+/**
+ * The field grid, written out rather than built from a template string so
+ * Tailwind sees every class it has to generate.
+ *
+ * A label and its control always share a row, so each column needs two tracks:
+ * a `max-content` label track that widens to the longest label, and the control
+ * track. `grid-cols-subgrid` on each field then aligns every control down the
+ * form however long the words are.
+ */
+const GRID = {
+  1: "grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3",
+  2: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(10rem,1fr)_max-content_minmax(10rem,1fr)]",
+  3: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)] xl:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)]",
 } as const;
 
-/** A field follows the form unless it asked for its own layout. A field given
- *  the full width stacks regardless: a label beside a full-width control would
- *  leave the control nowhere to go. Exported for testing. */
-export function fieldStacked<T>(
-  field: RecordField<T>,
-  formStacked: boolean,
-): boolean {
-  if (field.fullWidth) return true;
-  return (field.layout ?? (formStacked ? "stacked" : "inline")) === "stacked";
-}
+/** A field taking the whole row: every track in the grid. */
+const SPAN_ALL = {
+  1: "col-span-2",
+  2: "md:col-span-4",
+  3: "md:col-span-4 xl:col-span-6",
+} as const;
+
+/** …and its control fills what's left after the label track, so a full-width
+ *  field still reads `Label * [control]` instead of dropping the label above. */
+const CONTROL_SPAN = {
+  1: "",
+  2: "md:col-span-3",
+  3: "md:col-span-3 xl:col-span-5",
+} as const;
 
 /**
  * Place a form's slots within one section, keyed by the field each follows.
@@ -1035,10 +1008,6 @@ interface RecordViewProps<T extends { id: RowId }> {
    *  `VuiProvider`'s `form.fieldColumns`, then 1. Separate from `formColumns`,
    *  which flows whole sections on a full-page form. */
   fieldColumns?: FieldColumns;
-  /** Whether each field is `Label * [control]` on one row (`"inline"`) or the
-   *  label above its control (`"stacked"`). Falls back to `form.fieldLayout`,
-   *  then `"inline"`. A field can override it with its own `layout`. */
-  fieldLayout?: FieldLayout;
   /** Columns the add/edit form's **sections** flow across: 1, 2 or 3. The form
    *  is a grid of section cards, each itself a grid of fields. Falls back to
    *  `form.sectionColumns`, then 1. */
@@ -1167,7 +1136,6 @@ export function RecordView<T extends { id: RowId }>({
   showExport = true,
   showAdd = true,
   fieldColumns,
-  fieldLayout,
   sectionColumns,
   sections,
   behaviour: behaviourProp,
@@ -2157,7 +2125,6 @@ export function RecordView<T extends { id: RowId }>({
         formSlots={formSlots}
         behaviour={behaviour}
         fieldColumns={fieldColumns}
-        fieldLayout={fieldLayout}
         sectionColumns={sectionColumns}
         sections={sections}
       />
@@ -2979,7 +2946,6 @@ export function RecordView<T extends { id: RowId }>({
           formSlots={formSlots}
           behaviour={behaviour}
           fieldColumns={fieldColumns}
-          fieldLayout={fieldLayout}
           sectionColumns={sectionColumns}
           sections={sections}
         />
@@ -3189,9 +3155,6 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Columns the fields flow across (1, 2 or 3). Falls back to the app's
    *  `form.fieldColumns`, then 1. */
   fieldColumns?: FieldColumns;
-  /** Label beside the control (`"inline"`) or above it (`"stacked"`). Falls
-   *  back to the app's `form.fieldLayout`, then `"inline"`. */
-  fieldLayout?: FieldLayout;
   /** Columns the sections flow across (1, 2 or 3). Falls back to the app's
    *  `form.sectionColumns`, then 1. */
   sectionColumns?: SectionColumns;
@@ -3227,7 +3190,6 @@ function RecordDetailPanel<T extends { id: RowId }>({
   formSlots,
   behaviour: behaviourProp,
   fieldColumns,
-  fieldLayout,
   sectionColumns,
   sections,
   crumbs,
@@ -3236,8 +3198,6 @@ function RecordDetailPanel<T extends { id: RowId }>({
   // Two settings decide the whole form: how many columns the fields flow
   // across, and whether each label sits beside its control or above it.
   const formCols = fieldColumns ?? formConfig.fieldColumns ?? 1;
-  const formStacked =
-    (fieldLayout ?? formConfig.fieldLayout ?? "inline") === "stacked";
   const sectionCols = sectionColumns ?? formConfig.sectionColumns ?? 1;
   const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
@@ -3375,17 +3335,13 @@ function RecordDetailPanel<T extends { id: RowId }>({
   };
 
   // Grouped field sections — shared by the slide-over and full-page layouts.
-  const slotRow = (
-    slot: FormSlot<T>,
-    cols: FieldColumns,
-    stacked: boolean,
-  ) => (
+  const slotRow = (slot: FormSlot<T>, cols: FieldColumns) => (
     <div
       key={`slot:${slot.id}`}
       className={cn(
         "px-3 py-3 leading-relaxed",
         cols === 1 && "border-t border-border first:border-t-0",
-        SPAN_ALL[stacked ? "stacked" : "inline"][cols],
+        SPAN_ALL[cols],
       )}
     >
       {slot.render(actionCtx)}
@@ -3399,9 +3355,6 @@ function RecordDetailPanel<T extends { id: RowId }>({
     const slots = groupSlots(fields, formSlots, group);
     // A section can set its own field layout; otherwise it follows the form.
     const cols = section.fieldColumns ?? formCols;
-    const stacked = section.fieldLayout
-      ? section.fieldLayout === "stacked"
-      : formStacked;
     return (
       <section
         key={group}
@@ -3418,11 +3371,12 @@ function RecordDetailPanel<T extends { id: RowId }>({
             {section.description}
           </p>
         )}
-        {/* The whole layout comes from two settings. Columns: how many fields
-            fit across. Inline: each field is a label │ control pair whose label
-            column widens to the longest label, so controls line up down the
-            form. Stacked: one column per field, label above control. */}
-        <dl className={cn("grid", GRID[stacked ? "stacked" : "inline"][cols])}>
+        {/* `fieldColumns` is how many fields fit across. A label and its
+            control always share a row: never stacked, so the eye runs along one
+            line from the name to the box. Each column is a label │ control
+            pair, and the label track widens to the longest label so every
+            control lines up down the form. */}
+        <dl className={cn("grid", GRID[cols])}>
           {groupFields.flatMap((f) => [
             // Label, icon, required mark and control share one baseline —
             // vertically centered. ponytail: a wrapped textarea grows down and
@@ -3430,21 +3384,14 @@ function RecordDetailPanel<T extends { id: RowId }>({
             <div
               key={f.key}
               className={cn(
-                "px-3 py-3 leading-relaxed",
+                "grid grid-cols-subgrid items-center px-3 py-3 leading-relaxed",
                 // One column keeps the ruled rows the panel has always had;
                 // more than one drops them, because part-width rules read as
                 // broken lines rather than separators.
                 cols === 1 && "border-t border-border first:border-t-0",
-                fieldStacked(f, stacked)
-                  ? "flex flex-col gap-1.5"
-                  : "grid grid-cols-subgrid items-center",
-                // An inline field owns a label │ control pair; a stacked one a
-                // single cell. Full width takes the row whatever the setting.
-                f.fullWidth
-                  ? SPAN_ALL[stacked ? "stacked" : "inline"][cols]
-                  : fieldStacked(f, stacked)
-                    ? undefined
-                    : "col-span-2",
+                // A field owns a label │ control pair, or every track when it
+                // takes the whole row.
+                f.fullWidth ? SPAN_ALL[cols] : "col-span-2",
               )}
             >
               <dt className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground">
@@ -3465,7 +3412,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
                 {f.label}
                 {f.required && <RequiredMark />}
               </dt>
-              <dd className="min-w-0">
+              <dd className={cn("min-w-0", f.fullWidth && CONTROL_SPAN[cols])}>
                 {/* `render` is the read-only view; the edit control (a custom
                     `renderInput` or a built-in `input:"checkbox"`) wins while
                     editing, so a field can show a badge/preview in view and
@@ -3653,12 +3600,10 @@ function RecordDetailPanel<T extends { id: RowId }>({
               </dd>
             </div>,
             // Anything the host put after this field.
-            ...(slots.get(f.key) ?? []).map((slot) =>
-              slotRow(slot, cols, stacked),
-            ),
+            ...(slots.get(f.key) ?? []).map((slot) => slotRow(slot, cols)),
           ])}
           {/* Slots with no `after` close out the section. */}
-          {(slots.get("") ?? []).map((slot) => slotRow(slot, cols, stacked))}
+          {(slots.get("") ?? []).map((slot) => slotRow(slot, cols))}
         </dl>
       </section>
     );

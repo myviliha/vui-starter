@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/form-layout/" },
   title: "Form Layout",
   description:
-    "Design a Vui Starter form by declaring it: how many columns the sections flow across, how many columns the fields flow across inside each section, and whether a label sits beside its control or above it. Everything aligns automatically.",
+    "Design a Vui Starter form by declaring it: how many columns the sections flow across and how many columns the fields flow across inside each section. Labels always sit beside their controls, and everything aligns automatically.",
 };
 
 export default function FormLayoutPage() {
@@ -24,7 +24,7 @@ export default function FormLayoutPage() {
       <PageTitle
         eyebrow="Customization"
         title="Form Layout"
-        lead="You design a form by declaring it, not by writing CSS. Say how many columns the sections take, how many columns the fields take inside each section, and whether labels sit beside their controls or above them. The alignment is handled for you."
+        lead="You design a form by declaring it, not by writing CSS. Say how many columns the sections take and how many columns the fields take inside each section. A label always sits beside its control, and the alignment is handled for you."
       />
 
       <H2>How is a form put together?</H2>
@@ -36,11 +36,10 @@ export default function FormLayoutPage() {
 └─ Section grid        sectionColumns: 1 | 2 | 3      how many section cards fit across
    └─ Section card     span: 1 | 2 | 3 | "full"       how many columns this card takes
       └─ Field grid    fieldColumns: 1 | 2 | 3        how many fields fit across
-         └─ Field      fieldLayout: "inline" | "stacked"
+         └─ Field      [i] Label *   [ control ]      always on one row
 
-inline     [i] Country *   [ United Kingdom  ▾ ]
-stacked    [i] Country *
-               [ United Kingdom  ▾ ]`}</CodeBlock>
+A label and its control are never stacked. The eye runs along one line
+from the name to the box, and every control lines up down the form.`}</CodeBlock>
       <P>
         A field belongs to a section through its <code>group</code>. That is the
         only wiring: put the same <code>group</code> on some fields and they
@@ -49,14 +48,14 @@ stacked    [i] Country *
 
       <H2>How do I lay out an Add Order form?</H2>
       <P>
-        Declare the sections, then the field layout. This one puts Customer and
-        Delivery side by side, gives Items the full width because its fields are
-        long, and runs two fields per row inside each card.
+        Declare the sections, then how many fields go across each one. This puts
+        Customer and Delivery side by side, gives Items the full width because
+        its fields are long, and runs two fields per row inside each card.
       </P>
       <CodeBlock title="order-form.tsx">{`const sections = [
   { group: "Customer" },
   { group: "Delivery" },
-  { group: "Items", span: "full", fieldColumns: 1, fieldLayout: "stacked" },
+  { group: "Items", span: "full", fieldColumns: 1 },
 ];
 
 const fields: RecordField<Order>[] = [
@@ -75,7 +74,6 @@ const fields: RecordField<Order>[] = [
   singular="Order"
   sectionColumns={2}      // Customer and Delivery side by side
   fieldColumns={2}        // two fields per row inside a card
-  fieldLayout="inline"    // Label * [control] on one row
   sections={sections}
   fields={fields}
   /* … */
@@ -102,9 +100,9 @@ const fields: RecordField<Order>[] = [
           card of long fields wants.
         </li>
         <li>
-          <code>fieldColumns</code> / <code>fieldLayout</code>: its own field
-          layout, overriding the form&apos;s. A card of addresses can stack
-          while the rest of the form stays inline.
+          <code>fieldColumns</code>: its own field count, overriding the
+          form&apos;s. A card of long fields can run one per row while the rest
+          of the form runs two.
         </li>
         <li>
           <code>description</code>: a line under the title saying what the
@@ -121,23 +119,20 @@ const fields: RecordField<Order>[] = [
         How many fields fit across inside a card: <code>1</code> (the default),{" "}
         <code>2</code> or <code>3</code>.
       </P>
-      <H3>fieldLayout</H3>
+      <H3>Full-width fields</H3>
       <P>
-        <code>&quot;inline&quot;</code> (the default) puts the label beside the
-        control; <code>&quot;stacked&quot;</code> puts it above.{" "}
-        <code>layout</code> on a single field overrides the form, which is
-        usually what a long textarea wants, and <code>fullWidth</code> gives a
-        field the whole row and stacks it automatically, because a label beside
-        a control that fills the row leaves the control nowhere to go.
+        <code>fullWidth</code> on a field gives it every column of the card. Its
+        label still sits beside it and the control fills the rest of the row, so
+        a long textarea gets the room without breaking the line the eye follows.
       </P>
 
       <Note title="You never align anything yourself">
-        An inline form gives the labels their own auto-width track per column,
-        so the track widens to the longest label and every control lines up down
-        the form however long the words are. Multi-column grids collapse on
-        small screens. Single-column forms keep the ruled row separators;
-        multi-column forms drop them, because a rule that spans one column reads
-        as a broken line rather than a separator.
+        Labels get their own auto-width track per column, so the track widens to
+        the longest label and every control lines up down the form however long
+        the words are. Multi-column grids collapse to one column on small
+        screens. Single-column forms keep the ruled row separators; multi-column
+        forms drop them, because a rule that spans one column reads as a broken
+        line rather than a separator.
       </Note>
 
       <H2>How do I explain a field to whoever fills it in?</H2>
@@ -160,7 +155,7 @@ const fields: RecordField<Order>[] = [
         in one place and a screen can still differ where it needs to:
       </P>
       <CodeBlock title="app/(app)/layout.tsx">{`<VuiProvider
-  config={{ form: { sectionColumns: 2, fieldColumns: 2, fieldLayout: "inline" } }}
+  config={{ form: { sectionColumns: 2, fieldColumns: 2 } }}
 >
   {children}
 </VuiProvider>`}</CodeBlock>

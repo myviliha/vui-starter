@@ -558,7 +558,7 @@ Form
 └─ Section grid      sectionColumns: 1 | 2 | 3
    └─ Section card   span: 1 | 2 | 3 | "full"
       └─ Field grid  fieldColumns: 1 | 2 | 3
-         └─ Field    fieldLayout: "inline" | "stacked"   →  [i] Label * [control]
+         └─ Field    [i] Label * [control]   (always one row, never stacked)
 ```
 
 Sections come from each field's `group`. Declare `sections` to fix their order, let one span the row, or give one its own field layout:
@@ -570,26 +570,16 @@ Sections come from each field's `group`. Declare `sections` to fix their order, 
   sections={[
     { group: "Customer" },
     { group: "Delivery" },
-    { group: "Items", span: "full", fieldColumns: 1, fieldLayout: "stacked" },
+    { group: "Items", span: "full", fieldColumns: 1 },
   ]}
   … />
 ```
 
-A declared section with no fields is skipped; a group you didn't declare is appended rather than dropped. All three settings are also `form.sectionColumns` / `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`, so an app has a house style and a screen can still differ.
+A declared section with no fields is skipped; a group you didn't declare is appended rather than dropped. Both settings are also `form.sectionColumns` / `form.fieldColumns` in `VuiProvider`, so an app has a house style and a screen can still differ.
 
-**Field layout: pick the columns, then pick the rows.** Two settings arrange the fields inside a card and everything aligns from them.
+**A label always sits beside its control.** There is no stacked option: the eye should run along one line from the name to the box, and a form where some rows stack and others don't reads as broken. `fieldColumns` is the only field-level knob. `fullWidth` gives a field every column of its card with the label still beside it and the control filling the rest, which is what a long textarea wants.
 
-```tsx
-<RecordView fieldColumns={2} fieldLayout="inline" … />
-```
-
-`fieldColumns` (1, 2 or 3) is how many fields fit across. `fieldLayout` is how each label meets its control: `"inline"` is `Label * [control]` on one row, `"stacked"` puts the label above it. Set them per screen as above, or once for the app as `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`. Defaults are one column, inline, which is what forms looked like before.
-
-You don't align anything yourself. Inline forms give labels their own `max-content` track per column, so it widens to the longest label and every control lines up down the form. Two and three column forms collapse to one on small screens (three steps through two first). A single field can differ with `layout: "stacked"`, which is usually what a long textarea wants, and `fullWidth` takes the whole row and stacks automatically.
-
-Note `fieldColumns` is about **fields**; `formColumns` on a full-page form is about whole **sections** sitting side by side. They compose, and a two-column page of two-column sections is four fields wide, which is almost always too many.
-
-**Field help shows as a tooltip on the label.** Give a field a `description` and an info icon appears before its label everywhere it renders, so someone filling in a slide-over gets the same guidance a full-page form puts in its Info panel. Write it as an instruction ("The name on the invoice, not the trading name"), because that is what someone reads while their cursor is in the box.
+You don't align anything yourself: labels get their own auto-width track per column, so it widens to the longest label and every control lines up down the form. Multi-column grids collapse to one column on small screens. Single-column forms keep their ruled row separators; multi-column forms drop them, because a rule spanning one column reads as a broken line.
 
 **Put your own content between the fields.** `formSlots` renders a callout, a preview or a pair of custom controls as a full-width row inside a section, so it inherits the card, the separators and the padding instead of floating beside them:
 

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   emptyStateLabel,
-  fieldStacked,
   groupSlots,
   formatPhone,
   isAsyncLabeled,
@@ -256,33 +255,6 @@ describe("groupSlots", () => {
   it("keeps several slots on one field in order", () => {
     const list = [slot({ id: "a", after: "name" }), slot({ id: "b", after: "name" })];
     expect(ids(groupSlots(fields, list, "General"))).toEqual({ name: ["a", "b"] });
-  });
-});
-
-describe("fieldStacked", () => {
-  type Row = { id: number; name: string };
-  const F = (over: Partial<RecordField<Row>> = {}): RecordField<Row> => ({
-    key: "name",
-    label: "Name",
-    ...over,
-  });
-
-  it("follows the form's choice when the field says nothing", () => {
-    expect(fieldStacked(F(), false)).toBe(false);
-    expect(fieldStacked(F(), true)).toBe(true);
-  });
-
-  it("lets one field differ from the rest of the form", () => {
-    expect(fieldStacked(F({ layout: "stacked" }), false)).toBe(true);
-    expect(fieldStacked(F({ layout: "inline" }), true)).toBe(false);
-  });
-
-  it("stacks a full-width field whatever anyone asked for", () => {
-    // A label beside a control that fills the row leaves it nowhere to go.
-    expect(fieldStacked(F({ fullWidth: true }), false)).toBe(true);
-    expect(fieldStacked(F({ fullWidth: true, layout: "inline" }), false)).toBe(
-      true,
-    );
   });
 });
 
