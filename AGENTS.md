@@ -220,13 +220,23 @@ Prefer the smallest change that solves the problem. Reach for the standard libra
 
 - Author is **Suman Bonakurthi**. Do **not** add a Claude/AI co-author trailer or attribution.
 - Small, focused commits with imperative messages (`feat(ui): …`, `fix(backoffice): …`).
-- Branch off `main`; open a PR using `.github/PULL_REQUEST_TEMPLATE.md`.
-- **One task, one branch to merge (mandatory).** Never leave the author with a stack of branches that have to be merged in a particular order: that is how a docs branch lands describing code that hasn't. When follow-up work belongs to the same task, or a later change edits files an earlier branch touched, **put it on the same branch** rather than opening another. If a second branch already exists and both are still unmerged, rebase it onto the first and continue there, so there is exactly one branch to merge when the task is done.
+- **Every task runs the same loop. Don't skip a step.**
 
-  Only start a genuinely separate branch for work that stands on its own and could merge in any order. When in doubt, keep it on one branch: the author merges once, and the tree is never half-consistent.
+  **Before starting**
+  1. `git checkout main && git pull` (rebase if the tree diverged).
+  2. Run the verify set on the untouched tree, so a pre-existing failure is never mistaken for yours: `check-types`, both lints, tests, `build`.
+  3. Branch: one branch per feature, bug or issue.
 
-  If order ever does matter, say so explicitly in the final message, naming the sequence.
-- **One feature, one fresh branch, and clean up the old ones first (mandatory).** Before starting new work, delete the local branches already merged into `main`, then branch off an up-to-date `main`. The goal is a tidy tree: just `main` plus the branch you are working on. Only ever delete **merged** branches: list them with `git branch --merged main` (excluding `main` and the current branch) and delete with `git branch -d`. **Never** delete a branch with unmerged commits, and never touch remote branches or history. This is local cleanup only.
+  **Before committing**
+  4. `git pull --rebase origin main` again, to pick up whatever landed while you worked.
+  5. Run the full verify set again. It has to be green: your local run is the gate, because CI on `main` only reports after the code is already in.
+  6. Update the CHANGELOG and every doc the change touches, and bump `packages/ui/package.json` if it ships in the package.
+
+  **Finishing**
+  7. Merge into `main`, push, then delete the branch (local and remote).
+  8. One task, one branch. Follow-up work for the same task goes on the same branch. If a second branch already exists and both are unmerged, rebase it onto the first and continue there, so `main` never gets a half-consistent merge.
+
+- **Pushing to `main` is allowed** (granted 2026-08-07, replacing the PR-only rule). It is allowed because step 5 is done, not instead of it. Never push a tree you haven't just verified, and never leave `main` red: if something lands broken, fix it forward immediately rather than waiting to be asked.
 
 ## Performance defaults
 
