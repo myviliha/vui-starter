@@ -405,3 +405,39 @@
 .vui-overlay-out {
   animation: vui-overlay-out 0.2s ease-out both;
 }
+
+/* Scroll regions: always show the bars.
+ *
+ * macOS hides overlay scrollbars until you scroll, which means a table wider
+ * than its container looks like it just ends, and a long form looks complete at
+ * the fold. Defining `::-webkit-scrollbar` opts that element out of overlay
+ * scrollbars, so the bar is there before anyone touches the trackpad: the point
+ * is to say "there is more this way", not to decorate.
+ *
+ * `scrollbar-gutter: stable` reserves the space, so content doesn't shift by the
+ * bar's width when it appears. Applied by RecordView to its table and to the
+ * form body; use it on any scroll region you add. */
+.vui-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: color-mix(in oklab, var(--muted-foreground) 35%, transparent)
+    transparent;
+}
+.vui-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.vui-scroll::-webkit-scrollbar-track,
+.vui-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+.vui-scroll::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklab, var(--muted-foreground) 35%, transparent);
+  border-radius: 9999px;
+  /* Padding-box + a transparent border insets the thumb inside the track. */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.vui-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklab, var(--muted-foreground) 55%, transparent);
+}

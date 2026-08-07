@@ -106,6 +106,26 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.61.0 — 2026-08-07
+
+### Changed
+
+- **Scrollbars are visible before you scroll.** macOS hides overlay scrollbars
+  until something moves, so a table wider than its container looked like it
+  simply ended at the last column, and a long form looked complete at the fold.
+  The datatable now shows both bars as soon as there is anything to scroll to,
+  and so does the add/edit form's body under its pinned footer. The point is to
+  say "there is more this way" before anyone touches the trackpad.
+
+  The space is reserved with `scrollbar-gutter: stable`, so content doesn't jump
+  sideways when a bar appears.
+
+### Added
+
+- **`.vui-scroll`**, the utility behind it, in `theme.css`. Put it on any scroll
+  region you add and it gets the same always-visible, theme-coloured bars,
+  thumb inset from the track, darker on hover.
+
 ## 1.60.0 — 2026-08-07
 
 ### Fixed

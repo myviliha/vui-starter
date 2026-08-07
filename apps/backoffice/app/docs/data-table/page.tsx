@@ -327,6 +327,16 @@ useEffect(() => {
   initialData={[]}
   /* … */
 />`}</CodeBlock>
+      <Note title="A wide table says so">
+        Both scrollbars stay visible whenever there is somewhere to scroll,
+        rather than appearing only once you move. macOS hides overlay scrollbars
+        by default, which makes a table wider than its container look like it
+        just ends at the last column. The space is reserved too, so nothing
+        shifts sideways when a bar appears. The utility behind it is{" "}
+        <code>vui-scroll</code> in <code>theme.css</code>: put it on any scroll
+        region you add.
+      </Note>
+
       <Note title="The cache paints, the server decides">
         A cached page is only ever used to <strong>paint immediately</strong>.
         The request still goes out on every query, and the server&apos;s answer

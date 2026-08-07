@@ -2725,8 +2725,9 @@ export function RecordView<T extends { id: RowId }>({
             </div>
           </div>
 
-          {/* Table */}
-          <div className="min-h-0 flex-1 overflow-auto">
+          {/* Table. `vui-scroll` keeps both bars visible: a table wider than
+              its container otherwise just looks like it ends. */}
+          <div className="vui-scroll min-h-0 flex-1 overflow-auto">
             <Table
               style={{ minWidth: totalWidth, tableLayout: "auto" }}
               className="w-full"
@@ -3950,7 +3951,7 @@ function RecordDetailPanel<T extends { id: RowId }>({
           <div className="flex h-full gap-4">
             {/* Padded, bordered card — matches the datatable content container. */}
             <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card">
-              <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
+              <div className="vui-scroll min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
                 {/* The section grid. `sectionColumns` is the setting; the
                     older `columns` (page forms only) still widens a
                     single-column form to two, so nothing existing moves. */}
@@ -4018,7 +4019,9 @@ function RecordDetailPanel<T extends { id: RowId }>({
         </div>
 
         {/* Body — the section grid, one bordered card per field group. */}
-        <div className="min-h-0 flex-1 overflow-y-auto p-4">{formBody}</div>
+        <div className="vui-scroll min-h-0 flex-1 overflow-y-auto p-4">
+          {formBody}
+        </div>
 
         {formFooter}
       </aside>
