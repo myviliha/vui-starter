@@ -44,6 +44,8 @@ import { Skeleton } from "./skeleton";
 import {
   useResolved,
   type BehaviourConfig,
+  type FieldColumns,
+  type FieldLayout,
   type FormAction,
   type FormActionContext,
   type FormActionOutcome,
@@ -52,6 +54,8 @@ import {
 } from "./config";
 export type {
   BehaviourConfig,
+  FieldColumns,
+  FieldLayout,
   FormActionOutcome,
   FormSlot,
   FormAction,
@@ -401,9 +405,12 @@ export interface RecordField<T> {
    *  for single-value read displays, where the values a table paints in one go
    *  are collected and asked for together — 50 rows become one request. */
   resolveOptions?: (values: string[]) => Promise<AsyncOption[]>;
-  /** Give this field the whole form row: the label sits above a full-width
-   *  control instead of beside it. For a long textarea, an address block, or a
-   *  custom `renderInput` that needs the space. */
+  /** Lay this one field out differently from the rest of the form: `"stacked"`
+   *  puts its label above the control even in an inline form, which is what a
+   *  long textarea usually wants. */
+  layout?: FieldLayout;
+  /** Give this field the whole width, across every column. Pairs with
+   *  `layout: "stacked"` for an address block or a long note. */
   fullWidth?: boolean;
   /** The label to show in read mode, straight from the row. Set this when your
    *  payload already carries the label next to the id (`{ countryId, country }`)
@@ -552,6 +559,53 @@ export function validateField<T>(
  *  with no static `options`) — its read display must resolve the id to a label. */
 export function isAsyncLabeled<T>(f: RecordField<T>): boolean {
   return Boolean(f.loadOptions && f.resolveOption) && !Array.isArray(f.options);
+}
+
+/**
+ * The form grids, written out rather than built from a template string so
+ * Tailwind sees every class it has to generate.
+ *
+ * Inline needs two tracks per column: a `max-content` label track that widens to
+ * the longest label, and the control track. `grid-cols-subgrid` on each field
+ * then aligns every control down the form. Stacked needs one track per column,
+ * because the label sits above its control inside the cell.
+ */
+const GRID = {
+  inline: {
+    1: "grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3",
+    2: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(10rem,1fr)_max-content_minmax(10rem,1fr)]",
+    3: "grid-cols-1 gap-x-6 md:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)] xl:grid-cols-[max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)_max-content_minmax(8rem,1fr)]",
+  },
+  stacked: {
+    1: "grid-cols-1",
+    2: "grid-cols-1 gap-x-6 md:grid-cols-2",
+    3: "grid-cols-1 gap-x-6 md:grid-cols-2 xl:grid-cols-3",
+  },
+} as const;
+
+/** Spanning the whole row: two tracks per column when inline, one when stacked. */
+const SPAN_ALL = {
+  inline: {
+    1: "col-span-2",
+    2: "md:col-span-4",
+    3: "md:col-span-4 xl:col-span-6",
+  },
+  stacked: {
+    1: "col-span-1",
+    2: "md:col-span-2",
+    3: "md:col-span-2 xl:col-span-3",
+  },
+} as const;
+
+/** A field follows the form unless it asked for its own layout. A field given
+ *  the full width stacks regardless: a label beside a full-width control would
+ *  leave the control nowhere to go. Exported for testing. */
+export function fieldStacked<T>(
+  field: RecordField<T>,
+  formStacked: boolean,
+): boolean {
+  if (field.fullWidth) return true;
+  return (field.layout ?? (formStacked ? "stacked" : "inline")) === "stacked";
 }
 
 /**
@@ -924,6 +978,14 @@ interface RecordViewProps<T extends { id: RowId }> {
   /** Show the "+ {singular}" add button (still also requires `onCreate` or
    *  `makeEmptyRow`). Default `true`. */
   showAdd?: boolean;
+  /** Columns the add/edit form's fields flow across: 1, 2 or 3. Falls back to
+   *  `VuiProvider`'s `form.fieldColumns`, then 1. Separate from `formColumns`,
+   *  which flows whole sections on a full-page form. */
+  fieldColumns?: FieldColumns;
+  /** Whether each field is `Label * [control]` on one row (`"inline"`) or the
+   *  label above its control (`"stacked"`). Falls back to `form.fieldLayout`,
+   *  then `"inline"`. A field can override it with its own `layout`. */
+  fieldLayout?: FieldLayout;
   /** Behaviour overrides for this table only: what a row click does, whether
    *  delete confirms, how long the saved-row highlight lasts, and so on. Falls
    *  back to `VuiProvider`'s `behaviour`, then to the shipped defaults. */
@@ -1043,6 +1105,8 @@ export function RecordView<T extends { id: RowId }>({
   showImport = true,
   showExport = true,
   showAdd = true,
+  fieldColumns,
+  fieldLayout,
   behaviour: behaviourProp,
   formActions,
   renderFooter,
@@ -2029,6 +2093,8 @@ export function RecordView<T extends { id: RowId }>({
         renderFooter={renderFooter}
         formSlots={formSlots}
         behaviour={behaviour}
+        fieldColumns={fieldColumns}
+        fieldLayout={fieldLayout}
       />
     );
   }
@@ -2847,6 +2913,8 @@ export function RecordView<T extends { id: RowId }>({
           renderFooter={renderFooter}
           formSlots={formSlots}
           behaviour={behaviour}
+          fieldColumns={fieldColumns}
+          fieldLayout={fieldLayout}
         />
       )}
 
@@ -3051,6 +3119,12 @@ interface DetailPanelProps<T extends { id: RowId }> {
   /** Behaviour, already resolved by the table so a per-table prop reaches the
    *  form as well as the rows. */
   behaviour?: BehaviourConfig;
+  /** Columns the fields flow across (1, 2 or 3). Falls back to the app's
+   *  `form.fieldColumns`, then 1. */
+  fieldColumns?: FieldColumns;
+  /** Label beside the control (`"inline"`) or above it (`"stacked"`). Falls
+   *  back to the app's `form.fieldLayout`, then `"inline"`. */
+  fieldLayout?: FieldLayout;
   /** Page-form breadcrumb override (fully configurable). When set, these crumbs
    *  replace the default `Home › {title} › Create/Update {singular}` — so you can
    *  add parents ("Access") or rename the last crumb ("New Role"). Build each
@@ -3079,9 +3153,16 @@ function RecordDetailPanel<T extends { id: RowId }>({
   renderFooter,
   formSlots,
   behaviour: behaviourProp,
+  fieldColumns,
+  fieldLayout,
   crumbs,
 }: DetailPanelProps<T>) {
   const formConfig = useResolved("form", undefined) ?? {};
+  // Two settings decide the whole form: how many columns the fields flow
+  // across, and whether each label sits beside its control or above it.
+  const cols = fieldColumns ?? formConfig.fieldColumns ?? 1;
+  const stacked =
+    (fieldLayout ?? formConfig.fieldLayout ?? "inline") === "stacked";
   const behaviour = useResolved("behaviour", behaviourProp) ?? {};
   const draftKey = persistKey ? `${persistKey}::draft` : undefined;
   const [draft, setDraft] = usePersistentState<T>(draftKey, row);
@@ -3221,7 +3302,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
   const slotRow = (slot: FormSlot<T>) => (
     <div
       key={`slot:${slot.id}`}
-      className="col-span-2 border-t border-border px-3 py-3 leading-relaxed first:border-t-0"
+      className={cn(
+        "px-3 py-3 leading-relaxed",
+        cols === 1 && "border-t border-border first:border-t-0",
+        SPAN_ALL[stacked ? "stacked" : "inline"][cols],
+      )}
     >
       {slot.render(actionCtx)}
     </div>
@@ -3239,10 +3324,11 @@ function RecordDetailPanel<T extends { id: RowId }>({
         <h3 className="border-b border-border bg-muted/40 px-3 py-2 font-semibold text-[var(--button-primary)]">
           {group}
         </h3>
-        {/* Two columns sized to content: the label column auto-widens to the
-            longest label (never wraps), controls stay aligned. The panel width
-            follows (see the slide-over `sm:w-auto`). */}
-        <dl className="grid grid-cols-[max-content_minmax(12rem,1fr)] gap-x-3">
+        {/* The whole layout comes from two settings. Columns: how many fields
+            fit across. Inline: each field is a label │ control pair whose label
+            column widens to the longest label, so controls line up down the
+            form. Stacked: one column per field, label above control. */}
+        <dl className={cn("grid", GRID[stacked ? "stacked" : "inline"][cols])}>
           {groupFields.flatMap((f) => [
             // Label, icon, required mark and control share one baseline —
             // vertically centered. ponytail: a wrapped textarea grows down and
@@ -3250,15 +3336,35 @@ function RecordDetailPanel<T extends { id: RowId }>({
             <div
               key={f.key}
               className={cn(
-                "col-span-2 border-t border-border px-3 py-3 leading-relaxed first:border-t-0",
-                // Full width stacks the label over the control; the default puts
-                // them on one baseline in the label │ control subgrid.
-                f.fullWidth
+                "px-3 py-3 leading-relaxed",
+                // One column keeps the ruled rows the panel has always had;
+                // more than one drops them, because part-width rules read as
+                // broken lines rather than separators.
+                cols === 1 && "border-t border-border first:border-t-0",
+                fieldStacked(f, stacked)
                   ? "flex flex-col gap-1.5"
                   : "grid grid-cols-subgrid items-center",
+                // An inline field owns a label │ control pair; a stacked one a
+                // single cell. Full width takes the row whatever the setting.
+                f.fullWidth
+                  ? SPAN_ALL[stacked ? "stacked" : "inline"][cols]
+                  : fieldStacked(f, stacked)
+                    ? undefined
+                    : "col-span-2",
               )}
             >
               <dt className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground">
+                {/* Help text sits on the label itself, so it's there in a
+                    slide-over too: the full-page Info panel is the only place
+                    it used to appear. Tooltip icon, label, required mark. */}
+                {f.description && (
+                  <Tooltip content={f.description}>
+                    <Info
+                      aria-label={`About ${f.label}`}
+                      className="size-3.5 shrink-0 cursor-help text-muted-foreground/70 hover:text-[var(--button-primary)]"
+                    />
+                  </Tooltip>
+                )}
                 {f.icon && (
                   <f.icon className="size-3.5 text-[var(--button-primary)]" />
                 )}

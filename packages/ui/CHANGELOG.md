@@ -106,6 +106,41 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.58.0 — 2026-08-07
+
+### Added
+
+- **Form layout: pick the columns, then pick the rows.** Two settings decide how
+  an Add or Edit form is arranged, and everything auto-aligns from there.
+
+  `fieldColumns={1 | 2 | 3}` is how many fields fit across. `fieldLayout` is how
+  each label meets its control: `"inline"` puts them on one row
+  (`Label * [control]`), `"stacked"` puts the label on its own row above it.
+  Both are also `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`, so an
+  app sets its house style once and a screen overrides it when it needs to.
+
+  Alignment is handled rather than left to you. Inline forms give the labels
+  their own `max-content` track per column, so the track widens to the longest
+  label and every control lines up down the form however long the words are.
+  Multi-column forms collapse to one column on small screens, and three columns
+  step down to two before that, so a dense form stays usable on a laptop.
+
+- **`layout` on a field** overrides the form for that one field, which is what a
+  long textarea wants inside an otherwise inline form. `fullWidth` still takes
+  the whole row and now stacks automatically, because a label beside a
+  full-width control leaves the control nowhere to go.
+
+- **Field help is a tooltip on the label.** A field with a `description` now
+  shows an info icon before its label, wherever it renders. That text used to
+  reach only the Info panel on full-page forms, so anyone filling in a
+  slide-over never saw it. The panel is unchanged; this is the same text in the
+  place people actually look.
+
+### Changed
+
+- Ruled rows between fields are kept for single-column forms and dropped for two
+  and three, where part-width rules read as broken lines rather than separators.
+
 ## 1.57.1 — 2026-08-07
 
 ### Fixed

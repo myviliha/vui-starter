@@ -83,6 +83,8 @@ Both come from the same `RecordForm`; **pick one, don't invent a third:**
 
 When asked to add a page, **state which variant and default to slide-over.** Both inherit the blue Save, header/body/footer separators and token colors from the component — you never copy those styles. Same rule downstream in `packages/ui/AGENT.md`.
 
+**Form layout is two settings, not CSS.** `fieldColumns={1|2|3}` is how many fields fit across; `fieldLayout="inline"|"stacked"` is whether each label sits beside its control or above it. Set them on `RecordView`/`RecordForm`, or app-wide as `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`. Alignment follows automatically (labels get their own auto-width track per column; multi-column collapses on small screens). A single field overrides with `layout`, and `fullWidth` takes the row and stacks. Don't hand-build a grid to get a two-column form. A field's `description` becomes a tooltip on its label everywhere, on top of the Info panel on full-page forms.
+
 **From a field spec to a form — never style fields by hand.** A request like "Add Customer: Name (mandatory, text), Email (mandatory), Country" becomes a `RecordField[]`, nothing more: `{ key, label, required: true }` per field (add `description` for the Info-panel help). The component designs Add/Edit/View from that array — required renders the `*`, the label + icon + control are center-aligned on one baseline, colors come from theme tokens. Do **not** add per-field className, padding, or color; if a field looks unstyled, you built a raw input instead of feeding `fields`.
 
 ## Command palette (Quick actions & Global search)

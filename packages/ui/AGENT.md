@@ -551,6 +551,20 @@ import { VuiProvider } from "@viliha/vui-ui/config";
 
 The provider is optional: without it you get the theme as shipped. `defineConfig` types a config object, `mergeConfig` combines several (later wins), and `useVuiConfig()` reads the resolved one. Colors, radius and spacing are not in here on purpose, they stay in `theme.css`.
 
+**Form layout: pick the columns, then pick the rows.** Two settings arrange the whole form and everything aligns from them.
+
+```tsx
+<RecordView fieldColumns={2} fieldLayout="inline" … />
+```
+
+`fieldColumns` (1, 2 or 3) is how many fields fit across. `fieldLayout` is how each label meets its control: `"inline"` is `Label * [control]` on one row, `"stacked"` puts the label above it. Set them per screen as above, or once for the app as `form.fieldColumns` / `form.fieldLayout` in `VuiProvider`. Defaults are one column, inline, which is what forms looked like before.
+
+You don't align anything yourself. Inline forms give labels their own `max-content` track per column, so it widens to the longest label and every control lines up down the form. Two and three column forms collapse to one on small screens (three steps through two first). A single field can differ with `layout: "stacked"`, which is usually what a long textarea wants, and `fullWidth` takes the whole row and stacks automatically.
+
+Note `fieldColumns` is about **fields**; `formColumns` on a full-page form is about whole **sections** sitting side by side. They compose, and a two-column page of two-column sections is four fields wide, which is almost always too many.
+
+**Field help shows as a tooltip on the label.** Give a field a `description` and an info icon appears before its label everywhere it renders, so someone filling in a slide-over gets the same guidance a full-page form puts in its Info panel. Write it as an instruction ("The name on the invoice, not the trading name"), because that is what someone reads while their cursor is in the box.
+
 **Put your own content between the fields.** `formSlots` renders a callout, a preview or a pair of custom controls as a full-width row inside a section, so it inherits the card, the separators and the padding instead of floating beside them:
 
 ```tsx

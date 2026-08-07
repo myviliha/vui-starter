@@ -471,6 +471,56 @@ const onQueryChange = useCallback((q) => {   // { page, pageSize, sort, search, 
         <code>&quot;stay&quot;</code> without one.
       </P>
 
+      <Note title="Form layout: pick the columns, then pick the rows">
+        Two settings arrange an Add or Edit form.{" "}
+        <code>fieldColumns</code> (<code>1</code>, <code>2</code> or{" "}
+        <code>3</code>) is how many fields fit across.{" "}
+        <code>fieldLayout</code> is how each label meets its control:{" "}
+        <code>&quot;inline&quot;</code> is{" "}
+        <code>Label * [control]</code> on one row,{" "}
+        <code>&quot;stacked&quot;</code> puts the label above it. Set them per
+        screen, or once for the app as <code>form.fieldColumns</code> /{" "}
+        <code>form.fieldLayout</code> in <code>VuiProvider</code>. Defaults: one
+        column, inline.
+      </Note>
+
+      <CodeBlock title="a two-column Add Order form">{`<RecordView
+  fieldColumns={2}
+  fieldLayout="inline"
+  fields={[
+    { key: "customer", label: "Customer", required: true,
+      description: "Who the invoice goes to." },        // → tooltip on the label
+    { key: "orderedAt", label: "Order date", input: "date", required: true },
+    { key: "notes", label: "Notes", fullWidth: true },  // takes the row, stacks
+  ]}
+  /* … */
+/>`}</CodeBlock>
+
+      <P>
+        Alignment is handled for you. An inline form gives the labels their own
+        auto-width track per column, so it widens to the longest label and every
+        control lines up down the form. Two and three column forms collapse to
+        one column on small screens, and three steps through two on the way. A
+        single field can differ with <code>layout: &quot;stacked&quot;</code>,
+        which is usually what a long textarea wants, and <code>fullWidth</code>{" "}
+        takes the whole row and stacks automatically.
+      </P>
+      <P>
+        <code>fieldColumns</code> is about <strong>fields</strong>.{" "}
+        <code>formColumns</code> on a full-page form is about whole{" "}
+        <strong>sections</strong> sitting side by side; the two compose, and a
+        two-column page of two-column sections is four fields wide, which is
+        almost always too many.
+      </P>
+
+      <Note title="Field help is a tooltip on the label">
+        A field with a <code>description</code> shows an info icon before its
+        label, wherever it renders. That text used to appear only in the Info
+        panel on full-page forms, so anyone filling in a slide-over never saw
+        it. Write it as an instruction rather than a definition, because it is
+        read with the cursor already in the box.
+      </Note>
+
       <Note title="Put your own content between the fields">
         <code>formSlots</code> renders a callout, a preview or a pair of custom
         controls as a full-width row inside a section, so it inherits the card,

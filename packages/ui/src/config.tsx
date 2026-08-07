@@ -104,7 +104,33 @@ export type FormConfig = {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actions?: FormActionsConfig<any>;
+  /**
+   * How many columns the fields flow across: 1, 2 or 3. Default 1.
+   *
+   * This is about **fields**, not sections. `formColumns` on a full-page form
+   * still decides whether whole sections sit side by side, and the two compose:
+   * a two-column page of two-column sections is four fields wide, which is
+   * usually too many.
+   */
+  fieldColumns?: FieldColumns;
+  /**
+   * How a field's label meets its control. Default `"inline"`.
+   *
+   * - `"inline"` puts them on one row, `Label * [control]`, with the labels in
+   *   a column that widens to the longest one so every control lines up.
+   * - `"stacked"` puts the label on its own row above the control, which is
+   *   what long values, textareas and address blocks want.
+   *
+   * A field can override it, so one textarea can stack inside an inline form.
+   */
+  fieldLayout?: FieldLayout;
 };
+
+/** Columns the form's fields flow across. */
+export type FieldColumns = 1 | 2 | 3;
+
+/** Label beside the control, or above it. */
+export type FieldLayout = "inline" | "stacked";
 
 /** What the footer buttons can be: a list, or a change to the shipped list. */
 export type FormActionsConfig<T> =
