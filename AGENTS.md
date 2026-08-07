@@ -221,6 +221,11 @@ Prefer the smallest change that solves the problem. Reach for the standard libra
 - Author is **Suman Bonakurthi**. Do **not** add a Claude/AI co-author trailer or attribution.
 - Small, focused commits with imperative messages (`feat(ui): …`, `fix(backoffice): …`).
 - Branch off `main`; open a PR using `.github/PULL_REQUEST_TEMPLATE.md`.
+- **One task, one branch to merge (mandatory).** Never leave the author with a stack of branches that have to be merged in a particular order: that is how a docs branch lands describing code that hasn't. When follow-up work belongs to the same task, or a later change edits files an earlier branch touched, **put it on the same branch** rather than opening another. If a second branch already exists and both are still unmerged, rebase it onto the first and continue there, so there is exactly one branch to merge when the task is done.
+
+  Only start a genuinely separate branch for work that stands on its own and could merge in any order. When in doubt, keep it on one branch: the author merges once, and the tree is never half-consistent.
+
+  If order ever does matter, say so explicitly in the final message, naming the sequence.
 - **One feature, one fresh branch, and clean up the old ones first (mandatory).** Before starting new work, delete the local branches already merged into `main`, then branch off an up-to-date `main`. The goal is a tidy tree: just `main` plus the branch you are working on. Only ever delete **merged** branches: list them with `git branch --merged main` (excluding `main` and the current branch) and delete with `git branch -d`. **Never** delete a branch with unmerged commits, and never touch remote branches or history. This is local cleanup only.
 
 ## Performance defaults
