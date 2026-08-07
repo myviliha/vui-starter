@@ -68,7 +68,17 @@ export default function TemplatesPage() {
       </P>
       <TemplateBlock filename="feature.md" content={tmpl("feature.md")} />
 
-      <H2>4 · Multi-step workflow</H2>
+      <H2>4 · New form</H2>
+      <P>
+        For an Add or Edit form: what the record is, which cards it splits into,
+        and the fields in each. The layout questions are already answered by the
+        design system, so the template only asks the ones you actually decide.
+        See the <a href="/docs/form-layout/" className="font-medium text-foreground underline">Form layout</a>{" "}
+        page for what the settings do.
+      </P>
+      <TemplateBlock filename="form.md" content={tmpl("form.md")} />
+
+      <H2>5 · Multi-step workflow</H2>
       <P>
         For a guided, multi-screen flow. Describe it one step at a time, and the
         agent turns each step into a screen built from existing blocks.
@@ -81,7 +91,7 @@ export default function TemplatesPage() {
         content={tmpl("customer-signup.md")}
       />
 
-      <H2>5 · Full feature (CRUD entity)</H2>
+      <H2>6 · Full feature (CRUD entity)</H2>
       <P>
         The complete brief for a full resource: screens, fields, API contract,
         test matrix, business rules, and happy and unhappy{" "}
@@ -95,7 +105,7 @@ export default function TemplatesPage() {
         content={tmpl("feature-requirement.md")}
       />
 
-      <H2>6 · Worked example: Calendar page</H2>
+      <H2>7 · Worked example: Calendar page</H2>
       <P>
         A filled-in <a href="/docs/layout" className="font-medium text-foreground underline">page</a>{" "}
         brief for the appointments{" "}
@@ -105,7 +115,7 @@ export default function TemplatesPage() {
       </P>
       <TemplateBlock filename="calendar.md" content={tmpl("calendar.md")} />
 
-      <H2>7 · Worked example: Chat (ChatGPT-style)</H2>
+      <H2>8 · Worked example: Chat (ChatGPT-style)</H2>
       <P>
         A filled-in brief for the{" "}
         <a href="/docs/chat" className="font-medium text-foreground underline">Chat</a>{" "}
@@ -114,7 +124,7 @@ export default function TemplatesPage() {
       </P>
       <TemplateBlock filename="chat.md" content={tmpl("chat.md")} />
 
-      <H2>8 · Worked example: Support &amp; ticketing</H2>
+      <H2>9 · Worked example: Support &amp; ticketing</H2>
       <P>
         A filled-in brief for the{" "}
         <a href="/docs/support" className="font-medium text-foreground underline">Support</a>{" "}

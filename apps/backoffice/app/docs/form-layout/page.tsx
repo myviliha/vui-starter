@@ -173,6 +173,19 @@ const fields: RecordField<Order>[] = [
         many.
       </Note>
 
+      <H2>Is there a template I can hand to an agent?</H2>
+      <P>
+        Yes:{" "}
+        <a href="/templates/form.md" className="font-medium text-foreground underline">
+          form.md
+        </a>{" "}
+        on the <a href="/docs/templates/" className="font-medium text-foreground underline">Templates</a>{" "}
+        page. Copy it, fill in the record, the cards and the fields, and hand it
+        over. It only asks what you actually decide: the layout questions are
+        already answered here, so a filled-in template plus this page is enough
+        for an agent to build the form without guessing.
+      </P>
+
       <DocPager
         prev={{ label: "Layouts", href: "/docs/layout" }}
         next={{ label: "Navigation", href: "/docs/navigation" }}

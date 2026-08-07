@@ -85,6 +85,8 @@ When asked to add a page, **state which variant and default to slide-over.** Bot
 
 **Form layout is declared, not styled** (full write-up: docs `/form-layout`). A form is a grid of section cards, each card a grid of fields: `sectionColumns={1|2|3}` flows the cards, `sections` declares them (order, `span: "full"`, per-section `fieldColumns`, a description line), and `fieldColumns={1|2|3}` flows the fields inside. Both are also `form.*` keys in `VuiProvider`. **A label always sits beside its control**, never above it, so never add a stacked variant; `fullWidth` gives a field the row with the label still inline. A field's `description` becomes a tooltip on its label everywhere, on top of the Info panel on full-page forms.
 
+Asking for a form? Fill in `apps/backoffice/public/templates/form.md` (rendered on docs `/templates`): record, cards, fields, footer, behaviour. It only asks what a developer actually decides.
+
 **From a field spec to a form — never style fields by hand.** A request like "Add Customer: Name (mandatory, text), Email (mandatory), Country" becomes a `RecordField[]`, nothing more: `{ key, label, required: true }` per field (add `description` for the Info-panel help). The component designs Add/Edit/View from that array — required renders the `*`, the label + icon + control are center-aligned on one baseline, colors come from theme tokens. Do **not** add per-field className, padding, or color; if a field looks unstyled, you built a raw input instead of feeding `fields`.
 
 ## Command palette (Quick actions & Global search)

@@ -138,6 +138,10 @@ No component was renamed, no export was removed, and no prop was made required.
   `form.fieldColumns` in `VuiProvider`, so an app sets its form style once and a
   screen overrides what it needs.
 
+- **A requirement template for forms: `templates/form.md`,** on the docs
+  Templates page. Copy it, fill in the record, the cards and the fields, and
+  hand it to an agent. It asks only what a developer decides, because the layout
+  questions are already settled by the design system.
 - **A docs page to build against: `/docs/form-layout`.** The model, each
   setting, a worked Add Order form, and how to write field help. Linked from the
   Customization section of the docs nav.
