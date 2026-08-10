@@ -1,18 +1,13 @@
-# Graph Report - vui-starter  (2026-08-07)
+# Graph Report - .  (2026-08-10)
 
 ## Corpus Check
-- 518 files · ~347,216 words
+- 0 files · ~0 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5694 nodes · 9514 edges · 310 communities (253 shown, 57 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 595 edges (avg confidence: 0.81)
+- 3191 nodes · 5831 edges · 231 communities (177 shown, 54 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 530 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
-
-## Graph Freshness
-- Built from commit: `6acdb069`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Community 0|Community 0]]
@@ -161,18 +156,26 @@
 - [[_COMMUNITY_Community 143|Community 143]]
 - [[_COMMUNITY_Community 144|Community 144]]
 - [[_COMMUNITY_Community 145|Community 145]]
+- [[_COMMUNITY_Community 146|Community 146]]
 - [[_COMMUNITY_Community 147|Community 147]]
 - [[_COMMUNITY_Community 148|Community 148]]
 - [[_COMMUNITY_Community 149|Community 149]]
 - [[_COMMUNITY_Community 150|Community 150]]
 - [[_COMMUNITY_Community 151|Community 151]]
+- [[_COMMUNITY_Community 152|Community 152]]
+- [[_COMMUNITY_Community 153|Community 153]]
 - [[_COMMUNITY_Community 154|Community 154]]
+- [[_COMMUNITY_Community 155|Community 155]]
 - [[_COMMUNITY_Community 156|Community 156]]
 - [[_COMMUNITY_Community 157|Community 157]]
 - [[_COMMUNITY_Community 158|Community 158]]
 - [[_COMMUNITY_Community 159|Community 159]]
 - [[_COMMUNITY_Community 160|Community 160]]
 - [[_COMMUNITY_Community 161|Community 161]]
+- [[_COMMUNITY_Community 162|Community 162]]
+- [[_COMMUNITY_Community 163|Community 163]]
+- [[_COMMUNITY_Community 164|Community 164]]
+- [[_COMMUNITY_Community 165|Community 165]]
 - [[_COMMUNITY_Community 166|Community 166]]
 - [[_COMMUNITY_Community 167|Community 167]]
 - [[_COMMUNITY_Community 168|Community 168]]
@@ -184,15 +187,11 @@
 - [[_COMMUNITY_Community 174|Community 174]]
 - [[_COMMUNITY_Community 175|Community 175]]
 - [[_COMMUNITY_Community 176|Community 176]]
-- [[_COMMUNITY_Community 177|Community 177]]
 - [[_COMMUNITY_Community 178|Community 178]]
 - [[_COMMUNITY_Community 179|Community 179]]
 - [[_COMMUNITY_Community 180|Community 180]]
 - [[_COMMUNITY_Community 181|Community 181]]
-- [[_COMMUNITY_Community 182|Community 182]]
 - [[_COMMUNITY_Community 183|Community 183]]
-- [[_COMMUNITY_Community 184|Community 184]]
-- [[_COMMUNITY_Community 185|Community 185]]
 - [[_COMMUNITY_Community 186|Community 186]]
 - [[_COMMUNITY_Community 187|Community 187]]
 - [[_COMMUNITY_Community 188|Community 188]]
@@ -201,19 +200,6 @@
 - [[_COMMUNITY_Community 191|Community 191]]
 - [[_COMMUNITY_Community 192|Community 192]]
 - [[_COMMUNITY_Community 193|Community 193]]
-- [[_COMMUNITY_Community 194|Community 194]]
-- [[_COMMUNITY_Community 195|Community 195]]
-- [[_COMMUNITY_Community 196|Community 196]]
-- [[_COMMUNITY_Community 197|Community 197]]
-- [[_COMMUNITY_Community 198|Community 198]]
-- [[_COMMUNITY_Community 199|Community 199]]
-- [[_COMMUNITY_Community 200|Community 200]]
-- [[_COMMUNITY_Community 201|Community 201]]
-- [[_COMMUNITY_Community 202|Community 202]]
-- [[_COMMUNITY_Community 203|Community 203]]
-- [[_COMMUNITY_Community 204|Community 204]]
-- [[_COMMUNITY_Community 205|Community 205]]
-- [[_COMMUNITY_Community 206|Community 206]]
 - [[_COMMUNITY_Community 207|Community 207]]
 - [[_COMMUNITY_Community 208|Community 208]]
 - [[_COMMUNITY_Community 209|Community 209]]
@@ -238,1030 +224,672 @@
 - [[_COMMUNITY_Community 228|Community 228]]
 - [[_COMMUNITY_Community 229|Community 229]]
 - [[_COMMUNITY_Community 230|Community 230]]
-- [[_COMMUNITY_Community 231|Community 231]]
-- [[_COMMUNITY_Community 232|Community 232]]
-- [[_COMMUNITY_Community 233|Community 233]]
-- [[_COMMUNITY_Community 234|Community 234]]
-- [[_COMMUNITY_Community 235|Community 235]]
-- [[_COMMUNITY_Community 236|Community 236]]
-- [[_COMMUNITY_Community 237|Community 237]]
-- [[_COMMUNITY_Community 240|Community 240]]
-- [[_COMMUNITY_Community 241|Community 241]]
-- [[_COMMUNITY_Community 242|Community 242]]
-- [[_COMMUNITY_Community 243|Community 243]]
-- [[_COMMUNITY_Community 244|Community 244]]
-- [[_COMMUNITY_Community 245|Community 245]]
-- [[_COMMUNITY_Community 246|Community 246]]
-- [[_COMMUNITY_Community 247|Community 247]]
-- [[_COMMUNITY_Community 248|Community 248]]
-- [[_COMMUNITY_Community 249|Community 249]]
-- [[_COMMUNITY_Community 250|Community 250]]
-- [[_COMMUNITY_Community 251|Community 251]]
-- [[_COMMUNITY_Community 252|Community 252]]
-- [[_COMMUNITY_Community 253|Community 253]]
-- [[_COMMUNITY_Community 254|Community 254]]
-- [[_COMMUNITY_Community 255|Community 255]]
-- [[_COMMUNITY_Community 256|Community 256]]
-- [[_COMMUNITY_Community 257|Community 257]]
-- [[_COMMUNITY_Community 258|Community 258]]
-- [[_COMMUNITY_Community 259|Community 259]]
-- [[_COMMUNITY_Community 260|Community 260]]
-- [[_COMMUNITY_Community 261|Community 261]]
-- [[_COMMUNITY_Community 262|Community 262]]
-- [[_COMMUNITY_Community 263|Community 263]]
-- [[_COMMUNITY_Community 264|Community 264]]
-- [[_COMMUNITY_Community 265|Community 265]]
-- [[_COMMUNITY_Community 266|Community 266]]
-- [[_COMMUNITY_Community 267|Community 267]]
-- [[_COMMUNITY_Community 268|Community 268]]
-- [[_COMMUNITY_Community 269|Community 269]]
-- [[_COMMUNITY_Community 270|Community 270]]
-- [[_COMMUNITY_Community 271|Community 271]]
-- [[_COMMUNITY_Community 272|Community 272]]
-- [[_COMMUNITY_Community 274|Community 274]]
-- [[_COMMUNITY_Community 275|Community 275]]
-- [[_COMMUNITY_Community 276|Community 276]]
-- [[_COMMUNITY_Community 277|Community 277]]
-- [[_COMMUNITY_Community 278|Community 278]]
-- [[_COMMUNITY_Community 279|Community 279]]
-- [[_COMMUNITY_Community 280|Community 280]]
-- [[_COMMUNITY_Community 281|Community 281]]
-- [[_COMMUNITY_Community 282|Community 282]]
-- [[_COMMUNITY_Community 283|Community 283]]
-- [[_COMMUNITY_Community 284|Community 284]]
-- [[_COMMUNITY_Community 285|Community 285]]
-- [[_COMMUNITY_Community 286|Community 286]]
-- [[_COMMUNITY_Community 287|Community 287]]
-- [[_COMMUNITY_Community 288|Community 288]]
-- [[_COMMUNITY_Community 289|Community 289]]
-- [[_COMMUNITY_Community 290|Community 290]]
-- [[_COMMUNITY_Community 291|Community 291]]
-- [[_COMMUNITY_Community 292|Community 292]]
-- [[_COMMUNITY_Community 303|Community 303]]
-- [[_COMMUNITY_Community 304|Community 304]]
-- [[_COMMUNITY_Community 305|Community 305]]
-- [[_COMMUNITY_Community 306|Community 306]]
-- [[_COMMUNITY_Community 307|Community 307]]
-- [[_COMMUNITY_Community 308|Community 308]]
-- [[_COMMUNITY_Community 309|Community 309]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 487 edges
-2. `RecordView` - 108 edges
-3. `Changelog` - 102 edges
-4. `1.35.0 — 2026-07-31` - 76 edges
-5. `organizations` - 74 edges
-6. `RecordView / RecordForm component family` - 73 edges
-7. `1.39.0 — 2026-08-04` - 51 edges
-8. `1.38.0 — 2026-08-04` - 51 edges
-9. `1.36.0 — 2026-07-31` - 51 edges
-10. `1.34.0 — 2026-07-29` - 51 edges
+1. `cn()` - 421 edges
+2. `RecordView` - 170 edges
+3. `Changelog` - 95 edges
+4. `organizations` - 80 edges
+5. `Added` - 71 edges
+6. `RecordView / RecordForm component family` - 54 edges
+7. `H2()` - 49 edges
+8. `P()` - 48 edges
+9. `pageMeta` - 48 edges
+10. `CodeBlock()` - 44 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `AGENTS.md — Deterministic AI Agent Rules` --references--> `Turborepo Pipeline Config`  [INFERRED]
+  AGENTS.md → turbo.json
 - `AI Agent Guide (AGENT.md + CLAUDE.template.md)` --semantically_similar_to--> `AGENTS.md — Deterministic AI Agent Rules`  [INFERRED] [semantically similar]
   README.md → AGENTS.md
 - `Backoffice postcss.config.mjs` --conceptually_related_to--> `theme.css Design Tokens`  [INFERRED]
   apps/backoffice/postcss.config.mjs → README.md
+- `TemplatesPage (docs)` --semantically_similar_to--> `Feature requirement template`  [INFERRED] [semantically similar]
+  apps/backoffice/app/docs/templates/page.tsx → apps/backoffice/public/templates/feature.md
 - `CHROME_DEFAULTS` --semantically_similar_to--> `seo (SITE, ROUTE_META, sitemap)`  [INFERRED] [semantically similar]
   packages/ui/template/lib/app-config.ts → apps/backoffice/lib/seo.ts
-- `CHANGELOG 1.40.0 (ProfileForm + organization-profile preset)` --references--> `OrganizationProfilePage()`  [EXTRACTED]
-  packages/ui/CHANGELOG.md → apps/backoffice/app/(app)/organization/profile/page.tsx
-- `Section()` --calls--> `cn()`  [INFERRED]
-  apps/backoffice/app/(app)/settings/page.tsx → packages/ui/src/utils.ts
 
-## Hyperedges (group relationships)
-- **M2M multi-select render (form + cell)** — src_multi_combobox_multicombobox, src_record_view_multifieldvalue [INFERRED 0.85]
-- **Post codes async option source** — api_post_codes_searchpostcodes, api_post_codes_resolvepostcodes [INFERRED 0.85]
-
-## Communities (310 total, 57 thin omitted)
+## Communities (231 total, 54 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.03
-Nodes (101): Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup(), AvatarGroupCount(), AvatarImage(), BreadcrumbEllipsis(), BreadcrumbItem() (+93 more)
+Nodes (77): AvatarBadge(), AvatarFallback(), AvatarGroup(), AvatarGroupCount(), AvatarImage(), Card(), CardAction(), CardContent() (+69 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.20
-Nodes (6): Alert(), AlertDescription(), AlertTitle(), alertVariants, Alert, Collapsible
+Cohesion: 0.04
+Nodes (40): COUNTRIES, FormValues, schema, AccordionContent(), AccordionItem(), AccordionTrigger(), AspectRatio(), HoverCard() (+32 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.02
-Nodes (71): DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup(), DropdownMenuRadioItem() (+63 more)
+Cohesion: 0.03
+Nodes (56): RecordView 1.37.1 server/manual mode fix, FilterField(), FilterGrid(), ALIGN_BOX, ALIGN_TEXT, ColAlign, CONTROL_SPAN, DEFAULT_PAGE_SIZE (+48 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.07
-Nodes (29): metadata, metadata, BLOCKS, metadata, metadata, metadata, metadata, DocPager() (+21 more)
+Cohesion: 0.10
+Nodes (16): PAGES, ComponentDocFooter(), ComponentDocHeader(), ComponentPreview(), Install(), meta(), PMS, PropRow (+8 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.10
-Nodes (15): ComponentDocFooter(), ComponentDocHeader(), ComponentPreview(), Install(), meta(), PMS, PropRow, PropsTable() (+7 more)
+Cohesion: 0.08
+Nodes (29): metadata, metadata, BLOCKS, metadata, metadata, metadata, metadata, CodeBlock() (+21 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.10
-Nodes (30): fields, CHANGELOG 1.39.0 — custom section titles + render/renderInput, CHANGELOG 1.41.0, Nav: Organization group -> Profile, /organization/profile route, route-meta organization/profile label+color+accent, Breadcrumbs(), Crumb (+22 more)
+Cohesion: 0.04
+Nodes (30): COUNTRIES, FormValues, schema, AccordionContent(), AccordionItem(), AccordionTrigger(), InputOTP(), InputOTPGroup() (+22 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.05
-Nodes (62): Checkbox, Dropdown(), DropdownItem(), DropdownItemProps, DropdownLabel(), DropdownProps, FilterField(), FilterGrid() (+54 more)
+Nodes (25): metadata, metadata, pageMeta, PUBLIC_ROUTES, metadata, metadata, metadata, metadata (+17 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.09
-Nodes (18): metadata, metadata, CompaniesTable, fields, CompaniesPage, Dashboard Layout, HomePage (Dashboard), Global search record INDEX (+10 more)
+Cohesion: 0.06
+Nodes (34): addOrganization, bump (revision tracker), syncOrganizations (delta), updateOrganization, wait (simulated latency), OrganizationsController, bump(), emit() (+26 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.10
-Nodes (21): 1.22.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+13 more)
+Cohesion: 0.09
+Nodes (31): ALL, BY_CODE, CITIES, resolvePostCodes(), searchPostCodes(), wait(), metadata, metadata (+23 more)
 
 ### Community 9 - "Community 9"
-Cohesion: 0.09
-Nodes (17): Heading, DocsSearch (docs command palette), DocsShell, ALL_GROUPS, COMPONENTS_GROUP, DocsShell(), NavGroup, NavItem (+9 more)
+Cohesion: 0.08
+Nodes (20): RootPage (redirect to /docs), robots, sitemap, metadata, metadata, metadata, PUBLIC_ROUTES, SITE (+12 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.04
-Nodes (42): metadata, metadata, metadata, metadata, metadata, metadata, metadata, metadata (+34 more)
+Cohesion: 0.05
+Nodes (43): 1.10.0 — 2026-07-26, 1.11.0 — 2026-07-26, 1.12.0 — 2026-07-26, 1.15.0 — 2026-07-27, 1.17.0 — 2026-07-27, 1.20.0 — 2026-07-27, 1.21.0 — 2026-07-27, 1.22.0 — 2026-07-27 (+35 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.07
-Nodes (49): profile, addOrganization, bump (revision tracker), syncOrganizations (delta), wait (simulated latency), OrganizationsController, addOrganization(), bump() (+41 more)
+Cohesion: 0.11
+Nodes (26): SetPageTitle, api/organizations data layer, users data layer (server pagination), ChartsContent, Data → Controller → Presentation architecture, EditOrganizationPage, NewOrganizationPage, organizations-config (+18 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.16
-Nodes (19): applyTheme(), FONT_FAMILIES, FontFamily, mergeThemes(), parseHex(), parseTheme(), readableOn(), ids (+11 more)
+Cohesion: 0.07
+Nodes (34): BehaviourConfig, FieldColumns, filterUserPreferences(), FormAction, FormActionContext, FormActionOutcome, FormActionsConfig, FormConfig (+26 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.06
-Nodes (40): Claude Code Project Settings (hooks), AGENTS.md — Deterministic AI Agent Rules, Backoffice postcss.config.mjs, CLAUDE.md (imports AGENTS.md), Contributor Covenant Code of Conduct, AI Agent Guide (AGENT.md + CLAUDE.template.md), theme.css Design Tokens, Turborepo + pnpm Monorepo (+32 more)
+Cohesion: 0.08
+Nodes (32): metadata, metadata, fields, SOFT_DELETED, BranchesPage, BranchesTable, fields, BusinessesPage (+24 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.08
-Nodes (25): dependencies, better-auth, class-variance-authority, clsx, cmdk, date-fns, geist, @hookform/resolvers (+17 more)
+Cohesion: 0.09
+Nodes (29): formatCurrency(), initials(), OPPORTUNITY_FIELDS, OpportunityCard(), STAGE_BADGE, metadata, metadata, companies (+21 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.05
-Nodes (49): 1.45.0 — 2026-08-06, 1.52.0 — 2026-08-06, 1.61.0 — 2026-08-07, 1.62.0 — 2026-08-07, Added, Added, Added, Added (+41 more)
+Cohesion: 0.08
+Nodes (29): appFiles(), docFiles(), exists(), guideFiles(), GUIDES, handle(), KIND, read() (+21 more)
 
 ### Community 16 - "Community 16"
-Cohesion: 0.16
-Nodes (17): areaConfig, axis, barConfig, deals, lineConfig, pieConfig, revenue, traffic (+9 more)
+Cohesion: 0.06
+Nodes (30): CHANGELOG 1.39.0 — custom section titles + render/renderInput, Nav: Organization group -> Profile, /organization/profile route, BrandAsset(), OrganizationProfilePage(), route-meta organization/profile label+color+accent, BrandAsset(), BrandAssetHost (+22 more)
 
 ### Community 17 - "Community 17"
-Cohesion: 0.16
-Nodes (16): listUsers, restoreUsers(), ROLES, STATUSES, TEAMS, trashedIds, User, UserStatus (+8 more)
+Cohesion: 0.09
+Nodes (28): DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup(), DropdownMenuRadioItem() (+20 more)
 
 ### Community 18 - "Community 18"
 Cohesion: 0.07
-Nodes (22): CalendarPage(), CHIP_FOR, cnCell(), cnDate(), cnTab(), Draft, Ev, EVENT_COLORS (+14 more)
+Nodes (21): Section(), Theme, THEME_OPTIONS, PLANS, STEPS, Breadcrumbs (app wrapper), crumbsFor, Route-derived label/color metadata (+13 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.07
-Nodes (22): CalendarPage(), CHIP_FOR, cnCell(), cnDate(), cnTab(), Draft, Ev, EVENT_COLORS (+14 more)
+Cohesion: 0.09
+Nodes (28): ALL, FIRST, LAST, listUsers, MAX_PAGE_SIZE, restoreUsers(), ROLES, STATUSES (+20 more)
 
 ### Community 20 - "Community 20"
-Cohesion: 0.08
-Nodes (24): config, nextJsConfig, devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-jsx-a11y, eslint-plugin-only-warn (+16 more)
+Cohesion: 0.09
+Nodes (31): AlertDialog(), AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia() (+23 more)
 
 ### Community 21 - "Community 21"
-Cohesion: 0.08
-Nodes (28): opts(), OrganizationProfilePage(), BrandAsset(), BrandAssetHost, BrandAssetMeta, BrandAssetPick, BrandAssetProps, COUNTRIES (+20 more)
+Cohesion: 0.09
+Nodes (22): NotFoundActions, geist, RootLayout, sourceSerif, BetterAuthBridge(), DEMO_USER, MockAuthBridge(), USE_BETTER_AUTH (+14 more)
 
 ### Community 22 - "Community 22"
-Cohesion: 0.04
-Nodes (54): chrome-config (useChrome/useChromeConfig), COUNTRIES, fields, metadata, fields, Ctx, GlobalSearchContext, INDEX (+46 more)
+Cohesion: 0.11
+Nodes (27): CHANGELOG 1.44.0, Avatar, AvatarFallback, CascadingCombobox, CascadeLevel, CascadeNode, Combobox, ComboboxProps (+19 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.21
-Nodes (11): FormControl(), FormDescription(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContext, FormItemContextValue, FormLabel() (+3 more)
+Cohesion: 0.10
+Nodes (30): auth (AuthCard shell primitives), app-config (CHROME_FEATURES), seo (SITE, ROUTE_META, sitemap), llms.txt (AI index), Settings Layout (metadata), SettingsPage, applyTheme, SettingsPage (+22 more)
 
 ### Community 24 - "Community 24"
-Cohesion: 0.15
-Nodes (21): KeepAliveTabs, OpenTabsProvider, tabMeta, TabStrip, useOpenTabs, colorFor, labelFor, Keep-alive tab caching (+13 more)
+Cohesion: 0.12
+Nodes (33): 1.13.1 — 2026-07-26, 1.13.2 — 2026-07-26, 1.14.1 — 2026-07-26, 1.1.7 — 2026-07-23, 1.1.8 — 2026-07-23, 1.21.1 — 2026-07-27, 1.21.2 — 2026-07-27, 1.23.1 — 2026-07-27 (+25 more)
 
 ### Community 25 - "Community 25"
 Cohesion: 0.09
-Nodes (12): metadata, metadata, BrandProvider, LegalList(), LegalSection(), LegalTitle(), TemplateNotice(), SITE (+4 more)
+Nodes (24): IoAction, IoActionsConfig, IoContext, defaultExportActions(), defaultImportActions(), resolveIoActions(), actions, defaults (+16 more)
 
 ### Community 26 - "Community 26"
-Cohesion: 0.10
-Nodes (21): 1.25.1 — 2026-07-28, Added, Added, Added, Added, Added, Added, Added (+13 more)
+Cohesion: 0.09
+Nodes (22): chrome-config (useChrome/useChromeConfig), metadata, Ctx, GlobalSearchContext, INDEX, Indexed, CommandPalette (headless), GlobalSearchProvider (record INDEX) (+14 more)
 
 ### Community 27 - "Community 27"
-Cohesion: 0.08
-Nodes (21): AppSidebar, BrandProvider, Logo, themeInitScript, ThemeToggle, Wordmark, Brand, BrandContext (+13 more)
+Cohesion: 0.11
+Nodes (28): accentFor(), colorFor(), NavEntry, NavGroup, NavLink, NavSection, SECTION_INDEX, accentFor (+20 more)
 
 ### Community 28 - "Community 28"
-Cohesion: 0.07
-Nodes (23): Button(), buttonVariants, Calendar(), CalendarDayButton(), Command(), CommandDialog(), CommandGroup(), CommandInput() (+15 more)
+Cohesion: 0.09
+Nodes (21): StatCard, statCards, statusBadge, StatusBadge(), StatCardProps, Trend, trendColor, trendIcon (+13 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.06
-Nodes (33): ALL, BY_CODE, CITIES, resolvePostCodes(), searchPostCodes(), wait(), metadata, metadata (+25 more)
+Cohesion: 0.11
+Nodes (23): Button(), Calendar(), CalendarDayButton(), Button, ButtonSize, ButtonVariant, buttonVariants(), SIZES (+15 more)
 
 ### Community 30 - "Community 30"
-Cohesion: 0.17
-Nodes (8): SelectContent(), SelectItem(), SelectLabel(), SelectScrollDownButton(), SelectScrollUpButton(), SelectSeparator(), SelectTrigger(), Select
+Cohesion: 0.07
+Nodes (22): CalendarPage(), CHIP_FOR, cnCell(), cnDate(), cnTab(), Draft, Ev, EVENT_COLORS (+14 more)
 
 ### Community 31 - "Community 31"
-Cohesion: 0.13
-Nodes (13): AppSidebar, AppSidebar(), BOTTOM_BAR_ITEMS, COLLAPSED_GROUP_MODES, CollapsedGroupMode, GROUP_MODE, MobileNav(), NavIcon() (+5 more)
+Cohesion: 0.09
+Nodes (29): AiAgentsPage, areaConfig, axis, barConfig, deals, lineConfig, pieConfig, revenue (+21 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.12
-Nodes (31): CHANGELOG 1.44.0, Avatar, AvatarFallback, CascadingCombobox, CascadeLevel, CascadeNode, CascadingCombobox(), CascadingComboboxProps (+23 more)
+Cohesion: 0.07
+Nodes (21): CHIP_FOR, cnCell(), cnDate(), cnTab(), Draft, Ev, EVENT_COLORS, EvType (+13 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.10
-Nodes (14): AuthLayout, SidebarBody, AuthHeader, useBrand, Logo, SiteFooter, Wordmark, metadata (+6 more)
+Cohesion: 0.08
+Nodes (28): A theme that ships finished and stays configurable, code:block1 (package default  ←  shipped preset  ←  app config  ←  user p), code:tsx (// packages/ui/src/config.ts), code:tsx (// Out of the box — nothing to write; the provider is option), code:tsx (type FormAction<T> = {), code:tsx (actions={(defaults) => [), code:tsx (type FormSection = {), code:tsx (behaviour: {) (+20 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.07
-Nodes (35): BehaviourConfig, FieldColumns, filterUserPreferences(), FormAction, FormActionContext, FormActionOutcome, FormActionsConfig, FormConfig (+27 more)
+Cohesion: 0.08
+Nodes (20): buttonVariants, CalendarDayButton(), CommandDialog(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+12 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.09
-Nodes (16): NotFoundActions, BetterAuthBridge(), DEMO_USER, MockAuthBridge(), USE_BETTER_AUTH, authClient, AppAuthProvider, BetterAuthBridge (+8 more)
+Cohesion: 0.13
+Nodes (20): TopBar, ChromeFeature, MobileNav, SidebarToggle, ChromeConfigProvider, useChrome, QuickActionsProvider, colorFor (+12 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.12
-Nodes (16): Label component docs page, Popover component docs page, Progress component docs page, Radio Group component docs page, Scroll Area component docs page, Separator component docs page, shadcn/ui component set, Sheet component docs page (+8 more)
+Cohesion: 0.09
+Nodes (22): config, nextJsConfig, devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-jsx-a11y, eslint-plugin-only-warn (+14 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.07
-Nodes (27): fields, metadata, Branch, branches, Business, businesses, cities, City (+19 more)
+Cohesion: 0.10
+Nodes (27): CHANGELOG 1.41.0, FieldLayout, defaultFormActions(), resolveFormActions(), AsyncFieldValue(), blurField, formatPhone(), handleSave (+19 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.10
-Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+11 more)
+Cohesion: 0.07
+Nodes (27): 1.11.1 — 2026-07-26, 1.13.0 — 2026-07-26, 1.14.2 — 2026-07-26, 1.16.0 — 2026-07-27, 1.23.0 — 2026-07-27, 1.23.2 — 2026-07-27, 1.26.2 — 2026-07-29, 1.30.1 — 2026-07-29 (+19 more)
 
 ### Community 39 - "Community 39"
-Cohesion: 0.08
-Nodes (33): formatCurrency(), initials(), OpportunitiesBoard(), OPPORTUNITY_FIELDS, OpportunityCard(), STAGE_BADGE, metadata, companies (+25 more)
+Cohesion: 0.15
+Nodes (9): AuthHeader, SiteFooter, metadata, AuthLayout, AuthLayout, AuthHeader, SiteFooter, FOOTER_OVERRIDDEN (+1 more)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.12
-Nodes (19): CopyButton, CopyButton(), Doc prose primitives, PackageManagerTabs, PackageManagerTabs(), PM, PMS, store (+11 more)
+Cohesion: 0.14
+Nodes (15): Wordmark, LogoProps, SidebarBody, BrandProvider, useBrand, Logo, Wordmark, Brand (+7 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.06
-Nodes (44): SetPageTitle, getOrgProfile(), OrgProfile, updateOrgProfile(), wait(), api/organizations data layer, updateOrganization, users data layer (server pagination) (+36 more)
+Cohesion: 0.09
+Nodes (20): Attachment, AttachmentChip(), Chat, FIRST_CHAT, humanSize(), MessageRow(), Msg, SEED (+12 more)
 
 ### Community 42 - "Community 42"
-Cohesion: 0.19
-Nodes (18): ChangelogView, ChangelogView(), DEFAULT_STYLE, Entry, inline(), minorOf(), Release, Section (+10 more)
+Cohesion: 0.08
+Nodes (25): dependencies, better-auth, class-variance-authority, clsx, cmdk, date-fns, geist, @hookform/resolvers (+17 more)
 
 ### Community 43 - "Community 43"
-Cohesion: 0.05
-Nodes (34): statCards, statusBadge, fields, metadata, DemoEmployee, DemoMarket, DemoOrganization, employees (+26 more)
-
-### Community 44 - "Community 44"
-Cohesion: 0.06
-Nodes (29): RecordView 1.37.1 server/manual mode fix, FormSlot, blurField, clearRecordViewCache(), emptyStateLabel(), fieldStacked(), formatPhone(), handleSave (+21 more)
-
-### Community 45 - "Community 45"
-Cohesion: 0.10
-Nodes (14): Command(), CommandDialog(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator(), CommandShortcut() (+6 more)
-
-### Community 46 - "Community 46"
-Cohesion: 0.19
-Nodes (14): ADD_CMD, allFiles(), args, ask(), category(), DEPS, detectPM(), dry (+6 more)
-
-### Community 47 - "Community 47"
-Cohesion: 0.09
-Nodes (35): AlertDialog(), AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia() (+27 more)
-
-### Community 48 - "Community 48"
-Cohesion: 0.04
-Nodes (51): AppSidebar(), BOTTOM_BAR_ITEMS, COLLAPSED_GROUP_MODES, CollapsedGroupMode, GROUP_MODE, MobileNav(), NavIcon(), SidebarBody() (+43 more)
-
-### Community 49 - "Community 49"
-Cohesion: 0.09
-Nodes (26): SetPageTitle(), SetPageTitle(), IoAction, IoActionsConfig, IoContext, RecordView(), usePageTitle(), defaultExportActions() (+18 more)
-
-### Community 50 - "Community 50"
-Cohesion: 0.06
-Nodes (37): 1.44.0 — 2026-08-05, 1.50.0 — 2026-08-06, Added, Added, Added, Added, Added, Added (+29 more)
-
-### Community 51 - "Community 51"
-Cohesion: 0.12
-Nodes (16): compilerOptions, declaration, declarationMap, esModuleInterop, incremental, isolatedModules, lib, module (+8 more)
-
-### Community 52 - "Community 52"
-Cohesion: 0.08
-Nodes (24): 1.44.1 — 2026-08-06, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+16 more)
-
-### Community 53 - "Community 53"
-Cohesion: 0.06
-Nodes (37): 1 · New Next.js app, 2 · New Vite + React app, 3 · Existing project, 4 · Turborepo / monorepo, Changing how the components behave, code:bash (git clone https://github.com/myviliha/vui-starter.git), code:jsonc (// apps/web/package.json), code:tsx (import { Button } from "@viliha/vui-ui/button";) (+29 more)
-
-### Community 54 - "Community 54"
-Cohesion: 0.09
-Nodes (23): 1.37.1 — 2026-08-03, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+15 more)
-
-### Community 55 - "Community 55"
-Cohesion: 0.10
-Nodes (21): 1.29.0 — 2026-07-29, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 56 - "Community 56"
-Cohesion: 0.09
-Nodes (23): 1.34.2 — 2026-07-29, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+15 more)
-
-### Community 57 - "Community 57"
-Cohesion: 0.17
-Nodes (15): addToast(), dismissToast(), emit(), items, listeners, toast, ToastAction, ToastCard() (+7 more)
-
-### Community 58 - "Community 58"
-Cohesion: 0.06
-Nodes (34): Acknowledgments, Building with an AI agent, code:bash (npm install @viliha/vui-ui       # or: pnpm add / yarn add /), code:tsx (import { RecordView, type RecordField } from "@viliha/vui-ui), code:tsx (import { VuiProvider } from "@viliha/vui-ui/config";), code:tsx (<RecordView), code:tsx (import { ThemeConfigProvider } from "@viliha/vui-ui/theme-pr), code:bash (cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.m) (+26 more)
-
-### Community 59 - "Community 59"
-Cohesion: 0.17
-Nodes (19): Ctx, DOT_FOR, KeepAliveTabs(), MAX_TABS, NAV_META, OpenTabsContext, OpenTabsProvider(), Tab (+11 more)
-
-### Community 60 - "Community 60"
-Cohesion: 0.03
-Nodes (52): COUNTRIES, FormValues, schema, AccordionContent(), AccordionItem(), AccordionTrigger(), AspectRatio(), Checkbox() (+44 more)
-
-### Community 61 - "Community 61"
-Cohesion: 0.09
-Nodes (17): RecaptchaMock(), SignUpPage(), OnboardingPage(), STEPS, EmailCheck, Plan, PLANS, PUBLIC_EMAIL_DOMAINS (+9 more)
-
-### Community 62 - "Community 62"
-Cohesion: 0.14
-Nodes (9): OnboardingPage(), STEPS, EmailCheck, Plan, PLANS, PUBLIC_EMAIL_DOMAINS, TEAM_ROLES, TeamRole (+1 more)
-
-### Community 63 - "Community 63"
-Cohesion: 0.05
-Nodes (29): fields, SOFT_DELETED, metadata, fields, fields, fields, fields, metadata (+21 more)
-
-### Community 64 - "Community 64"
-Cohesion: 0.14
-Nodes (15): dependsOn, inputs, outputs, dependsOn, cache, persistent, globalEnv, dependsOn (+7 more)
-
-### Community 65 - "Community 65"
-Cohesion: 0.08
-Nodes (24): 1.14.1 — 2026-07-26, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+16 more)
-
-### Community 66 - "Community 66"
-Cohesion: 0.03
-Nodes (103): 1.40.0 — 2026-08-04, 1.53.0 — 2026-08-06, 1.54.0 — 2026-08-06, 1.55.0 — 2026-08-06, 1.57.0 — 2026-08-07, 1.58.0 — 2026-08-07, Added, Added (+95 more)
-
-### Community 67 - "Community 67"
-Cohesion: 0.15
-Nodes (13): dependencies, class-variance-authority, clsx, cmdk, input-otp, lucide-react, radix-ui, @radix-ui/react-icons (+5 more)
-
-### Community 68 - "Community 68"
-Cohesion: 0.18
-Nodes (13): Accordion doc Page, Alert Dialog doc Page, Alert doc Page, Aspect Ratio doc Page, Calendar component doc Page, Collapsible doc Page, Command doc Page, component-doc helpers (+5 more)
-
-### Community 69 - "Community 69"
-Cohesion: 0.10
-Nodes (20): 1.25.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+12 more)
-
-### Community 70 - "Community 70"
-Cohesion: 0.10
-Nodes (20): author, bin, vui, vui-ui, bugs, url, description, files (+12 more)
-
-### Community 71 - "Community 71"
-Cohesion: 0.11
-Nodes (9): AuthCard(), AuthCardAside(), AuthCardBody(), AuthCardFooter(), GoogleIcon(), PLANS, STEPS, InputOTP (shadcn) (+1 more)
-
-### Community 72 - "Community 72"
-Cohesion: 0.10
-Nodes (21): 1.26.2 — 2026-07-29, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+13 more)
-
-### Community 73 - "Community 73"
-Cohesion: 0.05
-Nodes (46): 1.24.0 — 2026-07-27, 1.34.0 — 2026-07-29, Added, Added, Added, Added, Added, Added (+38 more)
-
-### Community 74 - "Community 74"
-Cohesion: 0.07
-Nodes (27): 1. Delete First, 2. Extend Before Create, 3. Blueprint Test, Accessibility, apps/backoffice, Changelog & docs are mandatory (never skip), Code Standards, code:css (@import "@viliha/vui-ui/theme.css";) (+19 more)
-
-### Community 75 - "Community 75"
-Cohesion: 0.07
-Nodes (27): 1.23.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+19 more)
-
-### Community 76 - "Community 76"
-Cohesion: 0.06
-Nodes (33): 1.6.0 — 2026-07-25, Added, Added, Added, Added, Added, Added, Added (+25 more)
-
-### Community 77 - "Community 77"
-Cohesion: 0.17
-Nodes (12): devDependencies, eslint, postcss, @repo/eslint-config, @repo/typescript-config, tailwindcss, @tailwindcss/postcss, tw-animate-css (+4 more)
-
-### Community 78 - "Community 78"
-Cohesion: 0.15
-Nodes (14): devDependencies, eslint, react, react-dom, @repo/eslint-config, @repo/typescript-config, @types/node, @types/react (+6 more)
-
-### Community 79 - "Community 79"
-Cohesion: 0.09
-Nodes (19): accentFor(), colorFor(), Crumb, ROUTE_ACCENT, ROUTE_COLORS, SEGMENT_LABELS, SECTION_INDEX, accentFor (+11 more)
-
-### Community 80 - "Community 80"
-Cohesion: 0.40
-Nodes (6): vui init CLI scaffolder, Sanitized single-path publish flow, guard-publish.mjs (prepublish guard), publish.mjs (npm publish path), sync-template.mjs (regenerate template/), @viliha/vui-ui package manifest
-
-### Community 81 - "Community 81"
-Cohesion: 0.10
-Nodes (21): 1.5.0 — 2026-07-24, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 82 - "Community 82"
-Cohesion: 0.08
-Nodes (24): 1.21.1 — 2026-07-27, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+16 more)
-
-### Community 83 - "Community 83"
-Cohesion: 0.07
-Nodes (30): 1.48.0 — 2026-08-06, Added, Added, Added, Added, Added, Added, Added (+22 more)
-
-### Community 84 - "Community 84"
-Cohesion: 0.04
-Nodes (50): 1.37.0 — 2026-07-31, 1.51.0 — 2026-08-06, 1.59.0 — 2026-08-07, Added, Added, Added, Added, Added (+42 more)
-
-### Community 85 - "Community 85"
-Cohesion: 0.20
-Nodes (9): app, APP_SKIP, appSrc, COMP_SKIP, gcss, here, out, pkgRoot (+1 more)
-
-### Community 86 - "Community 86"
-Cohesion: 0.07
-Nodes (29): 1.31.0 — 2026-07-29, Added, Added, Added, Added, Added, Added, Added (+21 more)
-
-### Community 87 - "Community 87"
-Cohesion: 0.20
-Nodes (9): compilerOptions, allowJs, jsx, module, moduleResolution, noEmit, plugins, extends (+1 more)
-
-### Community 88 - "Community 88"
-Cohesion: 0.20
-Nodes (9): compilerOptions, emitDecoratorMetadata, experimentalDecorators, lib, types, useDefineForClassFields, verbatimModuleSyntax, extends (+1 more)
-
-### Community 89 - "Community 89"
-Cohesion: 0.22
-Nodes (8): compilerOptions, paths, plugins, strictNullChecks, exclude, extends, include, @/*
-
-### Community 90 - "Community 90"
-Cohesion: 0.08
-Nodes (25): 1.1.8 — 2026-07-23, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+17 more)
-
-### Community 91 - "Community 91"
-Cohesion: 0.22
-Nodes (6): ALL, CITIES, fields, Member, ROLES, TEAMS
-
-### Community 92 - "Community 92"
-Cohesion: 0.14
-Nodes (13): Comment, Entry(), FIRST_TICKET, initials(), Priority, PRIORITY_DOT, PRIORITY_OPTIONS, SEED (+5 more)
-
-### Community 93 - "Community 93"
-Cohesion: 0.09
-Nodes (25): TopBar, TopBar(), ChromeFeature, SidebarToggle, ChromeConfigProvider, useChrome, QuickActionsProvider, TopBar (+17 more)
-
-### Community 94 - "Community 94"
-Cohesion: 0.23
-Nodes (9): Badge(), badgeVariants, Badge(), badgeVariants, Badge(), BadgeProps, BadgeVariant, VARIANTS (+1 more)
-
-### Community 95 - "Community 95"
-Cohesion: 0.08
-Nodes (25): 1.5.1 — 2026-07-24, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+17 more)
-
-### Community 96 - "Community 96"
-Cohesion: 0.11
-Nodes (14): AppLayout (app shell), RootLayout, Brand, BrandContext, BrandContextValue, BrandName(), DEFAULT_BRAND, useBrand() (+6 more)
-
-### Community 97 - "Community 97"
-Cohesion: 0.25
-Nodes (8): scripts, check-types, generate:component, lint, prepublishOnly, release, sync-template, test
-
-### Community 98 - "Community 98"
-Cohesion: 0.11
-Nodes (23): 1.1.7 — 2026-07-23, 1.57.1 — 2026-08-07, 1.60.0 — 2026-08-07, 1.62.1 — 2026-08-07, Added, Added, Added, Changelog (+15 more)
-
-### Community 99 - "Community 99"
-Cohesion: 0.09
-Nodes (22): Accessibility, code:text (apps/), code:bash (pnpm --filter @viliha/vui-ui check-types), Components, Core Principles, Data Fetching, Enterprise Next.js & React Coding Standards, Error Handling (+14 more)
-
-### Community 100 - "Community 100"
-Cohesion: 0.15
-Nodes (12): Comment, Entry(), FIRST_TICKET, initials(), Priority, PRIORITY_DOT, PRIORITY_OPTIONS, SEED (+4 more)
-
-### Community 101 - "Community 101"
-Cohesion: 0.08
-Nodes (29): A theme that ships finished and stays configurable, code:block1 (package default  ←  shipped preset  ←  app config  ←  user p), code:tsx (// packages/ui/src/config.ts), code:tsx (// Out of the box — nothing to write; the provider is option), code:tsx (type FormAction<T> = {), code:tsx (actions={(defaults) => [), code:tsx (type FormSection = {), code:tsx (behaviour: {) (+21 more)
-
-### Community 102 - "Community 102"
-Cohesion: 0.07
-Nodes (30): 1.46.0 — 2026-08-06, Added, Added, Added, Added, Added, Added, Added (+22 more)
-
-### Community 103 - "Community 103"
-Cohesion: 0.10
-Nodes (21): 1.42.0 — 2026-08-05, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 104 - "Community 104"
-Cohesion: 0.25
-Nodes (7): compilerOptions, outDir, strictNullChecks, types, exclude, extends, include
-
-### Community 105 - "Community 105"
-Cohesion: 0.29
-Nodes (6): license, name, private, publishConfig, access, version
-
-### Community 107 - "Community 107"
-Cohesion: 0.22
-Nodes (11): @viliha/vui-ui init scaffolder CLI, Installation docs page, RecordView data table component, Using shadcn/ui docs page, Steps step indicator component, Steps docs page, Support Layout (metadata), Support & ticketing docs page (+3 more)
-
-### Community 108 - "Community 108"
-Cohesion: 0.14
-Nodes (16): AuthCard components, SupportPage(), ForgotPasswordPage(), ResetPasswordPage(), ForgotPasswordPage, SupportPage(), ForgotPasswordPage(), ResetPasswordPage() (+8 more)
-
-### Community 109 - "Community 109"
-Cohesion: 0.33
-Nodes (5): args, original, pkg, pkgDir, pkgPath
-
-### Community 110 - "Community 110"
-Cohesion: 0.17
-Nodes (9): geist, RootLayout, sourceSerif, geist, inter, jetbrainsMono, jsonLd, metadata (+1 more)
-
-### Community 111 - "Community 111"
-Cohesion: 0.10
-Nodes (21): 1.15.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 112 - "Community 112"
-Cohesion: 0.50
-Nodes (5): VUI Apple Touch Icon (PNG), VUI App Icon (PNG), VUI App Icon (SVG), Vui Starter Home Dashboard Screenshot, Vui Starter Organizations Data Table Screenshot
-
-### Community 113 - "Community 113"
-Cohesion: 0.10
-Nodes (20): OrgSwitcherConfig, ThemeAwareOrgConfig, useResolved(), useVuiConfig(), Organization, OrgContext, OrgCtx, OrgMark() (+12 more)
-
-### Community 114 - "Community 114"
-Cohesion: 0.15
-Nodes (19): AppAuthProvider, UserMenu, SignInPage(), View, USER, UserMenu(), useAuth (auth-context), auth-demo (lib) (+11 more)
-
-### Community 115 - "Community 115"
-Cohesion: 0.20
-Nodes (8): AttachmentChip(), Chat, FIRST_CHAT, humanSize(), MessageRow(), Msg, SEED, WELCOME
-
-### Community 116 - "Community 116"
-Cohesion: 0.18
-Nodes (3): OrganizationsView, metadata, UsersView
-
-### Community 117 - "Community 117"
-Cohesion: 0.11
-Nodes (17): ToggleGroup(), ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants, ToggleGroup(), ToggleGroupContext, ToggleGroupItem() (+9 more)
-
-### Community 118 - "Community 118"
-Cohesion: 0.40
-Nodes (4): compilerOptions, jsx, extends, $schema
-
-### Community 119 - "Community 119"
-Cohesion: 0.40
-Nodes (5): Dependabot Config, Issue Template Chooser Config, Security Policy, CodeQL Analysis Workflow, Security Workflow (Semgrep · Gitleaks · Audit)
-
-### Community 120 - "Community 120"
-Cohesion: 0.09
-Nodes (23): 1.26.1 — 2026-07-29, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+15 more)
-
-### Community 122 - "Community 122"
-Cohesion: 0.09
-Nodes (23): 1.30.2 — 2026-07-29, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+15 more)
-
-### Community 123 - "Community 123"
-Cohesion: 0.16
-Nodes (10): fields, metadata, CountriesTable, CountriesTable(), fields, CountriesPage, countries, Country (+2 more)
-
-### Community 130 - "Community 130"
-Cohesion: 0.08
-Nodes (26): 1.32.0 — 2026-07-29, Added, Added, Added, Added, Added, Added, Added (+18 more)
-
-### Community 131 - "Community 131"
-Cohesion: 0.09
-Nodes (22): 1.33.0 — 2026-07-29, Added, Added, Added, Added, Added, Added, Added (+14 more)
-
-### Community 132 - "Community 132"
-Cohesion: 0.11
-Nodes (17): aliases, components, hooks, lib, ui, utils, iconLibrary, rsc (+9 more)
-
-### Community 136 - "Community 136"
-Cohesion: 1.00
-Nodes (3): Data Table Page Type Screenshot, Settings Page Type Screenshot, Multi-step Wizard Page Type Screenshot
-
-### Community 137 - "Community 137"
-Cohesion: 1.00
-Nodes (3): Calendar Page Screenshot, Open Tabs Strip Screenshot, Quick Actions Command Palette Screenshot
-
-### Community 138 - "Community 138"
-Cohesion: 0.67
-Nodes (3): Dashboard Page Type Screenshot, Global Search Palette Screenshot, npm Logo
-
-### Community 139 - "Community 139"
-Cohesion: 0.67
-Nodes (3): File Text Icon, Next.js Wordmark Logo, Vercel Logo
-
-### Community 140 - "Community 140"
-Cohesion: 0.67
-Nodes (3): Globe Icon, Turborepo Light Logo, Window Icon
-
-### Community 142 - "Community 142"
-Cohesion: 0.67
-Nodes (3): utils (cn re-export), Form (react-hook-form shadcn), Input (shadcn)
-
-### Community 143 - "Community 143"
 Cohesion: 0.08
 Nodes (23): Contributing docs page, Architecture: three layers (Data → Controller → Presentation), Breadcrumbs, Changelog & docs — mandatory on every change (never skip), code:bash (pnpm --filter @viliha/vui-ui check-types), Command palette (Quick actions & Global search), Git conventions, Hard rules (+15 more)
 
-### Community 145 - "Community 145"
-Cohesion: 0.25
-Nodes (5): ChartConfig, ChartConfigContext, ChartContainer(), LegendEntry, TooltipEntry
+### Community 44 - "Community 44"
+Cohesion: 0.14
+Nodes (16): AuthCard components, ForgotPasswordPage, ForgotPasswordPage, SignInPage(), View, FormControl(), FormDescription(), FormFieldContext (+8 more)
 
-### Community 151 - "Community 151"
+### Community 45 - "Community 45"
+Cohesion: 0.13
+Nodes (16): Heading, DocsSearch (docs command palette), DocsShell, ALL_GROUPS, COMPONENTS_GROUP, NavGroup, NavItem, SECTIONS (+8 more)
+
+### Community 46 - "Community 46"
+Cohesion: 0.09
+Nodes (14): SelectContent(), SelectItem(), SelectLabel(), SelectScrollDownButton(), SelectScrollUpButton(), SelectSeparator(), SelectTrigger(), SheetContent() (+6 more)
+
+### Community 47 - "Community 47"
+Cohesion: 0.09
+Nodes (22): Enterprise Next.js & React Coding Standards, Accessibility, code:text (apps/), code:bash (pnpm --filter @viliha/vui-ui check-types), Components, Core Principles, Data Fetching, Error Handling (+14 more)
+
+### Community 48 - "Community 48"
+Cohesion: 0.11
+Nodes (15): CollapsedGroupMode, AppSidebar, isGroup, NAV_ENTRIES, QuickActionsLauncher, BOTTOM_BAR_ITEMS, GROUP_MODE, NavIcon() (+7 more)
+
+### Community 49 - "Community 49"
 Cohesion: 0.10
-Nodes (20): Accessibility, AI Development Rules, Application Structure, Charts, code:block8 (app/), code:block9 (SetPageTitle), Core Principles, Definition of Done (+12 more)
+Nodes (17): BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator(), Breadcrumb doc Page, BreadcrumbEllipsis() (+9 more)
 
-### Community 190 - "Community 190"
-Cohesion: 0.03
-Nodes (64): 1.35.0 — 2026-07-31, 1.39.0 — 2026-08-04, Added, Added, Added, Added, Added, Added (+56 more)
-
-### Community 191 - "Community 191"
-Cohesion: 0.15
-Nodes (12): 1 · Resource Information, 2 · Screens & Breadcrumb, 3 · API Contract, 4 · API Test Matrix, 5 · Business Rules, 6 · Definition of Done, Create, `<Entity>` — Feature Requirement (+4 more)
-
-### Community 192 - "Community 192"
-Cohesion: 0.09
-Nodes (22): 1.30.1 — 2026-07-29, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+14 more)
-
-### Community 193 - "Community 193"
-Cohesion: 0.18
-Nodes (7): batch(), share(), a, b, calls, opts, run()
-
-### Community 194 - "Community 194"
-Cohesion: 0.06
-Nodes (32): 1.36.0 — 2026-07-31, Added, Added, Added, Added, Added, Added, Added (+24 more)
-
-### Community 195 - "Community 195"
-Cohesion: 0.18
-Nodes (10): name, private, scripts, build, check-types, dev, lint, start (+2 more)
-
-### Community 196 - "Community 196"
-Cohesion: 0.11
-Nodes (19): 1.4.0 — 2026-07-24, Added, Added, Added, Added, Added, Added, Added (+11 more)
-
-### Community 197 - "Community 197"
-Cohesion: 0.09
-Nodes (23): 1.14.2 — 2026-07-26, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+15 more)
-
-### Community 198 - "Community 198"
-Cohesion: 0.25
-Nodes (7): Attribution, Contributor Covenant Code of Conduct, Enforcement, Enforcement Responsibilities, Our Pledge, Our Standards, Scope
-
-### Community 199 - "Community 199"
-Cohesion: 0.07
-Nodes (29): 1.38.0 — 2026-08-04, Added, Added, Added, Added, Added, Added, Added (+21 more)
-
-### Community 200 - "Community 200"
-Cohesion: 0.11
-Nodes (18): 1.56.1 — 2026-08-06, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+10 more)
-
-### Community 201 - "Community 201"
-Cohesion: 0.08
-Nodes (24): 1.3.0 — 2026-07-24, Added, Added, Added, Added, Added, Added, Added (+16 more)
-
-### Community 202 - "Community 202"
+### Community 50 - "Community 50"
 Cohesion: 0.10
-Nodes (20): 1.14.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+12 more)
+Nodes (14): Command(), CommandDialog(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator(), CommandShortcut() (+6 more)
 
-### Community 204 - "Community 204"
-Cohesion: 0.33
-Nodes (5): Backoffice, Environment, Routes, Scripts, Stack
-
-### Community 205 - "Community 205"
-Cohesion: 0.33
-Nodes (6): Breadcrumbs, code:ts (export const NAV: NavSection[] = [), code:tsx (<OpenTabsProvider>), Navigation, Open tabs (keep-alive), Sidebar: sections & collapsible groups
-
-### Community 206 - "Community 206"
-Cohesion: 0.18
-Nodes (11): code:bash (npx @viliha/vui-ui init          # interactive decision tree), code:bash (# A) from the repo root, name the app dir), code:bash (cd apps/web                 # be inside the app, not the roo), code:ts (transpilePackages: ["@viliha/vui-ui"]), code:css (@import "tailwindcss";), End-to-end walkthroughs, Inside a Turborepo / monorepo, Installation Requirements (+3 more)
-
-### Community 207 - "Community 207"
-Cohesion: 0.06
-Nodes (33): 1.47.0 — 2026-08-06, Added, Added, Added, Added, Added, Added, Added (+25 more)
-
-### Community 208 - "Community 208"
-Cohesion: 0.09
-Nodes (23): 1.2.0 — 2026-07-23, Added, Added, Added, Added, Added, Added, Added (+15 more)
-
-### Community 209 - "Community 209"
+### Community 51 - "Community 51"
 Cohesion: 0.11
-Nodes (19): 1.10.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+11 more)
+Nodes (14): ORG_SWITCHER, ThemeAwareOrgConfig, OrgContext, OrgCtx, OrgMark(), PLAN_ICON, SwitchHandler, orgs (+6 more)
 
-### Community 210 - "Community 210"
-Cohesion: 0.10
-Nodes (21): 1.11.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 211 - "Community 211"
-Cohesion: 0.25
-Nodes (7): ALLOWED, files, offenders, SCALE, source, SRC, value
-
-### Community 212 - "Community 212"
-Cohesion: 0.11
-Nodes (19): 1.12.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+11 more)
-
-### Community 213 - "Community 213"
-Cohesion: 0.50
-Nodes (3): Reporting a Vulnerability, Security Policy, Supported Versions
-
-### Community 214 - "Community 214"
-Cohesion: 0.28
-Nodes (16): Add / edit form, Authentication, code:tsx (formActions={(defaults) => [), code:tsx (<OrgProvider organizations={orgs} defaultOrgId={session.orgI), code:tsx (<ThemeConfigProvider), code:tsx (import { VuiProvider } from "@viliha/vui-ui/config";), code:block18 (Form), code:tsx (<RecordView) (+8 more)
-
-### Community 215 - "Community 215"
-Cohesion: 0.08
-Nodes (24): 1.35.1 — 2026-07-31, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+16 more)
-
-### Community 217 - "Community 217"
-Cohesion: 0.09
-Nodes (22): 1.34.1 — 2026-07-29, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+14 more)
-
-### Community 218 - "Community 218"
-Cohesion: 0.50
-Nodes (4): code:bash (npm i @viliha/vui-ui@latest      # or: pnpm up, yarn up, bun), code:ts (// ✅ preserves the mounted page across tab switches (no remo), Coming from 1.44 or earlier, Upgrading
-
-### Community 219 - "Community 219"
-Cohesion: 0.06
-Nodes (33): 1.13.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+25 more)
-
-### Community 220 - "Community 220"
-Cohesion: 0.06
-Nodes (34): 1.16.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+26 more)
-
-### Community 221 - "Community 221"
-Cohesion: 0.11
-Nodes (19): 1.17.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+11 more)
-
-### Community 222 - "Community 222"
-Cohesion: 0.09
-Nodes (22): 1.23.2 — 2026-07-27, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+14 more)
-
-### Community 223 - "Community 223"
-Cohesion: 0.10
-Nodes (21): 1.34.3 — 2026-07-31, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+13 more)
-
-### Community 224 - "Community 224"
-Cohesion: 0.07
-Nodes (30): 1.26.0 — 2026-07-29, Added, Added, Added, Added, Added, Added, Added (+22 more)
-
-### Community 225 - "Community 225"
-Cohesion: 0.05
-Nodes (45): 1.25.2 — 2026-07-29, 1.30.0 — 2026-07-29, Added, Added, Added, Added, Added, Added (+37 more)
-
-### Community 226 - "Community 226"
-Cohesion: 0.08
-Nodes (24): 1.42.1 — 2026-08-05, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+16 more)
-
-### Community 227 - "Community 227"
-Cohesion: 0.11
-Nodes (19): 1.7.0 — 2026-07-25, Added, Added, Added, Added, Added, Added, Added (+11 more)
-
-### Community 228 - "Community 228"
-Cohesion: 0.06
-Nodes (34): 1.41.0 — 2026-08-04, 1.43.0 — 2026-08-05, Added, Added, Added, Added, Added, Added (+26 more)
-
-### Community 229 - "Community 229"
-Cohesion: 0.18
-Nodes (10): Attachment, Attachment, AttachmentChip(), Chat, FIRST_CHAT, humanSize(), MessageRow(), Msg (+2 more)
-
-### Community 230 - "Community 230"
-Cohesion: 0.16
-Nodes (10): fields, metadata, LanguagesTable, fields, LanguagesTable(), LanguagesPage, Language, languages (+2 more)
-
-### Community 231 - "Community 231"
-Cohesion: 0.18
-Nodes (11): 1.56.0 — 2026-08-06, Added, Added, Added, Added, Added, Added, Added (+3 more)
-
-### Community 232 - "Community 232"
-Cohesion: 0.11
-Nodes (26): Button(), buttonVariants, Button, ButtonSize, ButtonVariant, buttonVariants(), SIZES, VARIANTS (+18 more)
-
-### Community 233 - "Community 233"
-Cohesion: 0.07
-Nodes (30): 1.4.1 — 2026-07-24, Added, Added, Added, Added, Added, Added, Added (+22 more)
-
-### Community 234 - "Community 234"
-Cohesion: 0.06
-Nodes (36): 1.5.4 — 2026-07-24, Added, Added, Added, Added, Added, Added, Added (+28 more)
-
-### Community 235 - "Community 235"
-Cohesion: 0.25
-Nodes (7): AuthContext (AuthProvider / useAuth), AuthContext, AuthContract, AuthStatus, AuthUser, Credentials, SignUpInput
-
-### Community 241 - "Community 241"
-Cohesion: 0.06
-Nodes (31): 1.49.0 — 2026-08-06, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+23 more)
-
-### Community 242 - "Community 242"
-Cohesion: 0.11
-Nodes (18): 1.9.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+10 more)
-
-### Community 243 - "Community 243"
-Cohesion: 0.09
-Nodes (10): ChartsContent, PLANS, STEPS, ChartsContent, PLANS, STEPS, Breadcrumbs, slugify (+2 more)
-
-### Community 244 - "Community 244"
-Cohesion: 0.09
-Nodes (22): 1.21.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+14 more)
-
-### Community 245 - "Community 245"
-Cohesion: 0.22
-Nodes (9): AuthIndex, AuthCard sectioned card, Auth contract (auth-context), Better Auth, useFormFields validation, NEXT_PUBLIC_PASSWORD_MASK, DEFAULT_MASK, PasswordInput (+1 more)
-
-### Community 246 - "Community 246"
-Cohesion: 0.50
-Nodes (4): exports, ./theme-config, ./theme.css, ./utils
-
-### Community 247 - "Community 247"
-Cohesion: 0.22
-Nodes (10): FormControl(), FormDescription(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContextValue, FormLabel(), FormMessage() (+2 more)
-
-### Community 248 - "Community 248"
-Cohesion: 0.08
-Nodes (24): 1.13.1 — 2026-07-26, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+16 more)
-
-### Community 249 - "Community 249"
-Cohesion: 0.08
-Nodes (25): 1.5.2 — 2026-07-24, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+17 more)
-
-### Community 250 - "Community 250"
-Cohesion: 0.08
-Nodes (25): 1.41.1 — 2026-08-05, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+17 more)
-
-### Community 251 - "Community 251"
-Cohesion: 0.09
-Nodes (22): 1.6.1 — 2026-07-25, Added, Added, Added, Added, Added, Added, Added (+14 more)
-
-### Community 252 - "Community 252"
-Cohesion: 0.06
-Nodes (37): 1.19.0 — 2026-07-27, 1.27.0 — 2026-07-29, Added, Added, Added, Added, Added, Added (+29 more)
-
-### Community 253 - "Community 253"
-Cohesion: 0.67
-Nodes (4): code:tsx (import { Page } from "@viliha/vui-ui/page";), code:tsx (import { FilterField } from "@viliha/vui-ui/filter-field";), Filtering, Tables
-
-### Community 254 - "Community 254"
-Cohesion: 0.08
-Nodes (24): 1.18.0 — 2026-07-27, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+16 more)
-
-### Community 255 - "Community 255"
-Cohesion: 0.10
-Nodes (21): 1.20.0 — 2026-07-27, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 256 - "Community 256"
+### Community 52 - "Community 52"
 Cohesion: 0.17
-Nodes (7): SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle(), Sheet
+Nodes (15): metadata, Department, departments, CitiesTable, CitiesTable(), COUNTRIES, fields, statesFor() (+7 more)
 
-### Community 257 - "Community 257"
-Cohesion: 0.10
-Nodes (20): 1.8.0 — 2026-07-26, Added, Added, Added, Added, Added, Added, Added (+12 more)
-
-### Community 258 - "Community 258"
-Cohesion: 0.25
-Nodes (5): CSS-variable design tokens (theme.css), ThemingPage (docs), COLORS, metadata, TypesetPage (docs)
-
-### Community 259 - "Community 259"
-Cohesion: 0.09
-Nodes (22): 1.21.2 — 2026-07-27, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+14 more)
-
-### Community 260 - "Community 260"
-Cohesion: 0.09
-Nodes (23): 1.23.1 — 2026-07-27, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+15 more)
-
-### Community 261 - "Community 261"
-Cohesion: 0.09
-Nodes (23): 1.6.3 — 2026-07-25, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+15 more)
-
-### Community 262 - "Community 262"
-Cohesion: 0.29
-Nodes (7): AiAgentsPage, shadcn components.json, BlocksPage, ComponentsPage showcase, AGENT.md consumer guide, Five VUI page types (Blocks), RecordView datatable
-
-### Community 263 - "Community 263"
-Cohesion: 0.43
-Nodes (5): CommandPalette, CommandAction, SearchGlyph(), Kbd(), Shortcut()
-
-### Community 264 - "Community 264"
-Cohesion: 0.33
-Nodes (5): ALL, BY_CODE, CITIES, searchPostCodes(), wait()
-
-### Community 265 - "Community 265"
-Cohesion: 0.10
-Nodes (21): 1.28.0 — 2026-07-29, Added, Added, Added, Added, Added, Added, Added (+13 more)
-
-### Community 266 - "Community 266"
-Cohesion: 0.09
-Nodes (20): Section(), SettingsPage(), Theme, THEME_OPTIONS, auth (AuthCard shell primitives), app-config (CHROME_FEATURES), DATA_TABLE_PREFERENCE_FIELDS, THEME_CHOICES (+12 more)
-
-### Community 268 - "Community 268"
-Cohesion: 0.28
-Nodes (9): CalendarPage, charts metadata layout, ChartsPage, chat metadata layout, ChatPage, components metadata layout, ChartContainer + chart tokens, Static-Tailwind color labels (+1 more)
-
-### Community 269 - "Community 269"
-Cohesion: 0.08
-Nodes (21): listWorkspaces(), switchWorkspace(), WORKSPACES, WorkspaceTheme(), WORKSPACES, CHROME_DEFAULTS, CHROME_FEATURES, DATA_TABLE_PREFERENCE_FIELDS (+13 more)
-
-### Community 270 - "Community 270"
-Cohesion: 0.22
-Nodes (6): ALL, CITIES, fields, Member, ROLES, TEAMS
-
-### Community 271 - "Community 271"
-Cohesion: 0.08
-Nodes (25): 1.33.1 — 2026-07-29, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+17 more)
-
-### Community 272 - "Community 272"
-Cohesion: 0.12
-Nodes (14): ALL, FIRST, LAST, MAX_PAGE_SIZE, ALL, FIRST, LAST, MAX_PAGE_SIZE (+6 more)
-
-### Community 274 - "Community 274"
-Cohesion: 0.40
-Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
-
-### Community 275 - "Community 275"
-Cohesion: 0.50
-Nodes (4): Alert(), AlertDescription(), AlertTitle(), alertVariants
-
-### Community 276 - "Community 276"
-Cohesion: 0.08
-Nodes (25): 1.11.1 — 2026-07-26, Changed, Changed, Changed, Changed, Changed, Changed, Changed (+17 more)
-
-### Community 277 - "Community 277"
-Cohesion: 0.33
-Nodes (5): ChromeConfigContext, ChromeFlags, Ctx, useChrome(), useChromeConfig()
-
-### Community 278 - "Community 278"
-Cohesion: 0.08
-Nodes (24): 1.13.2 — 2026-07-26, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+16 more)
-
-### Community 280 - "Community 280"
-Cohesion: 0.09
-Nodes (23): 1.4.3 — 2026-07-24, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+15 more)
-
-### Community 281 - "Community 281"
-Cohesion: 0.09
-Nodes (23): 1.6.2 — 2026-07-25, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed, Fixed (+15 more)
-
-### Community 282 - "Community 282"
+### Community 53 - "Community 53"
 Cohesion: 0.16
-Nodes (6): AuthHeader, SiteFooter, metadata, SiteFooter(), AuthLayout, FOOTER_OVERRIDDEN
+Nodes (12): listWorkspaces(), switchWorkspace(), WORKSPACES, CHROME_DEFAULTS, CHROME_FEATURES, WorkspaceProvider(), WorkspaceTheme(), DATA_TABLE_PREFERENCE_FIELDS (+4 more)
 
-### Community 283 - "Community 283"
+### Community 54 - "Community 54"
 Cohesion: 0.10
-Nodes (20): 1.5.3 — 2026-07-24, Added, Added, Added, Added, Added, Added, Added (+12 more)
+Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+11 more)
 
-### Community 284 - "Community 284"
-Cohesion: 0.25
-Nodes (9): BrandProvider runtime branding override, Configuration docs page, NEXT_PUBLIC_RESIZABLE_COLUMNS env var, Custom-render cell overflow clip fix, User-resizable columns on by default, Default-on so long values in narrow columns stay reachable, resizableColumns prop (defaults to RESIZABLE_COLUMNS), turbo.json globalEnv: NEXT_PUBLIC_RESIZABLE_COLUMNS (+1 more)
+### Community 55 - "Community 55"
+Cohesion: 0.10
+Nodes (19): Accessibility, AI Development Rules, Application Structure, Charts, code:block8 (app/), code:block9 (SetPageTitle), Core Principles, Definition of Done (+11 more)
 
-### Community 285 - "Community 285"
+### Community 56 - "Community 56"
+Cohesion: 0.11
+Nodes (19): author, bin, vui, vui-ui, bugs, url, description, files (+11 more)
+
+### Community 57 - "Community 57"
+Cohesion: 0.12
+Nodes (19): Acknowledgments, Building with an AI agent, code:tsx (import { RecordView, type RecordField } from "@viliha/vui-ui), code:tsx (import { VuiProvider } from "@viliha/vui-ui/config";), code:tsx (<RecordView), code:tsx (import { ThemeConfigProvider } from "@viliha/vui-ui/theme-pr), code:bash (cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.m), code:css (@import "@viliha/vui-ui/theme.css";) (+11 more)
+
+### Community 58 - "Community 58"
+Cohesion: 0.12
+Nodes (15): TableSkeleton, OrganizationsView, metadata, DemoEmployee, DemoMarket, DemoOrganization, employees, markets (+7 more)
+
+### Community 59 - "Community 59"
+Cohesion: 0.11
+Nodes (17): apps/backoffice, Changelog & docs are mandatory (never skip), Code Standards, code:bash (pnpm lint), code:bash (cd packages/ui), Contributing to VUI Starter, Core Philosophy, Definition of Done (+9 more)
+
+### Community 60 - "Community 60"
 Cohesion: 0.12
 Nodes (7): AuthCard(), AuthCardAside(), AuthCardBody(), AuthCardFooter(), GoogleIcon(), PLANS, STEPS
 
-### Community 286 - "Community 286"
+### Community 61 - "Community 61"
+Cohesion: 0.17
+Nodes (12): ToggleGroupContext, ToggleGroupItem(), toggleVariants, Toggle(), toggleVariants, ToggleGroup(), ToggleGroupContext, ToggleGroupItem() (+4 more)
+
+### Community 62 - "Community 62"
+Cohesion: 0.12
+Nodes (16): aliases, hooks, lib, ui, utils, iconLibrary, rsc, $schema (+8 more)
+
+### Community 63 - "Community 63"
+Cohesion: 0.17
+Nodes (16): NAV, KeepAliveTabs, OpenTabsProvider, tabMeta, TabStrip, useOpenTabs, labelFor, Keep-alive tab caching (+8 more)
+
+### Community 64 - "Community 64"
+Cohesion: 0.13
+Nodes (14): RecaptchaMock(), EmailCheck, Plan, PLANS, PUBLIC_EMAIL_DOMAINS, TEAM_ROLES, TeamRole, TIMEZONES (+6 more)
+
+### Community 65 - "Community 65"
+Cohesion: 0.16
+Nodes (14): CopyButton, Doc prose primitives, PackageManagerTabs, PM, PMS, store, usePM(), TemplateBlock (+6 more)
+
+### Community 66 - "Community 66"
+Cohesion: 0.16
+Nodes (12): ChangelogView, DEFAULT_STYLE, Entry, Release, Section, TYPE_ORDER, TYPE_STYLE, TypePill() (+4 more)
+
+### Community 67 - "Community 67"
+Cohesion: 0.14
+Nodes (11): AppSidebar, BOTTOM_BAR_ITEMS, COLLAPSED_GROUP_MODES, GROUP_MODE, MobileNav(), NavIcon(), SidebarBody(), SidebarContext (+3 more)
+
+### Community 68 - "Community 68"
+Cohesion: 0.13
+Nodes (14): statusBadge, Comment, Entry(), FIRST_TICKET, initials(), Priority, PRIORITY_DOT, PRIORITY_OPTIONS (+6 more)
+
+### Community 69 - "Community 69"
+Cohesion: 0.19
+Nodes (14): ADD_CMD, allFiles(), args, ask(), category(), DEPS, detectPM(), dry (+6 more)
+
+### Community 70 - "Community 70"
+Cohesion: 0.12
+Nodes (16): Label component docs page, Popover component docs page, Progress component docs page, Radio Group component docs page, Scroll Area component docs page, Separator component docs page, shadcn/ui component set, Sheet component docs page (+8 more)
+
+### Community 71 - "Community 71"
+Cohesion: 0.12
+Nodes (15): compilerOptions, declaration, esModuleInterop, incremental, isolatedModules, lib, module, moduleDetection (+7 more)
+
+### Community 72 - "Community 72"
+Cohesion: 0.28
+Nodes (16): Add / edit form, Authentication, code:tsx (formActions={(defaults) => [), code:tsx (<OrgProvider organizations={orgs} defaultOrgId={session.orgI), code:tsx (<ThemeConfigProvider), code:tsx (import { VuiProvider } from "@viliha/vui-ui/config";), code:block18 (Form), code:tsx (<RecordView) (+8 more)
+
+### Community 73 - "Community 73"
+Cohesion: 0.13
+Nodes (15): Changing how the components behave, code:tsx (import { Button } from "@viliha/vui-ui/button";), code:bash (NEXT_PUBLIC_COMPANY_NAME="Acme Inc."), code:tsx (import { VuiProvider } from "@viliha/vui-ui/config";), code:block16 (apps/), Components, Configuration, Contents (+7 more)
+
+### Community 74 - "Community 74"
 Cohesion: 0.23
-Nodes (11): StatCard, StatCard(), StatCardProps, Trend, trendColor, trendIcon, StatCard(), StatCardProps (+3 more)
+Nodes (11): AppAuthProvider, UserMenu, View, USER, useAuth (auth-context), RecaptchaMock(), SignUpPage(), USER (+3 more)
 
-### Community 287 - "Community 287"
+### Community 75 - "Community 75"
 Cohesion: 0.15
-Nodes (10): ALL, FIRST, LAST, MAX_PAGE_SIZE, ROLES, STATUSES, TEAMS, trashedIds (+2 more)
+Nodes (11): ChromeConfigContext, ChromeFlags, Ctx, useChrome(), useChromeConfig(), Ctx, NavEntryFlat, QuickActionsContext (+3 more)
 
-### Community 288 - "Community 288"
-Cohesion: 0.60
-Nodes (5): Layout & patterns docs page, nav-config.ts single source of truth, Navigation, sections & tabs docs page, Open tabs keep-alive strip, Five page types (table, form, dashboard, settings, board)
+### Community 76 - "Community 76"
+Cohesion: 0.18
+Nodes (14): addToast(), dismissToast(), emit(), items, listeners, toast, ToastAction, ToastCard() (+6 more)
 
-### Community 289 - "Community 289"
+### Community 77 - "Community 77"
+Cohesion: 0.14
+Nodes (15): code:bash (npm install @viliha/vui-ui       # or: pnpm add / yarn add /), Install, 1 · New Next.js app, 2 · New Vite + React app, 3 · Existing project, 4 · Turborepo / monorepo, code:jsonc (// apps/web/package.json), code:css (:root {) (+7 more)
+
+### Community 78 - "Community 78"
+Cohesion: 0.16
+Nodes (8): STEPS, PLANS, STEPS, auth-demo (lib), Multi-step wizard pattern, Multi-step wizard flow, OnboardingPage, RegisterBusinessPage
+
+### Community 79 - "Community 79"
+Cohesion: 0.20
+Nodes (11): FormControl(), FormDescription(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContext, FormItemContextValue, FormLabel() (+3 more)
+
+### Community 80 - "Community 80"
+Cohesion: 0.14
+Nodes (9): OnboardingPage(), STEPS, EmailCheck, Plan, PLANS, PUBLIC_EMAIL_DOMAINS, TEAM_ROLES, TeamRole (+1 more)
+
+### Community 81 - "Community 81"
+Cohesion: 0.23
+Nodes (12): metadata, Dashboard Layout, HomePage (Dashboard), EmployeesTable, fields, EmployeesPage, Global search record INDEX, crm-data module (+4 more)
+
+### Community 82 - "Community 82"
+Cohesion: 0.23
+Nodes (13): Ctx, DOT_FOR, MAX_TABS, NAV_META, OpenTabsContext, Tab, TAB_COLORS, tabKey() (+5 more)
+
+### Community 83 - "Community 83"
+Cohesion: 0.15
+Nodes (12): Comment, Entry(), FIRST_TICKET, initials(), Priority, PRIORITY_DOT, PRIORITY_OPTIONS, SEED (+4 more)
+
+### Community 84 - "Community 84"
+Cohesion: 0.16
+Nodes (12): body, decode(), dest, ENTITIES, exportDir, here, html, out (+4 more)
+
+### Community 85 - "Community 85"
+Cohesion: 0.18
+Nodes (13): metadata, BrandProvider runtime branding override, Configuration docs page, DataTableLayout, DataTablePage, NEXT_PUBLIC_RESIZABLE_COLUMNS env var, Custom-render cell overflow clip fix, User-resizable columns on by default (+5 more)
+
+### Community 86 - "Community 86"
+Cohesion: 0.14
+Nodes (14): Reuse-first VUI component principle, Feature requirement template, 1 · Resource Information, 2 · Screens & Breadcrumb, 3 · API Contract, 4 · API Test Matrix, 5 · Business Rules, 6 · Definition of Done (+6 more)
+
+### Community 87 - "Community 87"
+Cohesion: 0.16
+Nodes (13): inputs, outputs, cache, persistent, globalEnv, dependsOn, $schema, tasks (+5 more)
+
+### Community 88 - "Community 88"
+Cohesion: 0.24
+Nodes (9): metadata, CountriesTable, CountriesTable(), fields, CountriesPage, countries, Country, fields (+1 more)
+
+### Community 89 - "Community 89"
+Cohesion: 0.24
+Nodes (9): metadata, CurrenciesTable, CurrenciesTable(), fields, CurrenciesPage, currencies, Currency, fields (+1 more)
+
+### Community 90 - "Community 90"
+Cohesion: 0.24
+Nodes (9): metadata, LanguagesTable, fields, LanguagesTable(), LanguagesPage, Language, languages, fields (+1 more)
+
+### Community 91 - "Community 91"
+Cohesion: 0.23
+Nodes (13): Claude Code Project Settings (hooks), AGENTS.md — Deterministic AI Agent Rules, Backoffice postcss.config.mjs, CLAUDE.md (imports AGENTS.md), AI Agent Guide (AGENT.md + CLAUDE.template.md), theme.css Design Tokens, RecordView Datatable, @viliha/vui-ui Component Library (+5 more)
+
+### Community 92 - "Community 92"
+Cohesion: 0.18
+Nodes (13): Accordion doc Page, Alert Dialog doc Page, Alert doc Page, Aspect Ratio doc Page, Calendar component doc Page, Collapsible doc Page, Command doc Page, component-doc helpers (+5 more)
+
+### Community 93 - "Community 93"
+Cohesion: 0.18
+Nodes (11): AuthIndex, AuthCard sectioned card, Auth contract (auth-context), Auth screen flow, Better Auth, useFormFields validation, DemoPage, NEXT_PUBLIC_PASSWORD_MASK (+3 more)
+
+### Community 94 - "Community 94"
+Cohesion: 0.17
+Nodes (10): opts(), opts(), resolveOptions(), batch(), share(), a, b, calls (+2 more)
+
+### Community 95 - "Community 95"
+Cohesion: 0.15
+Nodes (13): dependencies, class-variance-authority, clsx, cmdk, input-otp, lucide-react, radix-ui, @radix-ui/react-icons (+5 more)
+
+### Community 96 - "Community 96"
 Cohesion: 0.23
 Nodes (10): FormControl(), FormDescription(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContext, FormItemContextValue, FormLabel() (+2 more)
 
-### Community 290 - "Community 290"
+### Community 97 - "Community 97"
+Cohesion: 0.17
+Nodes (7): AuthCard(), AuthCardAside(), AuthCardBody(), AuthCardFooter(), GoogleIcon(), InputOTP (shadcn), VerifyPage
+
+### Community 98 - "Community 98"
+Cohesion: 0.17
+Nodes (12): devDependencies, eslint, postcss, @repo/eslint-config, @repo/typescript-config, tailwindcss, @tailwindcss/postcss, tw-animate-css (+4 more)
+
+### Community 99 - "Community 99"
 Cohesion: 0.18
-Nodes (7): SelectContent(), SelectItem(), SelectLabel(), SelectScrollDownButton(), SelectScrollUpButton(), SelectSeparator(), SelectTrigger()
+Nodes (7): SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle(), Sheet
 
-### Community 291 - "Community 291"
+### Community 100 - "Community 100"
+Cohesion: 0.20
+Nodes (7): metadata, UsersView, metadata, UsersPage, UsersTable (dynamic loader), UsersTable, UsersView (server-paginated RecordView)
+
+### Community 101 - "Community 101"
 Cohesion: 0.25
-Nodes (6): TableSkeleton, metadata, UsersPage, UsersTable (dynamic loader), UsersTable, UsersView (server-paginated RecordView)
+Nodes (8): themeInitScript, ThemeToggle, metadata, metadata, themeInitScript, Flash-free theme init, OnboardingLayout, RegisterBusinessLayout
 
-### Community 304 - "Community 304"
+### Community 102 - "Community 102"
+Cohesion: 0.33
+Nodes (9): getOrgProfile(), OrgProfile, profile, updateOrgProfile(), wait(), OrgProfileController, OrgProfileController, useOrgProfile() (+1 more)
+
+### Community 103 - "Community 103"
+Cohesion: 0.22
+Nodes (11): @viliha/vui-ui init scaffolder CLI, Installation docs page, RecordView data table component, Using shadcn/ui docs page, Steps step indicator component, Steps docs page, Support Layout (metadata), Support & ticketing docs page (+3 more)
+
+### Community 104 - "Community 104"
+Cohesion: 0.18
+Nodes (11): code:bash (npx @viliha/vui-ui init          # interactive decision tree), code:bash (# A) from the repo root, name the app dir), code:bash (cd apps/web                 # be inside the app, not the roo), code:ts (transpilePackages: ["@viliha/vui-ui"]), code:css (@import "tailwindcss";), End-to-end walkthroughs, Inside a Turborepo / monorepo, Installation Requirements (+3 more)
+
+### Community 105 - "Community 105"
+Cohesion: 0.18
+Nodes (10): name, private, scripts, build, check-types, dev, lint, start (+2 more)
+
+### Community 106 - "Community 106"
+Cohesion: 0.20
+Nodes (11): devDependencies, eslint, react, react-dom, @repo/eslint-config, @repo/typescript-config, @types/node, @types/react (+3 more)
+
+### Community 107 - "Community 107"
+Cohesion: 0.18
+Nodes (11): code:css (@import "tailwindcss";), code:ts (const nextConfig = { transpilePackages: ["@viliha/vui-ui"] }), code:bash (npx @viliha/vui-ui init), code:block5 (Flags (for CI / agents, skip the prompts):), code:bash (# npm), code:bash (# from inside the app (simplest)), ⚠️ Existing project: read this first, Fresh + pre-built (recommended for new apps) (+3 more)
+
+### Community 108 - "Community 108"
+Cohesion: 0.27
+Nodes (7): badgeVariants, Badge(), Badge(), BadgeProps, BadgeVariant, VARIANTS, Badge
+
+### Community 109 - "Community 109"
+Cohesion: 0.20
+Nodes (8): AppLayout (app shell), RootLayout, geist, inter, jetbrainsMono, jsonLd, metadata, sourceSerif
+
+### Community 110 - "Community 110"
+Cohesion: 0.20
+Nodes (9): compilerOptions, allowJs, jsx, module, moduleResolution, noEmit, plugins, extends (+1 more)
+
+### Community 111 - "Community 111"
+Cohesion: 0.20
+Nodes (9): app, APP_SKIP, appSrc, COMP_SKIP, gcss, here, out, pkgRoot (+1 more)
+
+### Community 112 - "Community 112"
+Cohesion: 0.20
+Nodes (9): compilerOptions, emitDecoratorMetadata, experimentalDecorators, lib, types, useDefineForClassFields, verbatimModuleSyntax, extends (+1 more)
+
+### Community 113 - "Community 113"
+Cohesion: 0.22
+Nodes (8): compilerOptions, paths, plugins, strictNullChecks, exclude, extends, include, @/*
+
+### Community 114 - "Community 114"
+Cohesion: 0.25
+Nodes (9): Turborepo + pnpm Monorepo, Root package.json, pnpm Workspace Config, Turborepo Pipeline Config, devDependencies, prettier, turbo, typescript (+1 more)
+
+### Community 115 - "Community 115"
+Cohesion: 0.22
+Nodes (8): engines, node, name, postcss, sharp, pnpm, overrides, private
+
+### Community 116 - "Community 116"
+Cohesion: 0.25
+Nodes (8): BrandProvider, Logo, Brand, BrandContext, BrandContextValue, BrandName(), DEFAULT_BRAND, useBrand()
+
+### Community 117 - "Community 117"
+Cohesion: 0.22
+Nodes (6): ALL, CITIES, fields, Member, ROLES, TEAMS
+
+### Community 118 - "Community 118"
+Cohesion: 0.28
+Nodes (6): Field(), FieldGrid(), RequiredMark(), Placement, ResolvedSide, Tooltip()
+
+### Community 119 - "Community 119"
+Cohesion: 0.22
+Nodes (9): code:tsx (// app/(app)/layout.tsx), code:tsx (<RecordView behaviour={{ confirmDelete: false }} … />), code:tsx (<VuiProvider userConfigurable={{ behaviour: ["rowClick", "fl), code:tsx (<RecordView), Do I have to change any code?, Upgrading from 1.44 to 1.53, What changed without you asking, What did not change, and will not (+1 more)
+
+### Community 120 - "Community 120"
+Cohesion: 0.25
+Nodes (7): AuthContext (AuthProvider / useAuth), AuthContext, AuthContract, AuthStatus, AuthUser, Credentials, SignUpInput
+
+### Community 121 - "Community 121"
+Cohesion: 0.25
+Nodes (7): Contributor Covenant Code of Conduct, Attribution, Enforcement, Enforcement Responsibilities, Our Pledge, Our Standards, Scope
+
+### Community 122 - "Community 122"
+Cohesion: 0.25
+Nodes (7): ALLOWED, files, offenders, SCALE, source, SRC, value
+
+### Community 123 - "Community 123"
+Cohesion: 0.25
+Nodes (6): ALL, CITIES, fields, Member, ROLES, TEAMS
+
+### Community 124 - "Community 124"
+Cohesion: 0.25
+Nodes (8): scripts, check-types, generate:component, lint, prepublishOnly, release, sync-template, test
+
+### Community 125 - "Community 125"
+Cohesion: 0.25
+Nodes (7): compilerOptions, outDir, strictNullChecks, types, exclude, extends, include
+
+### Community 126 - "Community 126"
+Cohesion: 0.25
+Nodes (7): Dependabot Config, Issue Template Chooser Config, Security Policy, Reporting a Vulnerability, Supported Versions, CodeQL Analysis Workflow, Security Workflow (Semgrep · Gitleaks · Audit)
+
+### Community 128 - "Community 128"
+Cohesion: 0.29
+Nodes (5): CSS-variable design tokens (theme.css), ThemingPage (docs), COLORS, metadata, TypesetPage (docs)
+
+### Community 129 - "Community 129"
+Cohesion: 0.29
+Nodes (4): ChartConfig, ChartContainer(), LegendEntry, TooltipEntry
+
+### Community 130 - "Community 130"
+Cohesion: 0.33
+Nodes (5): ALL, BY_CODE, CITIES, searchPostCodes(), wait()
+
+### Community 131 - "Community 131"
+Cohesion: 0.38
+Nodes (7): Layout & patterns docs page, nav-config.ts single source of truth, Navigation, sections & tabs docs page, Open tabs keep-alive strip, Five page types (table, form, dashboard, settings, board), Data-Controller-Presentation pattern, code:tsx (<OpenTabsProvider>)
+
+### Community 132 - "Community 132"
 Cohesion: 0.38
 Nodes (7): BranchesTable (trash demo wiring), onRestore prop (restore handler), RecordViewProps, restore(ids) function, showTrash prop (Trash toggle), trashedData prop (soft-deleted rows), CHANGELOG 1.43.0 — Trash mode
 
-### Community 305 - "Community 305"
+### Community 133 - "Community 133"
 Cohesion: 0.29
 Nodes (6): Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
 
-### Community 306 - "Community 306"
-Cohesion: 0.33
-Nodes (5): Field(), FieldGrid(), Placement, ResolvedSide, Tooltip()
+### Community 134 - "Community 134"
+Cohesion: 0.29
+Nodes (6): license, name, private, publishConfig, access, version
 
-### Community 307 - "Community 307"
+### Community 135 - "Community 135"
+Cohesion: 0.29
+Nodes (7): Accessibility, code:css (@import "@viliha/vui-ui/theme.css";), Components, Dark Mode, Design System Rules, Responsiveness, Tokens
+
+### Community 136 - "Community 136"
 Cohesion: 0.40
 Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
 
-### Community 308 - "Community 308"
-Cohesion: 0.50
-Nodes (3): getOrgProfile(), profile, wait()
+### Community 137 - "Community 137"
+Cohesion: 0.47
+Nodes (4): CommandPalette, CommandAction, Kbd(), Shortcut()
 
-### Community 309 - "Community 309"
+### Community 138 - "Community 138"
+Cohesion: 0.40
+Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
+
+### Community 139 - "Community 139"
+Cohesion: 0.33
+Nodes (5): Backoffice, Environment, Routes, Scripts, Stack
+
+### Community 140 - "Community 140"
+Cohesion: 0.33
+Nodes (6): scripts, build, check-types, dev, format, lint
+
+### Community 141 - "Community 141"
+Cohesion: 0.33
+Nodes (5): args, original, pkg, pkgDir, pkgPath
+
+### Community 142 - "Community 142"
+Cohesion: 0.40
+Nodes (6): vui init CLI scaffolder, Sanitized single-path publish flow, guard-publish.mjs (prepublish guard), publish.mjs (npm publish path), sync-template.mjs (regenerate template/), @viliha/vui-ui package manifest
+
+### Community 143 - "Community 143"
+Cohesion: 0.50
+Nodes (5): VUI Apple Touch Icon (PNG), VUI App Icon (PNG), VUI App Icon (SVG), Vui Starter Home Dashboard Screenshot, Vui Starter Organizations Data Table Screenshot
+
+### Community 144 - "Community 144"
+Cohesion: 0.50
+Nodes (4): AlertDescription(), AlertTitle(), alertVariants, Alert
+
+### Community 145 - "Community 145"
+Cohesion: 0.40
+Nodes (4): Menu(), MenuItem, MenuItemProps, MenuLabel()
+
+### Community 146 - "Community 146"
+Cohesion: 0.50
+Nodes (4): Alert(), AlertDescription(), AlertTitle(), alertVariants
+
+### Community 147 - "Community 147"
+Cohesion: 0.50
+Nodes (4): Alert(), AlertDescription(), AlertTitle(), alertVariants
+
+### Community 149 - "Community 149"
+Cohesion: 0.40
+Nodes (4): compilerOptions, jsx, extends, $schema
+
+### Community 153 - "Community 153"
+Cohesion: 0.67
+Nodes (4): code:tsx (import { Page } from "@viliha/vui-ui/page";), code:tsx (import { FilterField } from "@viliha/vui-ui/filter-field";), Filtering, Tables
+
+### Community 154 - "Community 154"
+Cohesion: 0.50
+Nodes (4): Breadcrumbs, code:ts (export const NAV: NavSection[] = [), Navigation, Sidebar: sections & collapsible groups
+
+### Community 155 - "Community 155"
+Cohesion: 0.50
+Nodes (4): code:bash (npm i @viliha/vui-ui@latest      # or: pnpm up, yarn up, bun), code:ts (// ✅ preserves the mounted page across tab switches (no remo), Coming from 1.44 or earlier, Upgrading
+
+### Community 156 - "Community 156"
+Cohesion: 0.50
+Nodes (4): 1. Delete First, 2. Extend Before Create, 3. Blueprint Test, Contributor Mindset
+
+### Community 157 - "Community 157"
+Cohesion: 0.50
+Nodes (4): code:bash (git clone https://github.com/myviliha/vui-starter.git), code:bash (npx degit myviliha/vui-starter my-app), Quick start (clone the demo), Scaffold your own project from this template
+
+### Community 165 - "Community 165"
+Cohesion: 0.67
+Nodes (3): Pull Request Template, Checklist, What & why
+
+### Community 166 - "Community 166"
+Cohesion: 0.67
+Nodes (3): utils (cn re-export), Form (react-hook-form shadcn), Input (shadcn)
+
+### Community 170 - "Community 170"
 Cohesion: 1.00
-Nodes (3): RootPage (redirect to /docs), robots, sitemap
+Nodes (3): Calendar Page Screenshot, Open Tabs Strip Screenshot, Quick Actions Command Palette Screenshot
+
+### Community 171 - "Community 171"
+Cohesion: 1.00
+Nodes (3): Data Table Page Type Screenshot, Settings Page Type Screenshot, Multi-step Wizard Page Type Screenshot
+
+### Community 172 - "Community 172"
+Cohesion: 0.67
+Nodes (3): Dashboard Page Type Screenshot, Global Search Palette Screenshot, npm Logo
+
+### Community 173 - "Community 173"
+Cohesion: 0.67
+Nodes (3): Globe Icon, Turborepo Light Logo, Window Icon
+
+### Community 174 - "Community 174"
+Cohesion: 0.67
+Nodes (3): File Text Icon, Next.js Wordmark Logo, Vercel Logo
 
 ## Ambiguous Edges - Review These
 - `sitemap` → `RootPage (redirect to /docs)`  [AMBIGUOUS]
@@ -1272,9 +900,9 @@ Nodes (3): RootPage (redirect to /docs), robots, sitemap
   apps/backoffice/app/docs/steps/page.tsx · relation: references
 
 ## Knowledge Gaps
-- **2642 isolated node(s):** `$schema`, `ui`, `globalEnv`, `dependsOn`, `inputs` (+2637 more)
+- **1137 isolated node(s):** `$schema`, `ui`, `globalEnv`, `inputs`, `outputs` (+1132 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **57 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **54 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -1285,11 +913,11 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Steps docs page` and `RecordView data table component`?**
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **Why does `cn()` connect `Community 0` to `Community 256`, `Community 1`, `Community 2`, `Community 3`, `Community 4`, `Community 5`, `Community 6`, `Community 263`, `Community 266`, `Community 268`, `Community 269`, `Community 145`, `Community 18`, `Community 275`, `Community 274`, `Community 19`, `Community 23`, `Community 282`, `Community 27`, `Community 28`, `Community 285`, `Community 286`, `Community 31`, `Community 32`, `Community 33`, `Community 290`, `Community 289`, `Community 34`, `Community 30`, `Community 39`, `Community 40`, `Community 41`, `Community 42`, `Community 45`, `Community 47`, `Community 48`, `Community 305`, `Community 306`, `Community 307`, `Community 49`, `Community 57`, `Community 60`, `Community 61`, `Community 62`, `Community 71`, `Community 92`, `Community 94`, `Community 100`, `Community 229`, `Community 232`, `Community 108`, `Community 113`, `Community 114`, `Community 115`, `Community 243`, `Community 117`, `Community 247`?**
+- **Why does `cn()` connect `Community 0` to `Community 1`, `Community 129`, `Community 2`, `Community 3`, `Community 5`, `Community 133`, `Community 4`, `Community 136`, `Community 137`, `Community 138`, `Community 14`, `Community 144`, `Community 17`, `Community 18`, `Community 146`, `Community 20`, `Community 148`, `Community 22`, `Community 147`, `Community 145`, `Community 28`, `Community 29`, `Community 30`, `Community 32`, `Community 34`, `Community 35`, `Community 37`, `Community 39`, `Community 40`, `Community 41`, `Community 44`, `Community 46`, `Community 48`, `Community 49`, `Community 50`, `Community 51`, `Community 60`, `Community 61`, `Community 64`, `Community 65`, `Community 66`, `Community 67`, `Community 68`, `Community 74`, `Community 75`, `Community 76`, `Community 78`, `Community 79`, `Community 80`, `Community 83`, `Community 96`, `Community 97`, `Community 99`, `Community 108`, `Community 116`, `Community 118`?**
+  _High betweenness centrality (0.293) - this node is a cross-community bridge._
+- **Why does `RecordView` connect `Community 2` to `Community 0`, `Community 1`, `Community 132`, `Community 11`, `Community 12`, `Community 16`, `Community 17`, `Community 18`, `Community 19`, `Community 22`, `Community 25`, `Community 26`, `Community 29`, `Community 35`, `Community 37`, `Community 44`, `Community 52`, `Community 85`, `Community 88`, `Community 94`, `Community 118`?**
   _High betweenness centrality (0.133) - this node is a cross-community bridge._
-- **Why does `Changelog` connect `Community 98` to `Community 8`, `Community 15`, `Community 26`, `Community 50`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 65`, `Community 66`, `Community 69`, `Community 72`, `Community 73`, `Community 75`, `Community 76`, `Community 81`, `Community 82`, `Community 83`, `Community 84`, `Community 86`, `Community 90`, `Community 95`, `Community 102`, `Community 103`, `Community 111`, `Community 120`, `Community 122`, `Community 130`, `Community 131`, `Community 190`, `Community 192`, `Community 194`, `Community 196`, `Community 197`, `Community 199`, `Community 200`, `Community 201`, `Community 202`, `Community 207`, `Community 208`, `Community 209`, `Community 210`, `Community 212`, `Community 215`, `Community 217`, `Community 219`, `Community 220`, `Community 221`, `Community 222`, `Community 223`, `Community 224`, `Community 225`, `Community 226`, `Community 227`, `Community 228`, `Community 231`, `Community 233`, `Community 234`, `Community 241`, `Community 242`, `Community 244`, `Community 248`, `Community 249`, `Community 250`, `Community 251`, `Community 252`, `Community 254`, `Community 255`, `Community 257`, `Community 259`, `Community 260`, `Community 261`, `Community 265`, `Community 271`, `Community 276`, `Community 278`, `Community 280`, `Community 281`, `Community 283`?**
-  _High betweenness centrality (0.092) - this node is a cross-community bridge._
-- **Why does `Breadcrumbs` connect `Community 243` to `Community 32`, `Community 0`, `Community 2`, `Community 100`, `Community 229`, `Community 5`, `Community 39`, `Community 6`, `Community 266`, `Community 43`, `Community 269`, `Community 60`, `Community 79`, `Community 18`, `Community 19`, `Community 115`, `Community 92`, `Community 93`?**
-  _High betweenness centrality (0.040) - this node is a cross-community bridge._
-- **Are the 320 inferred relationships involving `cn()` (e.g. with `Section()` and `CalendarPage()`) actually correct?**
-  _`cn()` has 320 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `Components` connect `Community 3` to `Community 57`, `Community 5`, `Community 62`?**
+  _High betweenness centrality (0.077) - this node is a cross-community bridge._
+- **Are the 274 inferred relationships involving `cn()` (e.g. with `Section()` and `CalendarPage()`) actually correct?**
+  _`cn()` has 274 INFERRED edges - model-reasoned connections that need verification._
