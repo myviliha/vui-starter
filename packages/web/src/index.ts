@@ -9,9 +9,9 @@ export {
   type FeatureItem, type FeatureGridProps, type FeatureSplitProps,
 } from "./features";
 export {
-  Stats, LogoCloud, Testimonials, QuoteBlock, TrustBadges,
+  Stats, LogoCloud, Testimonials, QuoteBlock, TrustBadges, RatingBlock,
   type StatItem, type StatsProps, type LogoItem, type LogoCloudProps,
-  type Testimonial, type TestimonialsProps,
+  type Testimonial, type TestimonialsProps, type RatingSource,
 } from "./proof";
 export { Pricing, ComparisonTable, type PricingPlan, type PricingProps, type ComparisonRow, type ComparisonTableProps } from "./pricing";
 export { Faq, type FaqItem, type FaqProps } from "./faq";
@@ -39,3 +39,14 @@ export {
 export {
   ShareBlock, TableOfContents, ReadingProgress, type TocItem,
 } from "./article-client";
+
+export { Marquee, type MarqueeProps } from "./marquee";
+export { CodeBlock, type CodeFile, type CodeBlockProps } from "./code";
+export {
+  PricingCalculator,
+  UsagePricingTable,
+  usageCost,
+  type UsageTier,
+  type UsageMetric,
+  type PricingCalculatorProps,
+} from "./pricing-calculator";

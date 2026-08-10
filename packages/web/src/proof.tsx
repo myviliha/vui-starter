@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "@viliha/vui-core";
 
+import { Marquee } from "./marquee";
 import { Section, type SectionTone } from "./section";
 import { SectionHeader } from "./section-header";
 
@@ -100,17 +101,9 @@ export function LogoCloud({ items, title, lead, variant = "grid", tone, classNam
       )}
       {lead && <p className="mb-8 text-center text-muted-foreground">{lead}</p>}
       {variant === "marquee" ? (
-        // The list is rendered twice so the loop has no seam. The copy is hidden
-        // from assistive tech, and the animation stops entirely when the reader
-        // has asked for less motion.
-        <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-          <div className="flex w-max animate-[vui-marquee_36s_linear_infinite] items-center gap-12 motion-reduce:animate-none">
-            {items.map(logo)}
-            <span aria-hidden className="contents">
-              {items.map((item, i) => logo(item, i + items.length))}
-            </span>
-          </div>
-        </div>
+        <Marquee gap="lg" duration={36}>
+          {items.map(logo)}
+        </Marquee>
       ) : (
         <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8">
           {items.map(logo)}
@@ -307,6 +300,113 @@ export function TrustBadges({
           </li>
         ))}
       </ul>
+    </Section>
+  );
+}
+
+export interface RatingSource {
+  /** Where the score comes from: "G2", "Capterra", "the App Store". */
+  name: string;
+  /** 0 to 5. Rendered to one decimal place. */
+  score: number;
+  /** How many reviews it is averaged over. */
+  count?: number;
+  href?: string;
+  logo?: string;
+}
+
+/**
+ * An aggregate score, on its own or per source.
+ *
+ * Two numbers do the persuading here, so both are text rather than only a row
+ * of stars: a screen reader gets "4.8 out of 5 from 312 reviews", and so does a
+ * search engine looking for something to quote.
+ */
+export function RatingBlock({
+  score,
+  count,
+  label,
+  sources,
+  title,
+  eyebrow,
+  lead,
+  tone,
+  className,
+}: {
+  /** The headline score, 0 to 5. */
+  score?: number;
+  /** Reviews behind the headline score. */
+  count?: number;
+  /** Overrides the sentence under the stars. */
+  label?: ReactNode;
+  /** Per-source breakdown, shown as cards under the headline. */
+  sources?: RatingSource[];
+  title?: ReactNode;
+  eyebrow?: ReactNode;
+  lead?: ReactNode;
+  tone?: SectionTone;
+  className?: string;
+}) {
+  return (
+    <Section tone={tone} className={className}>
+      {title && <SectionHeader eyebrow={eyebrow} title={title} lead={lead} align="center" className="mb-10" />}
+      {score !== undefined && (
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-3">
+            <span className="text-h1 font-semibold tracking-tight tabular-nums">{score.toFixed(1)}</span>
+            <Stars rating={Math.round(score)} />
+          </div>
+          <p className="text-muted-foreground">
+            {label ?? (
+              <>
+                {score.toFixed(1)} out of 5
+                {count !== undefined && <> from {count.toLocaleString()} reviews</>}
+              </>
+            )}
+          </p>
+        </div>
+      )}
+      {sources && sources.length > 0 && (
+        <ul
+          className={cn(
+            "grid gap-4 sm:grid-cols-2 lg:grid-cols-4",
+            score !== undefined && "mt-10",
+          )}
+        >
+          {sources.map((s) => {
+            const inner = (
+              <>
+                <div className="flex items-center justify-between gap-3">
+                  {s.logo ? (
+                    <img src={s.logo} alt={s.name} loading="lazy" className="h-5 w-auto object-contain" />
+                  ) : (
+                    <span className="font-medium">{s.name}</span>
+                  )}
+                  <span className="text-h4 font-semibold tabular-nums">{s.score.toFixed(1)}</span>
+                </div>
+                <Stars rating={Math.round(s.score)} />
+                {s.count !== undefined && (
+                  <p className="text-caption text-muted-foreground">
+                    {s.count.toLocaleString()} reviews
+                  </p>
+                )}
+              </>
+            );
+            const shell = "vui-lift flex flex-col gap-2 rounded-xl border border-border bg-card p-5";
+            return (
+              <li key={s.name}>
+                {s.href ? (
+                  <a href={s.href} className={cn(shell, "h-full")}>
+                    {inner}
+                  </a>
+                ) : (
+                  <div className={cn(shell, "h-full")}>{inner}</div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </Section>
   );
 }

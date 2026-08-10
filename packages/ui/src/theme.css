@@ -561,6 +561,147 @@
 .vui-section { padding-block: var(--section-y); }
 .vui-section-tight { padding-block: var(--section-y-tight); }
 
+/* ---------------------------------------------------------------------------
+ * Decoration.
+ *
+ * The handful of effects that make a marketing page look designed rather than
+ * assembled: a soft brand wash behind a hero, a faint grid, a gradient
+ * headline, a card that lifts on hover. Every one of them is built from
+ * `--button-primary`, so they repaint with the tenant's brand and never need a
+ * colour of their own. They are decoration, so each is `pointer-events: none`
+ * and hidden from screen readers by the element that carries it.
+ * ------------------------------------------------------------------------ */
+
+/* An aurora wash: two brand-tinted blooms behind the content. Put it on a
+   positioned parent (`relative isolate`); it paints itself behind. */
+.vui-aurora { position: relative; isolation: isolate; }
+.vui-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 130%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(45% 55% at 20% 0%, color-mix(in oklab, var(--button-primary) 26%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 85% 10%, color-mix(in oklab, var(--chart-4, var(--button-primary)) 20%, transparent), transparent 72%);
+  filter: blur(8px);
+}
+
+/* A faint grid or dot field. Fades out downward so it never fights the content
+   below it, which is the difference between texture and noise. */
+.vui-grid-bg::after,
+.vui-dot-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+  opacity: 0.5;
+}
+.vui-grid-bg::after {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+.vui-dot-bg::after {
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 1.5rem 1.5rem;
+}
+
+/* A single soft spotlight, for a CTA band or a highlighted card. */
+.vui-glow { position: relative; isolation: isolate; }
+.vui-glow::before {
+  content: "";
+  position: absolute;
+  inset-inline: 10%;
+  inset-block-start: -30%;
+  aspect-ratio: 2 / 1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--button-primary) 30%, transparent), transparent);
+  filter: blur(28px);
+}
+
+/* Gradient headline. Applied to the text element itself. */
+.vui-gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    var(--foreground) 12%,
+    color-mix(in oklab, var(--button-primary) 85%, var(--foreground)) 52%,
+    var(--foreground) 88%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* A card that answers the pointer: a small lift, a warmer border, more shadow.
+   The transition uses the motion tokens, so turning motion down turns this
+   down with it. */
+.vui-lift {
+  transition:
+    transform var(--vui-duration-base) var(--vui-ease),
+    box-shadow var(--vui-duration-base) var(--vui-ease),
+    border-color var(--vui-duration-base) var(--vui-ease);
+}
+@media (hover: hover) {
+  .vui-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
+    border-color: color-mix(in oklab, var(--button-primary) 35%, var(--border));
+  }
+}
+
+/* A hairline gradient border. The element keeps its own background; this paints
+   a 1px brand-tinted edge that fades, which reads as premium without a colour
+   that has to be maintained. */
+.vui-ring-gradient {
+  position: relative;
+}
+.vui-ring-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--button-primary) 55%, transparent),
+    transparent 45%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Sections fading in as they arrive. `animation-timeline: view()` does this with
+   no JavaScript and no observer; browsers without it simply show the content,
+   which is the correct fallback. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .vui-reveal {
+      animation: vui-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}
+@keyframes vui-reveal {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: none; }
+}
+
 /* Appearance: how the shell is arranged.
  *
  * Three attributes on the root element, so switching layout is a data attribute

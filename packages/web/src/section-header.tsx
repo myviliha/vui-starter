@@ -25,7 +25,15 @@ export interface SectionHeaderProps {
   level?: HeadingLevel;
   size?: HeadingSize;
   align?: "start" | "center";
+  /**
+   * How the eyebrow is drawn. `pill` is the bordered chip a hero uses; `text`
+   * is the plain uppercase label that suits a section further down the page,
+   * where a row of chips would compete with the content.
+   */
+  eyebrowVariant?: "text" | "pill";
   className?: string;
+  /** For the heading itself, when a page wants a gradient or a wider measure. */
+  titleClassName?: string;
 }
 
 const SIZE: Record<HeadingSize, string> = {
@@ -51,7 +59,9 @@ export function SectionHeader({
   level = 2,
   size,
   align = "start",
+  eyebrowVariant = "text",
   className,
+  titleClassName,
 }: SectionHeaderProps) {
   const Heading = `h${level}` as "h1" | "h2" | "h3" | "h4";
   const centered = align === "center";
@@ -67,12 +77,23 @@ export function SectionHeader({
       )}
     >
       <div className={cn("flex flex-col gap-3", centered && "items-center", !centered && "max-w-[52ch]")}>
-        {eyebrow && (
-          <p className="text-caption font-medium tracking-wide text-[var(--button-primary)] uppercase">
-            {eyebrow}
-          </p>
-        )}
-        <Heading className={SIZE[size ?? DEFAULT_SIZE[level]]}>{title}</Heading>
+        {eyebrow &&
+          (eyebrowVariant === "pill" ? (
+            <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 py-1 ps-2.5 pe-3 text-caption font-medium text-muted-foreground shadow-[var(--shadow-1)] backdrop-blur">
+              <span
+                aria-hidden
+                className="size-1.5 rounded-full bg-[var(--button-primary)] shadow-[0_0_0_3px_color-mix(in_oklab,var(--button-primary)_20%,transparent)]"
+              />
+              {eyebrow}
+            </p>
+          ) : (
+            <p className="text-caption font-medium tracking-wide text-[var(--button-primary)] uppercase">
+              {eyebrow}
+            </p>
+          ))}
+        <Heading className={cn(SIZE[size ?? DEFAULT_SIZE[level]], titleClassName)}>
+          {title}
+        </Heading>
         {lead && (
           <p className={cn("text-lead text-muted-foreground", centered && "max-w-[60ch]")}>
             {lead}
