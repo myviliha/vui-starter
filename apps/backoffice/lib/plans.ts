@@ -29,12 +29,15 @@ export const PLAN_MATRIX: PlanEntry[] = [
   { area: "Layout", item: "App shell: sidebar, top bar, open tabs", plan: "free", note: "Scaffolded by npx @viliha/vui-ui init" },
   { area: "Layout", item: "All five page types", plan: "free", note: "Data table, record form, dashboard, settings, board" },
   { area: "Layout", item: "Auth, legal and error screens", plan: "free", note: "Sign in, sign up, reset, terms, 404, 500" },
+  { area: "Layout", item: "The starter marketing site", plan: "free", note: "65 pages in apps/website, composed entirely from blocks" },
+  { area: "Layout", item: "Page kits per vertical", plan: "pro", note: "Planned: SaaS, agency and e-commerce sets, ready to fill in" },
   { area: "Layout", item: "Command palette and global search", plan: "free", note: "⌘K and ⌘⌥K, wired to the nav config" },
 
   // Components
   { area: "Components", item: "Every React component", plan: "free", note: "Including RecordView, the datatable and record forms" },
   { area: "Components", item: "Vue components", plan: "free", note: "@viliha/vui-vue, growing; see /docs/frameworks" },
   { area: "Components", item: "Charts", plan: "free", note: "Recharts in React, TanStack Charts across frameworks" },
+  { area: "Components", item: "Website blocks", plan: "free", note: "60 marketing blocks in @viliha/vui-web: hero, pricing, FAQ, footer" },
   { area: "Components", item: "Datatable and record forms for Vue and Svelte", plan: "pro", note: "Planned. Recharts-style parity with RecordView" },
   { area: "Components", item: "Premium blocks", plan: "pro", note: "Planned: billing, roles and permissions, audit log, inbox" },
 
@@ -44,12 +47,14 @@ export const PLAN_MATRIX: PlanEntry[] = [
 
   // Tooling
   { area: "Tooling", item: "The init scaffolder", plan: "free", note: "Next.js and Turborepo, fresh or existing" },
-  { area: "Tooling", item: "The MCP server", plan: "free", note: "Seven tools, so an agent can query the library" },
+  { area: "Tooling", item: "The MCP server", plan: "free", note: "Ten tools, so an agent can query the library and compose a page" },
+  { area: "Tooling", item: "End-to-end test suite", plan: "free", note: "Playwright specs for both apps, in apps/e2e" },
   { area: "Tooling", item: "Requirement templates", plan: "free", note: "Ten markdown briefs at /docs/templates" },
 
   // Support
   { area: "Support", item: "Issues and discussions", plan: "free", note: "Best effort, in the open" },
   { area: "Support", item: "Priority support and a commercial licence", plan: "pro", note: "Planned. An invoice and a named counterparty" },
+  { area: "Support", item: "Managed hosting", plan: "pro", note: "Planned. A service, so it is the one thing that cannot be forked" },
 ];
 
 export const PLAN_LABEL: Record<Plan, string> = { free: "Free", pro: "Pro" };

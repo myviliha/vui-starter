@@ -40,6 +40,14 @@ stand up.
 > `@viliha/vui-ui`) and a **reference app** (`apps/backoffice`) that shows
 > every component in a real admin UI.
 
+There is a second half. `@viliha/vui-web` is 60 marketing blocks (hero, features,
+pricing, testimonials, FAQ, site header and footer) and `apps/website` is a
+65-page starter site built entirely from them. Same tokens, so the landing page
+and the dashboard it sells look like one product. An agent can compose a page
+from those blocks through the MCP server: `compose_page "SaaS landing page"`
+returns the block order, `get_block` returns the props. See
+[the website guide](https://vui.viliha.com/docs/website/).
+
 ![Vui Starter admin dashboard template: the organizations datatable with sorting, filtering, and row actions](./.github/screenshots/organizations.png)
 
 ![Vui Starter dashboard: stat cards and themed charts in a React admin UI](./.github/screenshots/home.png)
@@ -379,13 +387,23 @@ helper and the `theme.css` design tokens.
 
 ```
 apps/
-  backoffice/          # The app (:3000): admin UI + docs at /docs
+  backoffice/          # The admin app (:3000), with the docs site at /docs
+  website/             # The marketing site (:3002), 65 pages built from blocks
+  e2e/                 # Playwright tests for both apps
 packages/
   ui/                  # @viliha/vui-ui, the published component library
                        #   (ships AGENT.md + CLAUDE.template.md, the AI-agent guide)
+  web/                 # @viliha/vui-web, the marketing blocks
+  core/                # @viliha/vui-core, framework-free helpers (generated)
+  theme/               # @viliha/vui-theme, the CSS on its own (generated)
+  vue/                 # @viliha/vui-vue, the Vue components
   eslint-config/       # Shared ESLint config
   typescript-config/   # Shared tsconfig
 ```
+
+`core`, `theme` and `vue` are generated from `packages/ui/src`, so their output
+is git-ignored. Build with `pnpm turbo build --filter=<app>...` (note the `...`)
+and turbo builds the dependencies first.
 
 Stack: Next.js · React 19 · Tailwind CSS v4 · Radix Icons · TanStack Table ·
 pnpm workspaces · Turborepo · TypeScript 5.9.

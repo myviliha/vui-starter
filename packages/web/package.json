@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-web",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Marketing website blocks for VUI: heroes, features, testimonials, pricing, FAQ, headers and footers. Composable, prop-driven React blocks that share the same design tokens and class strings as the admin components, so a landing page and a dashboard look like one product.",
   "license": "MIT",
   "author": "VILIHA PTE. LTD.",
@@ -10,28 +10,56 @@
     "url": "git+https://github.com/myviliha/vui-starter.git",
     "directory": "packages/web"
   },
-  "bugs": { "url": "https://github.com/myviliha/vui-starter/issues" },
+  "bugs": {
+    "url": "https://github.com/myviliha/vui-starter/issues"
+  },
   "keywords": [
-    "react", "nextjs", "tailwind", "tailwind-v4", "marketing", "landing-page",
-    "blocks", "hero", "pricing", "testimonials", "saas", "website-template",
-    "design-system", "dark-mode"
+    "react",
+    "nextjs",
+    "tailwind",
+    "tailwind-v4",
+    "marketing",
+    "landing-page",
+    "blocks",
+    "hero",
+    "pricing",
+    "testimonials",
+    "saas",
+    "website-template",
+    "design-system",
+    "dark-mode"
   ],
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./theme.css": "./dist/theme.css",
-    "./*": { "types": "./dist/*.d.ts", "import": "./dist/*.js" }
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    }
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json && node scripts/theme.mjs",
     "check-types": "tsc --noEmit",
     "test": "vitest run",
     "prepublishOnly": "pnpm build"
   },
-  "peerDependencies": { "react": "^18 || ^19", "react-dom": "^18 || ^19" },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
   "dependencies": {
     "@viliha/vui-core": "workspace:^",
     "@viliha/vui-theme": "workspace:^",

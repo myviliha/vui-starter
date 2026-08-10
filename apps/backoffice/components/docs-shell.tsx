@@ -25,6 +25,7 @@ const TOP_NAV: NavItem[] = [
   { label: "Components", href: "/docs/components" },
   { label: "Charts", href: "/docs/charts" },
   { label: "Blocks", href: "/docs/blocks" },
+  { label: "Website", href: "/docs/website" },
   { label: "Typeset", href: "/docs/typeset" },
   { label: "Pricing", href: "/pricing" },
 ];
@@ -71,6 +72,7 @@ const SECTIONS: NavGroup[] = [
     items: [
       { label: "Overview", href: "/docs/components" },
       { label: "Blocks", href: "/docs/blocks" },
+      { label: "Website blocks", href: "/docs/website" },
       { label: "Data table", href: "/docs/data-table" },
       { label: "Steps", href: "/docs/steps" },
       { label: "Charts", href: "/docs/charts" },

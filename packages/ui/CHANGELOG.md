@@ -106,6 +106,42 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.66.0 — 2026-08-11
+
+### Added
+
+- **Three MCP tools for building a website.** `list_blocks`, `get_block` and
+  `compose_page` read `@viliha/vui-web` wherever it resolves, a sibling package
+  in a monorepo or `node_modules` in a consumer's project, and describe it from
+  the file list the way the component tools always have. A new block appears in
+  the answers because the file exists.
+
+  `compose_page "SaaS landing page for a developer tool"` returns an ordered
+  block list with a note on what each one is for. The recipes are the one
+  hand-written thing the server returns, because ordering is taste and no file
+  can be read to discover it. They are filtered against the blocks actually
+  installed before being served, so a recipe can never name a block that was
+  renamed away, and a test asserts exactly that.
+
+  Ten tools now, up from seven.
+
+- **The decoration a marketing page needs**, in `theme.css`: `.vui-aurora` for a
+  brand wash behind a hero, `.vui-grid-bg` and `.vui-dot-bg` for a faint texture
+  that fades out downward, `.vui-glow` for a spotlight, `.vui-gradient-text` for
+  a gradient headline, `.vui-lift` for a card that answers the pointer,
+  `.vui-ring-gradient` for a hairline brand edge, and `.vui-reveal` for a section
+  that fades in as it scrolls into view.
+
+  All of them are mixed from `--button-primary` with `color-mix`, so they repaint
+  with the tenant's brand and none of them carries a colour of its own.
+  `.vui-reveal` is built on `animation-timeline: view()`, so it needs no
+  JavaScript and no observer; browsers without it simply show the content, which
+  is the correct fallback.
+
+- **`@viliha/vui-web` 0.2.0** ships the blocks these tools describe: `Marquee`,
+  `CodeBlock`, `RatingBlock`, `PricingCalculator`, `UsagePricingTable`, and a
+  `gradient` hero with breadcrumb and search slots. See its own changelog.
+
 ## 1.65.0 — 2026-08-10
 
 ### Added

@@ -111,7 +111,7 @@ export default function BlocksPage() {
 
       <DocPager
         prev={{ label: "Overview", href: "/docs/components" }}
-        next={{ label: "Data table", href: "/docs/data-table" }}
+        next={{ label: "Website blocks", href: "/docs/website" }}
       />
     </article>
   );

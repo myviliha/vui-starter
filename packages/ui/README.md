@@ -429,7 +429,7 @@ config:
 }
 ```
 
-Seven tools come with it:
+Ten tools come with it:
 
 | Tool | Answers |
 | --- | --- |
@@ -439,11 +439,16 @@ Seven tools come with it:
 | `get_component` | one component's source, or its props and exported types when the file is large, plus the docs about it |
 | `list_pages` | the reference app's pages, layouts, shell components and config (`.env.example`, `next.config.ts`), with routes |
 | `get_page` | the full source of one of those files, to copy instead of invent |
+| `list_blocks` | every marketing block in `@viliha/vui-web`, with what each one is for |
+| `get_block` | one block's props, source and import specifier |
+| `compose_page` | an ordered block list for a page description, before any markup is written |
 | `search_docs` | the rules, the README and every guide at once; call it with no query for the outline |
 
 The docs site ships inside the package as markdown, so the whole guide works
 offline and matches the version you installed. The server runs over stdio and
-needs no API key. Keep the `CLAUDE.md` pointer as well: that loads the rules
+needs no API key. The block tools read `@viliha/vui-web` wherever it resolves, so
+"what blocks are there" is answered by the version you installed rather than by a
+manifest someone has to remember to update. Keep the `CLAUDE.md` pointer as well: that loads the rules
 every session, the server answers the follow-ups.
 
 ## Components

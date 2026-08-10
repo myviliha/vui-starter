@@ -43,7 +43,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check-types": "node scripts/build.mjs",
+    "check-types": "node scripts/build.mjs --check",
     "test": "vitest run",
     "prepublishOnly": "node scripts/build.mjs"
   },
