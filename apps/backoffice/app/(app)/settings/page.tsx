@@ -10,7 +10,6 @@ import {
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
 import { Button } from "@viliha/vui-ui/button";
 import { Checkbox } from "@viliha/vui-ui/checkbox";
 import { Input } from "@viliha/vui-ui/input";
@@ -22,6 +21,12 @@ import { useChromeConfig } from "@/app/_components/chrome-config";
 import { useVuiPreferences } from "@viliha/vui-ui/config";
 import { useThemeConfig } from "@viliha/vui-ui/theme-provider";
 import { AppearancePicker } from "@/app/_components/appearance-picker";
+import { BrandAsset } from "@viliha/vui-ui/organization-profile";
+import {
+  AVATAR_MAX_BYTES,
+  setAvatar,
+  useAvatar,
+} from "@/app/_components/use-avatar";
 import {
   CHROME_FEATURES,
   DATA_TABLE_PREFERENCE_FIELDS,
@@ -97,6 +102,7 @@ function Field({
 
 export default function SettingsPage() {
   const [theme, setTheme] = React.useState<Theme>("system");
+  const avatar = useAvatar();
   const [name, setName] = React.useState("Admin User");
   const [email, setEmail] = React.useState("admin@viliha.example");
   const [role, setRole] = React.useState("administrator");
@@ -143,12 +149,20 @@ export default function SettingsPage() {
             <div className="w-full space-y-4">
           <Section title="Profile" description="Your personal information.">
             <div className="space-y-4 sm:max-w-xl">
-              <div className="flex items-center gap-3">
-                <Avatar className="size-12">
-                  <AvatarFallback>AU</AvatarFallback>
-                </Avatar>
-                <Button>Change avatar</Button>
-              </div>
+              {/* BrandAsset is the shipped uploader: preview, pick, remove, size
+                  limit and its own busy and error states. `inline` is the demo
+                  escape hatch (base64, no backend); a real app passes `onPick`
+                  instead and stores the URL its API returns. */}
+              <BrandAsset
+                square
+                inline
+                fit="cover"
+                placeholder={<span className="text-sm font-medium">AU</span>}
+                value={avatar}
+                onChange={setAvatar}
+                maxBytes={AVATAR_MAX_BYTES}
+                accept="image/png,image/jpeg,image/webp,image/gif"
+              />
               <Field label="Name" htmlFor="name">
                 <Input
                   id="name"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 import {
   CubeIcon as Building2,
@@ -114,6 +114,10 @@ export type BrandAssetProps = {
    *  image ends up in the field. */
   inline?: boolean;
   square?: boolean;
+  /** What the empty box shows. Defaults to "None"; an avatar passes initials. */
+  placeholder?: ReactNode;
+  /** `contain` keeps a logo whole (default); `cover` fills the box, for a photo. */
+  fit?: "contain" | "cover";
   readOnly?: boolean;
 };
 
@@ -161,6 +165,8 @@ export function BrandAsset({
   busy,
   inline,
   square,
+  placeholder,
+  fit = "contain",
   readOnly,
 }: BrandAssetProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -231,7 +237,11 @@ export function BrandAsset({
             <img
               src={value}
               alt=""
-              className="max-h-full max-w-full object-contain"
+              className={
+                fit === "cover"
+                  ? "size-full object-cover"
+                  : "max-h-full max-w-full object-contain"
+              }
               onLoad={(e) =>
                 setDims({
                   width: e.currentTarget.naturalWidth,
@@ -240,7 +250,9 @@ export function BrandAsset({
               }
             />
           ) : (
-            <span className="text-xs text-muted-foreground">None</span>
+            <span className="text-xs text-muted-foreground">
+              {placeholder ?? "None"}
+            </span>
           )}
         </div>
         {!readOnly && (

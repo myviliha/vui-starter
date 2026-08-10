@@ -9,9 +9,10 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 
-import { Avatar, AvatarFallback } from "@viliha/vui-ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@viliha/vui-ui/avatar";
 import { MenuItem } from "@viliha/vui-ui/menu";
 import { useAuth } from "@viliha/vui-ui/auth-context";
+import { useAvatar } from "@/app/_components/use-avatar";
 import { ThemeToggle } from "./theme-toggle";
 
 // ponytail: no auth in the demo — mock the signed-in user. Swap for the real
@@ -28,6 +29,9 @@ const isAdmin = USER.role === "Administrator";
  *  info, an admin-only entry, appearance toggle, and sign out. */
 export function UserMenu() {
   const auth = useAuth();
+  // Set in Settings → Profile. Shared through a tiny store, so changing it
+  // there updates the top bar with no prop threading.
+  const avatar = useAvatar();
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -68,6 +72,7 @@ export function UserMenu() {
           {/* Account header */}
           <div className="flex items-center gap-3 border-b border-border px-3 py-3">
             <Avatar className="size-9">
+              {avatar && <AvatarImage src={avatar} alt="" />}
               <AvatarFallback>{USER.initials}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">

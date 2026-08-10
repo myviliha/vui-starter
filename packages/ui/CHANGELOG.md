@@ -106,6 +106,21 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.65.0 — 2026-08-10
+
+### Added
+
+- **`AvatarImage`.** The avatar could only ever show initials: the package
+  exported `Avatar` and `AvatarFallback` and nothing to put a picture in. The new
+  export sits over the fallback and removes itself if the image fails to load, so
+  a broken URL shows initials rather than an empty box, and a new `src` gets a
+  fresh attempt.
+
+- **`BrandAsset` gained `placeholder` and `fit`.** The empty box said "None",
+  which is right for a logo and wrong for a person, and the image was always
+  `object-contain`, which letterboxes a photo in a square. An avatar now passes
+  initials and `fit="cover"`; a logo keeps both defaults.
+
 ## 1.64.0 — 2026-08-10
 
 ### Fixed
