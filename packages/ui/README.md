@@ -65,6 +65,26 @@ export default nextConfig;
 
 (Vite and most bundlers need no extra config.)
 
+### Not using React?
+
+The theme is plain CSS with no JavaScript in it, so it works anywhere. It ships on
+its own as [`@viliha/vui-theme`](https://www.npmjs.com/package/@viliha/vui-theme),
+with no dependencies:
+
+```css
+/* Vue, Svelte, Angular, Solid, Astro, Qwik, Lit: anything running Tailwind v4 */
+@import "tailwindcss";
+@import "@viliha/vui-theme/theme.css";
+```
+
+```html
+<!-- Alpine, HTMX, 11ty, plain HTML: no build step at all -->
+<link rel="stylesheet" href="https://unpkg.com/@viliha/vui-theme/dist/vui.css" />
+```
+
+You get the tokens, dark mode, the z-scale, motion utilities and `.vui-scroll`. You
+build the markup. React components are what this package adds on top.
+
 ## Scaffold the full app + demo (`init`)
 
 The package itself ships the **components**. The **app shell** (layout, sidebar,

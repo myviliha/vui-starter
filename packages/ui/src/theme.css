@@ -210,17 +210,21 @@
   }
 }
 
+/* The height comes from whichever accordion primitive is in use: React/Radix
+   publishes --radix-accordion-content-height, and a Vue or Svelte port maps its
+   own library's variable onto --vui-accordion-height the same way. One
+   indirection here beats a fallback chain that grows with every port. */
 @keyframes accordion-down {
   from {
     height: 0;
   }
   to {
-    height: var(--radix-accordion-content-height);
+    height: var(--vui-accordion-height);
   }
 }
 @keyframes accordion-up {
   from {
-    height: var(--radix-accordion-content-height);
+    height: var(--vui-accordion-height);
   }
   to {
     height: 0;
@@ -261,11 +265,13 @@
     cursor: pointer;
   }
   /* Every icon is a bordered chip. Radix icons render `<svg width="15">`, so we
-     target that (custom SVGs like the logo use viewBox only and are exempt). The
-     Tailwind size utility (e.g. size-4) sets the glyph box, and content-box adds
-     the border + padding outside it so the glyph stays crisp. Active/emphasis
+     target that (custom SVGs like the logo use viewBox only and are exempt), and
+     `.vui-icon` is the opt-in for any other icon set or framework. The Tailwind
+     size utility (e.g. size-4) sets the glyph box, and content-box adds the
+     border + padding outside it so the glyph stays crisp. Active/emphasis
      states just flip bg/border/color via utilities (they win in the later layer). */
-  svg[width="15"] {
+  svg[width="15"],
+  .vui-icon {
     box-sizing: content-box;
     padding: 2px;
     border: 1px solid var(--border);
@@ -273,7 +279,8 @@
   }
   /* Radix icons are thin filled glyphs; add a matching stroke so they read
      bolder/heavier throughout the app. */
-  svg[width="15"] path {
+  svg[width="15"] path,
+  .vui-icon path {
     stroke: currentColor;
     stroke-width: 0.55px;
     stroke-linejoin: round;

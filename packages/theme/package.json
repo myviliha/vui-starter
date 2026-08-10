@@ -1,0 +1,61 @@
+{
+  "name": "@viliha/vui-theme",
+  "version": "1.0.0",
+  "description": "The VUI design system as plain CSS: 129 design tokens, dark mode, the z-scale, motion utilities and always-visible scrollbars. No JavaScript and no dependencies, so it works in React, Vue, Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine, HTMX or hand-written HTML.",
+  "license": "MIT",
+  "author": "VILIHA PTE. LTD.",
+  "homepage": "https://vui.viliha.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myviliha/vui-starter.git",
+    "directory": "packages/theme"
+  },
+  "bugs": {
+    "url": "https://github.com/myviliha/vui-starter/issues"
+  },
+  "keywords": [
+    "css",
+    "design-tokens",
+    "design-system",
+    "theme",
+    "tailwind",
+    "tailwindcss",
+    "tailwind-v4",
+    "dark-mode",
+    "oklch",
+    "vue",
+    "svelte",
+    "angular",
+    "solid",
+    "astro",
+    "qwik",
+    "lit",
+    "alpine",
+    "htmx",
+    "framework-agnostic"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "theme.css",
+    "dist"
+  ],
+  "exports": {
+    "./theme.css": "./theme.css",
+    "./vui.css": "./dist/vui.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "vitest run",
+    "prepublishOnly": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "tailwindcss": "^4.3.0",
+    "vitest": "^4.1.10"
+  }
+}

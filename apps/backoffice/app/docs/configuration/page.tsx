@@ -369,7 +369,7 @@ useEffect(() => {
       </Note>
 
       <DocPager
-        prev={{ label: "Installation", href: "/docs/installation" }}
+        prev={{ label: "Any framework", href: "/docs/frameworks" }}
         next={{ label: "Theming", href: "/docs/theming" }}
       />
     </article>

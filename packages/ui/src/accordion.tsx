@@ -50,12 +50,22 @@ function AccordionTrigger({
 function AccordionContent({
   className,
   children,
+  style,
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
       className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+      // theme.css animates --vui-accordion-height; Radix measures the content into
+      // its own variable, so this is where the two meet. A caller's own style still
+      // applies, it just can't drop the variable the animation needs.
+      style={
+        {
+          "--vui-accordion-height": "var(--radix-accordion-content-height)",
+          ...style,
+        } as React.CSSProperties
+      }
       {...props}
     >
       <div className={cn("pt-0 pb-4", className)}>{children}</div>

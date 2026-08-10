@@ -20,6 +20,7 @@ const PAGES: { title: string; href: string }[] = [
   { title: "Sponsor Me", href: "/docs/sponsor" },
   { title: "Introduction", href: "/docs" },
   { title: "Installation", href: "/docs/installation" },
+  { title: "Any framework (Vue, Svelte, Angular, HTMX)", href: "/docs/frameworks" },
   { title: "Configuration", href: "/docs/configuration" },
   { title: "Theming", href: "/docs/theming" },
   { title: "Layouts", href: "/docs/layout" },

@@ -42,6 +42,19 @@ export default function InstallationPage() {
         <code className="font-mono text-[0.9em]">react-dom</code> are peer
         dependencies, so your app&apos;s versions are used (React 18 or 19).
       </P>
+      <Note title="Not using React?">
+        The theme is plain CSS and ships on its own as{" "}
+        <code>@viliha/vui-theme</code>, with no dependencies. It works in Vue,
+        Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine, HTMX or hand-written HTML.
+        See{" "}
+        <a
+          href="/docs/frameworks"
+          className="font-medium text-foreground underline"
+        >
+          Use VUI with any framework
+        </a>
+        .
+      </Note>
 
       <H2>Scaffold the whole app + demo (<code>init</code>)</H2>
       <P>
@@ -263,7 +276,7 @@ export function Example() {
 
       <DocPager
         prev={{ label: "Introduction", href: "/docs" }}
-        next={{ label: "Configuration", href: "/docs/configuration" }}
+        next={{ label: "Any framework", href: "/docs/frameworks" }}
       />
     </article>
   );

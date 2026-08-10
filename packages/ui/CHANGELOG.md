@@ -110,6 +110,22 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ### Added
 
+- **The theme now ships on its own, for any framework: `@viliha/vui-theme`.** The
+  stylesheet was always framework-free, it was just locked inside a React package
+  with thirteen runtime dependencies. It is now published separately with none, in
+  two forms: `theme.css` for anyone running Tailwind v4, and a compiled
+  `vui.css` for people with no build step at all. Both are generated from
+  `packages/ui/src/theme.css` at publish time, so there is no second copy to drift.
+  Nothing changes for React users; this package still imports the same file.
+
+- **Two opt-ins so the CSS is not React-only.** The bordered icon chip used to key
+  off `svg[width="15"]`, which is how Radix icons happen to render, so a Vue or
+  Svelte app using a different icon set got nothing. `.vui-icon` now gets the same
+  treatment. The accordion animation reads `--vui-accordion-height` instead of
+  Radix's variable, and `AccordionContent` maps Radix onto it in one line, so a
+  port maps its own library the same way. Both are additive: React output is
+  unchanged.
+
 - **The npm tarball now carries the license text.** `package.json` said MIT but no
   `LICENSE` file shipped with the package, so anyone auditing `node_modules` found a
   claim with nothing behind it. The MIT license is now in the package.

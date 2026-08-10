@@ -5,10 +5,17 @@ rationale, see [`Enterprise_NextJS_React_Coding_Standards.md`](./Enterprise_Next
 
 ## What this repo is
 
-Turborepo + pnpm monorepo. One app + one published library:
+Turborepo + pnpm monorepo. One app + two published packages:
 
 - `apps/backoffice` — Admin app **and** the docs site (docs are routes under `app/docs`, served at `/docs`). Dev on **:3000**.
-- `packages/ui` — `@viliha/vui-ui`, shipped as **TypeScript source** (no build).
+- `packages/ui` — `@viliha/vui-ui`, the React components, shipped as **TypeScript source** (no build).
+- `packages/theme` — `@viliha/vui-theme`, the same design system as **plain CSS with no dependencies**, for every other framework. Both of its outputs (`theme.css` and the compiled `dist/vui.css`) are **generated from `packages/ui/src/theme.css`** by `packages/theme/scripts/build.mjs` and git-ignored, so there is never a second copy to keep in sync. Edit the tokens in `packages/ui/src/theme.css` as before.
+
+  Two rules keep that stylesheet framework-neutral: the icon chip matches
+  `svg[width="15"], .vui-icon` (Radix icons get it for free, everyone else opts in
+  with the class), and the accordion animates `--vui-accordion-height`, which
+  `accordion.tsx` maps from Radix and a port maps from its own library. Don't
+  reintroduce a React-only selector or a growing `var()` fallback chain.
 
 ## Where things go (do exactly this)
 

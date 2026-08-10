@@ -240,6 +240,14 @@ The config work (1.50 to 1.52) is additive: `vuiPreset` is the shipped behaviour
 
 # Design Tokens
 
+> **Building for another framework?** The tokens below are plain CSS and ship on
+> their own as `@viliha/vui-theme` (no dependencies): `@import
+> "@viliha/vui-theme/theme.css"` with Tailwind v4, or link
+> `@viliha/vui-theme/vui.css` with no build step. Two opt-ins replace the
+> React-specific hooks: add `.vui-icon` to an icon for the bordered chip (Radix
+> icons get it automatically), and set `--vui-accordion-height` on accordion
+> content to drive the open/close animation from your own headless library.
+
 VUI is entirely token-driven. Never hardcode colors, spacing, radius, typography, shadows, or borders; reach for the semantic design token instead. For example: `--button-primary`, `--button-primary-hover`, `--background`, `--foreground`, `--border`, `--ring`, `--chart-1`, `--sidebar-primary`.
 
 Avoid arbitrary values unless there's truly no token for the job.

@@ -36,6 +36,7 @@ const SECTIONS: NavGroup[] = [
       { label: "❤ Sponsor Me", href: "/docs/sponsor" },
       { label: "Introduction", href: "/docs" },
       { label: "Installation", href: "/docs/installation" },
+      { label: "Any framework", href: "/docs/frameworks" },
       { label: "Configuration", href: "/docs/configuration" },
     ],
   },
