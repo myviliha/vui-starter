@@ -86,6 +86,10 @@ const PRODUCT = {
   ),
   // Cents. 14900 = $149.00, matching PRO.price in apps/backoffice/lib/app-config.ts.
   price: Number(arg("--price", "14900")),
+  // draft   = exists, nobody can reach it (what you want before Pro is built)
+  // private = reachable by direct link, not listed
+  // public  = on sale
+  visibility: arg("--visibility", "draft"),
 };
 
 async function main() {
@@ -106,7 +110,9 @@ async function main() {
   for (const p of existing) {
     const price = p.prices?.[0];
     const amount = price?.price_amount != null ? `$${(price.price_amount / 100).toFixed(2)}` : "—";
-    console.log(`  ${p.is_archived ? "archived" : "live    "}  ${amount.padStart(8)}  ${p.name}  ${p.id}`);
+    // draft and private are not on sale; say so rather than implying "live".
+    const state = p.is_archived ? "archived" : (p.visibility ?? "unknown");
+    console.log(`  ${state.padEnd(8)}  ${amount.padStart(8)}  ${p.name}  ${p.id}`);
   }
 
   const clash = existing.find((p) => p.name === PRODUCT.name && !p.is_archived);
@@ -117,7 +123,7 @@ async function main() {
   }
 
   console.log(
-    `\nWould create:\n  name   ${PRODUCT.name}\n  price  $${(PRODUCT.price / 100).toFixed(2)} USD, one-time\n  org    ${org.slug}`,
+    `\nWould create:\n  name        ${PRODUCT.name}\n  price       $${(PRODUCT.price / 100).toFixed(2)} USD, one-time\n  visibility  ${PRODUCT.visibility}\n  org         ${org.slug}`,
   );
   if (!has("--create")) {
     console.log("\nDry run. Re-run with --create to actually create it.");
@@ -129,7 +135,11 @@ async function main() {
     body: JSON.stringify({
       name: PRODUCT.name,
       description: PRODUCT.description,
-      organization_id: org.id,
+      // An organization token (polar_oat_) already names the organization, and
+      // Polar rejects the field outright. A personal token (polar_pat_) can
+      // reach several organizations, so it has to say which.
+      ...(token.startsWith("polar_oat_") ? {} : { organization_id: org.id }),
+      visibility: PRODUCT.visibility,
       recurring_interval: null, // one-time purchase
       prices: [
         { amount_type: "fixed", price_amount: PRODUCT.price, price_currency: "usd" },
