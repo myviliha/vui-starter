@@ -1,6 +1,8 @@
-import { CaseStudyGrid, Cta, Hero, LogoCloud, Stats, Testimonials } from "@viliha/vui-web";
+import { CardGrid, CaseStudyGrid, Cta, Hero, LogoCloud, Stats, Testimonials } from "@viliha/vui-web";
 
+import { CASE_STUDIES } from "@/lib/catalog";
 import { CUSTOMERS, LOGOS, STATS, TESTIMONIALS } from "@/lib/content";
+import { LinkButton } from "@/app/_components/link-button";
 import { pageMeta } from "@/lib/site";
 
 export const metadata = pageMeta({
@@ -18,7 +20,19 @@ export default function CustomersPage() {
       <Testimonials variant="single" items={[TESTIMONIALS[0]!]} />
       <Testimonials title="More from customers" items={TESTIMONIALS} variant="columns" tone="muted" />
       <Stats items={STATS} />
-      <Cta title="Tell us what you built" lead="We feature real stories, and we link back to you." actions={<a href="/contact/" className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)]">Get in touch</a>} />
+      <CardGrid
+        eyebrow="Case studies"
+        title="The longer versions"
+        lead="Each one includes what did not work, because a case study without that is a brochure."
+        columns={3}
+        items={CASE_STUDIES.map((c) => ({
+          title: c.title,
+          body: c.summary,
+          meta: c.category,
+          href: `/customers/${c.slug}/`,
+        }))}
+      />
+      <Cta title="Tell us what you built" lead="We feature real stories, and we link back to you." actions={<LinkButton href="/contact/">Get in touch</LinkButton>} />
     </>
   );
 }

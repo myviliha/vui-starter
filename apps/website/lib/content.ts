@@ -10,17 +10,17 @@ export const FEATURES = [
   {
     title: "Datatables that already work",
     body: "Sorting, filtering, pagination, bulk actions and import/export, from one array of field definitions.",
-    href: "/features/",
+    href: "/features/datatables/",
   },
   {
     title: "Forms from the same definitions",
     body: "Add, edit and view screens generate themselves. Validation shows on the field, never as a wall of red text.",
-    href: "/features/",
+    href: "/features/forms/",
   },
   {
     title: "One theme, every surface",
     body: "Colours, radius, motion and density are tokens. Change the brand once and the whole product follows.",
-    href: "/features/",
+    href: "/features/theming/",
   },
   {
     title: "Dark mode you did not build",
@@ -176,7 +176,7 @@ export const CUSTOMERS = [
     title: "How Northwind cut onboarding from days to minutes",
     summary: "Replacing a bespoke admin panel with a generated one, without changing the backend.",
     company: "Northwind",
-    href: "/customers/",
+    href: "/customers/northwind/",
     results: [
       { value: "3×", label: "Faster onboarding" },
       { value: "−40%", label: "Support tickets" },
@@ -186,7 +186,7 @@ export const CUSTOMERS = [
     title: "Acme Retail rolled out to 12 markets in a quarter",
     summary: "One theme, twelve brands, and a per-tenant palette that repaints the whole app.",
     company: "Acme Retail",
-    href: "/customers/",
+    href: "/customers/acme-retail/",
     results: [
       { value: "12", label: "Markets live" },
       { value: "1", label: "Codebase" },
@@ -196,7 +196,7 @@ export const CUSTOMERS = [
     title: "Globex made accessibility a non-event",
     summary: "Keyboard paths and contrast were already handled, so the audit found nothing to fix.",
     company: "Globex",
-    href: "/customers/",
+    href: "/customers/globex/",
     results: [
       { value: "0", label: "Critical findings" },
       { value: "AA", label: "Contrast, throughout" },
@@ -230,4 +230,34 @@ export const INTEGRATIONS = [
   { title: "Recharts", body: "The React chart layer ChartContainer wraps.", meta: "Charts" },
   { title: "Reka UI", body: "The headless primitives behind the Vue components.", meta: "Vue" },
   { title: "Next.js", body: "App Router, static export, and the scaffolder that wires it up.", meta: "Framework" },
+];
+
+/**
+ * The Free and Pro columns, row by row.
+ *
+ * `false` renders as a blank rather than a cross on purpose: a table full of
+ * red crosses is a sales technique, and this one has to survive being read by
+ * someone deciding whether to trust the free plan.
+ */
+export const COMPARISON = [
+  { group: "Components", label: "Buttons, inputs, dialogs, menus", values: [true, true] },
+  { group: "Components", label: "shadcn/ui data table", values: [true, true] },
+  { group: "Components", label: "RecordView datatable and forms", values: [false, true] },
+  { group: "Components", label: "Marketing blocks", values: [true, true] },
+  { group: "Components", label: "Page kits per vertical", values: [false, true] },
+
+  { group: "Theming", label: "Tokens, dark mode, density, RTL", values: [true, true] },
+  { group: "Theming", label: "Runtime theme per organization", values: [true, true] },
+  { group: "Theming", label: "Per-user theme overrides", values: [true, true] },
+
+  { group: "Tooling", label: "MCP server", values: [true, true] },
+  { group: "Tooling", label: "Scaffolder and demo app", values: [true, true] },
+  { group: "Tooling", label: "Figma library", values: [false, true] },
+
+  { group: "Support", label: "GitHub issues", values: [true, true] },
+  { group: "Support", label: "Private support channel", values: [false, true] },
+  { group: "Support", label: "Managed hosting", values: [false, "Coming"] },
+
+  { group: "Licence", label: "MIT, permanently", values: [true, true] },
+  { group: "Licence", label: "Price", values: ["Free", "$29/mo"] },
 ];

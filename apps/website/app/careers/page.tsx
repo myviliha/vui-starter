@@ -1,5 +1,7 @@
 import { Benefits, CardGrid, Cta, EmptyState, Hero, ProcessSteps, TeamGrid } from "@viliha/vui-web";
 
+import { JOBS } from "@/lib/catalog";
+import { LinkButton } from "@/app/_components/link-button";
 import { TEAM } from "@/lib/content";
 import { pageMeta } from "@/lib/site";
 
@@ -9,10 +11,14 @@ export const metadata = pageMeta({
   path: "/careers/",
 });
 
-const ROLES = [
-  { title: "Design engineer", meta: "Remote · Full time", body: "Own the block library: build it, document it, and keep it honest.", href: "/contact/", tags: ["React", "CSS", "Design systems"] },
-  { title: "Developer advocate", meta: "Remote · Part time", body: "Write the guides, answer the issues, and tell us what the docs got wrong.", href: "/contact/", tags: ["Writing", "Community"] },
-];
+const ROLES = JOBS.map((job) => ({
+  title: job.title,
+  meta: job.meta,
+  body: job.summary,
+  href: `/careers/${job.slug}/`,
+  tags: job.tags,
+}));
+
 
 const PERKS = [
   { title: "Remote, genuinely", body: "No core hours beyond a couple that overlap. We write things down instead of meeting about them." },
@@ -40,7 +46,7 @@ export default function CareersPage() {
       ) : (
         <EmptyState title="No open roles right now" body="We hire slowly and rarely. Send a note anyway if the work looks like yours." action={<a href="/contact/" className="text-sm font-medium text-[var(--button-primary)] underline underline-offset-4">Introduce yourself</a>} />
       )}
-      <Cta title="Not seeing your role?" lead="Tell us what you would want to work on. We have hired from cold emails before." actions={<a href="/contact/" className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)]">Write to us</a>} />
+      <Cta title="Not seeing your role?" lead="Tell us what you would want to work on. We have hired from cold emails before." actions={<LinkButton href="/contact/">Write to us</LinkButton>} />
     </>
   );
 }

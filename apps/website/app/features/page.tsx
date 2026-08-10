@@ -1,6 +1,8 @@
-import { Cta, FeatureSplit, FeatureTabs, Hero, LogoCloud, Stats, TrustBadges } from "@viliha/vui-web";
+import { CardGrid, Cta, FeatureSplit, FeatureTabs, Hero, LogoCloud, Stats, TrustBadges } from "@viliha/vui-web";
 
+import { FEATURE_PAGES } from "@/lib/catalog";
 import { LOGOS, STATS } from "@/lib/content";
+import { LinkButton } from "@/app/_components/link-button";
 import { pageMeta } from "@/lib/site";
 
 export const metadata = pageMeta({
@@ -43,6 +45,18 @@ export default function FeaturesPage() {
         lead="Not a box of primitives to assemble. The screens themselves, generated from the data you describe."
       />
       <FeatureTabs items={TABS} />
+      <CardGrid
+        eyebrow="In depth"
+        title="Every feature, written up"
+        lead="What each one does, how it is wired, and where it stops being the right tool."
+        columns={2}
+        items={FEATURE_PAGES.map((f) => ({
+          title: f.title,
+          body: f.summary,
+          meta: f.category,
+          href: `/features/${f.slug}/`,
+        }))}
+      />
       <FeatureSplit
         eyebrow="Consistency"
         title="It stays consistent without anyone policing it"
@@ -69,7 +83,7 @@ export default function FeaturesPage() {
       <Cta
         title="See it running"
         lead="A full admin demo with real datatables, forms and charts. No signup."
-        actions={<a href="https://vui.viliha.com/dashboard/" className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)]">Open the demo</a>}
+        actions={<LinkButton href="https://vui.viliha.com/dashboard/">Open the demo</LinkButton>}
       />
     </>
   );

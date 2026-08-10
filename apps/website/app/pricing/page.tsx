@@ -1,6 +1,7 @@
 import { ComparisonTable, Cta, Faq, Hero, Pricing } from "@viliha/vui-web";
 
 import { FAQS, PLANS } from "@/lib/content";
+import { LinkButton } from "@/app/_components/link-button";
 import { pageMeta } from "@/lib/site";
 
 export const metadata = pageMeta({
@@ -46,9 +47,7 @@ export default function PricingPage() {
         title="Still deciding?"
         lead="Start on Free. Nothing expires, and nothing you build has to be rewritten if you upgrade."
         actions={
-          <a href="/contact/" className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)]">
-            Talk to us
-          </a>
+          <LinkButton href="/contact/">Talk to us</LinkButton>
         }
       />
     </>

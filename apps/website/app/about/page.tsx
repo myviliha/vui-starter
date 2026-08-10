@@ -1,5 +1,6 @@
 import { Benefits, Cta, Hero, QuoteBlock, Stats, TeamGrid, Timeline } from "@viliha/vui-web";
 
+import { LinkButton } from "@/app/_components/link-button";
 import { MILESTONES, STATS, TEAM, VALUES } from "@/lib/content";
 import { pageMeta } from "@/lib/site";
 
@@ -33,12 +34,8 @@ export default function AboutPage() {
         lead="The library is open, the issues are public, and the roadmap is decided by what people actually ask for."
         actions={
           <>
-            <a href="/careers/" className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] hover:bg-[var(--button-primary-hover)]">
-              See open roles
-            </a>
-            <a href="https://github.com/myviliha/vui-starter" className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-accent">
-              Browse the code
-            </a>
+            <LinkButton href="/careers/">See open roles</LinkButton>
+            <LinkButton href="https://github.com/myviliha/vui-starter" variant="secondary">Browse the code</LinkButton>
           </>
         }
       />

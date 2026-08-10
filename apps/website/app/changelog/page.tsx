@@ -1,5 +1,6 @@
 import { Cta, Hero, Timeline } from "@viliha/vui-web";
 
+import { LinkButton } from "@/app/_components/link-button";
 import { pageMeta } from "@/lib/site";
 
 export const metadata = pageMeta({
@@ -21,7 +22,7 @@ export default function ChangelogPage() {
     <>
       <Hero variant="minimal" eyebrow="Changelog" title="What shipped" lead="The short version. The full log lives with the packages, one entry per release." />
       <Timeline items={RELEASES} />
-      <Cta variant="card" title="Read the full changelog" lead="Every release, with the reasoning, in the package itself." actions={<a href="https://vui.viliha.com/docs/changelog/" className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-accent">Open the docs changelog</a>} />
+      <Cta variant="card" title="Read the full changelog" lead="Every release, with the reasoning, in the package itself." actions={<LinkButton href="https://vui.viliha.com/docs/changelog/" variant="secondary">Open the docs changelog</LinkButton>} />
     </>
   );
 }

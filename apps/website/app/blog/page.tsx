@@ -1,5 +1,6 @@
 import { CardGrid, Cta, Hero, Newsletter } from "@viliha/vui-web";
 
+import { LinkButton } from "@/app/_components/link-button";
 import { allPosts } from "@/lib/posts";
 import { pageMeta } from "@/lib/site";
 
@@ -43,9 +44,7 @@ export default function BlogPage() {
         title="Have something to add?"
         lead="Corrections and counter-arguments are welcome, and we publish them."
         actions={
-          <a href="/contact/" className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-accent">
-            Get in touch
-          </a>
+          <LinkButton href="/contact/" variant="secondary">Get in touch</LinkButton>
         }
       />
     </>

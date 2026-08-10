@@ -12,6 +12,7 @@ import {
 } from "@viliha/vui-web";
 
 import { CUSTOMERS, FAQS, FEATURES, LOGOS, PLANS, STATS, STEPS, TESTIMONIALS } from "@/lib/content";
+import { LinkButton } from "@/app/_components/link-button";
 import { SITE, pageMeta } from "@/lib/site";
 
 export const metadata = pageMeta({
@@ -38,18 +39,8 @@ export default function HomePage() {
         lead="Datatables, forms, charts and auth screens that already match each other. Scaffolded into your repo, MIT licensed, yours to own."
         actions={
           <>
-            <a
-              href="/pricing/"
-              className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] transition-colors hover:bg-[var(--button-primary-hover)]"
-            >
-              Start free
-            </a>
-            <a
-              href="/features/"
-              className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-accent"
-            >
-              See the features
-            </a>
+            <LinkButton href="/pricing/">Start free</LinkButton>
+            <LinkButton href="/features/" variant="secondary">See the features</LinkButton>
           </>
         }
         footnote="MIT licensed. No card, no trial clock, no seat limit."
@@ -110,18 +101,8 @@ export default function HomePage() {
         lead="Install it, point it at your API, and spend your time on the parts that are actually your product."
         actions={
           <>
-            <a
-              href="/pricing/"
-              className="inline-flex h-10 items-center rounded-md bg-[var(--button-primary)] px-5 text-sm font-medium text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)] transition-colors hover:bg-[var(--button-primary-hover)]"
-            >
-              Start free
-            </a>
-            <a
-              href="/contact/"
-              className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-accent"
-            >
-              Talk to us
-            </a>
+            <LinkButton href="/pricing/">Start free</LinkButton>
+            <LinkButton href="/contact/" variant="secondary">Talk to us</LinkButton>
           </>
         }
         footnote="No card required."

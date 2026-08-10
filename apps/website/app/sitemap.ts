@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { catalogRoutes } from "@/lib/catalog";
 import { allPosts } from "@/lib/posts";
 import { ROUTES, SITE } from "@/lib/site";
 
@@ -19,5 +20,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.date),
     priority: 0.6,
   }));
-  return [...pages, ...posts];
+  // Detail pages add themselves: a new case study or job is in the sitemap the
+  // moment it is in the catalog, with nothing to remember.
+  const details = catalogRoutes().map((route) => ({
+    url: `${base}${route}`,
+    lastModified: new Date(),
+    priority: 0.6,
+  }));
+  return [...pages, ...posts, ...details];
 }
