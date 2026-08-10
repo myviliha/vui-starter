@@ -72,6 +72,31 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
     description:
       "Calendar demo: a Google-style month view with appointments you can add and remove, built on the Vui Starter design system.",
   },
+  "/errors/unauthorized": {
+    title: "401 Unauthorized",
+    description:
+      "401 screen demo: the sign-in prompt Vui Starter shows when a session has expired, on the same brand shell as the 404 and 500.",
+  },
+  "/errors/forbidden": {
+    title: "403 Forbidden",
+    description:
+      "403 screen demo: what Vui Starter shows when someone is signed in but lacks the permission a page needs.",
+  },
+  "/errors/not-found": {
+    title: "404 Not Found",
+    description:
+      "404 screen demo: the not-found page Vui Starter renders for a missing route, reachable so you can see it without breaking a link.",
+  },
+  "/errors/server-error": {
+    title: "500 Server Error",
+    description:
+      "500 screen demo: the error boundary Vui Starter shows when a route throws, with retry and support actions.",
+  },
+  "/errors/maintenance": {
+    title: "Maintenance",
+    description:
+      "Maintenance screen demo: the planned-downtime page in the Vui Starter admin template.",
+  },
   "/notifications": {
     title: "Notifications",
     description:

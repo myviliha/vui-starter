@@ -8,6 +8,8 @@ import {
   ChatBubbleIcon,
   CheckCircledIcon as BadgeCheck,
   CubeIcon as Building,
+  CrossCircledIcon as NoAccess,
+  MagnifyingGlassIcon as Search,
   ExclamationTriangleIcon as AlertTriangle,
   CubeIcon as Building2,
   DashboardIcon as LayoutGrid,
@@ -53,37 +55,29 @@ export function isGroup(entry: NavEntry): entry is NavGroup {
 }
 
 export const NAV: NavSection[] = [
+  // Everyday screens. The first section has no title by convention.
   {
     items: [
       { label: "Home", href: "/dashboard", icon: Home, color: "text-blue-500" },
       { label: "Charts", href: "/charts", icon: BarChart3, color: "text-fuchsia-500" },
-      {
-        label: "Auth",
-        icon: Lock,
-        color: "text-rose-500",
-        children: [
-          { label: "Sign in", href: "/auth/signin", icon: LogIn, color: "text-blue-500" },
-          { label: "Sign up", href: "/auth/signup", icon: Users, color: "text-emerald-500" },
-          { label: "Forgot password", href: "/auth/forgot-password", icon: HelpCircle, color: "text-amber-500" },
-          { label: "Reset password", href: "/auth/reset-password", icon: Lock, color: "text-violet-500" },
-          { label: "Verify code", href: "/auth/verify", icon: BadgeCheck, color: "text-teal-500" },
-          // Links to a non-existent path so it renders the real 404 (not-found.tsx).
-          { label: "404 page", href: "/404", icon: AlertTriangle, color: "text-slate-500" },
-        ],
-      },
+      { label: "Calendar", href: "/calendar", icon: CalendarIcon, color: "text-rose-500" },
     ],
   },
   {
-    title: "shadcn/ui",
+    title: "Communication",
+    items: [
+      { label: "Notifications", href: "/notifications", icon: BellIcon, color: "text-rose-500" },
+      { label: "Chat", href: "/chat", icon: ChatBubbleIcon, color: "text-sky-500" },
+      { label: "Support", href: "/support", icon: HelpCircle, color: "text-emerald-500" },
+    ],
+  },
+  {
+    title: "UI kit",
     items: [
       { label: "Components", href: "/components", icon: Blocks, color: "text-indigo-500" },
       { label: "Data Table", href: "/data-table", icon: TableIcon, color: "text-amber-500" },
       { label: "Forms", href: "/forms", icon: FormInput, color: "text-teal-500" },
       { label: "Steps", href: "/steps", icon: StepsIcon, color: "text-violet-500" },
-      { label: "Calendar", href: "/calendar", icon: CalendarIcon, color: "text-rose-500" },
-      { label: "Chat", href: "/chat", icon: ChatBubbleIcon, color: "text-sky-500" },
-      { label: "Support", href: "/support", icon: HelpCircle, color: "text-emerald-500" },
-      { label: "Notifications", href: "/notifications", icon: BellIcon, color: "text-rose-500" },
     ],
   },
   {
@@ -128,6 +122,38 @@ export const NAV: NavSection[] = [
           { label: "Cities", href: "/system/cities", icon: Landmark, color: "text-amber-500" },
           { label: "Currencies", href: "/system/currencies", icon: Coins, color: "text-green-500" },
           { label: "Languages", href: "/system/languages", icon: Languages, color: "text-purple-500" },
+        ],
+      },
+    ],
+  },
+  // Standalone screens: these live outside the app shell (their own header and
+  // footer), which is why they are grouped rather than mixed into the sections
+  // above. Both groups collapse, so the sidebar stays short.
+  {
+    title: "Screens",
+    items: [
+      {
+        label: "Auth",
+        icon: Lock,
+        color: "text-rose-500",
+        children: [
+          { label: "Sign in", href: "/auth/signin", icon: LogIn, color: "text-blue-500" },
+          { label: "Sign up", href: "/auth/signup", icon: Users, color: "text-emerald-500" },
+          { label: "Forgot password", href: "/auth/forgot-password", icon: HelpCircle, color: "text-amber-500" },
+          { label: "Reset password", href: "/auth/reset-password", icon: Lock, color: "text-violet-500" },
+          { label: "Verify code", href: "/auth/verify", icon: BadgeCheck, color: "text-teal-500" },
+        ],
+      },
+      {
+        label: "Errors",
+        icon: AlertTriangle,
+        color: "text-slate-500",
+        children: [
+          { label: "Unauthorized", href: "/errors/unauthorized", icon: Lock, color: "text-amber-500" },
+          { label: "Forbidden", href: "/errors/forbidden", icon: NoAccess, color: "text-orange-500" },
+          { label: "Not found", href: "/errors/not-found", icon: Search, color: "text-slate-500" },
+          { label: "Server error", href: "/errors/server-error", icon: AlertTriangle, color: "text-red-500" },
+          { label: "Maintenance", href: "/errors/maintenance", icon: Settings, color: "text-sky-500" },
         ],
       },
     ],

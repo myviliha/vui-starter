@@ -32,6 +32,12 @@ export const SEGMENT_LABELS: Record<string, string> = {
   languages: "Languages",
   settings: "Settings",
   notifications: "Notifications",
+  errors: "Errors",
+  unauthorized: "Unauthorized",
+  forbidden: "Forbidden",
+  "not-found": "Not found",
+  "server-error": "Server error",
+  maintenance: "Maintenance",
 };
 
 /** Full pathname → icon color (Tailwind text-* class). */
@@ -63,6 +69,11 @@ export const ROUTE_COLORS: Record<string, string> = {
   "/system/languages": "text-purple-500",
   "/settings": "text-slate-500",
   "/notifications": "text-rose-500",
+  "/errors/unauthorized": "text-amber-500",
+  "/errors/forbidden": "text-orange-500",
+  "/errors/not-found": "text-slate-500",
+  "/errors/server-error": "text-red-500",
+  "/errors/maintenance": "text-sky-500",
 };
 
 /** Full pathname → raw accent color (drives the --page-accent CSS variable so
@@ -95,6 +106,11 @@ export const ROUTE_ACCENT: Record<string, string> = {
   "/system/languages": "#a855f7",
   "/settings": "#64748b",
   "/notifications": "#f43f5e",
+  "/errors/unauthorized": "#f59e0b",
+  "/errors/forbidden": "#f97316",
+  "/errors/not-found": "#64748b",
+  "/errors/server-error": "#ef4444",
+  "/errors/maintenance": "#0ea5e9",
 };
 
 // Group-parent → first-child map is derived automatically from the nav config
