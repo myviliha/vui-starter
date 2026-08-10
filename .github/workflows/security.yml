@@ -46,12 +46,17 @@ jobs:
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
       # action-setup puts pnpm on PATH; the npx-pnpm@11 workaround failed here
-      # because pnpm never landed on PATH. No `cache: pnpm` — this job runs no
-      # `pnpm install` (audit reads the lockfile directly), so an empty pnpm
-      # store makes setup-node's post-run cache save fail on a new lockfile.
+      # because pnpm never landed on PATH.
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      # `package-manager-cache: false` is load-bearing. setup-node v5 caches
+      # automatically whenever package.json has a `packageManager` field, and
+      # leaving `cache` unset is no longer enough to opt out. This job runs no
+      # `pnpm install` (audit reads the lockfile directly), so the pnpm store
+      # never exists and the post-run save fails the job with "Path Validation
+      # Error", even though the audit itself passed.
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 24
+          package-manager-cache: false
       - name: Audit production deps (fail on high/critical)
         run: pnpm audit --prod --audit-level high
