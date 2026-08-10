@@ -1,16 +1,16 @@
 # Graph Report - vui-starter  (2026-08-10)
 
 ## Corpus Check
-- 487 files · ~227,676 words
+- 465 files · ~217,677 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3242 nodes · 5188 edges · 297 communities (219 shown, 78 thin omitted)
+- 3055 nodes · 4872 edges · 289 communities (214 shown, 75 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 201 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4ebcd7b2`
+- Built from commit: `4fbca323`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -279,13 +279,6 @@
 - [[_COMMUNITY_Community 275|Community 275]]
 - [[_COMMUNITY_Community 276|Community 276]]
 - [[_COMMUNITY_Community 277|Community 277]]
-- [[_COMMUNITY_Community 289|Community 289]]
-- [[_COMMUNITY_Community 290|Community 290]]
-- [[_COMMUNITY_Community 291|Community 291]]
-- [[_COMMUNITY_Community 292|Community 292]]
-- [[_COMMUNITY_Community 293|Community 293]]
-- [[_COMMUNITY_Community 294|Community 294]]
-- [[_COMMUNITY_Community 295|Community 295]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 303 edges
@@ -319,23 +312,23 @@
 - **Security gates running on every push and PR to main** — workflows_security_semgrep_job, workflows_security_gitleaks_job, workflows_security_audit_job, workflows_codeql_analyze_job, workflows_shared_sha_pinned_actions [INFERRED 0.85]
 - **Requirement templates that brief an agent to build a VUI screen or feature** — templates_page_template, templates_form_template, templates_component_template, templates_feature_template, templates_workflow_template, templates_feature_requirement_entity_brief, templates_shared_test_scenarios_convention, templates_shared_definition_of_done [INFERRED 0.95]
 
-## Communities (297 total, 78 thin omitted)
+## Communities (289 total, 75 thin omitted)
 
 ### Community 0 - "UI Primitives"
-Cohesion: 0.04
-Nodes (62): AccordionContent(), AccordionItem(), AccordionTrigger(), Alert(), AlertDescription(), AlertTitle(), alertVariants, AlertDialogAction() (+54 more)
+Cohesion: 0.06
+Nodes (36): AccordionContent(), AccordionItem(), AccordionTrigger(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage() (+28 more)
 
 ### Community 1 - "Component Gallery"
-Cohesion: 0.03
-Nodes (73): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Alert(), AlertDescription(), AlertTitle(), alertVariants (+65 more)
+Cohesion: 0.05
+Nodes (51): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), AlertDialog(), AlertDialogAction(), AlertDialogCancel(), AlertDialogContent() (+43 more)
 
 ### Community 2 - "Docs Site Pages"
 Cohesion: 0.07
 Nodes (27): metadata, metadata, metadata, metadata, metadata, DocPager(), H3(), InlineCode() (+19 more)
 
 ### Community 3 - "Showcase & Inputs"
-Cohesion: 0.05
-Nodes (47): Demo(), COUNTRIES, FormValues, schema, Button(), buttonVariants, Calendar(), CalendarDayButton() (+39 more)
+Cohesion: 0.06
+Nodes (38): Demo(), COUNTRIES, FormValues, schema, Button(), buttonVariants, Calendar(), CalendarDayButton() (+30 more)
 
 ### Community 4 - "App Page Frames"
 Cohesion: 0.12
@@ -366,12 +359,12 @@ Cohesion: 0.07
 Nodes (36): BehaviourConfig, filterUserPreferences(), FormAction, FormActionContext, FormActionOutcome, FormActionsConfig, FormConfig, FormRow (+28 more)
 
 ### Community 11 - "Shared Class Variants"
-Cohesion: 0.07
-Nodes (34): Badge(), BadgeProps, Button, ButtonProps, buttonVariants(), Calendar(), CalendarDayButton(), BADGE_VARIANTS (+26 more)
+Cohesion: 0.10
+Nodes (27): Badge(), BadgeProps, Button, ButtonProps, buttonVariants(), Calendar(), CalendarDayButton(), BADGE_VARIANTS (+19 more)
 
 ### Community 12 - "Route Layouts & Metadata"
 Cohesion: 0.08
-Nodes (14): metadata, metadata, CurrenciesTable(), metadata, metadata, metadata, DOCS_ROUTES, LEGAL_ROUTES (+6 more)
+Nodes (9): metadata, metadata, metadata, metadata, pageMeta(), metadata, metadata, metadata (+1 more)
 
 ### Community 13 - "MCP Server"
 Cohesion: 0.08
@@ -386,8 +379,8 @@ Cohesion: 0.15
 Nodes (15): IoActionsConfig, IoContext, downloadFile(), htmlEscape(), IoColumn, parseCSV(), printTable(), Row (+7 more)
 
 ### Community 16 - "Community 16"
-Cohesion: 0.08
-Nodes (25): CitiesTable(), COUNTRIES, fields, metadata, Ctx, GlobalSearchContext, INDEX, Indexed (+17 more)
+Cohesion: 0.07
+Nodes (26): BusinessesTable(), fields, metadata, CitiesTable(), COUNTRIES, fields, metadata, Ctx (+18 more)
 
 ### Community 17 - "Community 17"
 Cohesion: 0.12
@@ -398,20 +391,20 @@ Cohesion: 0.08
 Nodes (22): BrandAsset(), BrandAssetHost, BrandAssetMeta, BrandAssetPick, BrandAssetProps, COUNTRIES, CURRENCIES, DATE_FORMATS (+14 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.07
-Nodes (34): Avatar, AvatarFallback, AvatarImage, Breadcrumbs(), LinkComponent, CascadeLevel, CascadeNode, CascadingCombobox() (+26 more)
+Cohesion: 0.14
+Nodes (24): CascadeLevel, CascadeNode, CascadingCombobox(), CascadingComboboxProps, Combobox(), ComboboxProps, Placement, MultiCombobox() (+16 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.07
 Nodes (22): CalendarPage(), CHIP_FOR, cnCell(), cnDate(), cnTab(), Draft, Ev, EVENT_COLORS (+14 more)
 
 ### Community 21 - "Community 21"
-Cohesion: 0.09
-Nodes (26): AppSidebar(), BOTTOM_BAR_ITEMS, COLLAPSED_GROUP_MODES, CollapsedGroupMode, GROUP_MODE, NavIcon(), SidebarContext, SidebarContextValue (+18 more)
+Cohesion: 0.10
+Nodes (23): AppSidebar(), BOTTOM_BAR_ITEMS, COLLAPSED_GROUP_MODES, CollapsedGroupMode, GROUP_MODE, NavIcon(), SidebarContext, SidebarContextValue (+15 more)
 
 ### Community 22 - "Community 22"
 Cohesion: 0.07
-Nodes (22): clearRecordViewCache(), formatPhone(), isAsyncLabeled(), orderedGroups(), orderedSections(), resolveFormRows(), rvCacheGet(), rvCacheSet() (+14 more)
+Nodes (23): FormSlot, clearRecordViewCache(), formatPhone(), isAsyncLabeled(), orderedGroups(), orderedSections(), resolveFormRows(), rvCacheGet() (+15 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.07
@@ -422,20 +415,20 @@ Cohesion: 0.23
 Nodes (12): @viliha/vui-core changelog, cn in @viliha/vui-core, Generated from packages/ui/src at publish time, Table import and export helpers, Runtime theming engine (THEME_FIELDS, themeToCssVars, applyTheme), @viliha/vui-core framework-free logic, 129 CSS design tokens in oklch, @viliha/vui-theme design system as plain CSS (+4 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.10
-Nodes (17): StatCard(), StatCardProps, Trend, trendColor, trendIcon, statCards, statusBadge, EmployeesTable() (+9 more)
+Cohesion: 0.05
+Nodes (47): addOrganization(), bump(), emit(), getOrganization(), listeners, listOrganizations(), organizationsCursor(), OrganizationsDelta (+39 more)
 
 ### Community 26 - "Community 26"
-Cohesion: 0.09
-Nodes (11): metadata, AuthHeader(), ErrorScreen(), NotFoundActions(), SiteFooter(), metadata, FOOTER_OVERRIDDEN, metadata (+3 more)
+Cohesion: 0.12
+Nodes (8): metadata, AuthHeader(), ErrorScreen(), SiteFooter(), metadata, metadata, metadata, metadata
 
 ### Community 28 - "Community 28"
-Cohesion: 0.13
-Nodes (13): LegalList(), LegalSection(), LegalTitle(), TemplateNotice(), TierCard(), PRO, canonicalFor(), PUBLIC_ROUTES (+5 more)
+Cohesion: 0.16
+Nodes (13): LegalList(), LegalSection(), LegalTitle(), TemplateNotice(), canonicalFor(), DOCS_ROUTES, FOOTER_OVERRIDDEN, LEGAL_ROUTES (+5 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.09
-Nodes (25): listWorkspaces(), switchWorkspace(), WORKSPACES, MobileNav(), SidebarProvider(), ChromeConfigContext, ChromeConfigProvider(), ChromeFlags (+17 more)
+Cohesion: 0.11
+Nodes (18): ChromeConfigContext, ChromeConfigProvider(), ChromeFlags, Ctx, useChromeConfig(), CHROME_DEFAULTS, CHROME_FEATURES, ChromeFeature (+10 more)
 
 ### Community 30 - "Community 30"
 Cohesion: 0.04
@@ -478,16 +471,16 @@ Cohesion: 0.10
 Nodes (20): devDependencies, prettier, turbo, typescript, @typescript/native-preview, engines, node, name (+12 more)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.14
-Nodes (11): ALL, BY_CODE, CITIES, resolvePostCodes(), searchPostCodes(), wait(), Market, reconcile() (+3 more)
+Cohesion: 0.16
+Nodes (11): ALL, BY_CODE, CITIES, resolvePostCodes(), searchPostCodes(), wait(), Market, markets (+3 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.13
-Nodes (13): useGlobalSearch(), SECTION_INDEX, colorFor(), Crumb, crumbsFor(), ROUTE_ACCENT, ROUTE_COLORS, SEGMENT_LABELS (+5 more)
+Cohesion: 0.16
+Nodes (9): SECTION_INDEX, Crumb, crumbsFor(), ROUTE_ACCENT, ROUTE_COLORS, SEGMENT_LABELS, PLANS, RegisterBusinessPage() (+1 more)
 
 ### Community 42 - "Community 42"
-Cohesion: 0.15
-Nodes (13): BLOCKS, metadata, PRO_BLOCKS, PlanBadge(), PlanMatrix(), counts, metadata, Plan (+5 more)
+Cohesion: 0.09
+Nodes (18): BLOCKS, metadata, PRO_BLOCKS, PlanBadge(), PlanMatrix(), TierCard(), counts, metadata (+10 more)
 
 ### Community 43 - "Community 43"
 Cohesion: 0.12
@@ -498,8 +491,8 @@ Cohesion: 0.16
 Nodes (14): ALL, FIRST, LAST, listUsers(), MAX_PAGE_SIZE, restoreUsers(), ROLES, STATUSES (+6 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.14
-Nodes (13): AuthShowcase(), POINTS, Brand, BrandContext, BrandContextValue, BrandName(), BrandProvider(), DEFAULT_BRAND (+5 more)
+Cohesion: 0.16
+Nodes (12): Brand, BrandContext, BrandContextValue, BrandProvider(), DEFAULT_BRAND, useBrand(), Logo(), LogoProps (+4 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.11
@@ -530,20 +523,20 @@ Cohesion: 0.12
 Nodes (16): dependsOn, inputs, outputs, dependsOn, cache, dependsOn, persistent, globalEnv (+8 more)
 
 ### Community 53 - "Community 53"
-Cohesion: 0.05
-Nodes (43): author, bugs, url, dependencies, @viliha/vui-core, @viliha/vui-theme, @viliha/vui-ui, description (+35 more)
+Cohesion: 0.09
+Nodes (15): Avatar, AvatarFallback, AvatarImage, HoverCardContent(), Page(), PageProps, Step, Steps() (+7 more)
 
 ### Community 54 - "Community 54"
 Cohesion: 0.05
 Nodes (38): 1 · New Next.js app, 2 · New Vite + React app, 3 · Existing project, 4 · Turborepo / monorepo, Changing how the components behave, code:bash (git clone https://github.com/myviliha/vui-starter.git), code:jsonc (// apps/web/package.json), code:tsx (import { Button } from "@viliha/vui-ui/button";) (+30 more)
 
 ### Community 55 - "Community 55"
-Cohesion: 0.17
-Nodes (15): SidebarBody(), Ctx, DOT_FOR, KeepAliveTabs(), MAX_TABS, NAV_META, OpenTabsContext, OpenTabsProvider() (+7 more)
+Cohesion: 0.15
+Nodes (17): MobileNav(), SidebarBody(), SidebarProvider(), Ctx, DOT_FOR, KeepAliveTabs(), MAX_TABS, NAV_META (+9 more)
 
 ### Community 56 - "Community 56"
-Cohesion: 0.13
-Nodes (13): geist, inter, jetbrainsMono, jsonLd, metadata, sourceSerif, authClient, AppAuthProvider() (+5 more)
+Cohesion: 0.10
+Nodes (15): geist, inter, jetbrainsMono, jsonLd, metadata, sourceSerif, authClient, AppAuthProvider() (+7 more)
 
 ### Community 57 - "Community 57"
 Cohesion: 0.19
@@ -558,8 +551,8 @@ Cohesion: 0.07
 Nodes (29): 1. Delete First, 2. Extend Before Create, 3. Blueprint Test, Accessibility, apps/backoffice, Changelog & docs are mandatory (never skip), Code Standards, code:css (@import "@viliha/vui-ui/theme.css";) (+21 more)
 
 ### Community 60 - "Community 60"
-Cohesion: 0.14
-Nodes (13): Comment, Entry(), FIRST_TICKET, initials(), Priority, PRIORITY_DOT, PRIORITY_OPTIONS, SEED (+5 more)
+Cohesion: 0.07
+Nodes (27): ChartsContent, Attachment, AttachmentChip(), Chat, FIRST_CHAT, humanSize(), MessageRow(), Msg (+19 more)
 
 ### Community 61 - "Community 61"
 Cohesion: 0.13
@@ -582,8 +575,8 @@ Cohesion: 0.16
 Nodes (12): body, decode(), dest, ENTITIES, exportDir, here, html, out (+4 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.14
-Nodes (21): addOrganization(), bump(), emit(), getOrganization(), listeners, listOrganizations(), organizationsCursor(), OrganizationsDelta (+13 more)
+Cohesion: 0.20
+Nodes (12): FormControl(), FormDescription(), FormField(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContext, FormItemContextValue (+4 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.15
@@ -606,8 +599,8 @@ Cohesion: 0.20
 Nodes (11): FormControl(), FormDescription(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContext, FormItemContextValue, FormLabel() (+3 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.20
-Nodes (6): share(), a, b, calls, opts, run()
+Cohesion: 0.18
+Nodes (7): batch(), share(), a, b, calls, opts, run()
 
 ### Community 74 - "Community 74"
 Cohesion: 0.14
@@ -618,8 +611,8 @@ Cohesion: 0.18
 Nodes (10): compilerOptions, declaration, declarationMap, module, moduleResolution, outDir, rootDir, exclude (+2 more)
 
 ### Community 76 - "Community 76"
-Cohesion: 0.27
-Nodes (8): Crumb, ProfileFormProps, RowId, FieldFilter, IconType, RecordField, RecordForm(), AsyncOption
+Cohesion: 0.24
+Nodes (8): Breadcrumbs(), Crumb, LinkComponent, ProfileFormProps, RowId, IconType, RecordField, RecordForm()
 
 ### Community 77 - "Community 77"
 Cohesion: 0.40
@@ -634,8 +627,8 @@ Cohesion: 0.20
 Nodes (8): areaConfig, axis, barConfig, deals, lineConfig, pieConfig, revenue, traffic
 
 ### Community 80 - "Community 80"
-Cohesion: 0.10
-Nodes (22): AnnouncementBar(), AnnouncementBarProps, Callout(), CookieBanner(), CookieBannerProps, TONE, useDismissed(), cols (+14 more)
+Cohesion: 0.17
+Nodes (8): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogOverlay(), AlertDialogTitle()
 
 ### Community 81 - "Community 81"
 Cohesion: 0.31
@@ -702,20 +695,20 @@ Cohesion: 0.25
 Nodes (5): ChartConfig, ChartConfigContext, ChartContainer(), LegendEntry, TooltipEntry
 
 ### Community 98 - "Community 98"
-Cohesion: 0.14
-Nodes (18): LogoCloud(), LogoCloudProps, LogoItem, QuoteBlock(), StatItem, Stats(), StatsProps, Testimonial (+10 more)
+Cohesion: 0.18
+Nodes (8): Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle(), SheetTrigger()
 
 ### Community 99 - "Community 99"
 Cohesion: 0.12
-Nodes (18): Command(), CommandDialog(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+10 more)
+Nodes (11): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuRadioItem(), DropdownMenuSeparator(), DropdownMenuShortcut() (+3 more)
 
 ### Community 100 - "Community 100"
 Cohesion: 0.25
 Nodes (7): compilerOptions, outDir, strictNullChecks, types, exclude, extends, include
 
 ### Community 101 - "Community 101"
-Cohesion: 0.17
-Nodes (15): Cta(), CtaProps, Faq(), FaqItem, FaqProps, Hero(), HeroProps, HeroVariant (+7 more)
+Cohesion: 0.36
+Nodes (7): useChrome(), GlobalSearchProvider(), useGlobalSearch(), QuickActionsProvider(), colorFor(), TopBar(), usePageChrome()
 
 ### Community 102 - "Community 102"
 Cohesion: 0.43
@@ -762,12 +755,12 @@ Cohesion: 0.40
 Nodes (4): compilerOptions, jsx, extends, $schema
 
 ### Community 114 - "Community 114"
-Cohesion: 0.23
-Nodes (10): SetPageTitle(), OrganizationStatus, filterRows(), fields, getPrimary(), makeEmptyRow(), ORG_ICON, statusBadge (+2 more)
+Cohesion: 0.50
+Nodes (4): Alert(), AlertDescription(), AlertTitle(), alertVariants
 
 ### Community 116 - "Community 116"
-Cohesion: 0.13
-Nodes (14): compilerOptions, isolatedModules, jsx, lib, module, moduleResolution, noEmit, noUncheckedIndexedAccess (+6 more)
+Cohesion: 0.18
+Nodes (6): SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle()
 
 ### Community 117 - "Community 117"
 Cohesion: 0.50
@@ -794,48 +787,48 @@ Cohesion: 0.18
 Nodes (10): checkBusinessEmail(), EmailCheck, Plan, PLANS, PUBLIC_EMAIL_DOMAINS, TEAM_ROLES, TeamRole, TIMEZONES (+2 more)
 
 ### Community 150 - "Community 150"
-Cohesion: 0.16
-Nodes (10): BusinessesTable(), fields, metadata, DepartmentsTable(), fields, metadata, Business, Department (+2 more)
+Cohesion: 0.10
+Nodes (16): CountriesTable(), fields, metadata, DepartmentsTable(), fields, metadata, fields, LanguagesTable() (+8 more)
 
 ### Community 151 - "Community 151"
 Cohesion: 0.24
 Nodes (13): Customer signup workflow brief (signup -> verify code -> company onboarding -> dashboard), REST contract table (get many/one, create, update, delete, bulk, import, export with status codes), Entity feature requirement brief (resource info, screens, RecordField table, API contract, test matrix, business rules, DoD), API test matrix (success, 400 invalid id, 404, 403, validation, 409 duplicate, 409 in use), Feature template (goal, where, reuse-first, behavior, required states, out of scope), Form requirement template (formRows layout, fields with group/tooltip/validation, footer, TC-1..TC-7), Page requirement template (pick one of five page types, fields, nav, test scenarios), TC-n happy/unhappy scenario convention shared by every template (+5 more)
 
+### Community 152 - "Community 152"
+Cohesion: 0.13
+Nodes (10): Badge(), badgeVariants, Popover(), PopoverContent(), PopoverDescription(), PopoverHeader(), PopoverTitle(), PopoverTrigger() (+2 more)
+
 ### Community 153 - "Community 153"
-Cohesion: 0.29
-Nodes (7): ThemeToggle(), emit(), listeners, setAvatar(), useAvatar(), USER, UserMenu()
+Cohesion: 0.14
+Nodes (12): emit(), listeners, setAvatar(), useAvatar(), UserMenu(), AuthContext, AuthContract, AuthStatus (+4 more)
 
 ### Community 154 - "Community 154"
 Cohesion: 0.15
 Nodes (12): 1 · Resource Information, 2 · Screens & Breadcrumb, 3 · API Contract, 4 · API Test Matrix, 5 · Business Rules, 6 · Definition of Done, Create, `<Entity>` — Feature Requirement (+4 more)
 
-### Community 155 - "Community 155"
-Cohesion: 0.18
-Nodes (9): Attachment, AttachmentChip(), Chat, FIRST_CHAT, humanSize(), MessageRow(), Msg, SEED (+1 more)
-
 ### Community 156 - "Community 156"
-Cohesion: 0.33
-Nodes (5): Field(), FieldGrid(), Placement, ResolvedSide, Tooltip()
+Cohesion: 0.28
+Nodes (6): Field(), FieldGrid(), RequiredMark(), Placement, ResolvedSide, Tooltip()
 
 ### Community 157 - "Community 157"
-Cohesion: 0.20
-Nodes (11): ContactForm(), ContactFormProps, DEFAULT_FIELDS, Field(), FieldProps, FieldState, Newsletter(), NewsletterProps (+3 more)
+Cohesion: 0.40
+Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
 
 ### Community 158 - "Community 158"
-Cohesion: 0.22
-Nodes (4): ChartsContent, Breadcrumbs(), PLANS, STEPS
+Cohesion: 0.50
+Nodes (4): Alert(), AlertDescription(), AlertTitle(), alertVariants
 
 ### Community 159 - "Community 159"
 Cohesion: 0.40
 Nodes (4): Menu(), MenuItem, MenuItemProps, MenuLabel()
 
 ### Community 160 - "Community 160"
-Cohesion: 0.10
-Nodes (14): SignInScreen(), SignUpScreen(), ForgotPasswordPage(), ResetPasswordPage(), AuthContext, AuthContract, AuthStatus, AuthUser (+6 more)
+Cohesion: 0.17
+Nodes (7): SignInScreen(), SignUpScreen(), ForgotPasswordPage(), ResetPasswordPage(), FieldRule, useFormFields(), SupportPage()
 
 ### Community 169 - "Community 169"
-Cohesion: 0.36
-Nodes (7): ConfirmDialog(), ConfirmDialogProps, Dialog(), DialogBody(), DialogFooter(), DialogHeader(), DialogTitle()
+Cohesion: 0.18
+Nodes (9): Select(), SelectContent(), SelectItem(), SelectLabel(), SelectScrollDownButton(), SelectScrollUpButton(), SelectSeparator(), SelectTrigger() (+1 more)
 
 ### Community 170 - "Community 170"
 Cohesion: 0.22
@@ -882,12 +875,12 @@ Cohesion: 0.22
 Nodes (9): code:tsx (// app/(app)/layout.tsx), code:tsx (<RecordView behaviour={{ confirmDelete: false }} … />), code:tsx (<VuiProvider userConfigurable={{ behaviour: ["rowClick", "fl), code:tsx (<RecordView), Do I have to change any code?, Upgrading from 1.44 to 1.53, What changed without you asking, What did not change, and will not (+1 more)
 
 ### Community 181 - "Community 181"
-Cohesion: 0.22
-Nodes (8): code:bash (npm install @viliha/vui-web), code:css (/* app/globals.css */), code:tsx (import { Hero, LogoCloud, FeatureGrid, Pricing, Faq, Cta } f), code:tsx (import { Hero } from "@viliha/vui-web/hero";), Compose a page, Things worth knowing, @viliha/vui-web, What's here
+Cohesion: 0.32
+Nodes (3): AuthShowcase(), POINTS, BrandName()
 
 ### Community 182 - "Community 182"
-Cohesion: 0.22
-Nodes (7): COLUMNS, FeatureGrid(), FeatureGridProps, FeatureItem, FeatureList(), FeatureSplit(), FeatureSplitProps
+Cohesion: 0.25
+Nodes (6): Popover(), PopoverContent(), PopoverDescription(), PopoverHeader(), PopoverTitle(), PopoverTrigger()
 
 ### Community 183 - "Community 183"
 Cohesion: 0.25
@@ -898,8 +891,8 @@ Cohesion: 0.25
 Nodes (7): Attribution, Contributor Covenant Code of Conduct, Enforcement, Enforcement Responsibilities, Our Pledge, Our Standards, Scope
 
 ### Community 185 - "Community 185"
-Cohesion: 0.29
-Nodes (5): CountriesTable(), fields, metadata, countries, Country
+Cohesion: 0.38
+Nodes (5): listWorkspaces(), switchWorkspace(), WORKSPACES, WorkspaceProvider(), ORG_THEME
 
 ### Community 186 - "Community 186"
 Cohesion: 0.33
@@ -1077,22 +1070,6 @@ Nodes (3): 1.61.0 — 2026-08-07, Added, Changed
 Cohesion: 0.67
 Nodes (3): 1.6.0 — 2026-07-25, Added, Changed
 
-### Community 251 - "Community 251"
-Cohesion: 0.25
-Nodes (7): compilerOptions, declaration, emitDeclarationOnly, noEmit, outDir, extends, include
-
-### Community 267 - "Community 267"
-Cohesion: 0.29
-Nodes (6): ComparisonRow, ComparisonTable(), ComparisonTableProps, Pricing(), PricingPlan, PricingProps
-
-### Community 268 - "Community 268"
-Cohesion: 0.33
-Nodes (5): DEFAULT_SIZE, HeadingLevel, HeadingSize, SectionHeaderProps, SIZE
-
-### Community 290 - "Community 290"
-Cohesion: 0.50
-Nodes (3): 0.1.0 — 2026-08-10, Added, Changelog
-
 ## Ambiguous Edges - Review These
 - `Backoffice README (stack, scripts, routes, footer env vars)` → `Doc drift: README says the backoffice runs on port 3001, AGENTS.md says dev on :3000`  [AMBIGUOUS]
   apps/backoffice/README.md · relation: references
@@ -1100,9 +1077,9 @@ Nodes (3): 0.1.0 — 2026-08-10, Added, Changelog
   apps/backoffice/public/llms.txt · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **1342 isolated node(s):** `Added`, `code:bash (npm install @viliha/vui-web)`, `code:css (/* app/globals.css */)`, `code:tsx (import { Hero, LogoCloud, FeatureGrid, Pricing, Faq, Cta } f)`, `code:tsx (import { Hero } from "@viliha/vui-web/hero";)` (+1337 more)
+- **1257 isolated node(s):** `$schema`, `ui`, `globalEnv`, `dependsOn`, `inputs` (+1252 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **78 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **75 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -1111,13 +1088,13 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
 - **What is the exact relationship between `llms.txt docs index for AI fetchers (trailing-slash rule + every docs URL)` and `Entity feature requirement brief (resource info, screens, RecordField table, API contract, test matrix, business rules, DoD)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `cn()` connect `UI Primitives` to `Component Gallery`, `Docs Site Pages`, `Showcase & Inputs`, `App Page Frames`, `Community 132`, `Auth & Onboarding Screens`, `Datatable & Records`, `Config & Form Actions`, `Shared Class Variants`, `Community 17`, `Community 19`, `Community 20`, `Community 21`, `Community 152`, `Community 25`, `Community 26`, `Community 155`, `Community 156`, `Community 29`, `Community 31`, `Community 159`, `Community 33`, `Community 36`, `Community 169`, `Community 43`, `Community 45`, `Community 48`, `Community 58`, `Community 60`, `Community 71`, `Community 74`, `Community 78`, `Community 97`, `Community 99`, `Community 103`, `Community 104`, `Community 105`?**
-  _High betweenness centrality (0.120) - this node is a cross-community bridge._
-- **Why does `Note()` connect `Docs Site Pages` to `UI Primitives`, `Community 289`, `Community 36`, `App Page Frames`, `Community 42`, `Community 174`, `Community 48`, `Community 63`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `SiteFooter()` connect `Community 26` to `UI Primitives`, `Community 29`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Why does `cn()` connect `UI Primitives` to `Component Gallery`, `Docs Site Pages`, `Showcase & Inputs`, `App Page Frames`, `Community 132`, `Auth & Onboarding Screens`, `Datatable & Records`, `Config & Form Actions`, `Shared Class Variants`, `Community 17`, `Community 19`, `Community 20`, `Community 21`, `Community 152`, `Community 25`, `Community 26`, `Community 156`, `Community 29`, `Community 158`, `Community 159`, `Community 31`, `Community 33`, `Community 157`, `Community 36`, `Community 169`, `Community 43`, `Community 45`, `Community 48`, `Community 53`, `Community 182`, `Community 55`, `Community 58`, `Community 60`, `Community 66`, `Community 71`, `Community 74`, `Community 76`, `Community 78`, `Community 80`, `Community 97`, `Community 98`, `Community 99`, `Community 103`, `Community 104`, `Community 105`, `Community 114`, `Community 116`?**
+  _High betweenness centrality (0.126) - this node is a cross-community bridge._
+- **Why does `Note()` connect `Docs Site Pages` to `UI Primitives`, `Community 36`, `App Page Frames`, `Community 42`, `Community 174`, `Community 48`, `Community 155`, `Community 63`?**
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `SiteFooter()` connect `Community 26` to `UI Primitives`, `Community 28`, `Community 55`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Are the 149 inferred relationships involving `cn()` (e.g. with `Section()` and `CalendarPage()`) actually correct?**
   _`cn()` has 149 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Added`, `code:bash (npm install @viliha/vui-web)`, `code:css (/* app/globals.css */)` to the rest of the system?**
-  _1351 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `$schema`, `ui`, `globalEnv` to the rest of the system?**
+  _1266 weakly-connected nodes found - possible documentation gaps or missing edges._

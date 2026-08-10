@@ -23,5 +23,20 @@ All notable changes to `@viliha/vui-web` are documented here. The format follows
 - **The FAQ is `<details>`,** not a JavaScript disclosure: keyboard operation,
   screen-reader semantics and open-before-hydration come free from the browser.
 
+- **The rest of the content set**: `ProcessSteps`, `Timeline`, `TeamGrid`,
+  `FeatureTabs`, `CaseStudyGrid`, `Benefits`, `ImageBlock`, `ImageGallery` with a
+  lightbox, `VideoBlock`, `EmbedBlock`, `MapBlock`, `CardGrid`, `MasonryGrid`,
+  `Carousel`, `DownloadBlock`, `SearchBlock`, `FilterBar`, `Pagination`,
+  `LoadMore`, `EmptyState` and `LoadingCards`.
+
+  `Pagination` and `EmptyState` did not exist anywhere in the repo before, not
+  even in the admin package, where pagination was locked inside `RecordView`.
+
+  Three of these earn their keep by what they avoid: `VideoBlock` keeps a YouTube
+  embed behind a poster, so the third-party iframe costs nothing until someone
+  presses play; `Carousel` scroll-snaps natively, so touch, keyboard and momentum
+  all work without a carousel library; `ImageBlock` reserves its space with an
+  aspect ratio, which is most of what CLS measures.
+
 Version 0.x on purpose. The block set is incomplete and the prop shapes may still
 move.
