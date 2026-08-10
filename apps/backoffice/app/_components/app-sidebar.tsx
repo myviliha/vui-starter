@@ -284,7 +284,7 @@ function SidebarBody({
             <NavIcon icon={GroupIcon} active={anyActive} color={entry.color} />
             <ChevronRight
               className={cn(
-                "absolute right-0.5 top-1/2 size-2.5 shrink-0 -translate-y-1/2 text-muted-foreground transition-transform",
+                "absolute end-0.5 top-1/2 size-2.5 shrink-0 -translate-y-1/2 text-muted-foreground transition-transform",
                 open && "rotate-90",
               )}
               aria-hidden="true"
@@ -544,7 +544,13 @@ export function AppSidebar() {
     <aside
       style={{ width: collapsed ? SIDEBAR_COLLAPSED_W : width }}
       className={cn(
-        "relative hidden shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex",
+        // `border-e`, not `border-r`: the logical edge follows the reading
+        // direction, so RTL puts the border on the correct side by itself.
+        "relative hidden shrink-0 flex-col border-e border-sidebar-border bg-sidebar md:flex",
+        // Appearance: the floating variant lifts the sidebar off the background
+        // and rounds it; inset and plain leave these variables at zero.
+        "rounded-[var(--vui-sidebar-radius,0px)] shadow-[var(--vui-sidebar-shadow,none)]",
+        "m-[var(--vui-shell-gap,0px)] me-0",
         !resizing && "transition-[width] duration-200 ease-out",
       )}
     >
@@ -576,7 +582,7 @@ export function AppSidebar() {
             }
           }}
           className={cn(
-            "absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize touch-none bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none",
+            "absolute inset-y-0 -end-1 z-10 w-2 cursor-col-resize touch-none bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none",
             resizing && "bg-primary/50",
           )}
         />

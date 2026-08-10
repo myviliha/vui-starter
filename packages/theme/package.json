@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-theme",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "The VUI design system as plain CSS: 129 design tokens, dark mode, the z-scale, motion utilities and always-visible scrollbars. No JavaScript and no dependencies, so it works in React, Vue, Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine, HTMX or hand-written HTML.",
   "license": "MIT",
   "author": "VILIHA PTE. LTD.",

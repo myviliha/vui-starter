@@ -142,6 +142,8 @@ export const NAV: NavSection[] = [
           { label: "Forgot password", href: "/auth/forgot-password", icon: HelpCircle, color: "text-amber-500" },
           { label: "Reset password", href: "/auth/reset-password", icon: Lock, color: "text-violet-500" },
           { label: "Verify code", href: "/auth/verify", icon: BadgeCheck, color: "text-teal-500" },
+          { label: "Sign in (split)", href: "/auth/signin-split", icon: LogIn, color: "text-indigo-500" },
+          { label: "Sign up (split)", href: "/auth/signup-split", icon: Users, color: "text-cyan-500" },
         ],
       },
       {

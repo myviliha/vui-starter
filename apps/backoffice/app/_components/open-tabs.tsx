@@ -340,7 +340,7 @@ export function TabStrip() {
       aria-label="Open pages"
       className="flex h-9 shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-background px-3"
     >
-      <span className="mr-1 shrink-0 rounded-md bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white">
+      <span className="me-1 shrink-0 rounded-md bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white">
         Tabs
       </span>
       {tabs.map((t) => {
@@ -392,7 +392,7 @@ export function TabStrip() {
             {/* Pill — the active/color background lives here (dot + icon + close). */}
             <div
               className={cn(
-                "flex h-7 items-center gap-1.5 rounded-md pl-2 pr-1.5 text-sm transition-colors",
+                "flex h-7 items-center gap-1.5 rounded-md ps-2 pe-1.5 text-sm transition-colors",
                 active
                   ? "bg-[var(--button-primary)] text-[var(--button-primary-foreground)] shadow-[var(--button-shadow)]"
                   : "text-muted-foreground group-hover:bg-accent/50",
@@ -437,7 +437,7 @@ export function TabStrip() {
       {notice && (
         <span
           role="status"
-          className="vui-fade-in ml-auto shrink-0 whitespace-nowrap rounded-md border border-border bg-muted px-2 py-1 text-xs text-muted-foreground"
+          className="vui-fade-in ms-auto shrink-0 whitespace-nowrap rounded-md border border-border bg-muted px-2 py-1 text-xs text-muted-foreground"
         >
           {notice}
         </span>

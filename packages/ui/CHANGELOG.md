@@ -110,6 +110,14 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ### Added
 
+- **Right-to-left support, and layout as a preference.** `theme.css` gains the
+  appearance tokens behind `data-sidebar`, `data-density` and `dir`, and the
+  reference app gains the picker that drives them. Most of RTL is free because
+  the shell is flex-based and flex follows the reading direction; what was not
+  free were the physical spacing utilities (`ml-`, `pr-`, `right-`), which are
+  now logical (`ms-`, `pe-`, `end-`) throughout the app shell. Use the logical
+  ones in new code and RTL keeps working.
+
 - **Every default is documented as swappable, at `/docs/swapping`.** Which icon
   set, which CSS engine, which font, which chart library, how much motion. The
   page says what each swap costs and, more usefully, what is *not* swappable: the

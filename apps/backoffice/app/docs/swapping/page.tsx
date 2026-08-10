@@ -57,6 +57,12 @@ const DEFAULTS: {
     cost: "One line",
   },
   {
+    piece: "Shell layout",
+    shipped: "Inset sidebar, default density, left to right",
+    swap: "Floating or flush sidebar, compact or full density, right to left",
+    cost: "One line",
+  },
+  {
     piece: "Components",
     shipped: "React and Vue, styled with Tailwind classes",
     swap: "Bootstrap or another component framework",
@@ -255,6 +261,33 @@ const palette = [1, 2, 3, 4, 5].map((i) => styles.getPropertyValue(\`--chart-\${
         <code>prefers-reduced-motion</code> and clamps every animation for people
         who ask their system for less motion, whatever these tokens say.
       </P>
+
+      <H2>Can I move the sidebar, tighten the spacing, or run right to left?</H2>
+      <P>
+        Yes, and none of it needs a rebuild. Three attributes on the root element
+        drive the whole shell, so a host can set them from a user preference, from
+        the server to avoid a flash, or from a settings screen like the demo does
+        at <a href="/settings" className="font-medium text-foreground underline">Settings → Layout</a>.
+      </P>
+      <CodeBlock title="index.html or your root layout">{`<html
+  data-sidebar="inset"     <!-- inset | floating | plain -->
+  data-density="default"   <!-- default | compact | full -->
+  dir="ltr"                <!-- ltr | rtl -->
+>`}</CodeBlock>
+      <P>
+        They set <code>--vui-shell-gap</code>, <code>--vui-shell-radius</code>,{" "}
+        <code>--vui-page-padding</code> and the sidebar&apos;s radius and shadow.
+        Because it is all CSS, switching layout does not re-render anything.
+      </P>
+      <Note title="Writing components that survive RTL">
+        Most of it is free: flexbox follows the reading direction, so rows
+        reverse by themselves. What does not flip is a physical utility. Use{" "}
+        <code>ms-</code>, <code>me-</code>, <code>ps-</code>, <code>pe-</code>,{" "}
+        <code>start-</code> and <code>end-</code> instead of <code>ml-</code>,{" "}
+        <code>mr-</code>, <code>pl-</code>, <code>pr-</code>, <code>left-</code>{" "}
+        and <code>right-</code>, and your component works in both directions with
+        no <code>rtl:</code> variants at all.
+      </Note>
 
       <H2>What is not swappable?</H2>
       <Ul>

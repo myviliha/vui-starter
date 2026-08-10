@@ -62,7 +62,7 @@ export function UserMenu() {
       {open && (
         <div
           role="menu"
-          className="vui-pop-in absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md"
+          className="vui-pop-in absolute end-0 z-50 mt-2 w-60 overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md"
           style={{ "--vui-pop-origin": "top right" } as React.CSSProperties}
         >
           {/* Account header */}

@@ -442,6 +442,50 @@
   animation: vui-overlay-out var(--vui-duration-base) ease-out both;
 }
 
+/* Appearance: how the shell is arranged.
+ *
+ * Three attributes on the root element, so switching layout is a data attribute
+ * rather than a re-render, and a host can set them server-side to avoid a flash:
+ *
+ *   <html data-sidebar="inset|floating|plain" data-density="default|compact|full" dir="rtl">
+ *
+ * Only the knobs live here. The shell reads them; components stay unaware.
+ */
+:root {
+  /* Gap between the sidebar, the content panel and the window edge. */
+  --vui-shell-gap: 0px;
+  /* Corner radius of the content panel. */
+  --vui-shell-radius: 0px;
+  /* Padding inside a page's content region. */
+  --vui-page-padding: 1rem;
+}
+
+:root[data-sidebar="inset"] {
+  --vui-shell-gap: 0.5rem;
+  --vui-shell-radius: var(--radius);
+}
+
+:root[data-sidebar="floating"] {
+  --vui-shell-gap: 0.75rem;
+  --vui-shell-radius: var(--radius);
+  /* The sidebar lifts off the background rather than sharing an edge with it. */
+  --vui-sidebar-shadow: 0 8px 24px -12px oklch(0 0 0 / 0.35);
+  --vui-sidebar-radius: var(--radius);
+}
+
+/* "plain": flush to the window, one shared border. The defaults above are it. */
+
+:root[data-density="compact"] {
+  --font-scale: 0.94;
+  --vui-page-padding: 0.625rem;
+}
+
+:root[data-density="full"] {
+  --vui-shell-gap: 0px;
+  --vui-shell-radius: 0px;
+  --vui-page-padding: 1.25rem;
+}
+
 /* Charts: hand the theme's palette to TanStack Charts.
  *
  * TanStack Charts deliberately has no theme of its own. It paints foreground,

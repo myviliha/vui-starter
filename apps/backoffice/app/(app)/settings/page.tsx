@@ -21,6 +21,7 @@ import { SetPageTitle } from "@/app/_components/set-page-title";
 import { useChromeConfig } from "@/app/_components/chrome-config";
 import { useVuiPreferences } from "@viliha/vui-ui/config";
 import { useThemeConfig } from "@viliha/vui-ui/theme-provider";
+import { AppearancePicker } from "@/app/_components/appearance-picker";
 import {
   CHROME_FEATURES,
   DATA_TABLE_PREFERENCE_FIELDS,
@@ -204,6 +205,13 @@ export default function SettingsPage() {
                 );
               })}
             </div>
+          </Section>
+
+          <Section
+            title="Layout"
+            description="How the shell is arranged: where the sidebar sits, how tight the spacing is, and which way the app reads. Saved to this browser."
+          >
+            <AppearancePicker />
           </Section>
 
           <Section

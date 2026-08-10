@@ -72,7 +72,7 @@ export function TopBar() {
           Bold, dark, larger glyphs (heavier stroke via [&_path]). */}
       {/* All controls share one size (size-9 box, size-5 glyph) so the cluster
           is visually uniform — see iconControl. */}
-      <div className="ml-auto flex items-center gap-1.5">
+      <div className="ms-auto flex items-center gap-1.5">
         {chrome.help && (
           <button
             type="button"

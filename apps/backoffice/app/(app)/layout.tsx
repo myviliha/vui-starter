@@ -12,6 +12,7 @@ import { GlobalSearchProvider } from "@/app/_components/global-search";
 import { VuiProvider } from "@viliha/vui-ui/config";
 import { WorkspaceProvider } from "@/app/_components/workspace-provider";
 import { ChromeConfigProvider } from "@/app/_components/chrome-config";
+import { AppearanceProvider } from "@/app/_components/appearance";
 import { DATA_TABLE_PREFERENCES, ORG_SWITCHER } from "@/lib/app-config";
 import {
   KeepAliveTabs,
@@ -35,6 +36,9 @@ export default function AppLayout({
     {/* The tenant switcher, and the theme that follows it: the current
         organization's brand is the floor, a personal theme overrides it. */}
     <WorkspaceProvider>
+    {/* Sidebar variant, density and reading direction. Attributes on <html>,
+        so switching layout is CSS rather than a re-render. */}
+    <AppearanceProvider>
     <ChromeConfigProvider>
      <SidebarProvider>
       <QuickActionsProvider>
@@ -43,7 +47,9 @@ export default function AppLayout({
         <div className="flex h-screen overflow-hidden">
           <AppSidebar />
           <PageChromeProvider titleLeading={<Breadcrumbs />}>
-            <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+            {/* The content panel. Inset and floating give it a gap and a radius through
+                the appearance tokens; plain leaves both at zero, so it stays flush. */}
+            <div className="m-[var(--vui-shell-gap,0px)] ms-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[var(--vui-shell-radius,0px)]">
               <TopBar />
               <TabStrip />
               {/* Single scroll owner is each page's own inner content area; this
@@ -66,6 +72,7 @@ export default function AppLayout({
       </QuickActionsProvider>
      </SidebarProvider>
     </ChromeConfigProvider>
+    </AppearanceProvider>
     </WorkspaceProvider>
     </VuiProvider>
   );

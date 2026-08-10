@@ -20,7 +20,11 @@ export default function AuthLayout({
     <div className="flex min-h-screen flex-col bg-muted/30">
       <AuthHeader />
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-[400px]">{children}</div>
+        {/* One shell, two widths: a page renders `data-auth-wide` when it needs
+            the two-column layout, and the wrapper widens to fit it. */}
+        <div className="w-full max-w-[400px] has-[[data-auth-wide]]:max-w-[62rem]">
+          {children}
+        </div>
       </main>
       <SiteFooter />
     </div>

@@ -10,7 +10,7 @@ export const metadata = pageMeta("/errors/maintenance");
 export default function MaintenancePage() {
   return (
     <ErrorScreen
-      code="Maintenance"
+      code="503"
       title="We’ll be back shortly"
       icon={<GearIcon className="size-7" />}
       message="We’re making a planned change and will be back within the hour. Nothing you’ve saved is affected."

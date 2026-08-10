@@ -38,6 +38,8 @@ export const SEGMENT_LABELS: Record<string, string> = {
   "not-found": "Not found",
   "server-error": "Server error",
   maintenance: "Maintenance",
+  "signin-split": "Sign in (split)",
+  "signup-split": "Sign up (split)",
 };
 
 /** Full pathname → icon color (Tailwind text-* class). */

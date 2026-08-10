@@ -41,7 +41,7 @@ export function NotificationsBell({
           <BellIcon className={iconGlyph} />
           {unread > 0 && (
             <span
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
+              className="absolute end-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
               aria-hidden="true"
             />
           )}
@@ -54,7 +54,7 @@ export function NotificationsBell({
           <span className="text-sm font-semibold tracking-tight">
             Notifications
             {unread > 0 && (
-              <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+              <span className="ms-1.5 text-xs font-normal text-muted-foreground">
                 {unread} unread
               </span>
             )}

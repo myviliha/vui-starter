@@ -4,6 +4,17 @@ All notable changes to `@viliha/vui-theme` are documented here. The format follo
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 1.3.0 — 2026-08-10
+
+### Added
+
+- **Appearance tokens, so the shell can be rearranged without a re-render.**
+  Three attributes on the root element drive them: `data-sidebar`
+  (`inset`, `floating`, `plain`), `data-density` (`default`, `compact`, `full`)
+  and the standard `dir`. They set `--vui-shell-gap`, `--vui-shell-radius`,
+  `--vui-page-padding` and the sidebar's radius and shadow, so a host can also
+  set the attributes server-side and avoid a flash on first paint.
+
 ## 1.2.0 — 2026-08-10
 
 ### Added
