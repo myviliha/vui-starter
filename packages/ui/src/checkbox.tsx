@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { CHECKBOX } from "./class-variants";
 import { cn } from "./utils";
 
 export const Checkbox = React.forwardRef<
@@ -9,11 +10,7 @@ export const Checkbox = React.forwardRef<
   <input
     ref={ref}
     type="checkbox"
-    className={cn(
-      "size-4 shrink-0 cursor-pointer rounded border-input accent-[var(--button-primary)]",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
-      className,
-    )}
+    className={cn(CHECKBOX, className)}
     {...props}
   />
 ));

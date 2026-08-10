@@ -1,6 +1,6 @@
 {
   "name": "@viliha/vui-vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "VUI components for Vue 3 and Nuxt: the same token-driven admin design system as @viliha/vui-ui, built on Reka UI. Buttons, inputs, cards, dialogs, menus and tables that match the React components pixel for pixel, because both render the same class strings.",
   "license": "MIT",
   "author": "VILIHA PTE. LTD.",

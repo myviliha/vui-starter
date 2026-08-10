@@ -1,5 +1,9 @@
 // Barrel for `import { Button } from "@viliha/vui-vue"`. Subpath imports
 // (@viliha/vui-vue/Button) work too and let a bundler drop the rest.
+export { default as Accordion } from './Accordion.vue';
+export { default as AccordionContent } from './AccordionContent.vue';
+export { default as AccordionItem } from './AccordionItem.vue';
+export { default as AccordionTrigger } from './AccordionTrigger.vue';
 export { default as Badge } from './Badge.vue';
 export { default as Button } from './Button.vue';
 export { default as Card } from './Card.vue';
@@ -9,10 +13,19 @@ export { default as CardFooter } from './CardFooter.vue';
 export { default as CardHeader } from './CardHeader.vue';
 export { default as CardTitle } from './CardTitle.vue';
 export { default as Chart } from './Chart.vue';
+export { default as Checkbox } from './Checkbox.vue';
 export { default as Code } from './Code.vue';
+export { default as Collapsible } from './Collapsible.vue';
+export { default as CollapsibleContent } from './CollapsibleContent.vue';
+export { default as CollapsibleTrigger } from './CollapsibleTrigger.vue';
 export { default as Input } from './Input.vue';
 export { default as Kbd } from './Kbd.vue';
 export { default as Label } from './Label.vue';
 export { default as Separator } from './Separator.vue';
 export { default as Skeleton } from './Skeleton.vue';
+export { default as Switch } from './Switch.vue';
+export { default as Tabs } from './Tabs.vue';
+export { default as TabsContent } from './TabsContent.vue';
+export { default as TabsList } from './TabsList.vue';
+export { default as TabsTrigger } from './TabsTrigger.vue';
 export { default as Textarea } from './Textarea.vue';

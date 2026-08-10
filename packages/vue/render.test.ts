@@ -18,9 +18,14 @@ const render = async (
   const html = await renderToString(
     createSSRApp({ render: () => h(component as never, props, () => slot) }),
   );
-  // Tailwind variants like `[&_svg]:size-4` contain an ampersand, which the SSR
-  // renderer escapes correctly. Undo it so assertions can use the class as written.
-  return html.replaceAll("&amp;", "&");
+  // Tailwind variants are full of &, > and quotes, all of which the SSR renderer
+  // escapes correctly. Undo it so assertions can use the class as written.
+  return html
+    .replaceAll("&amp;", "&")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#39;", "'");
 };
 
 it("renders a button with the same classes the React one renders", async () => {

@@ -4,6 +4,32 @@ All notable changes to `@viliha/vui-vue` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 0.2.0 — 2026-08-10
+
+### Added
+
+- **The stateful components that need a headless library**, on Reka UI:
+  `Switch`, `Checkbox`, `Tabs` with its list, triggers and panels, `Accordion`,
+  and `Collapsible`. They take `v-model` where a Vue developer expects one.
+
+- **The accordion animation works here too.** `theme.css` animates
+  `--vui-accordion-height`, and Radix and Reka each measure the panel into their
+  own variable name. `AccordionContent` maps Reka's onto ours, exactly as the
+  React component maps Radix's, which is what that indirection was added for.
+
+- **The stacking rules are enforced in this package too.** `z-layers.test.ts` is
+  the same guard as the React package's, reading `.vue` source instead of
+  `.tsx`: one z-scale, `bg-popover` on every floating panel, the themed scrim on
+  every backdrop, and portals so a menu is not clipped by a scrolling ancestor.
+  It is in place *before* the floating components land, rather than bolted on
+  after the first bug.
+
+### Changed
+
+- **More class strings moved into the shared source.** Switch, checkbox, tabs
+  and accordion now read their classes from `@viliha/vui-core`, and the React
+  components read the same ones. Nothing is copied between the two packages.
+
 ## 0.1.0 — 2026-08-10
 
 ### Added

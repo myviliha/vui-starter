@@ -108,6 +108,15 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ## 1.64.0 — 2026-08-10
 
+### Changed
+
+- **Switch, checkbox, tabs and accordion read their classes from the shared
+  source.** No visual change and no API change: the strings moved to
+  `class-variants.ts` so the Vue components render exactly the same markup
+  instead of a copy that drifts. `tabsListVariants` is now a plain function
+  rather than a `cva` instance; it takes the same `{ variant }` argument and
+  returns the same string.
+
 ### Added
 
 - **Charts that are not React-only: `TanStackChart`.** `ChartContainer` and
