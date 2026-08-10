@@ -72,6 +72,11 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
     description:
       "Calendar demo: a Google-style month view with appointments you can add and remove, built on the Vui Starter design system.",
   },
+  "/notifications": {
+    title: "Notifications",
+    description:
+      "Notifications screen demo: one feed shown two ways, as a hover popup in the top bar and as a full page with filters, in the Vui Starter admin template.",
+  },
   "/settings": {
     title: "Settings",
     description:

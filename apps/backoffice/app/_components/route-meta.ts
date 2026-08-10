@@ -31,6 +31,7 @@ export const SEGMENT_LABELS: Record<string, string> = {
   currencies: "Currencies",
   languages: "Languages",
   settings: "Settings",
+  notifications: "Notifications",
 };
 
 /** Full pathname → icon color (Tailwind text-* class). */
@@ -61,6 +62,7 @@ export const ROUTE_COLORS: Record<string, string> = {
   "/system/currencies": "text-green-500",
   "/system/languages": "text-purple-500",
   "/settings": "text-slate-500",
+  "/notifications": "text-rose-500",
 };
 
 /** Full pathname → raw accent color (drives the --page-accent CSS variable so
@@ -92,6 +94,7 @@ export const ROUTE_ACCENT: Record<string, string> = {
   "/system/currencies": "#22c55e",
   "/system/languages": "#a855f7",
   "/settings": "#64748b",
+  "/notifications": "#f43f5e",
 };
 
 // Group-parent → first-child map is derived automatically from the nav config

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  BellIcon,
   GearIcon,
   MagnifyingGlassIcon,
   QuestionMarkCircledIcon,
@@ -18,6 +17,7 @@ import { UserMenu } from "@/app/_components/user-menu";
 import { useGlobalSearch } from "@/app/_components/global-search";
 import { useChrome } from "@/app/_components/chrome-config";
 import { colorFor } from "@/app/_components/route-meta";
+import { NotificationsBell } from "@/app/_components/notifications-bell";
 import { Shortcut } from "@viliha/vui-ui/kbd";
 
 /** One shared size for every top-bar icon control, so the cluster is uniform. */
@@ -94,17 +94,7 @@ export function TopBar() {
           </Link>
         )}
         {chrome.notifications && (
-          <button
-            type="button"
-            aria-label="Notifications"
-            className={`relative ${iconControl}`}
-          >
-            <BellIcon className={iconGlyph} />
-            <span
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-[var(--button-primary)] ring-2 ring-background"
-              aria-hidden="true"
-            />
-          </button>
+          <NotificationsBell iconControl={iconControl} iconGlyph={iconGlyph} />
         )}
         {chrome.settings && (
           <Link

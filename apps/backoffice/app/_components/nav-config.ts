@@ -1,6 +1,7 @@
 import {
   AvatarIcon as UserCircle,
   BackpackIcon as Briefcase,
+  BellIcon,
   BarChartIcon as BarChart3,
   BookmarkIcon as Flag,
   CalendarIcon,
@@ -82,6 +83,7 @@ export const NAV: NavSection[] = [
       { label: "Calendar", href: "/calendar", icon: CalendarIcon, color: "text-rose-500" },
       { label: "Chat", href: "/chat", icon: ChatBubbleIcon, color: "text-sky-500" },
       { label: "Support", href: "/support", icon: HelpCircle, color: "text-emerald-500" },
+      { label: "Notifications", href: "/notifications", icon: BellIcon, color: "text-rose-500" },
     ],
   },
   {
