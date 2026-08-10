@@ -12,9 +12,9 @@ import {
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/ai-agents/" },
-  title: "Building with AI agents",
+  title: "Building with AI agents (AGENT.md + MCP server)",
   description:
-    "Standards for generating UI with VUI using AI coding agents (Claude Code, Cursor, Copilot). Ships as AGENT.md inside the @viliha/vui-ui package.",
+    "Standards for generating UI with VUI using AI coding agents (Claude Code, Cursor, Copilot). Ships as AGENT.md inside the @viliha/vui-ui package, plus an MCP server that answers component, page, and layout questions on demand.",
 };
 
 export default function AiAgentsPage() {
@@ -76,6 +76,66 @@ cp node_modules/@viliha/vui-ui/CLAUDE.template.md ./CLAUDE.md
         (for humans contributing to the theme). The package{" "}
         <code>AGENT.md</code> is the one you want for <em>consuming</em> VUI
         downstream.
+      </Note>
+
+      <H2>How do I connect the VUI MCP server?</H2>
+      <P>
+        Run <code>npx @viliha/vui-ui mcp</code> and register it with your agent.
+        The package ships an MCP server so an assistant can ask VUI direct
+        questions (how do I install it, what components exist, what props a
+        component takes, how the organizations page is built) instead of reading
+        through <code>node_modules</code> and guessing. These docs ship with it
+        as markdown, so it runs over stdio, needs no API key and no network, and
+        answers for whatever version of the package you installed.
+      </P>
+      <CodeBlock title="register the server">{`# Claude Code
+claude mcp add vui -- npx -y @viliha/vui-ui mcp
+
+# Cursor, Windsurf, or any MCP client (.mcp.json / mcp.json)
+{
+  "mcpServers": {
+    "vui": { "command": "npx", "args": ["-y", "@viliha/vui-ui", "mcp"] }
+  }
+}`}</CodeBlock>
+      <P>Seven tools come with it:</P>
+      <Ul>
+        <li>
+          <code>list_guides</code> — every page of this docs site, from
+          Installation to the per-component reference. It ships inside the
+          package as markdown, so it works offline and matches the version you
+          installed.
+        </li>
+        <li>
+          <code>get_guide</code> — one guide in full, as markdown with its code
+          samples.
+        </li>
+        <li>
+          <code>list_components</code> — every export with its import specifier,
+          straight from the package&apos;s <code>src/</code>.
+        </li>
+        <li>
+          <code>get_component</code> — the source for one component, or its
+          public API (props and exported types) when the file is large, plus the
+          doc sections that describe it.
+        </li>
+        <li>
+          <code>list_pages</code> — the reference app&apos;s pages, layouts and
+          shell components with their routes.
+        </li>
+        <li>
+          <code>get_page</code> — the full source of any of those files, so the
+          agent copies a working page instead of inventing one.
+        </li>
+        <li>
+          <code>search_docs</code> — searches all of it at once:{" "}
+          <code>AGENT.md</code>, the README, and every guide. Call it with no
+          query to get the outline.
+        </li>
+      </Ul>
+      <Note title="MCP is an addition, not a replacement">
+        Keep the <code>CLAUDE.md</code> pointer above. It loads the rules every
+        session; the MCP server answers the follow-up questions on demand. They
+        read the same files, so the two never disagree.
       </Note>
 
       <H2>What the guide enforces</H2>

@@ -106,6 +106,43 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.63.0 — 2026-08-10
+
+### Added
+
+- **An MCP server ships with the package: `npx @viliha/vui-ui mcp`.** An agent
+  that wants to know what VUI has can now ask it. Register the server once
+  (`claude mcp add vui -- npx -y @viliha/vui-ui mcp`, or the equivalent
+  `mcpServers` entry in Cursor or any other MCP client) and it gets seven tools:
+
+  - `list_guides` and `get_guide` serve the whole docs site as markdown, all 49
+    pages from Installation through the per-component reference, so an agent can
+    learn the package end to end without opening a browser.
+  - `list_components` lists every export with its import specifier, and
+    `get_component` returns one component's source or, when the file is large,
+    its props and exported types plus the docs about it.
+  - `list_pages` and `get_page` serve the reference app's pages, layouts and
+    shell components with their routes, so an agent copies a working page
+    instead of inventing one.
+  - `search_docs` searches all of it, `AGENT.md`, the README and every guide,
+    and returns the matching sections. No query returns the outline. It ranks
+    with tf-idf and splits sections on bold lead-ins as well as headings, so
+    "organization switcher" returns the paragraph about the org switcher rather
+    than the longest section that happens to say "organization".
+
+  `theme.css` is served too, so an agent can read the tokens, the z-scale and
+  `vui-scroll` without going into `node_modules`.
+
+  Everything is read from the installed package at call time, so the answers
+  match the version you actually have. It speaks stdio, needs no API key, and
+  adds no dependency: the JSON-RPC handling is about sixty lines of Node in
+  `bin/mcp.mjs`, and the guides are snapshotted from the docs site build at
+  publish time by `scripts/snapshot-docs.mjs`.
+
+  This does not replace `CLAUDE.md`. The pointer file loads the rules every
+  session and the server answers the follow-up questions, and since both read
+  the same files they can't drift apart.
+
 ## 1.62.1 — 2026-08-07
 
 ### Fixed

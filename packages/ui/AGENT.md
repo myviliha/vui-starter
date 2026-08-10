@@ -129,6 +129,44 @@ dev`. The theme import, `transpilePackages`, and the `@/*` alias all belong in
 
 VUI ships as TypeScript source.
 
+## Ask the package directly (MCP server)
+
+Rather than reading `node_modules` or guessing at an API, query the package over
+MCP. Register it once:
+
+```bash
+claude mcp add vui -- npx -y @viliha/vui-ui mcp
+```
+
+Other MCP clients (Cursor, Windsurf, VS Code) take the same command in their
+config:
+
+```json
+{
+  "mcpServers": {
+    "vui": { "command": "npx", "args": ["-y", "@viliha/vui-ui", "mcp"] }
+  }
+}
+```
+
+The seven tools:
+
+| Tool | Use it to |
+| --- | --- |
+| `list_guides` | see every guide from the docs site, installation through the per-component reference |
+| `get_guide` | read one guide in full, as markdown with its code samples |
+| `list_components` | see every export and its import specifier |
+| `get_component` | read one component's source, or its props and exported types when the file is large, plus the docs about it |
+| `list_pages` | list the reference app's pages, layouts, shell components and config (`.env.example`, `next.config.ts`) with their routes |
+| `get_page` | read one of those files in full, and copy the pattern |
+| `search_docs` | search this guide, the README and every docs-site guide at once; no query returns the outline |
+
+The docs site ships inside the package as markdown, so all of it works offline
+and matches the version you installed. Learning the package: `list_guides`, then
+`get_guide` on what you need. Building a screen: `search_docs` for the rule,
+`get_component` for the API, `get_page` for a working example. This guide still
+applies. The server is how you look things up in it, not a replacement for it.
+
 ## Next.js
 
 Transpile the package:

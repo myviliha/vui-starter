@@ -241,6 +241,7 @@ A contribution is complete only when:
 - It is responsive.
 - It passes all validation checks.
 - It is fully documented, and the **`CHANGELOG.md` entry is added** (with a version bump if it ships in the package).
+- **The MCP server can answer for it.** `bin/mcp.mjs` is how a consumer's agent learns VUI, so a feature it can't describe isn't finished. It reads `src/`, `template/`, `docs/`, `AGENT.md` and `README.md`, so documenting the change usually covers it. Anything served from a new place needs a tool entry and a case in `bin/mcp.test.mjs`.
 - It is production ready.
 
 ---

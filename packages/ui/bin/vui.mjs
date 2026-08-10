@@ -63,6 +63,9 @@ Usage:
   npx @viliha/vui-ui init [options]
 
   init            Set up the VUI theme in this project (interactive).
+  mcp             Run the MCP server (stdio) so an AI agent can query the
+                  components, pages, layouts and rules:
+                    claude mcp add vui -- npx -y @viliha/vui-ui mcp
 
 Options:
   --nextjs | --turbo          standalone Next.js app, or a Turborepo (Q0)
@@ -75,11 +78,11 @@ Options:
 `);
 }
 
-if (cmd !== "init") {
+if (cmd !== "init" && cmd !== "mcp") {
   usage();
   process.exit(cmd ? 1 : 0);
 }
-if (!existsSync(TEMPLATE)) {
+if (cmd === "init" && !existsSync(TEMPLATE)) {
   console.error(
     "vui: bundled template not found. Reinstall @viliha/vui-ui (the template " +
       "ships with the published package).",
@@ -321,4 +324,5 @@ Deps were NOT auto-installed for a monorepo — installs are workspace-specific.
   }
 }
 
-main();
+if (cmd === "mcp") (await import("./mcp.mjs")).serve();
+else main();

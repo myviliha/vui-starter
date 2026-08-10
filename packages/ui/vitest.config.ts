@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     // Pure-logic tests run in Node; component tests would add jsdom + RTL.
     environment: "node",
-    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    include: ["src/**/*.test.ts", "src/**/*.test.tsx", "bin/*.test.mjs"],
   },
 });

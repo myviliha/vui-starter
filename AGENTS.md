@@ -169,7 +169,17 @@ To change the trail, edit `nav-config.ts` (structure/order) and the label/color 
 10. **Lists/menus:** use `Menu`/`MenuItem` (bordered-row standard) or the shared `Dropdown`/`Select`; don't hand-roll list borders.
 11. **Icons:** Radix Icons (`@radix-ui/react-icons`) for app chrome; leave shadcn's internal Lucide icons as-is.
 12. **Comment deliberate no-ops** (e.g. clipboard/storage `catch`). Never silently swallow errors elsewhere.
-13. **Changelog + docs on every change (mandatory; see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change. After writing them, you **re-read and humanize** the prose (plain, human voice, no AI tells, and no em dashes) and make them **SEO and AEO friendly**. See the humanize and SEO/AEO rules in "Changelog & docs".
+13. **Every feature reaches the MCP server (mandatory).** The server in
+    `packages/ui/bin/mcp.mjs` is how a consumer's agent learns this package, so a
+    feature it can't answer for does not exist. It derives everything from
+    `src/`, `template/`, `docs/`, `AGENT.md` and `README.md`, so the usual work
+    (ship the component, document it) covers it. What is on you: if the thing you
+    added lives somewhere new (a new export-map entry, a new file type, a docs
+    page that isn't a normal route, a concept with no doc section), teach the
+    server to serve it and add the case to `bin/mcp.test.mjs`. Two tests there
+    fail when the package exports something the server doesn't list, or the docs
+    site grows a page with no guide. See "MCP server" below.
+14. **Changelog + docs on every change (mandatory; see below).** No feature or fix is "done" until the changelog and the relevant docs are updated in the same change. After writing them, you **re-read and humanize** the prose (plain, human voice, no AI tells, and no em dashes) and make them **SEO and AEO friendly**. See the humanize and SEO/AEO rules in "Changelog & docs".
 
 ## Changelog & docs — mandatory on every change (never skip)
 
@@ -182,7 +192,8 @@ Any change that adds, changes, removes, or fixes behaviour **must** update the d
    - the reference/agent docs (`README.md`, `CONTRIBUTING.md`, this `AGENTS.md`) when the workflow or rules change.
    - requirement templates in `apps/backoffice/public/templates/**` when a page/feature pattern changes.
 3. **A new `init` scaffolder feature or new demo page** must also be reflected in the shipped `template/` (it regenerates from `apps/backoffice` on publish) and documented in `AGENT.md` + the docs.
-4. **After writing any docs, check and humanize them (mandatory).** Once the prose is drafted (READMEs, CHANGELOG entries, docs-site pages, reader-facing comments, this file), re-read it before committing and rewrite anything that sounds machine-generated. This is a required final pass, not optional. In that pass:
+4. **The MCP server must be able to answer for it** (hard rule 13). Ask the question a consumer's agent would ask and check `bin/mcp.mjs` returns it: a new component through `list_components` / `get_component`, a new page or shell pattern through `list_pages` / `get_page`, a new docs page through `list_guides` / `get_guide`, a new rule through `search_docs`. All four read generated sources, so writing the docs is usually the whole job. Serving a new kind of surface is not: add it to `TOOLS` and cover it in `bin/mcp.test.mjs`.
+5. **After writing any docs, check and humanize them (mandatory).** Once the prose is drafted (READMEs, CHANGELOG entries, docs-site pages, reader-facing comments, this file), re-read it before committing and rewrite anything that sounds machine-generated. This is a required final pass, not optional. In that pass:
    - **Remove every em dash (the `—` character) used as punctuation, no exceptions.** It is the single biggest AI tell. Rewrite around it with a comma, a colon, parentheses, or by splitting into two sentences. The only acceptable `—` is a literal reference to the character itself, as in this rule.
    - Use plain, direct language and vary sentence length.
    - Cut filler and the usual AI tells: "delve", "seamless", "robust", "leverage", "in today's fast-paced…", "it's worth noting", hedging, padded bullet lists.
@@ -190,7 +201,7 @@ Any change that adds, changes, removes, or fixes behaviour **must** update the d
    - If a sentence reads like boilerplate, rewrite it or delete it.
 
    Applies to every doc surface above, no exceptions.
-5. **Docs must be SEO and AEO friendly (mandatory).** Write every doc so both search engines and answer engines (Google, plus AI assistants like ChatGPT, Claude, and Perplexity) can find, index, and quote it. Apply this in the same pass as the humanize check.
+6. **Docs must be SEO and AEO friendly (mandatory).** Write every doc so both search engines and answer engines (Google, plus AI assistants like ChatGPT, Claude, and Perplexity) can find, index, and quote it. Apply this in the same pass as the humanize check.
    - **SEO:** give each docs-site page a unique, keyword-led `title` and `description` in its `metadata` (client pages put it in the sibling `layout.tsx`); use one `H1` (`PageTitle`) per page, then a logical `H2`/`H3` outline that uses real search terms; write descriptive link text and image `alt`; set a self-canonical. Add any new route to `PUBLIC_ROUTES` in `lib/seo.ts` so it reaches the sitemap.
    - **AEO:** open the page, and each major section, with a direct one-sentence answer to the question it addresses, before the detail. Phrase headings the way people actually ask ("How do I add a page?"). Keep statements factual, self-contained, and quotable, define a term on first use, and show concrete code or steps. Those are the passages an answer engine lifts.
 
@@ -202,10 +213,10 @@ If you're unsure whether a doc applies, it does, so update it. A change that tou
 pnpm --filter @viliha/vui-ui check-types
 pnpm --filter backoffice lint            # eslint --max-warnings 0
 pnpm --filter backoffice build           # or the app you changed
-pnpm --filter @viliha/vui-ui test      # if you changed testable logic
+pnpm --filter @viliha/vui-ui test      # includes the MCP coverage tests
 ```
 
-Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs" rule above, and a `packages/ui` version bump if the change ships in the package.
+Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs" rule above, a `packages/ui` version bump if the change ships in the package, and the **MCP check** from hard rule 13 (ask the server the question a consumer's agent would ask, and see that it answers).
 
 ## Knowledge graph (graphify)
 
@@ -214,6 +225,35 @@ This repo ships a prebuilt knowledge graph so an agent can answer "how does X wo
 - **Query it before searching.** For a codebase question, run `graphify query "<question>"` against `graphify-out/graph.json` instead of grepping blind. The graph maps god nodes (`cn`, `RecordView`), communities, and cross-file edges.
 - **Update it with every change.** After a fix or feature lands, refresh the graph incrementally (`graphify --update`, or the `detect_incremental` → AST + semantic re-extract → `build_merge` → write flow). If the merge's fuzzy dedup shrinks the node count and the guard refuses to overwrite `graph.json`, force the write so `graph.json` and `GRAPH_REPORT.md` stay consistent. This sits alongside the CHANGELOG/docs rule, it does not replace it.
 - **What's tracked vs ignored.** Commit `graph.json` and `GRAPH_REPORT.md`. The `cache/`, `manifest.json`, `cost.json`, regenerable `graph.html`, and `.graphify_*` scratch files are machine-specific and git-ignored, so regenerate those locally.
+
+## MCP server (`bin/mcp.mjs`)
+
+The package ships an MCP server (`npx @viliha/vui-ui mcp`, a `mcp` subcommand of
+the same `bin/vui.mjs` CLI) so a consumer's agent can query VUI over stdio. It
+serves seven tools: `list_guides`, `get_guide`, `list_components`,
+`get_component`, `list_pages`, `get_page`, `search_docs`.
+
+**It has no index of its own.** Components are read from `src/` (including
+`theme.css`, so tokens and the z-scale are one call away), pages and layouts from
+`template/` (the backoffice snapshot), rules from `AGENT.md` and `README.md`, and
+the guides from `docs/`, a markdown snapshot of the docs site written by
+`scripts/snapshot-docs.mjs` from `apps/backoffice/out/docs`. So a new component,
+demo page or docs page shows up for free, and the rule that keeps it honest is
+the existing one: keep the docs current.
+
+`search_docs` ranks with tf-idf over sections, splitting on headings **and** on
+the bold lead-ins this repo writes ("**Multi-tenant apps: the organization
+switcher.**"), so a query lands on the paragraph that answers it instead of the
+longest section on the page. Changelog entries are down-weighted unless the
+question is about a release.
+
+Both snapshots are git-ignored and regenerated on `prepublishOnly`, so a publish
+now needs the docs site built first (`pnpm --filter backoffice build`, then
+`pnpm --filter @viliha/vui-ui snapshot-docs`). `bin/mcp.test.mjs` covers the
+handshake, each tool, and the path guards on `get_page` and `get_guide`; the
+guide assertions skip themselves when `docs/` hasn't been generated locally.
+Adding a tool means adding an entry to `TOOLS` and a case to that test, nothing
+else.
 
 ## Working style: build the least that works
 

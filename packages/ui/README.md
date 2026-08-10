@@ -378,6 +378,43 @@ That file is a one-line `@import` of `AGENT.md`, so the rules stay in a single
 place. If you'd rather keep a verbatim copy, run
 `cp node_modules/@viliha/vui-ui/AGENT.md AGENTS.md`.
 
+### MCP server
+
+The package also ships an **MCP server**, so your agent can ask VUI questions
+instead of reading `node_modules`. Register it once:
+
+```bash
+claude mcp add vui -- npx -y @viliha/vui-ui mcp
+```
+
+Any other MCP client (Cursor, Windsurf, VS Code) takes the same command in its
+config:
+
+```json
+{
+  "mcpServers": {
+    "vui": { "command": "npx", "args": ["-y", "@viliha/vui-ui", "mcp"] }
+  }
+}
+```
+
+Seven tools come with it:
+
+| Tool | Answers |
+| --- | --- |
+| `list_guides` | every guide from the docs site, installation through the per-component reference |
+| `get_guide` | one guide in full, as markdown with its code samples |
+| `list_components` | every export, with its import specifier |
+| `get_component` | one component's source, or its props and exported types when the file is large, plus the docs about it |
+| `list_pages` | the reference app's pages, layouts, shell components and config (`.env.example`, `next.config.ts`), with routes |
+| `get_page` | the full source of one of those files, to copy instead of invent |
+| `search_docs` | the rules, the README and every guide at once; call it with no query for the outline |
+
+The docs site ships inside the package as markdown, so the whole guide works
+offline and matches the version you installed. The server runs over stdio and
+needs no API key. Keep the `CLAUDE.md` pointer as well: that loads the rules
+every session, the server answers the follow-ups.
+
 ## Components
 
 `accordion` · `alert` · `alert-dialog` · `aspect-ratio` · `auth-context`
