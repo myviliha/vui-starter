@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { TierCard } from "@/components/tier-card";
 import { PRO } from "@/lib/app-config";
 import { canonicalFor } from "@/lib/seo";
+import { PlanMatrix } from "@/components/plan-matrix";
 import { LegalSection } from "../_components/legal";
 
 const title = "Pricing: VUI is free and MIT, Pro is optional";
@@ -119,6 +120,10 @@ export default function PricingPage() {
         We would rather build the blocks people actually ask for than guess and ship
         a list nobody wanted. Tell us which ones matter and you set the order.
       </p>
+
+      <LegalSection id="whats-included" title="What is in each plan">
+        <PlanMatrix />
+      </LegalSection>
 
       <LegalSection id="questions" title="Questions">
         <dl className="space-y-5">

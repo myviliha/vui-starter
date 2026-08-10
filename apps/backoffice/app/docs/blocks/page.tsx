@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
+import { PlanBadge } from "@/components/plan-matrix";
 import { PageTitle, H2, P, DocPager } from "@/components/doc";
 
 export const metadata: Metadata = {
@@ -10,6 +11,15 @@ export const metadata: Metadata = {
   description:
     "Prebuilt, full-page compositions: the five VUI page types you assemble screens from.",
 };
+
+/** Every shipped block is free. The planned Pro ones are listed separately
+ *  below, so "what do I get" is answerable from this page alone. */
+const PRO_BLOCKS = [
+  "Billing and subscriptions",
+  "Roles and permissions",
+  "Audit log",
+  "Inbox and threads",
+];
 
 const BLOCKS = [
   {
@@ -67,9 +77,37 @@ export default function BlocksPage() {
             <span className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {b.body}
             </span>
+            <span className="mt-3">
+              <PlanBadge plan="free" />
+            </span>
           </Link>
         ))}
       </div>
+
+      <H2>Planned for Pro</H2>
+      <P>
+        Every block above is free and MIT, including the datatable. These four do
+        not exist yet and are what VUI Pro would add. They are listed here so the
+        line is visible from the page you would look at first, rather than only
+        on a pricing page.
+      </P>
+      <ul className="mb-5 grid gap-2 sm:grid-cols-2">
+        {PRO_BLOCKS.map((title) => (
+          <li
+            key={title}
+            className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-border bg-muted/30 px-4 py-3 text-sm text-muted-foreground"
+          >
+            {title}
+            <PlanBadge plan="pro" />
+          </li>
+        ))}
+      </ul>
+      <P>
+        <a href="/docs/free-and-pro" className="font-medium text-foreground underline">
+          The full free-versus-Pro breakdown
+        </a>{" "}
+        covers the theme, layout and components too.
+      </P>
 
       <DocPager
         prev={{ label: "Overview", href: "/docs/components" }}

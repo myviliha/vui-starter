@@ -171,6 +171,7 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
 const DOCS_ROUTES: string[] = [
   "/docs",
   "/docs/installation",
+  "/docs/free-and-pro",
   "/docs/frameworks",
   "/docs/configuration",
   "/docs/theming",

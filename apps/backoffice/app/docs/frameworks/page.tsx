@@ -201,7 +201,7 @@ downloadFile("people.csv", rowsToCSV(columns, rows), "text/csv");`}</CodeBlock>
       </P>
 
       <DocPager
-        prev={{ label: "Installation", href: "/docs/installation" }}
+        prev={{ label: "Free vs Pro", href: "/docs/free-and-pro" }}
         next={{ label: "Swapping defaults", href: "/docs/swapping" }}
       />
     </article>

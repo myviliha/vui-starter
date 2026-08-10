@@ -189,7 +189,7 @@ export default function DocsHome() {
             Support the project
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            VUI is free and open source; sponsorship keeps it maintained.
+            VUI is free and open source, including the datatable. Sponsorship keeps it maintained.
           </p>
         </div>
         <iframe

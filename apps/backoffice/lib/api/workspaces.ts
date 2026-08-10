@@ -13,7 +13,7 @@ const WORKSPACES: Organization[] = [
   {
     id: "luxecart",
     name: "LuxeCart",
-    plan: "Plan",
+    plan: "Free plan",
     planStatus: "active",
     // Each tenant carries its own brand, handed to ThemeConfigProvider on a
     // switch, so the app repaints in their colours.

@@ -46,6 +46,25 @@ stand up.
 
 ---
 
+## What is free and what is Pro
+
+**Everything in this repository is free and MIT, including the datatable.** That
+is not a trial and it does not expire: every version already published is MIT
+permanently, so nothing listed as free can move behind a paywall later.
+
+| Area | Free | Pro (planned, not built yet) |
+| --- | --- | --- |
+| **Theme** | Design tokens, dark mode, the z-scale, runtime theming, per-tenant brand, motion and icon tokens | — |
+| **Layout** | App shell (sidebar, top bar, open tabs), all five page types, auth and legal screens, command palette, global search | — |
+| **Components** | Every React component including `RecordView`, the Vue package, charts in both Recharts and TanStack | Datatable and record forms for Vue and Svelte; premium blocks (billing, roles and permissions, audit log, inbox) |
+| **Data** | Import and export (CSV, JSON, Excel, print), the mock API and controller pattern | — |
+| **Tooling** | The `init` scaffolder, the MCP server, ten requirement templates | — |
+| **Support** | Issues and discussions, in the open | Priority support and a commercial licence |
+
+Pro is optional and additive: net-new work that does not exist yet. The full
+breakdown is at [vui.viliha.com/docs/free-and-pro](https://vui.viliha.com/docs/free-and-pro/),
+and the tiers are at [/pricing](https://vui.viliha.com/pricing/).
+
 ## Contents
 
 - [Features](#features)

@@ -38,6 +38,16 @@ and open-source admin design system.
 - ❤️ **Sponsor:** [github.com/sponsors/myviliha](https://github.com/sponsors/myviliha)
 - 💼 **For teams:** [vui.viliha.com/pricing](https://vui.viliha.com/pricing/). The library is MIT and stays MIT; Pro is an optional add-on of net-new blocks and support
 
+## What is free
+
+**All of it, including the datatable.** The theme, the layout and app shell,
+every component, the CLI, the MCP server and the docs are MIT, and every
+published version stays MIT permanently, so nothing here moves behind a paywall
+later. VUI Pro is a separate, optional add-on of net-new work that does not exist
+yet: premium blocks, the datatable for Vue and Svelte, and priority support. The
+full breakdown is at
+[vui.viliha.com/docs/free-and-pro](https://vui.viliha.com/docs/free-and-pro/).
+
 ## Install
 
 ```bash
