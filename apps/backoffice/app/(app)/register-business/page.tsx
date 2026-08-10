@@ -15,7 +15,10 @@ import { Button } from "@viliha/vui-ui/button";
 import { Input } from "@viliha/vui-ui/input";
 import { Select } from "@viliha/vui-ui/select";
 import { Steps, type Step } from "@viliha/vui-ui/steps";
+import { Page } from "@viliha/vui-ui/page";
+import { Breadcrumbs } from "@viliha/vui-ui/breadcrumbs";
 import { Field } from "@/app/_components/auth";
+import { crumbsFor } from "@/app/_components/route-meta";
 
 const STEPS: Step[] = [
   { label: "Organization", description: "Business details" },
@@ -87,7 +90,8 @@ export default function RegisterBusinessPage() {
   const back = () => setStep((s) => Math.max(0, s - 1));
 
   return (
-    <div className="w-full max-w-2xl">
+    <Page breadcrumbs={<Breadcrumbs crumbs={crumbsFor("/register-business")} />}>
+      <div className="mx-auto w-full max-w-2xl">
       {/* Header */}
       <div className="mb-6 flex items-center gap-3">
         <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent">
@@ -229,6 +233,7 @@ export default function RegisterBusinessPage() {
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+    </Page>
   );
 }

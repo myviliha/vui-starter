@@ -97,6 +97,11 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
     description:
       "Maintenance screen demo: the planned-downtime page in the Vui Starter admin template.",
   },
+  "/register-business": {
+    title: "Register your business",
+    description:
+      "Multi-step registration wizard demo: organization details, account credentials and a review step, inside the Vui Starter app shell.",
+  },
   "/notifications": {
     title: "Notifications",
     description:

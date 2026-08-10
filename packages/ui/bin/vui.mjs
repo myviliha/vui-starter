@@ -111,7 +111,10 @@ function isDemo(rel) {
   const p = rel.split(sep).join("/");
   if (p.startsWith("app/auth/")) return true;
   if (p.startsWith("app/onboarding/")) return true;
-  if (p.startsWith("app/register-business/")) return true;
+  // Error screens are demos of a pattern, like the auth ones: the real
+  // not-found.tsx and error.tsx boundaries stay in the shell either way.
+  if (p.startsWith("app/errors/")) return true;
+  // register-business moved under app/(app)/, so the rule below covers it.
   if (p.startsWith("app/(app)/"))
     return !(p === "app/(app)/layout.tsx" || p.startsWith("app/(app)/dashboard/"));
   return false;

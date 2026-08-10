@@ -40,6 +40,7 @@ export const SEGMENT_LABELS: Record<string, string> = {
   maintenance: "Maintenance",
   "signin-split": "Sign in (split)",
   "signup-split": "Sign up (split)",
+  "register-business": "Register business",
 };
 
 /** Full pathname → icon color (Tailwind text-* class). */
@@ -71,6 +72,7 @@ export const ROUTE_COLORS: Record<string, string> = {
   "/system/languages": "text-purple-500",
   "/settings": "text-slate-500",
   "/notifications": "text-rose-500",
+  "/register-business": "text-emerald-500",
   "/errors/unauthorized": "text-amber-500",
   "/errors/forbidden": "text-orange-500",
   "/errors/not-found": "text-slate-500",
@@ -108,6 +110,7 @@ export const ROUTE_ACCENT: Record<string, string> = {
   "/system/languages": "#a855f7",
   "/settings": "#64748b",
   "/notifications": "#f43f5e",
+  "/register-business": "#10b981",
   "/errors/unauthorized": "#f59e0b",
   "/errors/forbidden": "#f97316",
   "/errors/not-found": "#64748b",

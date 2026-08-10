@@ -110,6 +110,13 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ### Fixed
 
+- **Register business had no menu, header or footer.** It was a standalone route
+  with its own cut-down layout, so reaching it from the organization switcher
+  dropped you out of the app: no sidebar, no top bar, no footer, and no way back
+  except the browser. It now lives inside the app shell like every other screen,
+  with the standard page frame and a breadcrumb trail. The scaffolded template
+  gets the same fix, since it is generated from this app.
+
 - **The help button in the top bar did nothing.** It was a `<button>` with no
   handler, so the question-mark icon was decoration. It opens the support screen
   now. The documentation icon beside it already worked; both, and the settings
