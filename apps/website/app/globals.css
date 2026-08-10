@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* The design system, plus a @source rule so the blocks' utilities are emitted. */
+@import "@viliha/vui-web/theme.css";

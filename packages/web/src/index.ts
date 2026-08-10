@@ -32,3 +32,8 @@ export {
   SearchBlock, FilterBar, Pagination, LoadMore, EmptyState, LoadingCards,
   type SearchBlockProps, type FilterOption,
 } from "./discovery";
+export {
+  Prose, ArticleHeader, AuthorCard, ShareBlock, TableOfContents,
+  ReadingProgress, ArticlePager, ArticleTags,
+  type ArticleAuthor, type TocItem,
+} from "./article";
