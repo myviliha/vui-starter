@@ -39,6 +39,8 @@ const SECTIONS: NavGroup[] = [
       { label: "Installation", href: "/docs/installation" },
       { label: "Free vs Pro", href: "/docs/free-and-pro" },
       { label: "Any framework", href: "/docs/frameworks" },
+      { label: "Plain HTML", href: "/docs/html" },
+      { label: "Laravel", href: "/docs/laravel" },
       { label: "Configuration", href: "/docs/configuration" },
     ],
   },

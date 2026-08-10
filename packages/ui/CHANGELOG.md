@@ -118,6 +118,14 @@ No component was renamed, no export was removed, and no prop was made required.
   now logical (`ms-`, `pe-`, `end-`) throughout the app shell. Use the logical
   ones in new code and RTL keeps working.
 
+- **Laravel and plain HTML are documented paths now**, at `/docs/laravel` and
+  `/docs/html`. Neither gets a component package, and both pages say so. What
+  they get is the theme, the Vite and Tailwind wiring, and copy-paste markup:
+  Blade components with `@props` and `$attributes->merge()` for Laravel, and a
+  `<link>` tag plus snippets for a hand-written page. The snippets are generated
+  from the same class strings the React and Vue components render, so a docs
+  example cannot drift from the library.
+
 - **Every default is documented as swappable, at `/docs/swapping`.** Which icon
   set, which CSS engine, which font, which chart library, how much motion. The
   page says what each swap costs and, more usefully, what is *not* swappable: the

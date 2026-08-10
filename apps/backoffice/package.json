@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^5.4.0",
     "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/react-slot": "^1.2.5",
+    "@viliha/vui-core": "workspace:*",
     "@viliha/vui-ui": "workspace:*",
     "better-auth": "^1.6.25",
     "class-variance-authority": "^0.7.1",

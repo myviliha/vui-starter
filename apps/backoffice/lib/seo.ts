@@ -198,6 +198,8 @@ const DOCS_ROUTES: string[] = [
   "/docs/installation",
   "/docs/free-and-pro",
   "/docs/frameworks",
+  "/docs/html",
+  "/docs/laravel",
   "/docs/configuration",
   "/docs/theming",
   "/docs/swapping",

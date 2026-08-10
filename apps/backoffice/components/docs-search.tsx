@@ -23,6 +23,8 @@ const PAGES: { title: string; href: string }[] = [
   { title: "Installation", href: "/docs/installation" },
   { title: "What is free and what is Pro", href: "/docs/free-and-pro" },
   { title: "Any framework (Vue, Svelte, Angular, HTMX)", href: "/docs/frameworks" },
+  { title: "Plain HTML (no build step)", href: "/docs/html" },
+  { title: "Laravel and Blade", href: "/docs/laravel" },
   { title: "Configuration", href: "/docs/configuration" },
   { title: "Theming", href: "/docs/theming" },
   { title: "Swapping defaults (icons, CSS, fonts, charts, motion)", href: "/docs/swapping" },

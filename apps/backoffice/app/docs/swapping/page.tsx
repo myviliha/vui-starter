@@ -35,7 +35,7 @@ const DEFAULTS: {
   {
     piece: "CSS engine",
     shipped: "Tailwind v4 utilities plus CSS-variable tokens",
-    swap: "A compiled stylesheet with no build, or your own framework reading the tokens",
+    swap: "A compiled stylesheet with no build (plain HTML, Laravel, Rails), or your own framework reading the tokens",
     cost: "One line",
   },
   {

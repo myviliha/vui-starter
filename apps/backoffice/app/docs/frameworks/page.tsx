@@ -44,7 +44,9 @@ const TESTED: { name: string; note: string }[] = [
   { name: "Astro", note: "Works with or without a React island. Astro components use the classes directly." },
   { name: "Qwik", note: "Vite plugin, then the theme import." },
   { name: "Lit", note: "Tokens cross the shadow boundary; utility classes do not. Render light DOM to use them." },
-  { name: "Alpine, HTMX, 11ty, plain HTML", note: "No build step needed. Link the compiled stylesheet." },
+  { name: "Alpine, HTMX, 11ty, plain HTML", note: "No build step needed. Link the compiled stylesheet, then paste markup from the HTML page." },
+  { name: "Laravel and Blade", note: "Vite and Tailwind are already there. Import the theme, then build Blade components from the shared class strings." },
+  { name: "Rails, Django, Go templates, PHP", note: "Same as Laravel without the Blade recipes: import the theme and use the markup." },
 ];
 
 export default function FrameworksPage() {
@@ -202,7 +204,7 @@ downloadFile("people.csv", rowsToCSV(columns, rows), "text/csv");`}</CodeBlock>
 
       <DocPager
         prev={{ label: "Free vs Pro", href: "/docs/free-and-pro" }}
-        next={{ label: "Swapping defaults", href: "/docs/swapping" }}
+        next={{ label: "Plain HTML", href: "/docs/html" }}
       />
     </article>
   );

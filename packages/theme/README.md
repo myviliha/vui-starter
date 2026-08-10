@@ -7,8 +7,9 @@ documented z-scale, motion utilities, and `.vui-scroll` for always-visible
 scrollbars. It is the same file that styles [VUI](https://vui.viliha.com) itself,
 generated from the source rather than copied, so the two can never drift.
 
-Use it in React, Vue, Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine, HTMX, or
-hand-written HTML.
+Use it in React, Vue, Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine or HTMX,
+in a server-rendered app (Laravel and Blade, Rails, Django, PHP), or in a
+hand-written HTML file with no build step at all.
 
 ## With Tailwind v4
 
