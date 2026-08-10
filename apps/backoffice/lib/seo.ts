@@ -193,7 +193,7 @@ const DOCS_ROUTES: string[] = [
 /** All public routes, for the sitemap. */
 /** Public legal pages. Indexable, unlike the auth screens, because people look
  *  for them and search engines expect a site to have them. */
-const LEGAL_ROUTES = ["/terms", "/privacy"];
+const LEGAL_ROUTES = ["/pricing", "/terms", "/privacy"];
 
 export const PUBLIC_ROUTES: string[] = [
   "/",

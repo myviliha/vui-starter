@@ -392,6 +392,12 @@ pnpm check-types    # type-check
 
 [MIT](./LICENSE) © VILIHA PTE. LTD. Free for personal and commercial use.
 
+The core stays MIT: the component library, the CLI, the demo app, the templates
+and the docs. Every version already published is MIT permanently, so nothing that
+is free today moves behind a paywall later. Teams who want more than that (premium
+blocks, components for other frameworks, an invoice and someone to ask) can read
+about [Pro](https://vui.viliha.com/pricing/), which is optional and additive.
+
 ---
 
 Made with ♥ from Vietnam by the [Viliha Team](https://viliha.com).

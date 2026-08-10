@@ -143,3 +143,20 @@ export const ORG_SWITCHER: OrgSwitcherConfig = {
   addLabel: "Add organization",
   showPlan: true,
 };
+
+/**
+ * Where the paid tier is sold. The core is MIT and always will be; Pro is an
+ * optional add-on of net-new work. Point `checkoutUrl` at your checkout (a Polar
+ * or Lemon Squeezy link, say) and the pricing page picks it up. Until it is set,
+ * the page invites people to register interest instead of pretending there is a
+ * buy button, and `available: false` keeps the copy honest about that.
+ */
+export const PRO = {
+  available: false,
+  price: "$149",
+  cadence: "one-time, per developer",
+  checkoutUrl:
+    process.env.NEXT_PUBLIC_PRO_CHECKOUT_URL ??
+    "https://github.com/myviliha/vui-starter/discussions",
+  contactEmail: "hello@viliha.com",
+} as const;

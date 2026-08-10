@@ -36,6 +36,7 @@ and open-source admin design system.
 - 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com), a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
 - 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
 - ❤️ **Sponsor:** [github.com/sponsors/myviliha](https://github.com/sponsors/myviliha)
+- 💼 **For teams:** [vui.viliha.com/pricing](https://vui.viliha.com/pricing/). The library is MIT and stays MIT; Pro is an optional add-on of net-new blocks and support
 
 ## Install
 

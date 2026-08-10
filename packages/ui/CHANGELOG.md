@@ -132,6 +132,12 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ### Changed
 
+- **The README says where the paid tier lives.** One line, pointing at
+  [vui.viliha.com/pricing](https://vui.viliha.com/pricing/). The package itself
+  does not change: it is MIT, it stays MIT, and every version already published is
+  MIT permanently. Pro is separate, optional and additive, so nothing that is free
+  today can move behind it.
+
 - **One copyright holder.** The license said VILIHA PTE. LTD. while `package.json` and
   the README credited a person. Both now say VILIHA PTE. LTD., which is the entity that
   actually holds the copyright. The license itself is unchanged: still MIT, still free

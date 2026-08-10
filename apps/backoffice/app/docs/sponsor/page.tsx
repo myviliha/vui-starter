@@ -1,50 +1,10 @@
 import type { Metadata } from "next";
-import { ArrowRightIcon, PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 import { PageTitle, H2, H3, P, Ul, Note, DocPager } from "@/components/doc";
+import { TierCard } from "@/components/tier-card";
 
 const SPONSORS_URL = "https://github.com/sponsors/myviliha";
-
-/** A single sponsorship tier card linking to the GitHub Sponsors checkout. */
-function TierCard({
-  amount,
-  cadence,
-  perk,
-  featured,
-}: {
-  amount: string;
-  cadence?: string;
-  perk: string;
-  featured?: boolean;
-}) {
-  return (
-    <a
-      href={SPONSORS_URL}
-      target="_blank"
-      rel="noreferrer"
-      className={
-        "group flex flex-col rounded-xl border bg-card p-5 transition-colors hover:bg-accent/40 " +
-        (featured
-          ? "border-[var(--button-primary)]/60 ring-1 ring-[var(--button-primary)]/20"
-          : "border-border hover:border-[var(--button-primary)]/50")
-      }
-    >
-      <div className="flex items-baseline gap-1">
-        <span className="text-2xl font-semibold tracking-tight text-foreground">
-          {amount}
-        </span>
-        {cadence && (
-          <span className="text-sm text-muted-foreground">{cadence}</span>
-        )}
-      </div>
-      <p className="mt-2 flex-1 text-sm text-muted-foreground">{perk}</p>
-      <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--button-primary)]">
-        Sponsor
-        <ArrowRightIcon className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-      </span>
-    </a>
-  );
-}
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/sponsor/" },
@@ -147,21 +107,32 @@ export default function SponsorPage() {
 
       <H3>Monthly</H3>
       <div className="mb-6 grid gap-3 sm:grid-cols-2">
-        <TierCard amount="$5" cadence="/mo" perk="Access to private repositories" />
+        <TierCard
+          amount="$5"
+          cadence="/mo"
+          perk="Access to private repositories"
+          href={SPONSORS_URL}
+        />
         <TierCard
           amount="$6"
           cadence="/mo"
           perk="Have your bug reports prioritized"
+          href={SPONSORS_URL}
           featured
         />
       </div>
 
       <H3>One-time</H3>
       <div className="mb-6 grid gap-3 sm:grid-cols-2">
-        <TierCard amount="$10" perk="One bug or medium-sized bounty" />
+        <TierCard
+          amount="$10"
+          perk="One bug or medium-sized bounty"
+          href={SPONSORS_URL}
+        />
         <TierCard
           amount="$100"
           perk="Large contract project: contact me!"
+          href={SPONSORS_URL}
           featured
         />
       </div>

@@ -26,6 +26,7 @@ const TOP_NAV: NavItem[] = [
   { label: "Charts", href: "/docs/charts" },
   { label: "Blocks", href: "/docs/blocks" },
   { label: "Typeset", href: "/docs/typeset" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 /** Left-sidebar "Sections". A registry-driven "Components" group is appended. */

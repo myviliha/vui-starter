@@ -17,6 +17,7 @@ import { COMPONENTS } from "@/app/docs/components/registry";
 
 /** Searchable non-component doc pages (mirrors the sidebar). */
 const PAGES: { title: string; href: string }[] = [
+  { title: "Pricing", href: "/pricing" },
   { title: "Sponsor Me", href: "/docs/sponsor" },
   { title: "Introduction", href: "/docs" },
   { title: "Installation", href: "/docs/installation" },
