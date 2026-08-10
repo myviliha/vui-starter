@@ -5,7 +5,7 @@ rationale, see [`Enterprise_NextJS_React_Coding_Standards.md`](./Enterprise_Next
 
 ## What this repo is
 
-Turborepo + pnpm monorepo. One app + three published packages:
+Turborepo + pnpm monorepo. One app + four published packages:
 
 - `apps/backoffice` — Admin app **and** the docs site (docs are routes under `app/docs`, served at `/docs`). Dev on **:3000**.
 - `packages/ui` — `@viliha/vui-ui`, the React components, shipped as **TypeScript source** (no build).
@@ -16,6 +16,15 @@ Turborepo + pnpm monorepo. One app + three published packages:
   with the class), and the accordion animates `--vui-accordion-height`, which
   `accordion.tsx` maps from Radix and a port maps from its own library. Don't
   reintroduce a React-only selector or a growing `var()` fallback chain.
+
+- `packages/vue` — `@viliha/vui-vue`, the **Vue 3 components**, built on Reka UI
+  (the Radix port for Vue) and compiled with Vite. It is not a lookalike: the
+  class strings live in `class-variants.ts` and reach it through
+  `@viliha/vui-core`, so React and Vue render the same markup by construction. A
+  render test compares the two against that shared source. **Never paste a class
+  string into a `.vue` file that a `.tsx` file also uses**: move it to
+  `class-variants.ts` and import it in both. Early (v0): mechanical components
+  only, no dialogs, menus, selects or datatable yet.
 
 - `packages/core` — `@viliha/vui-core`, the **framework-free TypeScript**: the
   theming engine (`theme-config.ts`), table import/export (`table-io.ts`) and

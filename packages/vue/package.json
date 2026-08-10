@@ -1,0 +1,73 @@
+{
+  "name": "@viliha/vui-vue",
+  "version": "0.1.0",
+  "description": "VUI components for Vue 3 and Nuxt: the same token-driven admin design system as @viliha/vui-ui, built on Reka UI. Buttons, inputs, cards, dialogs, menus and tables that match the React components pixel for pixel, because both render the same class strings.",
+  "license": "MIT",
+  "author": "VILIHA PTE. LTD.",
+  "homepage": "https://vui.viliha.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myviliha/vui-starter.git",
+    "directory": "packages/vue"
+  },
+  "bugs": {
+    "url": "https://github.com/myviliha/vui-starter/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "nuxt",
+    "reka-ui",
+    "tailwind",
+    "tailwindcss",
+    "tailwind-v4",
+    "components",
+    "component-library",
+    "design-system",
+    "admin",
+    "admin-template",
+    "dashboard",
+    "dark-mode"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./theme.css": "./dist/theme.css",
+    "./*": {
+      "types": "./dist/*.vue.d.ts",
+      "import": "./dist/*.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build && vue-tsc --project tsconfig.build.json && node scripts/theme.mjs",
+    "check-types": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@viliha/vui-core": "workspace:^",
+    "@viliha/vui-theme": "workspace:^",
+    "reka-ui": "^2.10.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "typescript": "5.9.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10",
+    "vue": "^3.5.41",
+    "vue-tsc": "^3.3.9"
+  }
+}

@@ -20,7 +20,7 @@ const UI_SRC = join(root, "..", "ui", "src");
 
 // Framework-free modules only. A file lands here when it imports no UI
 // framework, not because it happens to be useful: the check below enforces it.
-const MODULES = ["theme-config", "table-io", "utils"];
+const MODULES = ["class-variants", "theme-config", "table-io", "utils"];
 
 const src = join(root, "src");
 rmSync(src, { recursive: true, force: true });
