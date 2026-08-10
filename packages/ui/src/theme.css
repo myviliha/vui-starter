@@ -143,6 +143,33 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
     monospace;
 
+  --text-display: var(--text-display);
+  --text-display--line-height: var(--text-display-leading);
+  --text-h1: var(--text-h1);
+  --text-h1--line-height: var(--text-h1-leading);
+  --text-h2: var(--text-h2);
+  --text-h2--line-height: var(--text-h2-leading);
+  --text-h3: var(--text-h3);
+  --text-h3--line-height: var(--text-h3-leading);
+  --text-h4: var(--text-h4);
+  --text-h4--line-height: var(--text-h4-leading);
+  --text-lead: var(--text-lead);
+  --text-lead--line-height: var(--text-lead-leading);
+  --text-caption: var(--text-caption);
+  --text-caption--line-height: var(--text-caption-leading);
+
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
+  --shadow-4: var(--shadow-4);
+  --shadow-5: var(--shadow-5);
+
+  --container-sm: var(--container-sm);
+  --container-md: var(--container-md);
+  --container-lg: var(--container-lg);
+  --container-xl: var(--container-xl);
+  --container-2xl: var(--container-2xl);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -440,6 +467,239 @@
 }
 .vui-overlay-out {
   animation: vui-overlay-out var(--vui-duration-base) ease-out both;
+}
+
+/* Continuous horizontal scroll for a logo strip. The list is rendered twice, so
+   translating by half the track loops seamlessly. Paused by the reduced-motion
+   clamp in the base layer, and by `motion-reduce:animate-none` on the element. */
+@keyframes vui-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Foundations a marketing page needs that an admin app never did.
+ *
+ * The admin theme lives happily on Tailwind's defaults: its type is one size,
+ * its containers are whatever the page frame says, and it has no hero. A landing
+ * page has a display headline that must not be a hand-picked `text-5xl` on every
+ * page, sections that must share one max-width, and cards that need more than
+ * two hand-rolled shadows. These are those tokens.
+ *
+ * Type is fluid: `clamp()` scales between the small and large ends without a
+ * breakpoint per size, so a headline reads on a 375px phone and a 1920px display
+ * from one declaration. Everything multiplies by --font-scale, so the density
+ * setting still works. */
+:root {
+  --text-display: clamp(2.5rem, 1.6rem + 4.2vw, 4.5rem);
+  --text-display-leading: 1.05;
+  --text-h1: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  --text-h1-leading: 1.1;
+  --text-h2: clamp(1.6rem, 1.25rem + 1.5vw, 2.35rem);
+  --text-h2-leading: 1.15;
+  --text-h3: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem);
+  --text-h3-leading: 1.25;
+  --text-h4: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+  --text-h4-leading: 1.35;
+  --text-lead: clamp(1.05rem, 1rem + 0.4vw, 1.25rem);
+  --text-lead-leading: 1.6;
+  --text-body: 1rem;
+  --text-body-leading: 1.65;
+  --text-caption: 0.8125rem;
+  --text-caption-leading: 1.5;
+
+  /* One max-width for every section, so a page cannot drift column by column. */
+  --container-sm: 40rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 80rem;
+  --container-2xl: 90rem;
+
+  /* Elevation as a ramp rather than picking shadow-sm or shadow-md by feel. */
+  --shadow-1: 0 1px 2px -1px oklch(0 0 0 / 0.08);
+  --shadow-2: 0 2px 6px -2px oklch(0 0 0 / 0.10);
+  --shadow-3: 0 8px 20px -8px oklch(0 0 0 / 0.14);
+  --shadow-4: 0 16px 40px -16px oklch(0 0 0 / 0.18);
+  --shadow-5: 0 28px 64px -24px oklch(0 0 0 / 0.22);
+
+  /* Vertical rhythm between marketing sections. */
+  --section-y: clamp(3.5rem, 2rem + 5vw, 7rem);
+  --section-y-tight: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+
+  /* The breakpoints the blocks assume, named so docs and code agree. */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+}
+
+/* Compact density tightens the rhythm, the same way it tightens page padding. */
+:root[data-density="compact"] {
+  --section-y: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  --section-y-tight: clamp(2rem, 1.25rem + 2vw, 3rem);
+}
+
+/* Centred, gutter-aware content column. `--vui-page-padding` is the same knob the
+   app shell uses, so a marketing page and an admin page indent identically. */
+.vui-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-xl);
+  padding-inline: max(var(--vui-page-padding, 1rem), 1.25rem);
+}
+.vui-container-sm { max-width: var(--container-sm); }
+.vui-container-md { max-width: var(--container-md); }
+.vui-container-lg { max-width: var(--container-lg); }
+.vui-container-2xl { max-width: var(--container-2xl); }
+
+/* Section rhythm, so a page is a stack of <section class="vui-section"> and the
+   spacing between them is one decision instead of fifty. */
+.vui-section { padding-block: var(--section-y); }
+.vui-section-tight { padding-block: var(--section-y-tight); }
+
+/* ---------------------------------------------------------------------------
+ * Decoration.
+ *
+ * The handful of effects that make a marketing page look designed rather than
+ * assembled: a soft brand wash behind a hero, a faint grid, a gradient
+ * headline, a card that lifts on hover. Every one of them is built from
+ * `--button-primary`, so they repaint with the tenant's brand and never need a
+ * colour of their own. They are decoration, so each is `pointer-events: none`
+ * and hidden from screen readers by the element that carries it.
+ * ------------------------------------------------------------------------ */
+
+/* An aurora wash: two brand-tinted blooms behind the content. Put it on a
+   positioned parent (`relative isolate`); it paints itself behind. */
+.vui-aurora { position: relative; isolation: isolate; }
+.vui-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 130%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(45% 55% at 20% 0%, color-mix(in oklab, var(--button-primary) 26%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 85% 10%, color-mix(in oklab, var(--chart-4, var(--button-primary)) 20%, transparent), transparent 72%);
+  filter: blur(8px);
+}
+
+/* A faint grid or dot field. Fades out downward so it never fights the content
+   below it, which is the difference between texture and noise. */
+.vui-grid-bg::after,
+.vui-dot-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+  opacity: 0.5;
+}
+.vui-grid-bg::after {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+.vui-dot-bg::after {
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 1.5rem 1.5rem;
+}
+
+/* A single soft spotlight, for a CTA band or a highlighted card. */
+.vui-glow { position: relative; isolation: isolate; }
+.vui-glow::before {
+  content: "";
+  position: absolute;
+  inset-inline: 10%;
+  inset-block-start: -30%;
+  aspect-ratio: 2 / 1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--button-primary) 30%, transparent), transparent);
+  filter: blur(28px);
+}
+
+/* Gradient headline. Applied to the text element itself. */
+.vui-gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    var(--foreground) 12%,
+    color-mix(in oklab, var(--button-primary) 85%, var(--foreground)) 52%,
+    var(--foreground) 88%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* A card that answers the pointer: a small lift, a warmer border, more shadow.
+   The transition uses the motion tokens, so turning motion down turns this
+   down with it. */
+.vui-lift {
+  transition:
+    transform var(--vui-duration-base) var(--vui-ease),
+    box-shadow var(--vui-duration-base) var(--vui-ease),
+    border-color var(--vui-duration-base) var(--vui-ease);
+}
+@media (hover: hover) {
+  .vui-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
+    border-color: color-mix(in oklab, var(--button-primary) 35%, var(--border));
+  }
+}
+
+/* A hairline gradient border. The element keeps its own background; this paints
+   a 1px brand-tinted edge that fades, which reads as premium without a colour
+   that has to be maintained. */
+.vui-ring-gradient {
+  position: relative;
+}
+.vui-ring-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--button-primary) 55%, transparent),
+    transparent 45%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Sections fading in as they arrive. `animation-timeline: view()` does this with
+   no JavaScript and no observer; browsers without it simply show the content,
+   which is the correct fallback. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .vui-reveal {
+      animation: vui-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}
+@keyframes vui-reveal {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: none; }
 }
 
 /* Appearance: how the shell is arranged.

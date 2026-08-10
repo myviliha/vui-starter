@@ -149,7 +149,7 @@ config:
 }
 ```
 
-The seven tools:
+The ten tools:
 
 | Tool | Use it to |
 | --- | --- |
@@ -159,13 +159,22 @@ The seven tools:
 | `get_component` | read one component's source, or its props and exported types when the file is large, plus the docs about it |
 | `list_pages` | list the reference app's pages, layouts, shell components and config (`.env.example`, `next.config.ts`) with their routes |
 | `get_page` | read one of those files in full, and copy the pattern |
+| `list_blocks` | see every marketing block in `@viliha/vui-web`, with what each one is for |
+| `get_block` | read one block's props, source and import specifier |
+| `compose_page` | turn a page description into an ordered block list, before writing any markup |
 | `search_docs` | search this guide, the README and every docs-site guide at once; no query returns the outline |
 
 The docs site ships inside the package as markdown, so all of it works offline
 and matches the version you installed. Learning the package: `list_guides`, then
-`get_guide` on what you need. Building a screen: `search_docs` for the rule,
-`get_component` for the API, `get_page` for a working example. This guide still
-applies. The server is how you look things up in it, not a replacement for it.
+`get_guide` on what you need. Building an admin screen: `search_docs` for the
+rule, `get_component` for the API, `get_page` for a working example. Building a
+marketing page: `compose_page` for the block order, then `get_block` on each one.
+This guide still applies. The server is how you look things up in it, not a
+replacement for it.
+
+The block tools read `@viliha/vui-web` wherever it resolves, so they answer with
+whatever version is installed. If it is not installed they say so, rather than
+returning an empty list that reads as "there are no blocks".
 
 ## Next.js
 

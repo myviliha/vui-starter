@@ -1,0 +1,2497 @@
+{
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/turbo.json": {
+    "mtime": 1786378526.136004,
+    "ast_hash": "8597aa5572c0d3d24bb05e809d98c525",
+    "semantic_hash": "8597aa5572c0d3d24bb05e809d98c525"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/package.json": {
+    "mtime": 1784966436.7385643,
+    "ast_hash": "ae0fa8976855f3e3960535f82cf50ef9",
+    "semantic_hash": "ae0fa8976855f3e3960535f82cf50ef9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.claude/settings.json": {
+    "mtime": 1786091737.7596714,
+    "ast_hash": "8a80554c91d9fca8acb82f023de02f11",
+    "semantic_hash": "8a80554c91d9fca8acb82f023de02f11"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.claude/settings.local.json": {
+    "mtime": 1786357161.1199412,
+    "ast_hash": "22806537a7bee0e31591de6c0490259d",
+    "semantic_hash": "22806537a7bee0e31591de6c0490259d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/scripts/polar-product.mjs": {
+    "mtime": 1786363721.546428,
+    "ast_hash": "9baca22622021daf6ec0d8b1bd8745a7",
+    "semantic_hash": "9baca22622021daf6ec0d8b1bd8745a7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/package.json": {
+    "mtime": 1786377537.2351353,
+    "ast_hash": "2c6424c32317d76a648e6899339e69d4",
+    "semantic_hash": "2c6424c32317d76a648e6899339e69d4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/tsconfig.json": {
+    "mtime": 1786093098.7341783,
+    "ast_hash": "045bb425a9069a4bf8b63aa9a5da30a4",
+    "semantic_hash": "045bb425a9069a4bf8b63aa9a5da30a4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/vitest.config.ts": {
+    "mtime": 1786358649.6188416,
+    "ast_hash": "1e634d6d001ac2a72b1e807a38d7f773",
+    "semantic_hash": "1e634d6d001ac2a72b1e807a38d7f773"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/eslint.config.mjs": {
+    "mtime": 1784822406.1898925,
+    "ast_hash": "26c0859eb59b23d09d520b93f76b9f78",
+    "semantic_hash": "26c0859eb59b23d09d520b93f76b9f78"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/bin/vui.mjs": {
+    "mtime": 1786377116.6488075,
+    "ast_hash": "813ea20b613627b5d6c5d78fd9795639",
+    "semantic_hash": "813ea20b613627b5d6c5d78fd9795639"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/bin/mcp.mjs": {
+    "mtime": 1786358649.6173854,
+    "ast_hash": "279ce2afef2edd6589739af0dcf075eb",
+    "semantic_hash": "279ce2afef2edd6589739af0dcf075eb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/bin/mcp.test.mjs": {
+    "mtime": 1786358649.6177526,
+    "ast_hash": "ad6cf4ab62450d658dddeed922926f48",
+    "semantic_hash": "ad6cf4ab62450d658dddeed922926f48"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/scripts/snapshot-docs.mjs": {
+    "mtime": 1786358649.61859,
+    "ast_hash": "7a40aad1698b332843652c13a1d111b4",
+    "semantic_hash": "7a40aad1698b332843652c13a1d111b4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/scripts/publish.mjs": {
+    "mtime": 1785301669.2721627,
+    "ast_hash": "b7e0c01d26c0da667821984faa2f6f9c",
+    "semantic_hash": "b7e0c01d26c0da667821984faa2f6f9c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/scripts/guard-publish.mjs": {
+    "mtime": 1785297164.5615664,
+    "ast_hash": "78999e138a58fc48bc4645bb34f4ef25",
+    "semantic_hash": "78999e138a58fc48bc4645bb34f4ef25"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/scripts/sync-template.mjs": {
+    "mtime": 1786363556.7555487,
+    "ast_hash": "bb96f178ee6535e92c9643db635f0d20",
+    "semantic_hash": "bb96f178ee6535e92c9643db635f0d20"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/steps.tsx": {
+    "mtime": 1784791149.7180007,
+    "ast_hash": "13e313b1e9e92d759be4e2c57938695a",
+    "semantic_hash": "13e313b1e9e92d759be4e2c57938695a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/theme-provider.tsx": {
+    "mtime": 1786011336.2368267,
+    "ast_hash": "b44eaaf05687d693efdc2ea4a9652fe4",
+    "semantic_hash": "b44eaaf05687d693efdc2ea4a9652fe4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/aspect-ratio.tsx": {
+    "mtime": 1785312410.1655893,
+    "ast_hash": "da356b49a1af5a2d5e9983bcf6ad301f",
+    "semantic_hash": "da356b49a1af5a2d5e9983bcf6ad301f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/organization-profile.test.tsx": {
+    "mtime": 1785988793.3119717,
+    "ast_hash": "f8ebf199d65ca7ac8ef34949713e50f5",
+    "semantic_hash": "f8ebf199d65ca7ac8ef34949713e50f5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/alert-dialog.tsx": {
+    "mtime": 1786104672.4944048,
+    "ast_hash": "1646775925e0f2b12730113d678c18fd",
+    "semantic_hash": "1646775925e0f2b12730113d678c18fd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/confirm-dialog.tsx": {
+    "mtime": 1784215520.9316978,
+    "ast_hash": "68099206eeb00c6ea8f1b7f519e74ed1",
+    "semantic_hash": "68099206eeb00c6ea8f1b7f519e74ed1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/cascading-combobox.tsx": {
+    "mtime": 1785322916.3761601,
+    "ast_hash": "0db6dcbb7e95b3d35dac376c7bf314b5",
+    "semantic_hash": "0db6dcbb7e95b3d35dac376c7bf314b5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/utils.test.ts": {
+    "mtime": 1784221294.2698264,
+    "ast_hash": "12e27d6ef3e707cb5dd269fdf23ff740",
+    "semantic_hash": "12e27d6ef3e707cb5dd269fdf23ff740"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/tabs.tsx": {
+    "mtime": 1786372298.9232976,
+    "ast_hash": "b62b278709cc35f5ba40040b06f9b26e",
+    "semantic_hash": "b62b278709cc35f5ba40040b06f9b26e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/table-io.test.ts": {
+    "mtime": 1784221200.6495113,
+    "ast_hash": "fb52c750b17663bd45dc2ac10e93cc50",
+    "semantic_hash": "fb52c750b17663bd45dc2ac10e93cc50"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/card.tsx": {
+    "mtime": 1784197439.322869,
+    "ast_hash": "6ca46af17498267b4a587b544c2a9f67",
+    "semantic_hash": "6ca46af17498267b4a587b544c2a9f67"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/slider.tsx": {
+    "mtime": 1785311467.3879428,
+    "ast_hash": "3281e4e490e4daacbed1063da18d24aa",
+    "semantic_hash": "3281e4e490e4daacbed1063da18d24aa"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/popover.tsx": {
+    "mtime": 1786372583.210209,
+    "ast_hash": "4725bdb45b787c95ba6f0ab4e9d60512",
+    "semantic_hash": "4725bdb45b787c95ba6f0ab4e9d60512"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/progress.tsx": {
+    "mtime": 1785312410.1669228,
+    "ast_hash": "810a6d55148496a0e8dd88a4b9303714",
+    "semantic_hash": "810a6d55148496a0e8dd88a4b9303714"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/z-layers.test.ts": {
+    "mtime": 1786372583.2103791,
+    "ast_hash": "d902640f9e47265f44471e0bc625cc2d",
+    "semantic_hash": "d902640f9e47265f44471e0bc625cc2d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/code.tsx": {
+    "mtime": 1784184707.8331425,
+    "ast_hash": "dd8ba0d572b4682c869f343cc7cad209",
+    "semantic_hash": "dd8ba0d572b4682c869f343cc7cad209"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/tanstack-chart.tsx": {
+    "mtime": 1786370775.2751784,
+    "ast_hash": "75ca5609e04ce468574698ed0442e969",
+    "semantic_hash": "75ca5609e04ce468574698ed0442e969"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/input-otp.tsx": {
+    "mtime": 1785311467.3875468,
+    "ast_hash": "21ff9205452353fec039e2a4cae7be06",
+    "semantic_hash": "21ff9205452353fec039e2a4cae7be06"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/chart.tsx": {
+    "mtime": 1784966436.7406242,
+    "ast_hash": "381bbd89a0285db81322fc74f96d45ae",
+    "semantic_hash": "381bbd89a0285db81322fc74f96d45ae"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/hover-card.tsx": {
+    "mtime": 1786093098.7303054,
+    "ast_hash": "0e58e1bf5ecca28d4264ea5bdcb2e2e9",
+    "semantic_hash": "0e58e1bf5ecca28d4264ea5bdcb2e2e9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/use-async-options.test.ts": {
+    "mtime": 1785996967.2567182,
+    "ast_hash": "db50d5f38b3379df160358a57db04772",
+    "semantic_hash": "db50d5f38b3379df160358a57db04772"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/sheet.tsx": {
+    "mtime": 1786104672.4950142,
+    "ast_hash": "87a0ab7561fd3f94b7fc1fc0e89aa351",
+    "semantic_hash": "87a0ab7561fd3f94b7fc1fc0e89aa351"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/config.tsx": {
+    "mtime": 1786103310.226914,
+    "ast_hash": "d7627f35408b76dbbeaa0b1ff17fcd24",
+    "semantic_hash": "d7627f35408b76dbbeaa0b1ff17fcd24"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/use-async-options.ts": {
+    "mtime": 1785996967.257168,
+    "ast_hash": "e654152f7a2769865ffed33aa899a1c8",
+    "semantic_hash": "e654152f7a2769865ffed33aa899a1c8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/table-io-actions.tsx": {
+    "mtime": 1786103310.2283812,
+    "ast_hash": "028e27247ae30a0ed46d622298077dab",
+    "semantic_hash": "028e27247ae30a0ed46d622298077dab"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/profile-form.tsx": {
+    "mtime": 1785842580.6026816,
+    "ast_hash": "a8bff5c879ac90c6f73bfe27940a9a9c",
+    "semantic_hash": "a8bff5c879ac90c6f73bfe27940a9a9c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/auth-context.tsx": {
+    "mtime": 1785318836.358829,
+    "ast_hash": "ad5f707720b230226d28bf7bbb97ec8d",
+    "semantic_hash": "ad5f707720b230226d28bf7bbb97ec8d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/command-palette.tsx": {
+    "mtime": 1786104672.4947093,
+    "ast_hash": "ad09f074b7db8eba5584542046d9f1ae",
+    "semantic_hash": "ad09f074b7db8eba5584542046d9f1ae"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/scroll-area.tsx": {
+    "mtime": 1785312410.1671312,
+    "ast_hash": "7a91162cc9fba13c294b55055d4b544f",
+    "semantic_hash": "7a91162cc9fba13c294b55055d4b544f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/breadcrumbs.tsx": {
+    "mtime": 1784621152.5947,
+    "ast_hash": "b461588e254cc9d75c5261658ceb8292",
+    "semantic_hash": "b461588e254cc9d75c5261658ceb8292"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/organization-profile.tsx": {
+    "mtime": 1786377537.235478,
+    "ast_hash": "a9ff55fa71cac15c6c8781a7c5297889",
+    "semantic_hash": "a9ff55fa71cac15c6c8781a7c5297889"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/label.tsx": {
+    "mtime": 1785309423.9102883,
+    "ast_hash": "1e55cebd2e7cc023e8aeae59b0af7467",
+    "semantic_hash": "1e55cebd2e7cc023e8aeae59b0af7467"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/sonner.tsx": {
+    "mtime": 1785312410.1673975,
+    "ast_hash": "d1c9caef947ec47f1164b7a90c700fa6",
+    "semantic_hash": "d1c9caef947ec47f1164b7a90c700fa6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/utils.ts": {
+    "mtime": 1786365839.7215772,
+    "ast_hash": "97edf9a308169f3b3a348b2681ddde3a",
+    "semantic_hash": "97edf9a308169f3b3a348b2681ddde3a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/form-actions.tsx": {
+    "mtime": 1786001123.8799489,
+    "ast_hash": "d333755e998ca98cb8cdd9b042970673",
+    "semantic_hash": "d333755e998ca98cb8cdd9b042970673"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/wizard.tsx": {
+    "mtime": 1785331367.6424367,
+    "ast_hash": "3556f13e7a77eccc0593a016c713dbe5",
+    "semantic_hash": "3556f13e7a77eccc0593a016c713dbe5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/accordion.tsx": {
+    "mtime": 1786372298.922727,
+    "ast_hash": "32c75b5f52f2834a78cb27510849fdad",
+    "semantic_hash": "32c75b5f52f2834a78cb27510849fdad"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/use-form-fields.tsx": {
+    "mtime": 1785475237.990469,
+    "ast_hash": "f6591aef167e5cfcbb70cc5ffbb57702",
+    "semantic_hash": "f6591aef167e5cfcbb70cc5ffbb57702"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/tooltip.tsx": {
+    "mtime": 1786104672.495369,
+    "ast_hash": "8a5bf4b88deeb874328e788f7df62984",
+    "semantic_hash": "8a5bf4b88deeb874328e788f7df62984"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/alert.tsx": {
+    "mtime": 1785311030.0361307,
+    "ast_hash": "d1911b85362021c57be7eb708064d8cf",
+    "semantic_hash": "d1911b85362021c57be7eb708064d8cf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/record-view.tsx": {
+    "mtime": 1786103310.2279248,
+    "ast_hash": "da450a278a5aa5bfb002d9603cf2442b",
+    "semantic_hash": "da450a278a5aa5bfb002d9603cf2442b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/combobox.tsx": {
+    "mtime": 1785996967.2549288,
+    "ast_hash": "4c2b02fd9a9b4e8ce866c48537059bd5",
+    "semantic_hash": "4c2b02fd9a9b4e8ce866c48537059bd5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/theme-config.ts": {
+    "mtime": 1786011336.2364922,
+    "ast_hash": "6c56cd3b20bd8261112b0b15ccc2cebe",
+    "semantic_hash": "6c56cd3b20bd8261112b0b15ccc2cebe"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/table-io.ts": {
+    "mtime": 1784197439.324883,
+    "ast_hash": "c68ee98f5eba9e895cf786ff5948183d",
+    "semantic_hash": "c68ee98f5eba9e895cf786ff5948183d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/switch.tsx": {
+    "mtime": 1786372298.923168,
+    "ast_hash": "6747faf0610537cd052a30c99db00d8c",
+    "semantic_hash": "6747faf0610537cd052a30c99db00d8c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/calendar.tsx": {
+    "mtime": 1785312410.1662362,
+    "ast_hash": "a76e7e7fc33af66d37b1b21f85dfe5fb",
+    "semantic_hash": "a76e7e7fc33af66d37b1b21f85dfe5fb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/breadcrumb.tsx": {
+    "mtime": 1785312410.1659348,
+    "ast_hash": "eb2d661677d2c4159f45ea79b4ecf27b",
+    "semantic_hash": "eb2d661677d2c4159f45ea79b4ecf27b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/radio-group.tsx": {
+    "mtime": 1785311467.3877463,
+    "ast_hash": "9007bbde4e851240ad8301a141cdc3de",
+    "semantic_hash": "9007bbde4e851240ad8301a141cdc3de"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/command.tsx": {
+    "mtime": 1785312410.1664817,
+    "ast_hash": "f28c4e085143c27f97b420462ec89064",
+    "semantic_hash": "f28c4e085143c27f97b420462ec89064"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/table-io-actions.test.ts": {
+    "mtime": 1786103310.228126,
+    "ast_hash": "dba5a6f5f321c80b50520bb106983e5a",
+    "semantic_hash": "dba5a6f5f321c80b50520bb106983e5a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/toggle-group.tsx": {
+    "mtime": 1785311467.3886797,
+    "ast_hash": "d5dff4ec1c9725aa20cf426d05ce97f3",
+    "semantic_hash": "d5dff4ec1c9725aa20cf426d05ce97f3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/org-switcher.test.ts": {
+    "mtime": 1786072256.8675528,
+    "ast_hash": "db1fe582ebaf6380c04b4a9dfa4996c8",
+    "semantic_hash": "db1fe582ebaf6380c04b4a9dfa4996c8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/avatar.tsx": {
+    "mtime": 1786377537.2353,
+    "ast_hash": "68c94d17d25eff2727e7fd9fed28aee9",
+    "semantic_hash": "68c94d17d25eff2727e7fd9fed28aee9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/kbd.tsx": {
+    "mtime": 1784285029.0046816,
+    "ast_hash": "c1a1fd6bb780c20d5d55a510c434a810",
+    "semantic_hash": "c1a1fd6bb780c20d5d55a510c434a810"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/tanstack-chart.test.ts": {
+    "mtime": 1786370775.275061,
+    "ast_hash": "2e49ecbc11c26c5d51c778b2ae1f6c18",
+    "semantic_hash": "2e49ecbc11c26c5d51c778b2ae1f6c18"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/filter-field.tsx": {
+    "mtime": 1785470437.9226644,
+    "ast_hash": "a57aec5265becf8025ec918452a9325f",
+    "semantic_hash": "a57aec5265becf8025ec918452a9325f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/record-view.test.ts": {
+    "mtime": 1786101954.9174798,
+    "ast_hash": "4caf78268841397a3c732a1307197156",
+    "semantic_hash": "4caf78268841397a3c732a1307197156"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/dialog.tsx": {
+    "mtime": 1784264351.4441266,
+    "ast_hash": "bbdefba89b97987f617a4b381ba27aea",
+    "semantic_hash": "bbdefba89b97987f617a4b381ba27aea"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/menu.tsx": {
+    "mtime": 1784216277.334845,
+    "ast_hash": "343a0538defb622d3a6f12d31ed96616",
+    "semantic_hash": "343a0538defb622d3a6f12d31ed96616"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/badge.tsx": {
+    "mtime": 1786370252.2877123,
+    "ast_hash": "7b4f137464484e03be32045450c2909a",
+    "semantic_hash": "7b4f137464484e03be32045450c2909a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/multi-combobox.tsx": {
+    "mtime": 1785996967.2553222,
+    "ast_hash": "335cc3866d8322499bcdc8888943c2d3",
+    "semantic_hash": "335cc3866d8322499bcdc8888943c2d3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/table.tsx": {
+    "mtime": 1784221081.4245057,
+    "ast_hash": "d866f20232ee942700bec36c556fc2c7",
+    "semantic_hash": "d866f20232ee942700bec36c556fc2c7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/separator.tsx": {
+    "mtime": 1785309423.9105563,
+    "ast_hash": "7b666db22b10415d4c27680ce7e4b558",
+    "semantic_hash": "7b666db22b10415d4c27680ce7e4b558"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/required-mark.tsx": {
+    "mtime": 1784264791.648028,
+    "ast_hash": "8d53bca4d1c84e4922f04899c037a4b3",
+    "semantic_hash": "8d53bca4d1c84e4922f04899c037a4b3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/button.tsx": {
+    "mtime": 1786370252.2878466,
+    "ast_hash": "a7eef3cb5b34c4435e23c146deba628a",
+    "semantic_hash": "a7eef3cb5b34c4435e23c146deba628a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/toggle.tsx": {
+    "mtime": 1785311467.3888686,
+    "ast_hash": "1e12ec40d9b367fb49f3fafd858b6395",
+    "semantic_hash": "1e12ec40d9b367fb49f3fafd858b6395"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/form-actions.test.ts": {
+    "mtime": 1786001123.8794768,
+    "ast_hash": "1fdf1a32c4cab3c8a23ffc68531a22b5",
+    "semantic_hash": "1fdf1a32c4cab3c8a23ffc68531a22b5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/toast.tsx": {
+    "mtime": 1785296031.2600017,
+    "ast_hash": "0418daffe93aa7ddc0a21b3f7f54e8db",
+    "semantic_hash": "0418daffe93aa7ddc0a21b3f7f54e8db"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/page.tsx": {
+    "mtime": 1786001123.8801668,
+    "ast_hash": "d1c57a308d673b69b1a60b2d905df1dc",
+    "semantic_hash": "d1c57a308d673b69b1a60b2d905df1dc"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/theme-config.test.ts": {
+    "mtime": 1786011336.2360919,
+    "ast_hash": "fb05b53fb7c098b741e60af8e091bb99",
+    "semantic_hash": "fb05b53fb7c098b741e60af8e091bb99"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/checkbox.tsx": {
+    "mtime": 1786372298.9228685,
+    "ast_hash": "5ab77f1bde0ee6428c0813092e0f5693",
+    "semantic_hash": "5ab77f1bde0ee6428c0813092e0f5693"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/class-variants.ts": {
+    "mtime": 1786374212.895029,
+    "ast_hash": "738ada4120ff5b26d0caa63348daebb6",
+    "semantic_hash": "738ada4120ff5b26d0caa63348daebb6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/collapsible.tsx": {
+    "mtime": 1785311030.036309,
+    "ast_hash": "ba6f8d06b8d65a386f2fbea4e5dde016",
+    "semantic_hash": "ba6f8d06b8d65a386f2fbea4e5dde016"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/dropdown-menu.tsx": {
+    "mtime": 1786374212.8952167,
+    "ast_hash": "6d9e6a26a54b98bbc5a3f05c15856620",
+    "semantic_hash": "6d9e6a26a54b98bbc5a3f05c15856620"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/select.tsx": {
+    "mtime": 1786374212.8953888,
+    "ast_hash": "cf2912dc7c13feae0228b471f0bd407c",
+    "semantic_hash": "cf2912dc7c13feae0228b471f0bd407c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/textarea.tsx": {
+    "mtime": 1785311467.3881352,
+    "ast_hash": "8dd7be702d7fe784ea427e76ecf5ca5d",
+    "semantic_hash": "8dd7be702d7fe784ea427e76ecf5ca5d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/input.tsx": {
+    "mtime": 1785296031.2593787,
+    "ast_hash": "287e8dbfafd6904451f84541115b01c2",
+    "semantic_hash": "287e8dbfafd6904451f84541115b01c2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/field-grid.tsx": {
+    "mtime": 1785472366.7456806,
+    "ast_hash": "85c3f4052f9baefac165f38e4425013e",
+    "semantic_hash": "85c3f4052f9baefac165f38e4425013e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/skeleton.tsx": {
+    "mtime": 1785309423.9107304,
+    "ast_hash": "209f168a1e78aa1143cf6db4c622d8a5",
+    "semantic_hash": "209f168a1e78aa1143cf6db4c622d8a5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/org-switcher.tsx": {
+    "mtime": 1786072256.8678598,
+    "ast_hash": "b9c76e4ddd1ae91cd1e73f8574ad5b06",
+    "semantic_hash": "b9c76e4ddd1ae91cd1e73f8574ad5b06"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/src/form.tsx": {
+    "mtime": 1785312410.1667047,
+    "ast_hash": "3083ff18f23698228c8a452ac24324de",
+    "semantic_hash": "3083ff18f23698228c8a452ac24324de"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/core/package.json": {
+    "mtime": 1786365986.1001463,
+    "ast_hash": "e55d1a0d1bc91792751d8856723072f7",
+    "semantic_hash": "e55d1a0d1bc91792751d8856723072f7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/core/tsconfig.json": {
+    "mtime": 1786365986.100471,
+    "ast_hash": "e86015802dc60d45085495fd8986302a",
+    "semantic_hash": "e86015802dc60d45085495fd8986302a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/core/build.test.mjs": {
+    "mtime": 1786365986.099992,
+    "ast_hash": "f1f7f9a4a51d33021ed60361e565bbac",
+    "semantic_hash": "f1f7f9a4a51d33021ed60361e565bbac"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/core/scripts/build.mjs": {
+    "mtime": 1786370252.287552,
+    "ast_hash": "b2dd31823eacf6739aefe141c09510d5",
+    "semantic_hash": "b2dd31823eacf6739aefe141c09510d5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/chart.test.ts": {
+    "mtime": 1786370775.2757568,
+    "ast_hash": "54d8cda74982be07d2bcff292748e902",
+    "semantic_hash": "54d8cda74982be07d2bcff292748e902"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/z-layers.test.ts": {
+    "mtime": 1786372583.2120206,
+    "ast_hash": "fa141ae912f997bc7e81f4c494281550",
+    "semantic_hash": "fa141ae912f997bc7e81f4c494281550"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/wave-b.test.ts": {
+    "mtime": 1786372298.9263067,
+    "ast_hash": "b849287eadcaff281f193e55b5518d85",
+    "semantic_hash": "b849287eadcaff281f193e55b5518d85"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/menus.test.ts": {
+    "mtime": 1786374212.8958766,
+    "ast_hash": "a1c226a6cf98878d9138bd55e8c51571",
+    "semantic_hash": "a1c226a6cf98878d9138bd55e8c51571"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/package.json": {
+    "mtime": 1786374212.8960288,
+    "ast_hash": "7494cc69b8417131cc2a41b540a1d22e",
+    "semantic_hash": "7494cc69b8417131cc2a41b540a1d22e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/tsconfig.build.json": {
+    "mtime": 1786370252.2904866,
+    "ast_hash": "6154c645e4c6b1d4caab92e254ad734e",
+    "semantic_hash": "6154c645e4c6b1d4caab92e254ad734e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/tsconfig.json": {
+    "mtime": 1786370252.2905862,
+    "ast_hash": "4b3cc6ca1a438f0df5cfc6ce78ee269f",
+    "semantic_hash": "4b3cc6ca1a438f0df5cfc6ce78ee269f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/vite.config.ts": {
+    "mtime": 1786370775.2763002,
+    "ast_hash": "5523ce9123a98d7550ccc82f03935219",
+    "semantic_hash": "5523ce9123a98d7550ccc82f03935219"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/vitest.config.ts": {
+    "mtime": 1786370252.2907844,
+    "ast_hash": "a7c0b1e853a8349f8773fbeed5148b54",
+    "semantic_hash": "a7c0b1e853a8349f8773fbeed5148b54"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/render.test.ts": {
+    "mtime": 1786372298.9238698,
+    "ast_hash": "af364ce0ab766012ee47e8fc753206ce",
+    "semantic_hash": "af364ce0ab766012ee47e8fc753206ce"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/scripts/theme.mjs": {
+    "mtime": 1786370252.2887106,
+    "ast_hash": "e09664096ad8fafd0f12bcfb15214a53",
+    "semantic_hash": "e09664096ad8fafd0f12bcfb15214a53"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DialogBody.vue": {
+    "mtime": 1786372583.2110186,
+    "ast_hash": "52ef402117c85077e2f0aabcaddf053c",
+    "semantic_hash": "52ef402117c85077e2f0aabcaddf053c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DialogTitle.vue": {
+    "mtime": 1786372583.2113364,
+    "ast_hash": "56f8979fa439cf16b3b6ed784ff32b2b",
+    "semantic_hash": "56f8979fa439cf16b3b6ed784ff32b2b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DialogHeader.vue": {
+    "mtime": 1786372583.2112184,
+    "ast_hash": "c7012eb791994cb6354126d4393d8782",
+    "semantic_hash": "c7012eb791994cb6354126d4393d8782"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DialogFooter.vue": {
+    "mtime": 1786372583.2111175,
+    "ast_hash": "8aae836c42bf0f81d95003e17212983d",
+    "semantic_hash": "8aae836c42bf0f81d95003e17212983d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Tabs.vue": {
+    "mtime": 1786372298.9256883,
+    "ast_hash": "a8fdbf820585cef0cb97281bcaa44b3b",
+    "semantic_hash": "a8fdbf820585cef0cb97281bcaa44b3b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DropdownMenuLabel.vue": {
+    "mtime": 1786374212.8965113,
+    "ast_hash": "fdf7e0a68b7fbd271d3ff553c49c1b23",
+    "semantic_hash": "fdf7e0a68b7fbd271d3ff553c49c1b23"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Popover.vue": {
+    "mtime": 1786372583.2114408,
+    "ast_hash": "14e35c6a8f4d951955bfa38b04d535da",
+    "semantic_hash": "14e35c6a8f4d951955bfa38b04d535da"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/TabsContent.vue": {
+    "mtime": 1786372298.9258072,
+    "ast_hash": "2ecfda8edeccd3eca679a2f6b94661c1",
+    "semantic_hash": "2ecfda8edeccd3eca679a2f6b94661c1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Card.vue": {
+    "mtime": 1786370252.2890546,
+    "ast_hash": "7447a38f8f2676cdc3f47e4b5419459e",
+    "semantic_hash": "7447a38f8f2676cdc3f47e4b5419459e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/AccordionTrigger.vue": {
+    "mtime": 1786372298.9242826,
+    "ast_hash": "ab8b9c2b92f6a56cb13f83c9cf99de78",
+    "semantic_hash": "ab8b9c2b92f6a56cb13f83c9cf99de78"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/AccordionContent.vue": {
+    "mtime": 1786372298.924077,
+    "ast_hash": "20905c21446bce4cc2ba4408b095a0a7",
+    "semantic_hash": "20905c21446bce4cc2ba4408b095a0a7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/TabsTrigger.vue": {
+    "mtime": 1786372298.9260166,
+    "ast_hash": "0647f6635da3c751c45159535a4bbffd",
+    "semantic_hash": "0647f6635da3c751c45159535a4bbffd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CardContent.vue": {
+    "mtime": 1786370252.2891495,
+    "ast_hash": "9c27417a12c8e1477eea2eabb1dc5e06",
+    "semantic_hash": "9c27417a12c8e1477eea2eabb1dc5e06"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/SelectItem.vue": {
+    "mtime": 1786374212.8970025,
+    "ast_hash": "f7fbbd22baf5bec7fad8af7f8cb5358f",
+    "semantic_hash": "f7fbbd22baf5bec7fad8af7f8cb5358f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Code.vue": {
+    "mtime": 1786370252.2896616,
+    "ast_hash": "8a1b659c5fb4aca4060d47a9f281c13c",
+    "semantic_hash": "8a1b659c5fb4aca4060d47a9f281c13c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/TabsList.vue": {
+    "mtime": 1786372298.9259179,
+    "ast_hash": "bb6d2f91c36aa7093a74e25270442227",
+    "semantic_hash": "bb6d2f91c36aa7093a74e25270442227"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CollapsibleTrigger.vue": {
+    "mtime": 1786372298.9254,
+    "ast_hash": "b7cf90ea6a21684c047c85c663e0b013",
+    "semantic_hash": "b7cf90ea6a21684c047c85c663e0b013"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Chart.vue": {
+    "mtime": 1786370775.2760262,
+    "ast_hash": "98bfcf59b86d25adbb56fe6577b4cd51",
+    "semantic_hash": "98bfcf59b86d25adbb56fe6577b4cd51"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CollapsibleContent.vue": {
+    "mtime": 1786372298.9251075,
+    "ast_hash": "82c837f50b4a56f634b9f898cfe9e920",
+    "semantic_hash": "82c837f50b4a56f634b9f898cfe9e920"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/AccordionItem.vue": {
+    "mtime": 1786372298.92418,
+    "ast_hash": "b01de09c502367f5ae46f4409938483b",
+    "semantic_hash": "b01de09c502367f5ae46f4409938483b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Label.vue": {
+    "mtime": 1786370252.2899737,
+    "ast_hash": "118482c7ff6b830ff9dbb50f4c472a87",
+    "semantic_hash": "118482c7ff6b830ff9dbb50f4c472a87"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CardTitle.vue": {
+    "mtime": 1786370252.2895644,
+    "ast_hash": "3362f444e8fbd0bcddf4ef89e820398b",
+    "semantic_hash": "3362f444e8fbd0bcddf4ef89e820398b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Accordion.vue": {
+    "mtime": 1786372298.923973,
+    "ast_hash": "882f210fae4c91a2fe080794a8d67a3c",
+    "semantic_hash": "882f210fae4c91a2fe080794a8d67a3c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DropdownMenuTrigger.vue": {
+    "mtime": 1786374212.8966475,
+    "ast_hash": "523218055231888e419135304388369a",
+    "semantic_hash": "523218055231888e419135304388369a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DropdownMenuContent.vue": {
+    "mtime": 1786374212.896294,
+    "ast_hash": "3d2202aaa26b69ccc8752a04dae42822",
+    "semantic_hash": "3d2202aaa26b69ccc8752a04dae42822"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/SelectContent.vue": {
+    "mtime": 1786374212.8968797,
+    "ast_hash": "6de511541ca2c3e52010d966a6577679",
+    "semantic_hash": "6de511541ca2c3e52010d966a6577679"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Tooltip.vue": {
+    "mtime": 1786372583.2117362,
+    "ast_hash": "bc215e2036336b7b56bc6afa8ff01b4f",
+    "semantic_hash": "bc215e2036336b7b56bc6afa8ff01b4f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Switch.vue": {
+    "mtime": 1786372298.925574,
+    "ast_hash": "440ca565caef6973806ef69b9bad1a41",
+    "semantic_hash": "440ca565caef6973806ef69b9bad1a41"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DropdownMenuItem.vue": {
+    "mtime": 1786374212.8964021,
+    "ast_hash": "a80c9ede87fab13f673f7919ebfdb9ea",
+    "semantic_hash": "a80c9ede87fab13f673f7919ebfdb9ea"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CardHeader.vue": {
+    "mtime": 1786370252.2894585,
+    "ast_hash": "55e57c528ffbc09b9549c5d67b126704",
+    "semantic_hash": "55e57c528ffbc09b9549c5d67b126704"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Kbd.vue": {
+    "mtime": 1786370252.289864,
+    "ast_hash": "7d68248f9922eab2fcd856f1388ce7b9",
+    "semantic_hash": "7d68248f9922eab2fcd856f1388ce7b9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CardFooter.vue": {
+    "mtime": 1786370252.2893538,
+    "ast_hash": "d0d24ab9daa70a7a0b8cf7dbba0f08fa",
+    "semantic_hash": "d0d24ab9daa70a7a0b8cf7dbba0f08fa"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Dialog.vue": {
+    "mtime": 1786372583.2109222,
+    "ast_hash": "1f8e9d701b9051c245438fd6d5da3c38",
+    "semantic_hash": "1f8e9d701b9051c245438fd6d5da3c38"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/DropdownMenu.vue": {
+    "mtime": 1786374212.8961527,
+    "ast_hash": "1489559048378cc4b94db489818d3404",
+    "semantic_hash": "1489559048378cc4b94db489818d3404"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Badge.vue": {
+    "mtime": 1786370252.2888525,
+    "ast_hash": "a06e9bc1d8cb10868b78e2a7734889b9",
+    "semantic_hash": "a06e9bc1d8cb10868b78e2a7734889b9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/PopoverContent.vue": {
+    "mtime": 1786372583.2115412,
+    "ast_hash": "b55a7303c17dc08db7d658b77fad20b9",
+    "semantic_hash": "b55a7303c17dc08db7d658b77fad20b9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/index.ts": {
+    "mtime": 1786374212.8971553,
+    "ast_hash": "14ea07fc7784e4b4616a150de1538efb",
+    "semantic_hash": "14ea07fc7784e4b4616a150de1538efb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Separator.vue": {
+    "mtime": 1786370252.2900696,
+    "ast_hash": "3f46644fe6a3819e2a8db05bf141bc65",
+    "semantic_hash": "3f46644fe6a3819e2a8db05bf141bc65"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Button.vue": {
+    "mtime": 1786370252.2889583,
+    "ast_hash": "f760404841909c3277b086d4b8d4c443",
+    "semantic_hash": "f760404841909c3277b086d4b8d4c443"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/PopoverTrigger.vue": {
+    "mtime": 1786372583.2116382,
+    "ast_hash": "c4139fd044ca045e7805e0537c3552db",
+    "semantic_hash": "c4139fd044ca045e7805e0537c3552db"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/CardDescription.vue": {
+    "mtime": 1786370252.289251,
+    "ast_hash": "9f93ab515b1f15f88556fb3c5b29476b",
+    "semantic_hash": "9f93ab515b1f15f88556fb3c5b29476b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Collapsible.vue": {
+    "mtime": 1786372298.9249043,
+    "ast_hash": "e96df6101abd939c3865e9ff1d6efd48",
+    "semantic_hash": "e96df6101abd939c3865e9ff1d6efd48"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Checkbox.vue": {
+    "mtime": 1786372298.924382,
+    "ast_hash": "154185fec25b1e99113437cf4096f6a1",
+    "semantic_hash": "154185fec25b1e99113437cf4096f6a1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Textarea.vue": {
+    "mtime": 1786370252.2902794,
+    "ast_hash": "57e577f605057ee0cf7811fd531ff364",
+    "semantic_hash": "57e577f605057ee0cf7811fd531ff364"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Input.vue": {
+    "mtime": 1786370252.2897642,
+    "ast_hash": "fc5e72967af55526a1605e615930217e",
+    "semantic_hash": "fc5e72967af55526a1605e615930217e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Select.vue": {
+    "mtime": 1786374212.8967695,
+    "ast_hash": "dcb0733bd4d444d15d62be39f1e63825",
+    "semantic_hash": "dcb0733bd4d444d15d62be39f1e63825"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/src/Skeleton.vue": {
+    "mtime": 1786370252.2901785,
+    "ast_hash": "7023a2a7555d503135afdaa45e9c8c65",
+    "semantic_hash": "7023a2a7555d503135afdaa45e9c8c65"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/eslint-config/package.json": {
+    "mtime": 1784556719.6481285,
+    "ast_hash": "e35e65e7a2ebb6d22a460059536dccbb",
+    "semantic_hash": "e35e65e7a2ebb6d22a460059536dccbb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/eslint-config/next.js": {
+    "mtime": 1784173077.9055815,
+    "ast_hash": "20cc7e2d1aed0a930425a57eaabd1257",
+    "semantic_hash": "20cc7e2d1aed0a930425a57eaabd1257"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/eslint-config/react-internal.js": {
+    "mtime": 1784173077.9057693,
+    "ast_hash": "3a0dbea6d402eb72899ed2d7569d69db",
+    "semantic_hash": "3a0dbea6d402eb72899ed2d7569d69db"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/eslint-config/base.js": {
+    "mtime": 1784173077.905486,
+    "ast_hash": "5f62d96dff562381ba4f76c608ced0d2",
+    "semantic_hash": "5f62d96dff562381ba4f76c608ced0d2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/theme/package.json": {
+    "mtime": 1786376298.2274787,
+    "ast_hash": "05604a9e315217344696373f1c2269ac",
+    "semantic_hash": "05604a9e315217344696373f1c2269ac"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/theme/build.test.mjs": {
+    "mtime": 1786362477.7854276,
+    "ast_hash": "cd0d98ec77502111924eaf6ddca1631f",
+    "semantic_hash": "cd0d98ec77502111924eaf6ddca1631f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/theme/scripts/build.mjs": {
+    "mtime": 1786362477.785702,
+    "ast_hash": "f53c4ce8fe7a6f9162701cda0fd6fd04",
+    "semantic_hash": "f53c4ce8fe7a6f9162701cda0fd6fd04"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/typescript-config/nextjs.json": {
+    "mtime": 1784173077.9060571,
+    "ast_hash": "419d0717abcf3b97c7ec3638e55f8ec8",
+    "semantic_hash": "419d0717abcf3b97c7ec3638e55f8ec8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/typescript-config/package.json": {
+    "mtime": 1784173077.9062564,
+    "ast_hash": "1e99369b75db4546af4ac4a79eb5f2dd",
+    "semantic_hash": "1e99369b75db4546af4ac4a79eb5f2dd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/typescript-config/react-library.json": {
+    "mtime": 1784173077.9063733,
+    "ast_hash": "42fa007069bd205e7d2762f34a1545ae",
+    "semantic_hash": "42fa007069bd205e7d2762f34a1545ae"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/typescript-config/base.json": {
+    "mtime": 1784173077.9059393,
+    "ast_hash": "cba1ac504004ffd7a202c09b8fa58f09",
+    "semantic_hash": "cba1ac504004ffd7a202c09b8fa58f09"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/typescript-config/node.json": {
+    "mtime": 1784173077.906163,
+    "ast_hash": "8b7272c9df7156e81d9aded1e008bde6",
+    "semantic_hash": "8b7272c9df7156e81d9aded1e008bde6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/postcss.config.mjs": {
+    "mtime": 1784260681.5307138,
+    "ast_hash": "239f3ebf717465dc636818a1a619398d",
+    "semantic_hash": "239f3ebf717465dc636818a1a619398d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/next.config.js": {
+    "mtime": 1784271754.4988277,
+    "ast_hash": "f60eb0e5b69dcc75e11d58090c726dbb",
+    "semantic_hash": "f60eb0e5b69dcc75e11d58090c726dbb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/next-env.d.ts": {
+    "mtime": 1786090878.212088,
+    "ast_hash": "2a74d3909800ca5467fa83b0ab4a4890",
+    "semantic_hash": "2a74d3909800ca5467fa83b0ab4a4890"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/package.json": {
+    "mtime": 1786376794.4643247,
+    "ast_hash": "319f26895241d71020f64c2ba243c5d7",
+    "semantic_hash": "319f26895241d71020f64c2ba243c5d7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components.json": {
+    "mtime": 1784260681.522309,
+    "ast_hash": "ba0496f98030c9a620c4cf864cd11792",
+    "semantic_hash": "ba0496f98030c9a620c4cf864cd11792"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/tsconfig.json": {
+    "mtime": 1784268673.121763,
+    "ast_hash": "f7a8dd04beded07b88a8217375ee4af1",
+    "semantic_hash": "f7a8dd04beded07b88a8217375ee4af1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/eslint.config.js": {
+    "mtime": 1784260681.5291066,
+    "ast_hash": "394a542e2edb3897759e9d37e5e16402",
+    "semantic_hash": "394a542e2edb3897759e9d37e5e16402"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/robots.ts": {
+    "mtime": 1784430914.6336277,
+    "ast_hash": "2ed1e275832f795c50845dafc30c10f1",
+    "semantic_hash": "2ed1e275832f795c50845dafc30c10f1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/sitemap.ts": {
+    "mtime": 1785334532.3607779,
+    "ast_hash": "9fb6a6d23171b2fa10e281ed68b19a73",
+    "semantic_hash": "9fb6a6d23171b2fa10e281ed68b19a73"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/layout.tsx": {
+    "mtime": 1786011336.22508,
+    "ast_hash": "1becc4fcaba3bea6e3e7eb65015b4840",
+    "semantic_hash": "1becc4fcaba3bea6e3e7eb65015b4840"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/error.tsx": {
+    "mtime": 1786375177.9725769,
+    "ast_hash": "c7f93b54dfd5469bee2f5ca792ee3dd8",
+    "semantic_hash": "c7f93b54dfd5469bee2f5ca792ee3dd8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/page.tsx": {
+    "mtime": 1785313043.7707834,
+    "ast_hash": "2668880e2ab37b825cffc7e9262050db",
+    "semantic_hash": "2668880e2ab37b825cffc7e9262050db"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/not-found.tsx": {
+    "mtime": 1786375177.9734917,
+    "ast_hash": "d8648d18e6c372d34f2e3e0555bedf77",
+    "semantic_hash": "d8648d18e6c372d34f2e3e0555bedf77"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/demo/page.tsx": {
+    "mtime": 1785331367.638593,
+    "ast_hash": "60c62fb53fe40bc1d30488adc167dbee",
+    "semantic_hash": "60c62fb53fe40bc1d30488adc167dbee"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/layout.tsx": {
+    "mtime": 1786376298.2240016,
+    "ast_hash": "3a424399817fc5dae5edd18d4f472816",
+    "semantic_hash": "3a424399817fc5dae5edd18d4f472816"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organization/profile/use-org-profile.ts": {
+    "mtime": 1785840575.5822737,
+    "ast_hash": "24c32f435bcde67f7eb8ca0eb2a66fa1",
+    "semantic_hash": "24c32f435bcde67f7eb8ca0eb2a66fa1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organization/profile/layout.tsx": {
+    "mtime": 1785840575.5812898,
+    "ast_hash": "3c463f0c7811c13d27573fe9b2577e90",
+    "semantic_hash": "3c463f0c7811c13d27573fe9b2577e90"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organization/profile/page.tsx": {
+    "mtime": 1785842580.5956943,
+    "ast_hash": "6279a342d6c070ce18215ef60054f6fd",
+    "semantic_hash": "6279a342d6c070ce18215ef60054f6fd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/organizations-view.tsx": {
+    "mtime": 1785920544.4379926,
+    "ast_hash": "42a926a92469b265a5db2f6368e767b4",
+    "semantic_hash": "42a926a92469b265a5db2f6368e767b4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/use-organizations.ts": {
+    "mtime": 1785232655.760088,
+    "ast_hash": "7f843d829ee07aabd1d4ebbbab999e4d",
+    "semantic_hash": "7f843d829ee07aabd1d4ebbbab999e4d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/organizations-table.tsx": {
+    "mtime": 1785146511.0520704,
+    "ast_hash": "20db9bd0b6d94767695558f30edff56a",
+    "semantic_hash": "20db9bd0b6d94767695558f30edff56a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/organizations-config.tsx": {
+    "mtime": 1785906666.661306,
+    "ast_hash": "876fb2ee6764abe2e0efb3c77d0109cf",
+    "semantic_hash": "876fb2ee6764abe2e0efb3c77d0109cf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/page.tsx": {
+    "mtime": 1784430914.629626,
+    "ast_hash": "78072676a2a55162650b8f30f3f24a3f",
+    "semantic_hash": "78072676a2a55162650b8f30f3f24a3f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/edit/page.tsx": {
+    "mtime": 1785146511.0515332,
+    "ast_hash": "1cacd5df226460cf2d2ff5a00b7b6e53",
+    "semantic_hash": "1cacd5df226460cf2d2ff5a00b7b6e53"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/organizations/new/page.tsx": {
+    "mtime": 1785146511.051879,
+    "ast_hash": "e3ec41e1811b00502a223d7f5bae533a",
+    "semantic_hash": "e3ec41e1811b00502a223d7f5bae533a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/settings/layout.tsx": {
+    "mtime": 1784430914.6298087,
+    "ast_hash": "ea1606252416eb67514280eb96e543c6",
+    "semantic_hash": "ea1606252416eb67514280eb96e543c6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/settings/page.tsx": {
+    "mtime": 1786377537.2342465,
+    "ast_hash": "f440c5778f80db4c5c36c0cddc245abe",
+    "semantic_hash": "f440c5778f80db4c5c36c0cddc245abe"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/businesses/businesses-table.tsx": {
+    "mtime": 1785920544.4360006,
+    "ast_hash": "a1ac226df6edadfe6e14ab0d6ba6d22e",
+    "semantic_hash": "a1ac226df6edadfe6e14ab0d6ba6d22e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/businesses/page.tsx": {
+    "mtime": 1784430914.6267512,
+    "ast_hash": "80967c7dc13705c378bb784a61270158",
+    "semantic_hash": "80967c7dc13705c378bb784a61270158"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/calendar/page.tsx": {
+    "mtime": 1784805456.0587661,
+    "ast_hash": "7b7cbc17622fb84ea116d64faf6c5ec2",
+    "semantic_hash": "7b7cbc17622fb84ea116d64faf6c5ec2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/forms/layout.tsx": {
+    "mtime": 1784430914.6290684,
+    "ast_hash": "6d5c877a935ceb8b6f091f2716246382",
+    "semantic_hash": "6d5c877a935ceb8b6f091f2716246382"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/forms/page.tsx": {
+    "mtime": 1784260681.5086834,
+    "ast_hash": "b80ecb681762ef0b2c524693be6bd65d",
+    "semantic_hash": "b80ecb681762ef0b2c524693be6bd65d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/chat/layout.tsx": {
+    "mtime": 1784804500.098503,
+    "ast_hash": "1e54fd1ee822a1af7dcdf782f176d7cd",
+    "semantic_hash": "1e54fd1ee822a1af7dcdf782f176d7cd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/chat/page.tsx": {
+    "mtime": 1785986834.8819008,
+    "ast_hash": "c11e35c5283e94a4fc788f9fb4bc3f7a",
+    "semantic_hash": "c11e35c5283e94a4fc788f9fb4bc3f7a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/crm/opportunities/opportunities-board.tsx": {
+    "mtime": 1784966436.7279086,
+    "ast_hash": "6b1ea07f37b4eb348e625b8c6cace169",
+    "semantic_hash": "6b1ea07f37b4eb348e625b8c6cace169"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/crm/opportunities/page.tsx": {
+    "mtime": 1784430914.6278675,
+    "ast_hash": "8945fbe49faeea5336b27e10d9fd290d",
+    "semantic_hash": "8945fbe49faeea5336b27e10d9fd290d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/crm/people/people-table.tsx": {
+    "mtime": 1785920544.4366179,
+    "ast_hash": "fac1468d396b2aaf7c64bd928593c25b",
+    "semantic_hash": "fac1468d396b2aaf7c64bd928593c25b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/crm/people/page.tsx": {
+    "mtime": 1784430914.628144,
+    "ast_hash": "e8cf39cb855ee331093b512690eb6c6e",
+    "semantic_hash": "e8cf39cb855ee331093b512690eb6c6e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/crm/companies/companies-table.tsx": {
+    "mtime": 1785920544.4363174,
+    "ast_hash": "b69293883238a2b064ec19ff05cbb472",
+    "semantic_hash": "b69293883238a2b064ec19ff05cbb472"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/crm/companies/page.tsx": {
+    "mtime": 1784430914.6274257,
+    "ast_hash": "fa0be9f1fafbe3db0fbfcdb1e3da7a3e",
+    "semantic_hash": "fa0be9f1fafbe3db0fbfcdb1e3da7a3e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/charts/charts-content.tsx": {
+    "mtime": 1784260681.5059335,
+    "ast_hash": "f5889344d6e2d2b6c575f946accddfe1",
+    "semantic_hash": "f5889344d6e2d2b6c575f946accddfe1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/charts/layout.tsx": {
+    "mtime": 1784430914.6269684,
+    "ast_hash": "530563d5483192a0575b16dddf1e028f",
+    "semantic_hash": "530563d5483192a0575b16dddf1e028f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/charts/page.tsx": {
+    "mtime": 1784260681.5060828,
+    "ast_hash": "c970eeac9eeb15b8dac9b5f5f27d7ea0",
+    "semantic_hash": "c970eeac9eeb15b8dac9b5f5f27d7ea0"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/departments/page.tsx": {
+    "mtime": 1784430914.6286337,
+    "ast_hash": "6405322be70b8361ac81f50cc33bb3d6",
+    "semantic_hash": "6405322be70b8361ac81f50cc33bb3d6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/departments/departments-table.tsx": {
+    "mtime": 1785920544.4369287,
+    "ast_hash": "5e27519282dc2da2e3f55e3dc8b1b4cf",
+    "semantic_hash": "5e27519282dc2da2e3f55e3dc8b1b4cf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/dashboard/layout.tsx": {
+    "mtime": 1784430914.628359,
+    "ast_hash": "30dbf617f71965610062a641e90785e4",
+    "semantic_hash": "30dbf617f71965610062a641e90785e4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/dashboard/page.tsx": {
+    "mtime": 1786001123.8690863,
+    "ast_hash": "cc09757e314860576581edf58367b15b",
+    "semantic_hash": "cc09757e314860576581edf58367b15b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/regions/regions-table.tsx": {
+    "mtime": 1785920544.4395702,
+    "ast_hash": "b536d120d9efedca821c49cdef3a5450",
+    "semantic_hash": "b536d120d9efedca821c49cdef3a5450"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/regions/page.tsx": {
+    "mtime": 1784430914.6324046,
+    "ast_hash": "7814346311e48276434e5118de5fd560",
+    "semantic_hash": "7814346311e48276434e5118de5fd560"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/currencies/currencies-table.tsx": {
+    "mtime": 1785920544.4390328,
+    "ast_hash": "8c1d706b9a78f2a9b6df2a7af775d488",
+    "semantic_hash": "8c1d706b9a78f2a9b6df2a7af775d488"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/currencies/page.tsx": {
+    "mtime": 1784430914.6310601,
+    "ast_hash": "722d73ebc1d8b1dd4afdc35ea9faf8d3",
+    "semantic_hash": "722d73ebc1d8b1dd4afdc35ea9faf8d3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/languages/languages-table.tsx": {
+    "mtime": 1785920544.4393032,
+    "ast_hash": "82dad05aa271080493e2052161b2dd73",
+    "semantic_hash": "82dad05aa271080493e2052161b2dd73"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/languages/page.tsx": {
+    "mtime": 1784430914.6313877,
+    "ast_hash": "be6bb064c0d963faa98aebb05818e41d",
+    "semantic_hash": "be6bb064c0d963faa98aebb05818e41d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/cities/cities-table.tsx": {
+    "mtime": 1785920544.4383729,
+    "ast_hash": "2dc183f8a4cac2f7496ef0b323c6c139",
+    "semantic_hash": "2dc183f8a4cac2f7496ef0b323c6c139"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/cities/page.tsx": {
+    "mtime": 1784430914.6300561,
+    "ast_hash": "c1312cb58d4e08d3dbc228acaa014bc4",
+    "semantic_hash": "c1312cb58d4e08d3dbc228acaa014bc4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/countries/countries-table.tsx": {
+    "mtime": 1785920544.438734,
+    "ast_hash": "53c361235c2701c57e27051693906435",
+    "semantic_hash": "53c361235c2701c57e27051693906435"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/system/countries/page.tsx": {
+    "mtime": 1784430914.6306322,
+    "ast_hash": "a78fb1461c30de26875a66aca92af371",
+    "semantic_hash": "a78fb1461c30de26875a66aca92af371"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/components/layout.tsx": {
+    "mtime": 1784430914.6271875,
+    "ast_hash": "3c10b7834040038021015a8915055369",
+    "semantic_hash": "3c10b7834040038021015a8915055369"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/components/page.tsx": {
+    "mtime": 1784260681.5062656,
+    "ast_hash": "4928399930ffcebd48eb0e4bc6b135ef",
+    "semantic_hash": "4928399930ffcebd48eb0e4bc6b135ef"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/steps/page.tsx": {
+    "mtime": 1785331367.6383,
+    "ast_hash": "2ea65022099913b3e8011db3187c2708",
+    "semantic_hash": "2ea65022099913b3e8011db3187c2708"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/support/layout.tsx": {
+    "mtime": 1784804596.4727118,
+    "ast_hash": "863b0d14923c8d30a68cbf703ddc203c",
+    "semantic_hash": "863b0d14923c8d30a68cbf703ddc203c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/support/page.tsx": {
+    "mtime": 1785472366.7387176,
+    "ast_hash": "85526807847fd04851804a573b04c7c9",
+    "semantic_hash": "85526807847fd04851804a573b04c7c9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/markets/markets-table.tsx": {
+    "mtime": 1785920903.1435027,
+    "ast_hash": "9b06a911741b854e81081d2890b2d9ab",
+    "semantic_hash": "9b06a911741b854e81081d2890b2d9ab"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/markets/page.tsx": {
+    "mtime": 1784430914.6293933,
+    "ast_hash": "435c20a2e60b27ac6b37c2e1e4049945",
+    "semantic_hash": "435c20a2e60b27ac6b37c2e1e4049945"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/users/users-table.tsx": {
+    "mtime": 1785146511.0531223,
+    "ast_hash": "ac760ad55c898f5c57828aa1d2283f4f",
+    "semantic_hash": "ac760ad55c898f5c57828aa1d2283f4f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/users/page.tsx": {
+    "mtime": 1784430914.6327093,
+    "ast_hash": "8beeafdd3e4e0355ffd5b1b33bec10cf",
+    "semantic_hash": "8beeafdd3e4e0355ffd5b1b33bec10cf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/users/users-view.tsx": {
+    "mtime": 1785920544.4398186,
+    "ast_hash": "08a9c9c7e7b85ed5bfb0a8994573b64b",
+    "semantic_hash": "08a9c9c7e7b85ed5bfb0a8994573b64b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/branches/branches-table.tsx": {
+    "mtime": 1785920544.435575,
+    "ast_hash": "dce40583a874badc9fa939cc2f2a7e78",
+    "semantic_hash": "dce40583a874badc9fa939cc2f2a7e78"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/branches/page.tsx": {
+    "mtime": 1784430914.6264954,
+    "ast_hash": "e9265a8e6e88d5d16a227c6dc42c3827",
+    "semantic_hash": "e9265a8e6e88d5d16a227c6dc42c3827"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/notifications/notifications-view.tsx": {
+    "mtime": 1786375177.9704046,
+    "ast_hash": "496c8dc533be4edcca7f0b5235c75ea0",
+    "semantic_hash": "496c8dc533be4edcca7f0b5235c75ea0"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/notifications/layout.tsx": {
+    "mtime": 1786375177.9703047,
+    "ast_hash": "b001f461ef95d3956936e646828a0450",
+    "semantic_hash": "b001f461ef95d3956936e646828a0450"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/notifications/page.tsx": {
+    "mtime": 1786375177.9704924,
+    "ast_hash": "625f5f111dd524a524876d43b1c4aefd",
+    "semantic_hash": "625f5f111dd524a524876d43b1c4aefd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/register-business/layout.tsx": {
+    "mtime": 1786377116.6475353,
+    "ast_hash": "97ffb43e28c99106e258e4775cef9d6e",
+    "semantic_hash": "97ffb43e28c99106e258e4775cef9d6e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/register-business/page.tsx": {
+    "mtime": 1786377116.6476862,
+    "ast_hash": "47d75e86a5606f94b27ab9fc335e38d7",
+    "semantic_hash": "47d75e86a5606f94b27ab9fc335e38d7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/employees/employees-table.tsx": {
+    "mtime": 1785920544.4372194,
+    "ast_hash": "6c359cfac17e0ed832c822665c8376eb",
+    "semantic_hash": "6c359cfac17e0ed832c822665c8376eb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/employees/page.tsx": {
+    "mtime": 1784430914.6288662,
+    "ast_hash": "f35ebce592866f25e7a8293fbe794fca",
+    "semantic_hash": "f35ebce592866f25e7a8293fbe794fca"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/data-table/layout.tsx": {
+    "mtime": 1785081529.4732728,
+    "ast_hash": "a087b44e7c24bb94ce3e39691d513278",
+    "semantic_hash": "a087b44e7c24bb94ce3e39691d513278"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(app)/data-table/page.tsx": {
+    "mtime": 1785081529.4737043,
+    "ast_hash": "96815aeb8f4c8bb6cd44349761ef8ca4",
+    "semantic_hash": "96815aeb8f4c8bb6cd44349761ef8ca4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/layout.tsx": {
+    "mtime": 1786376298.2262897,
+    "ast_hash": "77fc76d91aa9a986a5fe506c07780c72",
+    "semantic_hash": "77fc76d91aa9a986a5fe506c07780c72"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/page.tsx": {
+    "mtime": 1784262879.738991,
+    "ast_hash": "ea56d067858c9345b5a41915f7bb274d",
+    "semantic_hash": "ea56d067858c9345b5a41915f7bb274d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/verify/page.tsx": {
+    "mtime": 1785301669.271204,
+    "ast_hash": "d4df2ddcb5d073442b77aca384b211f4",
+    "semantic_hash": "d4df2ddcb5d073442b77aca384b211f4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/signup/page.tsx": {
+    "mtime": 1786376298.2268577,
+    "ast_hash": "459ec5a46c4e6c3c8424261c5143ee84",
+    "semantic_hash": "459ec5a46c4e6c3c8424261c5143ee84"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/signin/page.tsx": {
+    "mtime": 1786376298.2265866,
+    "ast_hash": "5ece8d1b07304ea939f98e5cf0dfea68",
+    "semantic_hash": "5ece8d1b07304ea939f98e5cf0dfea68"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/forgot-password/page.tsx": {
+    "mtime": 1785472366.741555,
+    "ast_hash": "6ea65a2965fe5c95d24e4ac3383b41cd",
+    "semantic_hash": "6ea65a2965fe5c95d24e4ac3383b41cd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/reset-password/page.tsx": {
+    "mtime": 1785490782.3928428,
+    "ast_hash": "8186ceb3520a5d9adf1252da887c1220",
+    "semantic_hash": "8186ceb3520a5d9adf1252da887c1220"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/signup-split/page.tsx": {
+    "mtime": 1786376298.226727,
+    "ast_hash": "17bce761112c8564e56d2e6242b3041e",
+    "semantic_hash": "17bce761112c8564e56d2e6242b3041e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/auth/signin-split/page.tsx": {
+    "mtime": 1786376298.226449,
+    "ast_hash": "1a440217de06c89d5945b246316e622b",
+    "semantic_hash": "1a440217de06c89d5945b246316e622b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/layout.tsx": {
+    "mtime": 1785336699.6271203,
+    "ast_hash": "62c25702078250e5841a810d4c068d6e",
+    "semantic_hash": "62c25702078250e5841a810d4c068d6e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/page.tsx": {
+    "mtime": 1786375177.9724383,
+    "ast_hash": "327e015d17fddc7b1dd6c5eb73ab750d",
+    "semantic_hash": "327e015d17fddc7b1dd6c5eb73ab750d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/blocks/page.tsx": {
+    "mtime": 1786375177.9717846,
+    "ast_hash": "bbc3ff013e1760163490dfa97c3fd7c6",
+    "semantic_hash": "bbc3ff013e1760163490dfa97c3fd7c6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/configuration/page.tsx": {
+    "mtime": 1786362477.7833378,
+    "ast_hash": "2dfbb7e7a2bc1f4f0a73e3bf05b13cd7",
+    "semantic_hash": "2dfbb7e7a2bc1f4f0a73e3bf05b13cd7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/calendar/page.tsx": {
+    "mtime": 1785083319.2326584,
+    "ast_hash": "74e32ea582fbea1070f9445c7f4172d3",
+    "semantic_hash": "74e32ea582fbea1070f9445c7f4172d3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/chat/page.tsx": {
+    "mtime": 1784966436.731545,
+    "ast_hash": "f805b05190cea359a7010c5caad89d60",
+    "semantic_hash": "f805b05190cea359a7010c5caad89d60"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/changelog/changelog-view.tsx": {
+    "mtime": 1785083631.8433125,
+    "ast_hash": "a9235e11aedcee5d6c18c37b9e8b71ba",
+    "semantic_hash": "a9235e11aedcee5d6c18c37b9e8b71ba"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/changelog/page.tsx": {
+    "mtime": 1786000465.2162251,
+    "ast_hash": "5a11a2ef3b14d0f66bcaf465b4ab46dc",
+    "semantic_hash": "5a11a2ef3b14d0f66bcaf465b4ab46dc"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/auth/page.tsx": {
+    "mtime": 1786005343.8860114,
+    "ast_hash": "a4b679c85ba1e62eb26e1d1e74a683cf",
+    "semantic_hash": "a4b679c85ba1e62eb26e1d1e74a683cf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/shadcn-ui/page.tsx": {
+    "mtime": 1784966436.7348278,
+    "ast_hash": "90e75b809ed79654dd03ea7282b9c6b7",
+    "semantic_hash": "90e75b809ed79654dd03ea7282b9c6b7"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/contributing/page.tsx": {
+    "mtime": 1785083319.2336946,
+    "ast_hash": "548cf5ec30c5871274682d134687612c",
+    "semantic_hash": "548cf5ec30c5871274682d134687612c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/layout/page.tsx": {
+    "mtime": 1786089710.5679803,
+    "ast_hash": "c9128465911db13f750bfc6dab2ab681",
+    "semantic_hash": "c9128465911db13f750bfc6dab2ab681"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/ai-agents/page.tsx": {
+    "mtime": 1786358649.6110573,
+    "ast_hash": "0df5107cfb47e3ec3365f79e27314a2b",
+    "semantic_hash": "0df5107cfb47e3ec3365f79e27314a2b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/navigation/page.tsx": {
+    "mtime": 1786089710.5684743,
+    "ast_hash": "ae0dc445fccac4c9635bbe0690122595",
+    "semantic_hash": "ae0dc445fccac4c9635bbe0690122595"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/charts/page.tsx": {
+    "mtime": 1786370775.273464,
+    "ast_hash": "0b6cde0d4daf6d6d2aa5e4b256ea50f0",
+    "semantic_hash": "0b6cde0d4daf6d6d2aa5e4b256ea50f0"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/form-layout/page.tsx": {
+    "mtime": 1786093098.7174048,
+    "ast_hash": "c0143016607893eec1090974e19bbd54",
+    "semantic_hash": "c0143016607893eec1090974e19bbd54"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/html/page.tsx": {
+    "mtime": 1786376794.4629464,
+    "ast_hash": "963de6f7d62a46fba168b8a6e500863a",
+    "semantic_hash": "963de6f7d62a46fba168b8a6e500863a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/installation/page.tsx": {
+    "mtime": 1786375177.972288,
+    "ast_hash": "aa14143e968605f27031aaf062141bf4",
+    "semantic_hash": "aa14143e968605f27031aaf062141bf4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/layout.tsx": {
+    "mtime": 1784966436.7318974,
+    "ast_hash": "a0b55215a11f4b549534316ce1ce4ede",
+    "semantic_hash": "a0b55215a11f4b549534316ce1ce4ede"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/registry.ts": {
+    "mtime": 1785335281.5549152,
+    "ast_hash": "3fbf9aca0e307518e64b678806f96187",
+    "semantic_hash": "3fbf9aca0e307518e64b678806f96187"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/page.tsx": {
+    "mtime": 1785336388.5908835,
+    "ast_hash": "d34731e19cd924bfd731cc6f8d44ca7f",
+    "semantic_hash": "d34731e19cd924bfd731cc6f8d44ca7f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/component-doc.tsx": {
+    "mtime": 1785310295.7151241,
+    "ast_hash": "e0c1a0d5dcd6874f7ffc391a0c367cd3",
+    "semantic_hash": "e0c1a0d5dcd6874f7ffc391a0c367cd3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/tabs/page.tsx": {
+    "mtime": 1785310295.720201,
+    "ast_hash": "e5e70b58220f59b280a5e6da7b5fd11d",
+    "semantic_hash": "e5e70b58220f59b280a5e6da7b5fd11d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/form/page.tsx": {
+    "mtime": 1785336699.6259446,
+    "ast_hash": "3fd7f706587cd26744dcd9b15b02c481",
+    "semantic_hash": "3fd7f706587cd26744dcd9b15b02c481"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/input-otp/page.tsx": {
+    "mtime": 1785311467.383859,
+    "ast_hash": "d50b34be746f70668dffa2570cd7eeb2",
+    "semantic_hash": "d50b34be746f70668dffa2570cd7eeb2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/calendar/page.tsx": {
+    "mtime": 1785312410.1606255,
+    "ast_hash": "8cc19495c7f1bded991d65e0b28328af",
+    "semantic_hash": "8cc19495c7f1bded991d65e0b28328af"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/progress/page.tsx": {
+    "mtime": 1785312410.161814,
+    "ast_hash": "1f59fffb932dac17a51724eb25bf8b35",
+    "semantic_hash": "1f59fffb932dac17a51724eb25bf8b35"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/alert-dialog/page.tsx": {
+    "mtime": 1785311030.032306,
+    "ast_hash": "b076d51d8dd43fdd1b19f94f0ecb0fc0",
+    "semantic_hash": "b076d51d8dd43fdd1b19f94f0ecb0fc0"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/alert/page.tsx": {
+    "mtime": 1785311030.0326116,
+    "ast_hash": "6baede4aa03d6b43824a2b5ffee655bb",
+    "semantic_hash": "6baede4aa03d6b43824a2b5ffee655bb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/accordion/page.tsx": {
+    "mtime": 1785336699.6252847,
+    "ast_hash": "80a2d3094941827d7c2e991f08af6818",
+    "semantic_hash": "80a2d3094941827d7c2e991f08af6818"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/skeleton/page.tsx": {
+    "mtime": 1785310295.7177334,
+    "ast_hash": "1a39db3131c46e8f90910b5009a532d2",
+    "semantic_hash": "1a39db3131c46e8f90910b5009a532d2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/separator/page.tsx": {
+    "mtime": 1785310295.7166193,
+    "ast_hash": "62b705d2d1cc3b33885cf14b38a071a1",
+    "semantic_hash": "62b705d2d1cc3b33885cf14b38a071a1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/hover-card/page.tsx": {
+    "mtime": 1785336699.6261518,
+    "ast_hash": "58af79b09c5ce6f5a0a901ec7d15e22f",
+    "semantic_hash": "58af79b09c5ce6f5a0a901ec7d15e22f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/label/page.tsx": {
+    "mtime": 1785310295.7157166,
+    "ast_hash": "11bb9af3a58af03263322ab74a621927",
+    "semantic_hash": "11bb9af3a58af03263322ab74a621927"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/slider/page.tsx": {
+    "mtime": 1785311467.3851151,
+    "ast_hash": "6b25d18e62ce0a212fec1175f8eb6b39",
+    "semantic_hash": "6b25d18e62ce0a212fec1175f8eb6b39"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/toggle-group/page.tsx": {
+    "mtime": 1785311467.3855815,
+    "ast_hash": "9bdc197e3b75e49f79a9578f211fea1b",
+    "semantic_hash": "9bdc197e3b75e49f79a9578f211fea1b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/toggle/page.tsx": {
+    "mtime": 1785311467.3857875,
+    "ast_hash": "7232d52319568de0fb52eabe22fe7a16",
+    "semantic_hash": "7232d52319568de0fb52eabe22fe7a16"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/popover/page.tsx": {
+    "mtime": 1785311030.0334759,
+    "ast_hash": "eff09ac83fcf7c0a0a2e19d690c50ab4",
+    "semantic_hash": "eff09ac83fcf7c0a0a2e19d690c50ab4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/sonner/page.tsx": {
+    "mtime": 1785336699.6264849,
+    "ast_hash": "1dd8749e585dfe4b05e0f5da79e87a70",
+    "semantic_hash": "1dd8749e585dfe4b05e0f5da79e87a70"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/textarea/page.tsx": {
+    "mtime": 1785311467.3853514,
+    "ast_hash": "4ca3ed61e9f8626bbcdeaa9c5629445e",
+    "semantic_hash": "4ca3ed61e9f8626bbcdeaa9c5629445e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/scroll-area/page.tsx": {
+    "mtime": 1785312410.1628163,
+    "ast_hash": "eef62502d45b4d99d1fe61a42db28d0d",
+    "semantic_hash": "eef62502d45b4d99d1fe61a42db28d0d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/collapsible/page.tsx": {
+    "mtime": 1785311030.032913,
+    "ast_hash": "8792b3281570a0947612123491b1a81b",
+    "semantic_hash": "8792b3281570a0947612123491b1a81b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/aspect-ratio/page.tsx": {
+    "mtime": 1785312410.159955,
+    "ast_hash": "e562031d9fb2e0ede9291bc14f1a946d",
+    "semantic_hash": "e562031d9fb2e0ede9291bc14f1a946d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/switch/page.tsx": {
+    "mtime": 1785310295.7190652,
+    "ast_hash": "b1a504493f9b3ecc97d940ebba88605c",
+    "semantic_hash": "b1a504493f9b3ecc97d940ebba88605c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/command/page.tsx": {
+    "mtime": 1785312410.1609976,
+    "ast_hash": "dd8cfbda2864f368dce31ee25ccf13dd",
+    "semantic_hash": "dd8cfbda2864f368dce31ee25ccf13dd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/radio-group/page.tsx": {
+    "mtime": 1785311467.3843486,
+    "ast_hash": "6351d38667a3058369f56e387b048c98",
+    "semantic_hash": "6351d38667a3058369f56e387b048c98"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/breadcrumb/page.tsx": {
+    "mtime": 1785336699.6256607,
+    "ast_hash": "fd8647ef80eee25be0b4fe3d2a4c9621",
+    "semantic_hash": "fd8647ef80eee25be0b4fe3d2a4c9621"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/components/sheet/page.tsx": {
+    "mtime": 1785311030.0340633,
+    "ast_hash": "657845c1845d58e60ec9151993979e62",
+    "semantic_hash": "657845c1845d58e60ec9151993979e62"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/theming/page.tsx": {
+    "mtime": 1786373666.6698825,
+    "ast_hash": "6a7996adce623244be874329574beda2",
+    "semantic_hash": "6a7996adce623244be874329574beda2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/steps/page.tsx": {
+    "mtime": 1785336699.628266,
+    "ast_hash": "17838d987436d233f30bce00aa2172e3",
+    "semantic_hash": "17838d987436d233f30bce00aa2172e3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/support/page.tsx": {
+    "mtime": 1784966436.7353773,
+    "ast_hash": "92f690e8a8f6f678616602cf372c7167",
+    "semantic_hash": "92f690e8a8f6f678616602cf372c7167"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/sponsor/page.tsx": {
+    "mtime": 1786362803.779482,
+    "ast_hash": "edc5d16d59dcdf82b684f5ffe8bcda69",
+    "semantic_hash": "edc5d16d59dcdf82b684f5ffe8bcda69"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/templates/page.tsx": {
+    "mtime": 1786091106.913968,
+    "ast_hash": "e026abd67be173edd79bcbc661a4d091",
+    "semantic_hash": "e026abd67be173edd79bcbc661a4d091"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/swapping/page.tsx": {
+    "mtime": 1786376794.4633431,
+    "ast_hash": "ae85dbb667810ea58e2bdea259550fc4",
+    "semantic_hash": "ae85dbb667810ea58e2bdea259550fc4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/typeset/page.tsx": {
+    "mtime": 1785336699.6285205,
+    "ast_hash": "181bc0dad5e046a025d069ee114d2c3e",
+    "semantic_hash": "181bc0dad5e046a025d069ee114d2c3e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/free-and-pro/page.tsx": {
+    "mtime": 1786375177.9721344,
+    "ast_hash": "6ae1ec2c89d09e95eafc776695c23538",
+    "semantic_hash": "6ae1ec2c89d09e95eafc776695c23538"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/frameworks/page.tsx": {
+    "mtime": 1786376794.4627402,
+    "ast_hash": "b78994e5a704867ddea430d15464d40c",
+    "semantic_hash": "b78994e5a704867ddea430d15464d40c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/laravel/page.tsx": {
+    "mtime": 1786376794.463159,
+    "ast_hash": "9e030027fc3d79a79e24600f1af855a3",
+    "semantic_hash": "9e030027fc3d79a79e24600f1af855a3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/docs/data-table/page.tsx": {
+    "mtime": 1786103310.2174392,
+    "ast_hash": "f1d9195465126cacfe6d6fa49998fcfb",
+    "semantic_hash": "f1d9195465126cacfe6d6fa49998fcfb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/nav-config.ts": {
+    "mtime": 1786376298.2253094,
+    "ast_hash": "b460bb03de13112724e43f45bf5c5094",
+    "semantic_hash": "b460bb03de13112724e43f45bf5c5094"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/global-search.tsx": {
+    "mtime": 1785320840.3765442,
+    "ast_hash": "3e100031b91b11a7c965cbcad29646fd",
+    "semantic_hash": "3e100031b91b11a7c965cbcad29646fd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/auth.tsx": {
+    "mtime": 1785472366.7393682,
+    "ast_hash": "aac0c9fcbc2533032a9e13a284d0d730",
+    "semantic_hash": "aac0c9fcbc2533032a9e13a284d0d730"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/use-notifications.ts": {
+    "mtime": 1786375177.9716542,
+    "ast_hash": "06137a4c4fb0276d14fa7f1a6ef26e73",
+    "semantic_hash": "06137a4c4fb0276d14fa7f1a6ef26e73"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/quick-actions.tsx": {
+    "mtime": 1785320840.3771214,
+    "ast_hash": "7c3e701809c19561515152cf848fba94",
+    "semantic_hash": "7c3e701809c19561515152cf848fba94"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/route-meta.ts": {
+    "mtime": 1786377116.6478684,
+    "ast_hash": "043df7e67c59241da5e4fb17ff19f20f",
+    "semantic_hash": "043df7e67c59241da5e4fb17ff19f20f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/wordmark.tsx": {
+    "mtime": 1784966436.7296653,
+    "ast_hash": "263318d2d57533b28854f252cec09352",
+    "semantic_hash": "263318d2d57533b28854f252cec09352"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/notification-list.tsx": {
+    "mtime": 1786375177.9711518,
+    "ast_hash": "f3fafde5ef8168d598e1ef8eabb80ac0",
+    "semantic_hash": "f3fafde5ef8168d598e1ef8eabb80ac0"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/auth-showcase.tsx": {
+    "mtime": 1786376298.2248378,
+    "ast_hash": "0ffb3fcebb4730b25fea71780620ec76",
+    "semantic_hash": "0ffb3fcebb4730b25fea71780620ec76"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/use-avatar.ts": {
+    "mtime": 1786377537.2343822,
+    "ast_hash": "42cff364e4691bad3d43983586da9051",
+    "semantic_hash": "42cff364e4691bad3d43983586da9051"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/open-tabs.tsx": {
+    "mtime": 1786376298.2256227,
+    "ast_hash": "68ad8768d1f3708457161c0880b0f3a2",
+    "semantic_hash": "68ad8768d1f3708457161c0880b0f3a2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/error-screen.tsx": {
+    "mtime": 1786375177.970815,
+    "ast_hash": "33d690ea07eaf291a229833890fad0b2",
+    "semantic_hash": "33d690ea07eaf291a229833890fad0b2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/site-footer.tsx": {
+    "mtime": 1786005343.8854802,
+    "ast_hash": "dfd54be7dc05960d225af43e1634db5c",
+    "semantic_hash": "dfd54be7dc05960d225af43e1634db5c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/breadcrumbs.tsx": {
+    "mtime": 1784621152.5941148,
+    "ast_hash": "9efa9aa7223df32f012d42ac2b72faa8",
+    "semantic_hash": "9efa9aa7223df32f012d42ac2b72faa8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/showcase.tsx": {
+    "mtime": 1784260681.5140886,
+    "ast_hash": "cc8cacd870efb638d9a0fb6d991253f4",
+    "semantic_hash": "cc8cacd870efb638d9a0fb6d991253f4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/not-found-actions.tsx": {
+    "mtime": 1785296031.2548392,
+    "ast_hash": "58ffd8468a154669c4b5b8a83c4ad730",
+    "semantic_hash": "58ffd8468a154669c4b5b8a83c4ad730"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/appearance-picker.tsx": {
+    "mtime": 1786376298.2246003,
+    "ast_hash": "1bde3b5b05681b978c815a07e7caeda8",
+    "semantic_hash": "1bde3b5b05681b978c815a07e7caeda8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/auth-signup.tsx": {
+    "mtime": 1786376298.2251313,
+    "ast_hash": "e563fcfe8e83aea0bcb9f90e28cfa556",
+    "semantic_hash": "e563fcfe8e83aea0bcb9f90e28cfa556"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/app-sidebar.tsx": {
+    "mtime": 1786376298.2244377,
+    "ast_hash": "e5ed6b767d5b3ed973732f80c8801b3e",
+    "semantic_hash": "e5ed6b767d5b3ed973732f80c8801b3e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/theme-script.ts": {
+    "mtime": 1785296031.2551982,
+    "ast_hash": "e008ef7b58ada3854558c41f96870f96",
+    "semantic_hash": "e008ef7b58ada3854558c41f96870f96"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/workspace-provider.tsx": {
+    "mtime": 1786072256.8519936,
+    "ast_hash": "e62b42ad292d749600de46c0a2d79d14",
+    "semantic_hash": "e62b42ad292d749600de46c0a2d79d14"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/user-menu.tsx": {
+    "mtime": 1786377537.2345555,
+    "ast_hash": "0863a6bb3c783e1eea277c73b6dfdeda",
+    "semantic_hash": "0863a6bb3c783e1eea277c73b6dfdeda"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/set-page-title.tsx": {
+    "mtime": 1784260681.513958,
+    "ast_hash": "47e6d2b321aac52580f6ba0a3be89070",
+    "semantic_hash": "47e6d2b321aac52580f6ba0a3be89070"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/notifications-bell.tsx": {
+    "mtime": 1786376298.2254493,
+    "ast_hash": "1c7eb20133b47e5541c190f51a1179a5",
+    "semantic_hash": "1c7eb20133b47e5541c190f51a1179a5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/chrome-config.tsx": {
+    "mtime": 1785320840.3758307,
+    "ast_hash": "2bcac462c6d954c1a2a3c1c0057148b8",
+    "semantic_hash": "2bcac462c6d954c1a2a3c1c0057148b8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/logo.tsx": {
+    "mtime": 1784966436.728697,
+    "ast_hash": "28d883a08dfc0659e1f71817d0301a9f",
+    "semantic_hash": "28d883a08dfc0659e1f71817d0301a9f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/auth-header.tsx": {
+    "mtime": 1785296031.2540803,
+    "ast_hash": "f20896404507b34710f7e23668810072",
+    "semantic_hash": "f20896404507b34710f7e23668810072"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/table-skeleton.tsx": {
+    "mtime": 1785146511.0533955,
+    "ast_hash": "a6aad2dd182a6bc5f734e3f0c5412942",
+    "semantic_hash": "a6aad2dd182a6bc5f734e3f0c5412942"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/appearance.tsx": {
+    "mtime": 1786376298.224718,
+    "ast_hash": "855f542014d25c7f284c3a857f5c8f26",
+    "semantic_hash": "855f542014d25c7f284c3a857f5c8f26"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/auth-provider.tsx": {
+    "mtime": 1785318836.3509111,
+    "ast_hash": "92ee31253a329cf373aef18c6a4a10bf",
+    "semantic_hash": "92ee31253a329cf373aef18c6a4a10bf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/brand.tsx": {
+    "mtime": 1784997109.1879165,
+    "ast_hash": "56a1c47e1636742d2c3fcfc734846c34",
+    "semantic_hash": "56a1c47e1636742d2c3fcfc734846c34"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/top-bar.tsx": {
+    "mtime": 1786376892.3724632,
+    "ast_hash": "4d185d5fb2304a7bdcd75bdfed264ffe",
+    "semantic_hash": "4d185d5fb2304a7bdcd75bdfed264ffe"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/theme-toggle.tsx": {
+    "mtime": 1785296031.255343,
+    "ast_hash": "07986939c5a7d9060caeb93eecbdf48a",
+    "semantic_hash": "07986939c5a7d9060caeb93eecbdf48a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/stat-card.tsx": {
+    "mtime": 1784260681.5141778,
+    "ast_hash": "5f31e9372813ea0d3e8623716a8d3b25",
+    "semantic_hash": "5f31e9372813ea0d3e8623716a8d3b25"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/_components/auth-signin.tsx": {
+    "mtime": 1786376298.2249925,
+    "ast_hash": "d5f482614a42493411b3439231b91c01",
+    "semantic_hash": "d5f482614a42493411b3439231b91c01"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/errors/not-found/page.tsx": {
+    "mtime": 1786375177.973066,
+    "ast_hash": "6e498d1f84775594beff52cd636ffc9d",
+    "semantic_hash": "6e498d1f84775594beff52cd636ffc9d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/errors/unauthorized/page.tsx": {
+    "mtime": 1786375177.9733539,
+    "ast_hash": "48221558e32b26b3430769c1f8432eae",
+    "semantic_hash": "48221558e32b26b3430769c1f8432eae"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/errors/forbidden/page.tsx": {
+    "mtime": 1786375177.9727633,
+    "ast_hash": "151ca6ee62c87f56ef4606f303b2cbe3",
+    "semantic_hash": "151ca6ee62c87f56ef4606f303b2cbe3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/errors/maintenance/page.tsx": {
+    "mtime": 1786376298.2272053,
+    "ast_hash": "0485fb72f10be3a869150a436eb85216",
+    "semantic_hash": "0485fb72f10be3a869150a436eb85216"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/errors/server-error/page.tsx": {
+    "mtime": 1786375177.9732106,
+    "ast_hash": "05d4b9a72c2549c21acb7a82842110ff",
+    "semantic_hash": "05d4b9a72c2549c21acb7a82842110ff"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/onboarding/layout.tsx": {
+    "mtime": 1784966436.7363544,
+    "ast_hash": "1c460489890259ef914205f04e4fb410",
+    "semantic_hash": "1c460489890259ef914205f04e4fb410"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/onboarding/page.tsx": {
+    "mtime": 1784260681.521807,
+    "ast_hash": "206c15a99265952d24fbdb1a62813705",
+    "semantic_hash": "206c15a99265952d24fbdb1a62813705"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(legal)/layout.tsx": {
+    "mtime": 1786005343.8846085,
+    "ast_hash": "d3aed209f0f3937d74412c10799300e4",
+    "semantic_hash": "d3aed209f0f3937d74412c10799300e4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(legal)/privacy/page.tsx": {
+    "mtime": 1786005343.884933,
+    "ast_hash": "0e780eb9e3fd43255768047720179f1f",
+    "semantic_hash": "0e780eb9e3fd43255768047720179f1f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(legal)/terms/page.tsx": {
+    "mtime": 1786005343.8852355,
+    "ast_hash": "9c72f3185dba33b28bbf14f080b2ce40",
+    "semantic_hash": "9c72f3185dba33b28bbf14f080b2ce40"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(legal)/_components/legal.tsx": {
+    "mtime": 1786005343.884488,
+    "ast_hash": "3b2f63c27bd91922ab5dbc17aeec5481",
+    "semantic_hash": "3b2f63c27bd91922ab5dbc17aeec5481"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/app/(legal)/pricing/page.tsx": {
+    "mtime": 1786375177.9706628,
+    "ast_hash": "24324b9f2b8c0940ba3a5e569be5127c",
+    "semantic_hash": "24324b9f2b8c0940ba3a5e569be5127c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/doc.tsx": {
+    "mtime": 1785334532.3610308,
+    "ast_hash": "175ec792621edeb694a7f0ee1a72ee1f",
+    "semantic_hash": "175ec792621edeb694a7f0ee1a72ee1f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/tier-card.tsx": {
+    "mtime": 1786362803.7801018,
+    "ast_hash": "afa4ee0d69acef460e0f5286e0a5d2dc",
+    "semantic_hash": "afa4ee0d69acef460e0f5286e0a5d2dc"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/copy-button.tsx": {
+    "mtime": 1784794887.2099237,
+    "ast_hash": "f926379369b5b83a04e534b9dde8cf5e",
+    "semantic_hash": "f926379369b5b83a04e534b9dde8cf5e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/sponsor-banner.tsx": {
+    "mtime": 1785314897.9510808,
+    "ast_hash": "bac34ce682293b323bfc7af09aff067b",
+    "semantic_hash": "bac34ce682293b323bfc7af09aff067b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/template-block.tsx": {
+    "mtime": 1784797027.9891083,
+    "ast_hash": "7d8cb21c8b290758a428c2c2b66b6885",
+    "semantic_hash": "7d8cb21c8b290758a428c2c2b66b6885"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/pm-tabs.tsx": {
+    "mtime": 1786362477.7846904,
+    "ast_hash": "d0ba9787138406824e245740a4cdc0e8",
+    "semantic_hash": "d0ba9787138406824e245740a4cdc0e8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/sponsor-card.tsx": {
+    "mtime": 1785314897.9517736,
+    "ast_hash": "8b3e7800be4644f7bc6a5a53f6ae192c",
+    "semantic_hash": "8b3e7800be4644f7bc6a5a53f6ae192c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/code-tabs.tsx": {
+    "mtime": 1786362477.7839203,
+    "ast_hash": "c854e262610d8146be85aeca805d942a",
+    "semantic_hash": "c854e262610d8146be85aeca805d942a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/plan-matrix.tsx": {
+    "mtime": 1786375177.9739342,
+    "ast_hash": "c1ee52a25b5168d9b2646ea30e84eafd",
+    "semantic_hash": "c1ee52a25b5168d9b2646ea30e84eafd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/docs-shell.tsx": {
+    "mtime": 1786376794.4638007,
+    "ast_hash": "81f5d8355520160428aca718c69b73ce",
+    "semantic_hash": "81f5d8355520160428aca718c69b73ce"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/table-of-contents.tsx": {
+    "mtime": 1785314897.9532304,
+    "ast_hash": "bed8ca54f7e7e0db378d21f76031e987",
+    "semantic_hash": "bed8ca54f7e7e0db378d21f76031e987"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/framework-tabs.tsx": {
+    "mtime": 1786362477.7845237,
+    "ast_hash": "1ed09689c2ca77f1ffb96eafeafd1e08",
+    "semantic_hash": "1ed09689c2ca77f1ffb96eafeafd1e08"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/docs-search.tsx": {
+    "mtime": 1786376794.463538,
+    "ast_hash": "47a7ace523541eb42d047aa52e9d7a9f",
+    "semantic_hash": "47a7ace523541eb42d047aa52e9d7a9f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/aspect-ratio.tsx": {
+    "mtime": 1784260681.5238233,
+    "ast_hash": "c6d85ec0522899c5da67ffdae8b4f3ea",
+    "semantic_hash": "c6d85ec0522899c5da67ffdae8b4f3ea"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/alert-dialog.tsx": {
+    "mtime": 1784260681.5236342,
+    "ast_hash": "324ed23ae31556d9a729c0fc780b8ba8",
+    "semantic_hash": "324ed23ae31556d9a729c0fc780b8ba8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/tabs.tsx": {
+    "mtime": 1784260681.5283904,
+    "ast_hash": "3db2474e4c66b1e544bb514bf1024612",
+    "semantic_hash": "3db2474e4c66b1e544bb514bf1024612"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/card.tsx": {
+    "mtime": 1784260681.5249217,
+    "ast_hash": "5f465338c9c83716fd67bba76b9852d4",
+    "semantic_hash": "5f465338c9c83716fd67bba76b9852d4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/slider.tsx": {
+    "mtime": 1784260681.5279481,
+    "ast_hash": "310455a3b7405ba1001dc00b6bfbc6f8",
+    "semantic_hash": "310455a3b7405ba1001dc00b6bfbc6f8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/popover.tsx": {
+    "mtime": 1784260681.5265088,
+    "ast_hash": "6fc46ad5d685bb0df4429f32e53522e2",
+    "semantic_hash": "6fc46ad5d685bb0df4429f32e53522e2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/progress.tsx": {
+    "mtime": 1784260681.5266008,
+    "ast_hash": "ca99607c05ca0555bcb95eff552e64dc",
+    "semantic_hash": "ca99607c05ca0555bcb95eff552e64dc"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/input-otp.tsx": {
+    "mtime": 1784260681.526189,
+    "ast_hash": "b80b4c079f1092bb7a6b2707b3c45979",
+    "semantic_hash": "b80b4c079f1092bb7a6b2707b3c45979"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/hover-card.tsx": {
+    "mtime": 1784260681.5259652,
+    "ast_hash": "109abe175a5765fb53cdf1c1506d3c99",
+    "semantic_hash": "109abe175a5765fb53cdf1c1506d3c99"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/sheet.tsx": {
+    "mtime": 1784260681.5276082,
+    "ast_hash": "70f191fcbd262095ddd6afbcc8bbf99d",
+    "semantic_hash": "70f191fcbd262095ddd6afbcc8bbf99d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/scroll-area.tsx": {
+    "mtime": 1784260681.5268881,
+    "ast_hash": "8bf02de15eee0da6e5942ea2ff1c64c3",
+    "semantic_hash": "8bf02de15eee0da6e5942ea2ff1c64c3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/label.tsx": {
+    "mtime": 1784260681.526418,
+    "ast_hash": "e7e0c4ad98f3485ecd3c0ca516d0a8bf",
+    "semantic_hash": "e7e0c4ad98f3485ecd3c0ca516d0a8bf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/sonner.tsx": {
+    "mtime": 1784260681.5280669,
+    "ast_hash": "5dde0d04f3ecf6b5e812104aca12c546",
+    "semantic_hash": "5dde0d04f3ecf6b5e812104aca12c546"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/accordion.tsx": {
+    "mtime": 1784260681.523421,
+    "ast_hash": "ca7c6d2563cb840754f6af0ac52a62b8",
+    "semantic_hash": "ca7c6d2563cb840754f6af0ac52a62b8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/tooltip.tsx": {
+    "mtime": 1784260681.5289683,
+    "ast_hash": "c5acc9dbc05002c04a86b807f72f9817",
+    "semantic_hash": "c5acc9dbc05002c04a86b807f72f9817"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/alert.tsx": {
+    "mtime": 1784260681.523734,
+    "ast_hash": "f90e428654b2145ee1a80c66f46fdbef",
+    "semantic_hash": "f90e428654b2145ee1a80c66f46fdbef"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/switch.tsx": {
+    "mtime": 1784260681.5281992,
+    "ast_hash": "4c97d0833cc1f563ff893749a9a94154",
+    "semantic_hash": "4c97d0833cc1f563ff893749a9a94154"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/calendar.tsx": {
+    "mtime": 1784260681.5248306,
+    "ast_hash": "ff77c78f80e73bfde1e4420305dda6bf",
+    "semantic_hash": "ff77c78f80e73bfde1e4420305dda6bf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/breadcrumb.tsx": {
+    "mtime": 1784260681.5244603,
+    "ast_hash": "f745d4c268d7b95d591932f9ba6c87e2",
+    "semantic_hash": "f745d4c268d7b95d591932f9ba6c87e2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/radio-group.tsx": {
+    "mtime": 1784260681.5266945,
+    "ast_hash": "017a01d9f4021d142d6df7d5df502ac5",
+    "semantic_hash": "017a01d9f4021d142d6df7d5df502ac5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/command.tsx": {
+    "mtime": 1784260681.5253286,
+    "ast_hash": "0fb528fb269684974d66ed609036cadf",
+    "semantic_hash": "0fb528fb269684974d66ed609036cadf"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/toggle-group.tsx": {
+    "mtime": 1784260681.528735,
+    "ast_hash": "bc36423177245af73467d7842a49a29f",
+    "semantic_hash": "bc36423177245af73467d7842a49a29f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/avatar.tsx": {
+    "mtime": 1784260681.5239408,
+    "ast_hash": "c0136d9a1c07129863348811dcc037e0",
+    "semantic_hash": "c0136d9a1c07129863348811dcc037e0"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/dialog.tsx": {
+    "mtime": 1784260681.525556,
+    "ast_hash": "716542a167fb7bda2fea4df346c54075",
+    "semantic_hash": "716542a167fb7bda2fea4df346c54075"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/badge.tsx": {
+    "mtime": 1784260681.5243013,
+    "ast_hash": "8510911fff59be294d64dbfc67f5c710",
+    "semantic_hash": "8510911fff59be294d64dbfc67f5c710"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/table.tsx": {
+    "mtime": 1784260681.528293,
+    "ast_hash": "908dde6e20d6ca61ef44ff007e66311f",
+    "semantic_hash": "908dde6e20d6ca61ef44ff007e66311f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/separator.tsx": {
+    "mtime": 1784260681.5273714,
+    "ast_hash": "31309c8fad1e9a91db2a4bdfb4988b45",
+    "semantic_hash": "31309c8fad1e9a91db2a4bdfb4988b45"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/button.tsx": {
+    "mtime": 1784260681.5246108,
+    "ast_hash": "5eb5c23dfc552fe75b9beeffacede350",
+    "semantic_hash": "5eb5c23dfc552fe75b9beeffacede350"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/toggle.tsx": {
+    "mtime": 1784260681.5288508,
+    "ast_hash": "d21c665171abb398d823dc77bb10642d",
+    "semantic_hash": "d21c665171abb398d823dc77bb10642d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/checkbox.tsx": {
+    "mtime": 1784260681.5250301,
+    "ast_hash": "8ab728d8b37af0d62855c63521e6aa5e",
+    "semantic_hash": "8ab728d8b37af0d62855c63521e6aa5e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/collapsible.tsx": {
+    "mtime": 1784260681.5251234,
+    "ast_hash": "d3bc158594b1f19fd28d9868792d17f1",
+    "semantic_hash": "d3bc158594b1f19fd28d9868792d17f1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/dropdown-menu.tsx": {
+    "mtime": 1784260681.52571,
+    "ast_hash": "687ccb0d62020e2e0f9c1d894a825bd4",
+    "semantic_hash": "687ccb0d62020e2e0f9c1d894a825bd4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/select.tsx": {
+    "mtime": 1784260681.5271468,
+    "ast_hash": "8f59eda15860f917b57c8c427e6a6960",
+    "semantic_hash": "8f59eda15860f917b57c8c427e6a6960"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/textarea.tsx": {
+    "mtime": 1784260681.5286162,
+    "ast_hash": "b068d08e701aefd6216234a763e3a2ef",
+    "semantic_hash": "b068d08e701aefd6216234a763e3a2ef"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/input.tsx": {
+    "mtime": 1784260681.5263298,
+    "ast_hash": "186052fef4d6a678824a3ac70ec3bdec",
+    "semantic_hash": "186052fef4d6a678824a3ac70ec3bdec"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/skeleton.tsx": {
+    "mtime": 1784260681.5277162,
+    "ast_hash": "64033a08d89d382ad050d80cbb0cc98d",
+    "semantic_hash": "64033a08d89d382ad050d80cbb0cc98d"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/components/ui/form.tsx": {
+    "mtime": 1784260681.5258148,
+    "ast_hash": "2259336ac40c442981e4f95f6d5e3d99",
+    "semantic_hash": "2259336ac40c442981e4f95f6d5e3d99"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/demo-data.ts": {
+    "mtime": 1784260681.5297298,
+    "ast_hash": "76cca7637b2c5e560c578f2a8a290cf6",
+    "semantic_hash": "76cca7637b2c5e560c578f2a8a290cf6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/auth-demo.ts": {
+    "mtime": 1784260681.5292742,
+    "ast_hash": "96df2c5ff76674e653b4dc1c47e4d3fe",
+    "semantic_hash": "96df2c5ff76674e653b4dc1c47e4d3fe"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/app-config.ts": {
+    "mtime": 1786376892.3726397,
+    "ast_hash": "8b3a0f0bf23d26af2f47a6e7ae660ec6",
+    "semantic_hash": "8b3a0f0bf23d26af2f47a6e7ae660ec6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/use-refetch-on-active.ts": {
+    "mtime": 1785232655.761174,
+    "ast_hash": "68c982f47c8a154bf361cab19d668fc8",
+    "semantic_hash": "68c982f47c8a154bf361cab19d668fc8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/crm-data.ts": {
+    "mtime": 1784260681.5294948,
+    "ast_hash": "d0ce4e214e7b6049c0847fa3e5f105a9",
+    "semantic_hash": "d0ce4e214e7b6049c0847fa3e5f105a9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/snippets.ts": {
+    "mtime": 1786376794.4641871,
+    "ast_hash": "9efe5a1554c740d1f8ffacb757f72ed8",
+    "semantic_hash": "9efe5a1554c740d1f8ffacb757f72ed8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/plans.ts": {
+    "mtime": 1786375177.9742193,
+    "ast_hash": "688c5b53d02c9d7f00cda05674ffdd0f",
+    "semantic_hash": "688c5b53d02c9d7f00cda05674ffdd0f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/auth-state.ts": {
+    "mtime": 1785296031.2581618,
+    "ast_hash": "6fc51d460ee75fe941517bf82b0ab103",
+    "semantic_hash": "6fc51d460ee75fe941517bf82b0ab103"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/utils.ts": {
+    "mtime": 1784260681.5302236,
+    "ast_hash": "61a6ebe54fb6f09fe06b59c4883debd5",
+    "semantic_hash": "61a6ebe54fb6f09fe06b59c4883debd5"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/use-client-filter.ts": {
+    "mtime": 1785920903.1444173,
+    "ast_hash": "bde1c85d16005e7dcd53f6166d2aa5af",
+    "semantic_hash": "bde1c85d16005e7dcd53f6166d2aa5af"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/seo.ts": {
+    "mtime": 1786377116.6481512,
+    "ast_hash": "8d66f0cca964f20c7459c31a86968a9c",
+    "semantic_hash": "8d66f0cca964f20c7459c31a86968a9c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/mock-data.ts": {
+    "mtime": 1785920544.4412298,
+    "ast_hash": "6af5847fdffdbdf8d07737435942a56f",
+    "semantic_hash": "6af5847fdffdbdf8d07737435942a56f"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/auth/client.ts": {
+    "mtime": 1785318836.354219,
+    "ast_hash": "531cf8a99ac91a5a9b6c1b158acdeeb9",
+    "semantic_hash": "531cf8a99ac91a5a9b6c1b158acdeeb9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/api/workspaces.ts": {
+    "mtime": 1786375177.9741342,
+    "ast_hash": "d8d0fcd3e9498b3b6d420edce9eaf666",
+    "semantic_hash": "d8d0fcd3e9498b3b6d420edce9eaf666"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/api/notifications.ts": {
+    "mtime": 1786375177.9740229,
+    "ast_hash": "c7d28860deee48dc957da842b9222550",
+    "semantic_hash": "c7d28860deee48dc957da842b9222550"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/api/post-codes.ts": {
+    "mtime": 1785920544.4406118,
+    "ast_hash": "c33e45c75d0310c1de7208235ba80482",
+    "semantic_hash": "c33e45c75d0310c1de7208235ba80482"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/api/organizations.ts": {
+    "mtime": 1785232655.7608988,
+    "ast_hash": "1c75d657b3ec00a653a3706293b694b3",
+    "semantic_hash": "1c75d657b3ec00a653a3706293b694b3"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/api/organization.ts": {
+    "mtime": 1785842580.5965786,
+    "ast_hash": "43f7fff142810b652a423bea3050fa5c",
+    "semantic_hash": "43f7fff142810b652a423bea3050fa5c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/lib/api/users.ts": {
+    "mtime": 1785920544.4408624,
+    "ast_hash": "75034af1c31ce561cfd1bd7c96414bdb",
+    "semantic_hash": "75034af1c31ce561cfd1bd7c96414bdb"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/CODE_OF_CONDUCT.md": {
+    "mtime": 1784173077.8810713,
+    "ast_hash": "f6509b67ae651952f7d82b162635f447",
+    "semantic_hash": "f6509b67ae651952f7d82b162635f447"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/Enterprise_NextJS_React_Coding_Standards.md": {
+    "mtime": 1784260681.5038629,
+    "ast_hash": "1e75f66fb7370ee677eab8b5ea812fc8",
+    "semantic_hash": "1e75f66fb7370ee677eab8b5ea812fc8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/README.md": {
+    "mtime": 1786375177.9701204,
+    "ast_hash": "ae0bc4b31aaf1a03100f22721595abfa",
+    "semantic_hash": "ae0bc4b31aaf1a03100f22721595abfa"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/CONTRIBUTING.md": {
+    "mtime": 1786361826.2624927,
+    "ast_hash": "ff010cb79766acc4e4106b8983bd77fd",
+    "semantic_hash": "ff010cb79766acc4e4106b8983bd77fd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/AGENTS.md": {
+    "mtime": 1786379427.2629173,
+    "ast_hash": "a1372957a89fe9135037b6dba8be183e",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/CLAUDE.md": {
+    "mtime": 1784559625.06703,
+    "ast_hash": "5c27369b226fcf2be8a6cfe52224e767",
+    "semantic_hash": "5c27369b226fcf2be8a6cfe52224e767"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/SECURITY.md": {
+    "mtime": 1784173077.8815472,
+    "ast_hash": "c7911915205990949e435e8d1829e8c1",
+    "semantic_hash": "c7911915205990949e435e8d1829e8c1"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/pnpm-workspace.yaml": {
+    "mtime": 1786361679.5693226,
+    "ast_hash": "afcb70cb9cfb3538a16ca7938cb09d9c",
+    "semantic_hash": "afcb70cb9cfb3538a16ca7938cb09d9c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/docs/proposals/configurable-theme-roadmap.md": {
+    "mtime": 1786000465.2175462,
+    "ast_hash": "32981a2d0e394fb90293379abaef213e",
+    "semantic_hash": "32981a2d0e394fb90293379abaef213e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/AGENT.md": {
+    "mtime": 1786373798.0165951,
+    "ast_hash": "32dabddb636e6fd39ca7b49c34c5aedc",
+    "semantic_hash": "32dabddb636e6fd39ca7b49c34c5aedc"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/CHANGELOG.md": {
+    "mtime": 1786377537.2349284,
+    "ast_hash": "a3c72c64d3b56febf19879bb85d41263",
+    "semantic_hash": "a3c72c64d3b56febf19879bb85d41263"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/README.md": {
+    "mtime": 1786375177.9746437,
+    "ast_hash": "dc8834fa58565494879f7dafd3c69b9b",
+    "semantic_hash": "dc8834fa58565494879f7dafd3c69b9b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/CLAUDE.template.md": {
+    "mtime": 1784777967.2597144,
+    "ast_hash": "9d39df96b60f251cbcacfeb7931113e9",
+    "semantic_hash": "9d39df96b60f251cbcacfeb7931113e9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/ui/CLAUDE.md": {
+    "mtime": 1784559625.0673604,
+    "ast_hash": "33bf2a84cae9641a82c4d630fcde90e4",
+    "semantic_hash": "33bf2a84cae9641a82c4d630fcde90e4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/core/CHANGELOG.md": {
+    "mtime": 1786365986.0997274,
+    "ast_hash": "501103ab8b13d36b7f5fe258b8d97ce2",
+    "semantic_hash": "501103ab8b13d36b7f5fe258b8d97ce2"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/core/README.md": {
+    "mtime": 1786365986.0998604,
+    "ast_hash": "974678142f25f34f448f4fdb1089a976",
+    "semantic_hash": "974678142f25f34f448f4fdb1089a976"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/CHANGELOG.md": {
+    "mtime": 1786374212.8955977,
+    "ast_hash": "d4326a7d233fe96a43574be55cd65836",
+    "semantic_hash": "d4326a7d233fe96a43574be55cd65836"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/vue/README.md": {
+    "mtime": 1786374212.8957503,
+    "ast_hash": "92c896df50fbca03808a71ca23a3a0d8",
+    "semantic_hash": "92c896df50fbca03808a71ca23a3a0d8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/eslint-config/README.md": {
+    "mtime": 1784173077.9053786,
+    "ast_hash": "3f4915336e7c54df90f5b12b527b8b87",
+    "semantic_hash": "3f4915336e7c54df90f5b12b527b8b87"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/theme/CHANGELOG.md": {
+    "mtime": 1786376298.227347,
+    "ast_hash": "05fd3917077228b0b7353defe66598f4",
+    "semantic_hash": "05fd3917077228b0b7353defe66598f4"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/theme/README.md": {
+    "mtime": 1786376794.4644825,
+    "ast_hash": "2b282847ae995f2c6911079e792d3450",
+    "semantic_hash": "2b282847ae995f2c6911079e792d3450"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/FUNDING.yml": {
+    "mtime": 1786362803.7786913,
+    "ast_hash": "25c60647e02eeafd2165d11188c96401",
+    "semantic_hash": "25c60647e02eeafd2165d11188c96401"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/PULL_REQUEST_TEMPLATE.md": {
+    "mtime": 1784173077.8801627,
+    "ast_hash": "0be65400045b10d88a475156d3cad6da",
+    "semantic_hash": "0be65400045b10d88a475156d3cad6da"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/dependabot.yml": {
+    "mtime": 1784173077.8802743,
+    "ast_hash": "7a353aefe406b5f6632097eb9e2525c8",
+    "semantic_hash": "7a353aefe406b5f6632097eb9e2525c8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/workflows/security.yml": {
+    "mtime": 1786369465.5641506,
+    "ast_hash": "a388389b43132e9c3e0c9ecc42aef9f8",
+    "semantic_hash": "a388389b43132e9c3e0c9ecc42aef9f8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/workflows/publish.yml": {
+    "mtime": 1784966436.7258208,
+    "ast_hash": "f7e7385a7e9c930618b18031edc6e943",
+    "semantic_hash": "f7e7385a7e9c930618b18031edc6e943"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/workflows/codeql.yml": {
+    "mtime": 1784203614.8926797,
+    "ast_hash": "0f00a05d02d582a22acc6aade029780c",
+    "semantic_hash": "0f00a05d02d582a22acc6aade029780c"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/workflows/nextjs.yml": {
+    "mtime": 1786378526.1355162,
+    "ast_hash": "af427949c7ee18e5eef23386af191237",
+    "semantic_hash": "af427949c7ee18e5eef23386af191237"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/workflows/ci.yml": {
+    "mtime": 1784966436.72516,
+    "ast_hash": "61b7a43a5420282e2530afe5e42806a6",
+    "semantic_hash": "61b7a43a5420282e2530afe5e42806a6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/ISSUE_TEMPLATE/feature_request.yml": {
+    "mtime": 1784173077.880043,
+    "ast_hash": "907a636e66694ee2474e7d5caed92e56",
+    "semantic_hash": "907a636e66694ee2474e7d5caed92e56"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/ISSUE_TEMPLATE/bug_report.yml": {
+    "mtime": 1784260681.5029757,
+    "ast_hash": "ca23c53f78865cf45831e888f3226d56",
+    "semantic_hash": "ca23c53f78865cf45831e888f3226d56"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/.github/ISSUE_TEMPLATE/config.yml": {
+    "mtime": 1784173077.8799167,
+    "ast_hash": "8e464b36b2838febd0a7ba9596753dbe",
+    "semantic_hash": "8e464b36b2838febd0a7ba9596753dbe"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/README.md": {
+    "mtime": 1784531675.5281024,
+    "ast_hash": "f00f621bdfdeef673d1fb47767e619e9",
+    "semantic_hash": "f00f621bdfdeef673d1fb47767e619e9"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/llms.txt": {
+    "mtime": 1784556077.8214214,
+    "ast_hash": "1be5e4be496fff665e07f2406df46df8",
+    "semantic_hash": "1be5e4be496fff665e07f2406df46df8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/calendar.md": {
+    "mtime": 1784805478.253219,
+    "ast_hash": "e11593a8be80788bced413cd9e74ca6b",
+    "semantic_hash": "e11593a8be80788bced413cd9e74ca6b"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/chat.md": {
+    "mtime": 1784804856.9390512,
+    "ast_hash": "df9588bdd326ec4f7a8ed1944fd9655a",
+    "semantic_hash": "df9588bdd326ec4f7a8ed1944fd9655a"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/form.md": {
+    "mtime": 1786093098.7178867,
+    "ast_hash": "40631dfd414541f78737e602837110b6",
+    "semantic_hash": "40631dfd414541f78737e602837110b6"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/workflow.md": {
+    "mtime": 1784799394.8257627,
+    "ast_hash": "ed114058feffdb5115a9b93d2fe68213",
+    "semantic_hash": "ed114058feffdb5115a9b93d2fe68213"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/component.md": {
+    "mtime": 1784799365.5712945,
+    "ast_hash": "7080391a87f20c6b8042615ffe0ca820",
+    "semantic_hash": "7080391a87f20c6b8042615ffe0ca820"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/support.md": {
+    "mtime": 1784804977.1354432,
+    "ast_hash": "4e97eb5339fc5f67e29e69eb66c47bca",
+    "semantic_hash": "4e97eb5339fc5f67e29e69eb66c47bca"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/feature-requirement.md": {
+    "mtime": 1784799302.785702,
+    "ast_hash": "fdebbef82890623ad39538d25f2c2f76",
+    "semantic_hash": "fdebbef82890623ad39538d25f2c2f76"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/page.md": {
+    "mtime": 1786000465.217113,
+    "ast_hash": "354a08691864eb06c5a67dc1f535e36e",
+    "semantic_hash": "354a08691864eb06c5a67dc1f535e36e"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/customer-signup.md": {
+    "mtime": 1784799406.173105,
+    "ast_hash": "3c8e2f3d9b3a445b1d3f791724e46fd8",
+    "semantic_hash": "3c8e2f3d9b3a445b1d3f791724e46fd8"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/apps/backoffice/public/templates/feature.md": {
+    "mtime": 1784799385.0257225,
+    "ast_hash": "118ab2cf696218337322aa688c678ebd",
+    "semantic_hash": "118ab2cf696218337322aa688c678ebd"
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/blocks.test.tsx": {
+    "mtime": 1786380533.9772646,
+    "ast_hash": "ed7ffb8ffe3304d96df7e839a1939a87",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/package.json": {
+    "mtime": 1786380089.2758946,
+    "ast_hash": "1f358b7b5f69b97dff7e415772d500d6",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/tsconfig.build.json": {
+    "mtime": 1786380089.284729,
+    "ast_hash": "8edc4326065e88b2ad2765bd7c50a9e1",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/tsconfig.json": {
+    "mtime": 1786380089.2821486,
+    "ast_hash": "b7ceab0b23d42758770c68455889c041",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/vite.config.ts": {
+    "mtime": 1786380089.27899,
+    "ast_hash": "93452d0b011c7483c72ef7d1156107c0",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/vitest.config.ts": {
+    "mtime": 1786380089.2915988,
+    "ast_hash": "84dd79f2ea168deda87af7a422f400f1",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/scripts/theme.mjs": {
+    "mtime": 1786380089.2893803,
+    "ast_hash": "5722a3d1ba1a649d34f32906dfa7e7c5",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/hero.tsx": {
+    "mtime": 1786380152.3349116,
+    "ast_hash": "b6e59a82b16710029a1bc0fc27362c03",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/pricing.tsx": {
+    "mtime": 1786380283.7055051,
+    "ast_hash": "b4257aad17bc19cd6d0065e959765b85",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/features.tsx": {
+    "mtime": 1786380194.0279841,
+    "ast_hash": "ccdfc2a6bb6f256301e9b17405813532",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/site-header.tsx": {
+    "mtime": 1786380342.797116,
+    "ast_hash": "017206b2a429faa6d30882d343eb0761",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/section.tsx": {
+    "mtime": 1786380105.7241514,
+    "ast_hash": "d4a0fb30fbec0e88037912d000405122",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/site-footer.tsx": {
+    "mtime": 1786380362.9996073,
+    "ast_hash": "8a570da2d7875bdb4e9ff7dedd1e5add",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/proof.tsx": {
+    "mtime": 1786380564.9060402,
+    "ast_hash": "1a8099171c1411cdc8b9f67872986607",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/section-header.tsx": {
+    "mtime": 1786380123.2802722,
+    "ast_hash": "af341bfed92c9f67c3bcb1c1efe26ac5",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/cta.tsx": {
+    "mtime": 1786380166.8487003,
+    "ast_hash": "954d79face250243cd9694d4c21c50e7",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/bars.tsx": {
+    "mtime": 1786380398.1679041,
+    "ast_hash": "d66aa150ff4e1190be16f6c7549ee374",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/index.ts": {
+    "mtime": 1786380463.3030815,
+    "ast_hash": "bfae9d3b289724ab57d8e1ae0395d883",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/forms.tsx": {
+    "mtime": 1786380446.946331,
+    "ast_hash": "8e0012c6fa13a828ca04811ce748a90f",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/src/faq.tsx": {
+    "mtime": 1786380302.3890142,
+    "ast_hash": "d4ac1bf5f1023e444234f93a9332d21e",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/CHANGELOG.md": {
+    "mtime": 1786380602.1168966,
+    "ast_hash": "0fe4b47e1bd818614a1c27a058bd0aaa",
+    "semantic_hash": ""
+  },
+  "/Users/suman.bonakurthi/Documents/projects/viliha/vui-starter/packages/web/README.md": {
+    "mtime": 1786380602.1141405,
+    "ast_hash": "581ebedc6000b68196c9632806ef7222",
+    "semantic_hash": ""
+  }
+}

@@ -5,9 +5,11 @@ rationale, see [`Enterprise_NextJS_React_Coding_Standards.md`](./Enterprise_Next
 
 ## What this repo is
 
-Turborepo + pnpm monorepo. One app + four published packages:
+Turborepo + pnpm monorepo. Three apps + five published packages:
 
 - `apps/backoffice` — Admin app **and** the docs site (docs are routes under `app/docs`, served at `/docs`). Dev on **:3000**.
+- `apps/website` — The **marketing site**: 65 static pages composed entirely from `@viliha/vui-web` blocks. Dev on **:3002**. If a page there needs markup that is not a block, that is a missing block, not a reason to hand-roll a section.
+- `apps/e2e` — **Playwright tests** for both apps. Route lists live in `tests/routes.ts`, so adding a page adds it to the smoke, SEO and accessibility passes at once. See `apps/e2e/README.md`.
 - `packages/ui` — `@viliha/vui-ui`, the React components, shipped as **TypeScript source** (no build).
 - `packages/theme` — `@viliha/vui-theme`, the same design system as **plain CSS with no dependencies**, for every other framework. Both of its outputs (`theme.css` and the compiled `dist/vui.css`) are **generated from `packages/ui/src/theme.css`** by `packages/theme/scripts/build.mjs` and git-ignored, so there is never a second copy to keep in sync. Edit the tokens in `packages/ui/src/theme.css` as before.
 
@@ -26,6 +28,15 @@ Turborepo + pnpm monorepo. One app + four published packages:
   `class-variants.ts` and import it in both. Early (v0): mechanical components
   only, no dialogs, menus, selects or datatable yet.
 
+- `packages/web` — `@viliha/vui-web`, the **marketing blocks**: hero, features,
+  pricing, testimonials, FAQ, article pieces, site header and footer. Around 60
+  of them, all taking their content as props so an agent can fill them in. They
+  read the same tokens as the admin components, so a landing page and the
+  dashboard it sells look like one product. Server components except
+  `article-client.tsx`, `code.tsx`, `bars.tsx` and `forms.tsx`, which need the
+  browser. **Keep it that way**: a whole-file `"use client"` stops a page passing
+  a block a function, which is how `ArticleTags` broke once already.
+
 - `packages/core` — `@viliha/vui-core`, the **framework-free TypeScript**: the
   theming engine (`theme-config.ts`), table import/export (`table-io.ts`) and
   `cn` (`utils.ts`). Same trick as the theme: generated from `packages/ui/src` by
@@ -41,6 +52,9 @@ Turborepo + pnpm monorepo. One app + four published packages:
 | Task | Location |
 | --- | --- |
 | New reusable component | `packages/ui/src/<name>.tsx` → auto-exported as `@viliha/vui-ui/<name>` (the `./*` export map; **no barrel edit needed**) |
+| New marketing block | `packages/web/src/<group>.tsx` + an export in `src/index.ts`. **Give it a doc comment**: a test fails if any exported block has no summary, because that summary is what an agent reads to choose between blocks |
+| New marketing page | `apps/website/app/<route>/page.tsx`, composed from blocks, with copy in `lib/content.ts` or `lib/catalog.ts`. Add it to `ROUTES` in `lib/site.ts` (sitemap) and to `apps/e2e/tests/routes.ts` |
+| New e2e test | `apps/e2e/tests/<app>/<area>.spec.ts`. Query by role and accessible name; `test.skip` with a reason for anything optional |
 | New admin page | `apps/backoffice/app/(app)/<route>/page.tsx` — copy the page template from docs `/layout`. **Pick a page type** (see "Page types" below) and state which; for a record form default to **slide-over**. |
 | New auth page | `apps/backoffice/app/auth/<name>/page.tsx` — inherits the auth shell (`AuthHeader` logo bar + `SiteFooter`). Build fields with `Field` inside a `FieldGrid` (two-column: labels │ inputs) from `_components/auth.tsx`; don't hand-roll |
 | New legal/public page (Terms, Privacy, …) | `apps/backoffice/app/(legal)/<name>/page.tsx`, the same brand shell as auth but **indexable**. Compose with `LegalTitle` / `LegalSection` / `LegalList` from `(legal)/_components/legal.tsx`, add the route to `LEGAL_ROUTES` in `lib/seo.ts` (sitemap), and link it from `SiteFooter` if it belongs there |

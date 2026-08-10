@@ -217,6 +217,7 @@ const DOCS_ROUTES: string[] = [
   "/docs/charts",
   "/docs/auth",
   "/docs/blocks",
+  "/docs/website",
   "/docs/calendar",
   "/docs/chat",
   "/docs/typeset",

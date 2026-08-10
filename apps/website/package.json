@@ -1,0 +1,33 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3002",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "next typegen && tsgo --noEmit"
+  },
+  "dependencies": {
+    "@viliha/vui-core": "workspace:*",
+    "@viliha/vui-theme": "workspace:*",
+    "@viliha/vui-ui": "workspace:*",
+    "@viliha/vui-web": "workspace:*",
+    "next": "^16.2.11",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "eslint": "^9.39.1",
+    "tailwindcss": "^4.3.0",
+    "typescript": "5.9.2"
+  }
+}

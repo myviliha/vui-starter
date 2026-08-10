@@ -42,10 +42,20 @@ writeFileSync(
     MODULES.map((m) => `export * from "./${m}.js";\n`).join(""),
 );
 
-rmSync(join(root, "dist"), { recursive: true, force: true });
-execFileSync("npx", ["--no-install", "tsc", "-p", join(root, "tsconfig.json")], {
-  cwd: root,
-  stdio: "inherit",
-});
+// `--check` type-checks without touching dist/. That distinction matters:
+// turbo runs check-types for every package at once, and a build that deletes
+// dist/ mid-flight fails whichever package is importing it at that moment.
+const checkOnly = process.argv.includes("--check");
 
-console.log(`vui-core: built ${MODULES.length + 1} modules from packages/ui/src`);
+if (!checkOnly) rmSync(join(root, "dist"), { recursive: true, force: true });
+execFileSync(
+  "npx",
+  ["--no-install", "tsc", "-p", join(root, "tsconfig.json"), ...(checkOnly ? ["--noEmit"] : [])],
+  { cwd: root, stdio: "inherit" },
+);
+
+console.log(
+  checkOnly
+    ? `vui-core: type-checked ${MODULES.length + 1} modules`
+    : `vui-core: built ${MODULES.length + 1} modules from packages/ui/src`,
+);

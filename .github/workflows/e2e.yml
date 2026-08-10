@@ -1,0 +1,70 @@
+name: End-to-end
+
+# Deliberately manual for now.
+#
+# The Playwright suite in apps/e2e was written against the source and the built
+# output but has never been executed, so wiring it to `push` would turn main red
+# on the first selector that guessed wrong. Run it from the Actions tab, fix
+# what it finds, and then add the `push`/`pull_request` triggers below.
+#
+# on:
+#   pull_request:
+#     branches: [main]
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Which project to run"
+        required: false
+        default: "all"
+        type: choice
+        options: [all, website, backoffice, mobile, firefox]
+      grep:
+        description: "Only tests matching this tag, e.g. @smoke"
+        required: false
+        default: ""
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: playwright
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Chromium and Firefox only: the suite has no WebKit project, and pulling
+      # a browser nothing runs in costs a minute on every run.
+      - name: Install browsers
+        run: pnpm --filter e2e exec playwright install --with-deps chromium firefox
+
+      # The tests run against `next start`, so both apps have to be built. The
+      # `...` builds each app's workspace dependencies first.
+      - name: Build both apps
+        run: pnpm turbo build --filter=website... --filter=backoffice...
+
+      - name: Run the suite
+        run: >-
+          pnpm --filter e2e exec playwright test
+          ${{ inputs.project != 'all' && format('--project={0}', inputs.project) || '' }}
+          ${{ inputs.grep != '' && format('--grep={0}', inputs.grep) || '' }}
+
+      - name: Upload the report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: playwright-report
+          path: apps/e2e/playwright-report
+          retention-days: 7
