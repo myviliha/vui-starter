@@ -132,7 +132,7 @@ describe("content blocks", () => {
   });
 
   it("QuoteBlock and TrustBadges render", () => {
-    expect(render(<QuoteBlock quote="Q" author="A" role="CEO" />)).toContain("CEO");
+    expect(render(<QuoteBlock quote="Q" author="A" authorRole="CEO" />)).toContain("CEO");
     expect(render(<TrustBadges items={[{ label: "SOC 2" }]} />)).toContain("SOC 2");
   });
 });

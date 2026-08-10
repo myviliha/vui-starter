@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
@@ -29,12 +30,12 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
 
       <SiteHeader
         brand={
-          <a href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+          <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
             <span aria-hidden className="grid size-7 place-items-center rounded-md bg-[var(--button-primary)] text-sm text-[var(--button-primary-foreground)]">
               N
             </span>
             {SITE.name}
-          </a>
+          </Link>
         }
         items={NAV}
         currentPath={pathname}

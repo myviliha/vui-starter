@@ -33,7 +33,9 @@ export {
   type SearchBlockProps, type FilterOption,
 } from "./discovery";
 export {
-  Prose, ArticleHeader, AuthorCard, ShareBlock, TableOfContents,
-  ReadingProgress, ArticlePager, ArticleTags,
-  type ArticleAuthor, type TocItem,
+  Prose, ArticleHeader, AuthorCard, ArticlePager, ArticleTags,
+  type ArticleAuthor,
 } from "./article";
+export {
+  ShareBlock, TableOfContents, ReadingProgress, type TocItem,
+} from "./article-client";

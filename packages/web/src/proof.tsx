@@ -251,13 +251,14 @@ export function Testimonials({
 export function QuoteBlock({
   quote,
   author,
-  role,
+  authorRole,
   tone,
   className,
 }: {
   quote: ReactNode;
   author?: string;
-  role?: string;
+  /** Named `authorRole`, not `role`: on a JSX element `role` is the ARIA attribute. */
+  authorRole?: string;
   tone?: SectionTone;
   className?: string;
 }) {
@@ -268,7 +269,7 @@ export function QuoteBlock({
         {author && (
           <figcaption className="text-muted-foreground">
             <span className="font-medium text-foreground">{author}</span>
-            {role && <span>, {role}</span>}
+            {authorRole && <span>, {authorRole}</span>}
           </figcaption>
         )}
       </figure>
