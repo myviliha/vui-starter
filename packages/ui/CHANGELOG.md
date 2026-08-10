@@ -106,6 +106,22 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.63.1 — 2026-08-10
+
+### Fixed
+
+- **`init` no longer installs a table library nothing imports.** `@tanstack/react-table`
+  was in the CLI's dependency list, so every scaffolded app pulled it in. No file in
+  the package has ever imported it: the datatable is `RecordView`, which is hand-written
+  and depends on nothing but React and the icon set. Removed from the install list and
+  from the demo app.
+
+- **Dependency audit is green again.** `postcss` in the lockfile was pinned to 8.5.19,
+  which carried `nanoid` 3.3.15 and two high-severity advisories
+  (GHSA-28wg-ghj8-5hjv, GHSA-2v37-7h3g-55p8). Refreshing the lockfile moves `postcss`
+  to 8.5.26, which requires the patched `nanoid`. Nothing in the package changed; the
+  advisories arrived through a transitive dependency of the demo app.
+
 ## 1.63.0 — 2026-08-10
 
 ### Added

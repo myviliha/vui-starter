@@ -28,7 +28,6 @@ const forceFlag = has("--force");
 const DEPS = [
   "@radix-ui/react-icons",
   "@radix-ui/react-slot",
-  "@tanstack/react-table",
   "class-variance-authority",
   "clsx",
   "cmdk",
