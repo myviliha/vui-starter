@@ -235,7 +235,17 @@ If you're unsure whether a doc applies, it does, so update it. A change that tou
 
 ## Verify before "done" (must pass)
 
+**Run builds through turbo, not the app directly.** `packages/core`, `packages/theme`
+and `packages/vue` ship only **generated** output (from `packages/ui/src`), and it is
+git-ignored, so a fresh clone or a CI checkout has nothing to import until those
+packages build. `pnpm --filter backoffice build` skips them and fails with "Module not
+found: @viliha/vui-core"; `pnpm turbo build --filter=backoffice...` builds them first
+because `turbo.json` declares `dependsOn: ["^build"]`. `check-types` and `dev` declare
+it too. If you add a package whose output is generated, give it a `build` script and
+let turbo order it.
+
 ```bash
+pnpm turbo build --filter=backoffice...   # the app plus its generated deps
 pnpm --filter @viliha/vui-ui check-types
 pnpm --filter backoffice lint            # eslint --max-warnings 0
 pnpm --filter backoffice build           # or the app you changed
