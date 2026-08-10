@@ -51,3 +51,5 @@ graphify-out/manifest.json
 graphify-out/cost.json
 graphify-out/graph.html
 graphify-out/.graphify_*
+# Dated backups the post-commit hook writes before rebuilding. Machine-local.
+graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
