@@ -1,0 +1,50 @@
+{
+  "name": "@viliha/vui-web",
+  "version": "0.1.0",
+  "description": "Marketing website blocks for VUI: heroes, features, testimonials, pricing, FAQ, headers and footers. Composable, prop-driven React blocks that share the same design tokens and class strings as the admin components, so a landing page and a dashboard look like one product.",
+  "license": "MIT",
+  "author": "VILIHA PTE. LTD.",
+  "homepage": "https://vui.viliha.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myviliha/vui-starter.git",
+    "directory": "packages/web"
+  },
+  "bugs": { "url": "https://github.com/myviliha/vui-starter/issues" },
+  "keywords": [
+    "react", "nextjs", "tailwind", "tailwind-v4", "marketing", "landing-page",
+    "blocks", "hero", "pricing", "testimonials", "saas", "website-template",
+    "design-system", "dark-mode"
+  ],
+  "type": "module",
+  "sideEffects": ["**/*.css"],
+  "files": ["dist"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./theme.css": "./dist/theme.css",
+    "./*": { "types": "./dist/*.d.ts", "import": "./dist/*.js" }
+  },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json && node scripts/theme.mjs",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
+  },
+  "peerDependencies": { "react": "^18 || ^19", "react-dom": "^18 || ^19" },
+  "dependencies": {
+    "@viliha/vui-core": "workspace:^",
+    "@viliha/vui-theme": "workspace:^",
+    "@viliha/vui-ui": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@vitejs/plugin-react": "^5.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "5.9.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
+  }
+}
