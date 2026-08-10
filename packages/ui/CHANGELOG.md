@@ -108,6 +108,13 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ## 1.64.0 — 2026-08-10
 
+### Fixed
+
+- **The help button in the top bar did nothing.** It was a `<button>` with no
+  handler, so the question-mark icon was decoration. It opens the support screen
+  now. The documentation icon beside it already worked; both, and the settings
+  gear, gained a hover title so the cluster behaves consistently.
+
 ### Added
 
 - **Right-to-left support, and layout as a preference.** `theme.css` gains the

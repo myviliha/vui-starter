@@ -33,9 +33,9 @@ export type ChromeFeature =
 export const CHROME_FEATURES: { key: ChromeFeature; label: string; hint: string }[] = [
   { key: "quickActions", label: "Quick actions (⌘K)", hint: "Command palette to jump between pages." },
   { key: "globalSearch", label: "Global search (⌘⌥K)", hint: "Search across records from the top bar." },
-  { key: "help", label: "Help", hint: "Help & support button." },
+  { key: "help", label: "Help", hint: "Opens the support screen." },
   { key: "docs", label: "Documentation", hint: "Opens the docs site in a new tab." },
-  { key: "notifications", label: "Notifications", hint: "Notifications bell." },
+  { key: "notifications", label: "Notifications", hint: "Bell with a hover preview; opens the notifications page." },
   { key: "settings", label: "Settings", hint: "Shortcut to this page." },
   { key: "userMenu", label: "User menu", hint: "Account avatar, profile & sign out." },
 ];

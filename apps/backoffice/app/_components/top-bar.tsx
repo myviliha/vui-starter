@@ -74,13 +74,14 @@ export function TopBar() {
           is visually uniform — see iconControl. */}
       <div className="ms-auto flex items-center gap-1.5">
         {chrome.help && (
-          <button
-            type="button"
-            aria-label="Help &amp; support"
+          <Link
+            href="/support"
+            aria-label="Help and support"
+            title="Help and support"
             className={`hidden sm:grid ${iconControl}`}
           >
             <QuestionMarkCircledIcon className={iconGlyph} />
-          </button>
+          </Link>
         )}
         {chrome.docs && (
           <Link
@@ -88,6 +89,7 @@ export function TopBar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Documentation (opens in a new tab)"
+            title="Documentation"
             className={iconControl}
           >
             <ReaderIcon className={iconGlyph} />
@@ -100,6 +102,7 @@ export function TopBar() {
           <Link
             href="/settings"
             aria-label="Settings"
+            title="Settings"
             className={`hidden sm:grid ${iconControl}`}
           >
             <GearIcon className={iconGlyph} />
