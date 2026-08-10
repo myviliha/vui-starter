@@ -5,7 +5,7 @@ rationale, see [`Enterprise_NextJS_React_Coding_Standards.md`](./Enterprise_Next
 
 ## What this repo is
 
-Turborepo + pnpm monorepo. One app + two published packages:
+Turborepo + pnpm monorepo. One app + three published packages:
 
 - `apps/backoffice` — Admin app **and** the docs site (docs are routes under `app/docs`, served at `/docs`). Dev on **:3000**.
 - `packages/ui` — `@viliha/vui-ui`, the React components, shipped as **TypeScript source** (no build).
@@ -16,6 +16,16 @@ Turborepo + pnpm monorepo. One app + two published packages:
   with the class), and the accordion animates `--vui-accordion-height`, which
   `accordion.tsx` maps from Radix and a port maps from its own library. Don't
   reintroduce a React-only selector or a growing `var()` fallback chain.
+
+- `packages/core` — `@viliha/vui-core`, the **framework-free TypeScript**: the
+  theming engine (`theme-config.ts`), table import/export (`table-io.ts`) and
+  `cn` (`utils.ts`). Same trick as the theme: generated from `packages/ui/src` by
+  `packages/core/scripts/build.mjs`, both `src/` and `dist/` git-ignored, so
+  nothing moved and no React consumer pays for it. The build **fails** if one of
+  those modules picks up a `react`/`vue`/`svelte` import or a `"use client"`
+  directive, which is what keeps the promise honest. To add a module to it,
+  append to `MODULES` in that script; if the file is not framework-free, split it
+  first.
 
 ## Where things go (do exactly this)
 

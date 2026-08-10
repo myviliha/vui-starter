@@ -18,6 +18,12 @@ const LEVELS: { level: string; ships: string; where: string }[] = [
     where: "Every framework on this page, today.",
   },
   {
+    level: "Core",
+    ships:
+      "@viliha/vui-core: the logic without the framework. Runtime theming, table import and export, class merging. Plain TypeScript, no UI framework.",
+    where: "Every framework, and Node.",
+  },
+  {
     level: "Components",
     ships: "A real component package: buttons, inputs, dialogs, menus, tables, the whole set.",
     where: "React and Next.js.",
@@ -118,6 +124,28 @@ npm install -D tailwindcss @tailwindcss/postcss
           </tbody>
         </table>
       </div>
+
+      <H2>What about the logic, not just the look?</H2>
+      <P>
+        Some of what a design system does is not markup at all: turning a theme
+        into CSS variables, exporting a table to CSV, merging class names without
+        conflicts. That part ships as{" "}
+        <code>@viliha/vui-core</code>, plain TypeScript with no UI framework in it.
+      </P>
+      <CodeBlock title="theming and exporting, in any framework">{`npm install @viliha/vui-core
+
+import { mergeThemes, applyTheme, rowsToCSV, downloadFile } from "@viliha/vui-core";
+
+// An organization's theme with one person's overrides on top.
+applyTheme(document.documentElement, mergeThemes(orgTheme, userTheme));
+
+// Export the rows on screen, no spreadsheet library required.
+downloadFile("people.csv", rowsToCSV(columns, rows), "text/csv");`}</CodeBlock>
+      <P>
+        It is generated from the same files the React components use, so the two
+        cannot drift, and the build refuses to publish a module that has picked up
+        a framework import.
+      </P>
 
       <H2>Which frameworks are tested?</H2>
       <P>

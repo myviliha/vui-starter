@@ -1,0 +1,60 @@
+{
+  "name": "@viliha/vui-core",
+  "version": "1.0.0",
+  "description": "The framework-free half of the VUI design system: the runtime theming engine (tokens as data, contrast, CSS-variable output), CSV/JSON/Excel/PDF table import and export, and the class-merging helper. Plain TypeScript with no UI framework, so it works in React, Vue, Svelte, Angular, Solid or Node.",
+  "license": "MIT",
+  "author": "VILIHA PTE. LTD.",
+  "homepage": "https://vui.viliha.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myviliha/vui-starter.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/myviliha/vui-starter/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "theme",
+    "theming",
+    "csv",
+    "export",
+    "framework-agnostic",
+    "typescript",
+    "vue",
+    "svelte",
+    "angular",
+    "solid"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./theme-config": "./dist/theme-config.js",
+    "./table-io": "./dist/table-io.js",
+    "./utils": "./dist/utils.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check-types": "node scripts/build.mjs",
+    "test": "vitest run",
+    "prepublishOnly": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "typescript": "5.9.2",
+    "vitest": "^4.1.10"
+  }
+}
