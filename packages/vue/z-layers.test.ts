@@ -18,7 +18,28 @@ const Z_CLASS = /\bz-\[(\d+)\]|\bz-(\d+)\b/g;
 
 const SRC = fileURLToPath(new URL("./src", import.meta.url));
 const files = readdirSync(SRC).filter((f) => f.endsWith(".vue"));
-const read = (file: string) => readFileSync(join(SRC, file), "utf8");
+
+/**
+ * Components reference shared class strings (`POPOVER_CONTENT`) rather than
+ * spelling them out, so expand those before checking, exactly as the React
+ * package's copy of this test does. Otherwise every assertion below passes on a
+ * file that renders the wrong thing.
+ */
+const CONSTANTS = new Map<string, string>();
+for (const match of readFileSync(
+  fileURLToPath(new URL("../ui/src/class-variants.ts", import.meta.url)),
+  "utf8",
+).matchAll(
+  /export const ([A-Z0-9_]+)(?::[^=]+)? =\s*(?:\[([\s\S]*?)\]\.join\(" "\)|"([\s\S]*?)")/g,
+)) {
+  CONSTANTS.set(match[1]!, (match[2] ?? match[3] ?? "").replace(/",\s*"/g, " "));
+}
+
+const read = (file: string) =>
+  readFileSync(join(SRC, file), "utf8").replace(
+    /\b[A-Z][A-Z0-9_]{2,}\b/g,
+    (name) => CONSTANTS.get(name) ?? name,
+  );
 
 // Floating components arrive with the rest of wave B; each list is checked only
 // for the files that exist, so this guard is in place before they land rather
@@ -29,10 +50,10 @@ describe("floating surfaces", () => {
   it("every floating panel uses the same surface, never a dark bubble", () => {
     for (const file of present([
       "Tooltip.vue",
-      "Popover.vue",
-      "DropdownMenu.vue",
-      "Select.vue",
-      "HoverCard.vue",
+      "PopoverContent.vue",
+      "DropdownMenuContent.vue",
+      "SelectContent.vue",
+      "HoverCardContent.vue",
     ])) {
       expect(read(file), file).toContain("bg-popover");
       expect(read(file), file).not.toContain("bg-primary ");
@@ -61,10 +82,10 @@ describe("stacking order", () => {
 
   it("pickers and menus clear the slide-over they open inside", () => {
     for (const file of present([
-      "Select.vue",
+      "SelectContent.vue",
       "Combobox.vue",
-      "DropdownMenu.vue",
-      "Popover.vue",
+      "DropdownMenuContent.vue",
+      "PopoverContent.vue",
     ])) {
       expect(read(file), file).toContain("z-[200]");
     }
@@ -74,10 +95,10 @@ describe("stacking order", () => {
     // Reka's portal component is the equivalent of Radix's; without it, a menu
     // is clipped by the nearest overflow-hidden ancestor at any z-index.
     for (const file of present([
-      "Select.vue",
+      "SelectContent.vue",
       "Combobox.vue",
-      "DropdownMenu.vue",
-      "Popover.vue",
+      "DropdownMenuContent.vue",
+      "PopoverContent.vue",
       "Tooltip.vue",
       "Dialog.vue",
     ])) {

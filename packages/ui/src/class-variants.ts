@@ -116,3 +116,34 @@ export const ACCORDION_CONTENT =
   "overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down";
 
 export const ACCORDION_CONTENT_INNER = "pt-0 pb-4";
+
+export const DIALOG_OVERLAY =
+  "vui-overlay-in fixed inset-0 z-[70] flex items-center justify-center bg-foreground/25 p-4";
+
+export const DIALOG_PANEL =
+  "vui-pop-in w-full max-w-md overflow-hidden rounded-lg border border-border bg-background shadow-xl";
+
+export const DIALOG_HEADER = "border-b border-border bg-muted/40 px-5 py-3";
+
+export const DIALOG_TITLE = "text-base font-semibold tracking-tight";
+
+/** Capped so long content scrolls inside the dialog, not the page behind it. */
+export const DIALOG_BODY = "max-h-[70vh] overflow-y-auto px-5 py-4 text-sm leading-relaxed";
+
+export const DIALOG_FOOTER =
+  "flex items-center justify-end gap-2 border-t border-border bg-muted/40 px-5 py-3";
+
+/**
+ * Everything about the popover surface except its transform origin. Radix and
+ * Reka each publish the measured origin under their own variable name, so each
+ * component adds that one utility itself, the same split the accordion uses.
+ */
+export const POPOVER_CONTENT =
+  "z-[200] w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95";
+
+export const POPOVER_HEADER = "flex flex-col gap-1 text-sm";
+export const POPOVER_TITLE = "font-medium";
+export const POPOVER_DESCRIPTION = "text-muted-foreground";
+
+export const TOOLTIP_CONTENT =
+  "vui-fade-in relative w-fit max-w-xs text-balance rounded-md border border-border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md";

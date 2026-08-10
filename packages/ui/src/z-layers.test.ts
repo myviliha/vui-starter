@@ -39,6 +39,25 @@ const files = readdirSync(SRC).filter(
   (f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx"),
 );
 
+/**
+ * Class strings shared with the other framework packages live in
+ * `class-variants.ts`, so a component may reference `POPOVER_CONTENT` rather
+ * than spelling out `z-[200] … bg-popover`. Reading the raw file would then
+ * silently pass every check below, so expand those constants first: this test
+ * asks what a component actually renders, not how it is written.
+ */
+const CONSTANTS = new Map<string, string>();
+for (const match of readFileSync(join(SRC, "class-variants.ts"), "utf8").matchAll(
+  /export const ([A-Z0-9_]+)(?::[^=]+)? =\s*(?:\[([\s\S]*?)\]\.join\(" "\)|"([\s\S]*?)")/g,
+)) {
+  CONSTANTS.set(match[1]!, (match[2] ?? match[3] ?? "").replace(/",\s*"/g, " "));
+}
+
+function sourceOf(file: string): string {
+  const raw = readFileSync(join(SRC, file), "utf8");
+  return raw.replace(/\b[A-Z][A-Z0-9_]{2,}\b/g, (name) => CONSTANTS.get(name) ?? name);
+}
+
 describe("floating surfaces", () => {
   it("every floating panel uses the same surface, never a dark bubble", () => {
     // shadcn's tooltip is dark `bg-primary`, which reads as a second design
@@ -51,7 +70,7 @@ describe("floating surfaces", () => {
       "select.tsx",
       "hover-card.tsx",
     ]) {
-      const source = readFileSync(join(SRC, file), "utf8");
+      const source = sourceOf(file);
       expect(source, file).toContain("bg-popover");
       expect(source, file).not.toContain("bg-primary ");
     }
@@ -60,7 +79,7 @@ describe("floating surfaces", () => {
   it("every backdrop is the themed scrim, not hard black", () => {
     // `bg-black/50` over an already-dark background is a muddy rectangle.
     for (const file of ["dialog.tsx", "alert-dialog.tsx", "sheet.tsx", "command-palette.tsx"]) {
-      const source = readFileSync(join(SRC, file), "utf8");
+      const source = sourceOf(file);
       expect(source, file).toContain("bg-foreground/25");
       expect(source, file).not.toContain("bg-black/");
     }
@@ -71,7 +90,7 @@ describe("stacking order", () => {
   it("every z-index in the package is on the documented scale", () => {
     const offenders: string[] = [];
     for (const file of files) {
-      const source = readFileSync(join(SRC, file), "utf8");
+      const source = sourceOf(file);
       for (const match of source.matchAll(Z_CLASS)) {
         const value = Number(match[1] ?? match[2]);
         if (!ALLOWED.has(value)) offenders.push(`${file}: z-${value}`);
@@ -86,13 +105,13 @@ describe("stacking order", () => {
     // The bug this test exists for: a Dropdown at z-40 inside a z-60 panel.
     expect(200).toBeGreaterThan(60);
     for (const file of ["select.tsx", "combobox.tsx", "multi-combobox.tsx", "dropdown-menu.tsx", "popover.tsx"]) {
-      const source = readFileSync(join(SRC, file), "utf8");
+      const source = sourceOf(file);
       expect(source, file).toContain("z-[200]");
     }
   });
 
   it("a confirm clears both a dialog and a slide-over", () => {
-    const source = readFileSync(join(SRC, "alert-dialog.tsx"), "utf8");
+    const source = sourceOf("alert-dialog.tsx");
     expect(source).toContain("z-[80]");
   });
 
@@ -100,7 +119,7 @@ describe("stacking order", () => {
     // Position alone isn't enough: rendered in place, an `absolute` menu is cut
     // off by the nearest `overflow-hidden`, which every section card has.
     for (const file of ["select.tsx", "combobox.tsx", "multi-combobox.tsx", "dropdown-menu.tsx", "popover.tsx", "tooltip.tsx"]) {
-      const source = readFileSync(join(SRC, file), "utf8");
+      const source = sourceOf(file);
       expect(source, file).toMatch(/createPortal|\.Portal/);
     }
   });

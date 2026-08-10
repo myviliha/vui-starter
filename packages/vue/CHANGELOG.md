@@ -4,6 +4,21 @@ All notable changes to `@viliha/vui-vue` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 0.3.0 — 2026-08-10
+
+### Added
+
+- **The floating components**: `Dialog` with its header, title, body and footer,
+  `Popover`, and `Tooltip`. Reka owns the focus trap, the scroll lock, the
+  positioning and the aria wiring; the surfaces come from the shared class
+  strings, so a Vue dialog and a React dialog are the same dialog.
+
+- **They obey the stacking rules by construction.** Portalled, on the documented
+  z-scale, `bg-popover` on every floating panel and the themed scrim on the
+  backdrop. `z-layers.test.ts` now expands the shared class constants before
+  checking, so extracting a string cannot quietly blind the guard. Verified by
+  breaking a constant on purpose and watching the test fail.
+
 ## 0.2.0 — 2026-08-10
 
 ### Added
