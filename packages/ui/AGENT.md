@@ -707,6 +707,19 @@ shared `@viliha/vui-ui/breadcrumbs` component.
 
 Build every chart with `ChartContainer` plus Recharts. Never hardcode chart colors; map them through the chart tokens.
 
+**Two chart engines, pick by reach.** `ChartContainer` (Recharts) stays the default for a React app: it is what the demo uses and nothing about it is changing. `TanStackChart` (`@viliha/vui-ui/tanstack-chart`) wraps [TanStack Charts](https://tanstack.com/charts), whose definitions are framework-neutral, so the same chart renders in React, Vue, Svelte, Solid and Angular. Reach for it when a chart has to exist in more than one framework, or when you want a grammar-of-graphics API instead of a component per chart type. `@tanstack/charts` is an optional peer dependency, so it costs nothing unless you import that component.
+
+```tsx
+import { defineChart, lineY } from "@tanstack/charts";
+import { TanStackChart } from "@viliha/vui-ui/tanstack-chart";
+
+const chart = defineChart({ marks: [lineY(rows, { id: "revenue", x: "month", y: "revenue" })], … });
+
+<TanStackChart definition={chart} ariaLabel="Monthly revenue" height={280} />
+```
+
+Colors are still tokens either way, and still not your problem: the `.vui-chart` class in `theme.css` maps the theme's chart tokens onto the `--ts-chart-*` palette TanStack reads, so charts follow light mode, dark mode and a tenant's brand with no chart-level color prop. Never pass a hex to a mark.
+
 ---
 
 # Multi-step wizards & form layout

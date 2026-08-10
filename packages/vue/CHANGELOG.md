@@ -19,6 +19,12 @@ All notable changes to `@viliha/vui-vue` are documented here. The format follows
   the same source the React component uses, so the two cannot drift into looking
   almost alike.
 
+- **`Chart`, so Vue is not stuck without charts.** Recharts, which the React
+  package uses, has no Vue build. `Chart` wraps TanStack Charts instead, whose
+  definitions are framework-neutral: a definition written for the React app
+  renders here unchanged, wearing the same palette. `@tanstack/charts` is an
+  optional peer dependency.
+
 - **One import for the styling**: `@viliha/vui-vue/theme.css` pulls in
   `@viliha/vui-theme` and adds the `@source` rule Tailwind needs to emit the
   utilities inside the compiled components.

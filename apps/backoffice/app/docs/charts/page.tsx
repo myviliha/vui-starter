@@ -13,9 +13,9 @@ import {
 
 export const metadata: Metadata = {
   alternates: { canonical: "/docs/charts/" },
-  title: "Charts",
+  title: "Charts with Recharts or TanStack Charts",
   description:
-    "Add themed charts to Vui Starter with Recharts. The ChartContainer wrapper drives every series from the --chart-* design tokens, so charts match your theme and dark mode automatically.",
+    "Add themed charts to Vui Starter with Recharts or TanStack Charts. Both drive every series from the --chart-* design tokens, so charts match your theme and dark mode automatically. TanStack Charts also renders in Vue, Svelte, Solid and Angular.",
 };
 
 export default function ChartsPage() {
@@ -153,6 +153,73 @@ const data = [
       <Note title="See it live">
         The backoffice demo has a full Charts page (area, bar, line, donut) at{" "}
         <code>/charts</code>.
+      </Note>
+
+      <H2>Which should I use, Recharts or TanStack Charts?</H2>
+      <P>
+        Use <strong>Recharts</strong> if your app is React and stays React. It is
+        what <code>ChartContainer</code> wraps, it is what the demo uses, and
+        nothing about it is changing.
+      </P>
+      <P>
+        Use <strong>TanStack Charts</strong> if the same chart has to exist in
+        more than one framework, or you want a grammar-of-graphics API rather than
+        a component per chart type. One definition renders in React, Vue, Svelte,
+        Solid, Angular, Lit and Alpine, which is why it is how Vue gets charts at
+        all: Recharts is React-only.
+      </P>
+      <P>
+        Both read the same tokens, so they look like the same product. Recharts
+        reads <code>--chart-1</code> to <code>--chart-5</code> directly. TanStack
+        paints with <code>currentColor</code> and reads its own{" "}
+        <code>--ts-chart-*</code> palette, and the <code>.vui-chart</code> class in{" "}
+        <code>theme.css</code> maps ours onto those, so light mode, dark mode and a
+        per-tenant brand all just work.
+      </P>
+
+      <H3>TanStack Charts in React</H3>
+      <CodeBlock title="app/(app)/reports/revenue-chart.tsx">{`"use client";
+
+import { defineChart, lineY } from "@tanstack/charts";
+import { scaleLinear } from "@tanstack/charts/scales/linear";
+import { scalePoint } from "@tanstack/charts/scales/point";
+import { TanStackChart } from "@viliha/vui-ui/tanstack-chart";
+
+const revenue = [
+  { month: "Jan", revenue: 42_000 },
+  { month: "Feb", revenue: 58_000 },
+  { month: "Mar", revenue: 76_000 },
+];
+
+const chart = defineChart({
+  marks: [lineY(revenue, { id: "revenue", x: "month", y: "revenue", points: true })],
+  x: { scale: () => scalePoint<string>().padding(0.2) },
+  y: { scale: scaleLinear, nice: true, grid: true },
+});
+
+export function RevenueChart() {
+  return <TanStackChart definition={chart} ariaLabel="Monthly revenue" height={280} />;
+}`}</CodeBlock>
+
+      <H3>The same chart in Vue</H3>
+      <CodeBlock title="RevenueChart.vue">{`<script setup lang="ts">
+import { Chart } from "@viliha/vui-vue";
+// \`chart\` is the exact definition from the React example: it is framework-neutral.
+import { chart } from "./revenue-definition";
+</script>
+
+<template>
+  <Chart :definition="chart" aria-label="Monthly revenue" :height="280" />
+</template>`}</CodeBlock>
+      <P>
+        <code>@tanstack/charts</code> is an optional peer dependency of both
+        packages, so it only costs you anything if you use it:
+      </P>
+      <CodeBlock title="terminal">{`npm install @tanstack/charts`}</CodeBlock>
+      <Note title="Version">
+        TanStack Charts is pre-1.0 (0.9 at the time of writing), so its API can
+        still move between minor versions. Recharts stays the safer default for a
+        React-only app.
       </Note>
 
       <DocPager

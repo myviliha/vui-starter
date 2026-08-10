@@ -26,7 +26,7 @@ const LEVELS: { level: string; ships: string; where: string }[] = [
   {
     level: "Components",
     ships: "A real component package: buttons, inputs, dialogs, menus, tables, the whole set.",
-    where: "React and Next.js.",
+    where: "React and Next.js. Vue has the mechanical components and charts.",
   },
   {
     level: "Starter kit",

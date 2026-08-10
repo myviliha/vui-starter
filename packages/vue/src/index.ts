@@ -8,6 +8,7 @@ export { default as CardDescription } from './CardDescription.vue';
 export { default as CardFooter } from './CardFooter.vue';
 export { default as CardHeader } from './CardHeader.vue';
 export { default as CardTitle } from './CardTitle.vue';
+export { default as Chart } from './Chart.vue';
 export { default as Code } from './Code.vue';
 export { default as Input } from './Input.vue';
 export { default as Kbd } from './Kbd.vue';

@@ -413,6 +413,29 @@
   animation: vui-overlay-out 0.2s ease-out both;
 }
 
+/* Charts: hand the theme's palette to TanStack Charts.
+ *
+ * TanStack Charts deliberately has no theme of its own. It paints foreground,
+ * grids and muted text with `currentColor`, and reads six CSS variables for the
+ * categorical palette. So a chart inherits the design system for free, as long
+ * as something maps our tokens onto the names it looks for. That is all this
+ * class does, which is why charts follow light and dark mode, and a per-tenant
+ * brand, without a single line of JavaScript or a chart-specific colour prop.
+ *
+ * Put it on the chart's container:  <div class="vui-chart">
+ *
+ * The theme ships five chart tokens and TanStack reads six; the sixth falls
+ * back to the brand colour rather than to a hard-coded blue. */
+.vui-chart {
+  color: var(--foreground);
+  --ts-chart-1: var(--chart-1);
+  --ts-chart-2: var(--chart-2);
+  --ts-chart-3: var(--chart-3);
+  --ts-chart-4: var(--chart-4);
+  --ts-chart-5: var(--chart-5);
+  --ts-chart-6: var(--brand);
+}
+
 /* Scroll regions: always show the bars.
  *
  * macOS hides overlay scrollbars until you scroll, which means a table wider

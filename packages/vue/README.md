@@ -58,7 +58,12 @@ import Button from "@viliha/vui-vue/Button";
 
 `Button` · `Badge` · `Card` (+ `CardHeader`, `CardTitle`, `CardDescription`,
 `CardContent`, `CardFooter`) · `Input` · `Textarea` · `Label` · `Separator` ·
-`Skeleton` · `Kbd` · `Code`
+`Skeleton` · `Kbd` · `Code` · `Chart`
+
+`Chart` wraps [TanStack Charts](https://tanstack.com/charts), which is
+framework-neutral, so a chart definition written for the React app renders here
+unchanged. It picks up the theme palette automatically. Install
+`@tanstack/charts` (an optional peer) if you use it.
 
 Inputs use `v-model`, which is what a Vue developer expects. Every component
 takes `class` and merges it, so a caller's `h-20` beats the variant's `h-9`.
@@ -66,8 +71,8 @@ takes `class` and merges it, so a caller's `h-20` beats the variant's `h-9`.
 ## What's not here yet
 
 Dialogs, sheets, menus, selects, comboboxes, tooltips, tabs, accordions, toasts,
-the command palette, and the datatable. Charts, the calendar and the auth screens
-are React-only for now. The
+the command palette, and the datatable. The calendar and the auth screens are
+React-only for now. The
 [frameworks page](https://vui.viliha.com/docs/frameworks/) is kept honest about
 what exists.
 

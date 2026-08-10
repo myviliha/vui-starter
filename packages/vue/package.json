@@ -55,7 +55,8 @@
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.4.0",
+    "@tanstack/charts": "^0.9.0"
   },
   "dependencies": {
     "@viliha/vui-core": "workspace:^",
@@ -63,11 +64,17 @@
     "reka-ui": "^2.10.3"
   },
   "devDependencies": {
+    "@tanstack/charts": "^0.9.0",
     "@vitejs/plugin-vue": "^6.0.8",
     "typescript": "5.9.2",
     "vite": "^8.2.1",
     "vitest": "^4.1.10",
     "vue": "^3.5.41",
     "vue-tsc": "^3.3.9"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/charts": {
+      "optional": true
+    }
   }
 }

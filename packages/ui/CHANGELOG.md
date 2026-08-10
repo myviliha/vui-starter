@@ -106,6 +106,37 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.64.0 — 2026-08-10
+
+### Added
+
+- **Charts that are not React-only: `TanStackChart`.** `ChartContainer` and
+  Recharts are unchanged and stay the default for a React app. The new component
+  wraps [TanStack Charts](https://tanstack.com/charts), whose definitions are
+  framework-neutral, so the same chart renders in React, Vue, Svelte, Solid and
+  Angular. That is how the Vue package gets charts at all, since Recharts has no
+  Vue build.
+
+  ```tsx
+  import { TanStackChart } from "@viliha/vui-ui/tanstack-chart";
+
+  <TanStackChart definition={chart} ariaLabel="Monthly revenue" height={280} />
+  ```
+
+  `@tanstack/charts` is an **optional peer dependency**: it costs nothing unless
+  you import this component.
+
+- **`.vui-chart` maps the theme onto TanStack's palette.** TanStack Charts ships
+  no theme of its own. It paints with `currentColor` and reads six CSS variables,
+  so one class in `theme.css` is enough to make every chart follow light mode,
+  dark mode and a tenant's brand. No colour props, no chart config to keep in
+  sync. The class works in any framework, because it is only CSS.
+
+  A test asserts all six palette slots are mapped, and that the class lands on
+  the chart host rather than the SVG surface. The two adapters disagree about
+  which prop that is (`className` in React, `class` in Vue), and getting it wrong
+  silently drops the theme.
+
 ## 1.63.1 — 2026-08-10
 
 ### Added

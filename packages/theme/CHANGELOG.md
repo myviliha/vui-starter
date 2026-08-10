@@ -4,6 +4,16 @@ All notable changes to `@viliha/vui-theme` are documented here. The format follo
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 1.1.0 — 2026-08-10
+
+### Added
+
+- **`.vui-chart`, so charts inherit the theme in any framework.** TanStack Charts
+  paints with `currentColor` and reads six `--ts-chart-*` variables. This class
+  maps the theme's own chart tokens onto them, which is all it takes for a chart
+  to follow light mode, dark mode and a per-tenant brand. Pure CSS, so it works
+  the same in Vue, Svelte, Solid, Angular or a hand-written page.
+
 ## 1.0.0 — 2026-08-10
 
 ### Added
