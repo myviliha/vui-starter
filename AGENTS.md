@@ -262,6 +262,25 @@ guide assertions skip themselves when `docs/` hasn't been generated locally.
 Adding a tool means adding an entry to `TOOLS` and a case to that test, nothing
 else.
 
+## Secrets (the app is a static export, so this matters)
+
+`apps/backoffice` builds with `output: "export"` and is served as files from
+GitHub Pages. There is no server, so **every `NEXT_PUBLIC_` value is inlined into
+JavaScript that anyone can download**. A secret with that prefix is a published
+secret.
+
+- **Secrets live in `.env` at the repo root** (git-ignored), for scripts and CI.
+  `.env.example` is the committed template and every value in it stays empty.
+- **Never prefix a secret with `NEXT_PUBLIC_`.** If a value has to reach the
+  browser it is not a secret; if it is a secret it belongs in a build step or a
+  service, not in the bundle.
+- `.gitleaks.toml` extends the default rules with the Polar token shape and
+  deliberately does **not** allowlist `.env.example`, because a token pasted
+  there is exactly the mistake worth failing CI over.
+- `scripts/polar-product.mjs` is the one tool that reads `POLAR_ACCESS_TOKEN`
+  today: it lists the Polar organization and products, and creates the Pro
+  product only with an explicit `--create`. Everything else is a dry run.
+
 ## Working style: build the least that works
 
 Prefer the smallest change that solves the problem. Reach for the standard library or an already-installed dependency before adding a new one, a native platform feature before hand-rolled code, and one line before fifty. Skip speculative abstractions (no interface with one implementation, no config for a value that never changes) and say so in a line rather than building for a future that may not arrive. Non-trivial logic still leaves one runnable check behind. This is the default for both humans and agents here.

@@ -1,0 +1,21 @@
+# Secret scanning rules for the Gitleaks job in .github/workflows/security.yml.
+# Gitleaks picks this file up automatically from the repo root.
+
+[extend]
+# Keep every built-in rule; the block below only adds to them.
+useDefault = true
+
+[[rules]]
+id = "polar-access-token"
+description = "Polar access token (organization or personal)"
+# Polar issues polar_oat_… (organization) and polar_pat_… (personal) tokens.
+# They are bearer credentials for the whole organization, so one leaking means
+# rotating it in the Polar dashboard, not just deleting the commit.
+regex = '''polar_[a-z]{3}_[A-Za-z0-9_\-]{20,}'''
+keywords = ["polar_oat_", "polar_pat_"]
+
+[allowlist]
+description = "This file's own example patterns, nothing else"
+# Deliberately NOT allowlisting .env.example. It is committed, and a token
+# pasted into it by mistake is the exact case this rule exists to catch.
+paths = ['''\.gitleaks\.toml$''']

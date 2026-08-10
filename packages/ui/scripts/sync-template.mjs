@@ -31,12 +31,18 @@ mkdirSync(out, { recursive: true });
 
 // app/** — the shell + demo pages, minus the docs SITE and deploy-only SEO.
 const APP_SKIP = new Set(["docs", "robots.ts", "sitemap.ts"]);
+// VUI's own commerce, not a starter pattern. Terms and Privacy are useful
+// boilerplate for any app; a page arguing that VUI's core is MIT is not.
+const APP_SKIP_PATHS = ["(legal)/pricing"];
 const appSrc = join(app, "app");
 cpSync(appSrc, join(out, "app"), {
   recursive: true,
   filter: (src) => {
     const rel = src.slice(appSrc.length + 1);
     if (!rel) return true;
+    const posix = rel.split(sep).join("/");
+    if (APP_SKIP_PATHS.some((p) => posix === p || posix.startsWith(p + "/")))
+      return false;
     return !APP_SKIP.has(rel.split(sep)[0]);
   },
 });
@@ -75,6 +81,20 @@ cpSync(join(app, "lib"), join(out, "lib"), { recursive: true });
 // Root files copied verbatim.
 for (const f of [".env.example", "postcss.config.mjs"]) {
   if (existsSync(join(app, f))) cpSync(join(app, f), join(out, f));
+}
+
+// The Pro checkout variable belongs to VUI's own pricing page, which the
+// scaffold does not get. Drop it rather than hand every new project a setting
+// that points at nothing.
+const envExample = join(out, ".env.example");
+if (existsSync(envExample)) {
+  writeFileSync(
+    envExample,
+    readFileSync(envExample, "utf8").replace(
+      /\n# Where the "Pro" card[\s\S]*?NEXT_PUBLIC_PRO_CHECKOUT_URL=""\n/,
+      "",
+    ),
+  );
 }
 
 // A clean, consumer-ready Next config (backoffice's is monorepo / GH-Pages
