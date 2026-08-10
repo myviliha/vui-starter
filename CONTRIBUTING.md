@@ -246,6 +246,30 @@ A contribution is complete only when:
 
 ---
 
+# Licensing and sign-off
+
+**VUI Starter is MIT and stays MIT.** Everything in this repository, the component
+library, the CLI, the demo app, the templates and the docs, is free under the
+[MIT license](./LICENSE) and always will be. Every version already published is MIT
+permanently, so nothing that is free today can be moved behind a paywall later.
+
+Sign your commits off with the [Developer Certificate of Origin](https://developercertificate.org/):
+
+```bash
+git commit -s -m "feat(ui): …"
+```
+
+The `-s` flag appends a `Signed-off-by:` line. It says you wrote the change, or have
+the right to submit it under MIT. That is all it says. There is no CLA and you keep
+your copyright.
+
+**Contributed code stays in the MIT packages.** We do not move community
+contributions into any commercial package. If a paid add-on ever ships, it is our own
+net-new work, licensed separately, in its own repository. That rule is why a DCO is
+enough here and a copyright-assignment agreement is not.
+
+---
+
 # One Final Rule
 
 When in doubt, **build the solution that makes VUI simpler, not larger.** Every

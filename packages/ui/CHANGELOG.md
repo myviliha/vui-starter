@@ -108,6 +108,19 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ## 1.63.1 — 2026-08-10
 
+### Added
+
+- **The npm tarball now carries the license text.** `package.json` said MIT but no
+  `LICENSE` file shipped with the package, so anyone auditing `node_modules` found a
+  claim with nothing behind it. The MIT license is now in the package.
+
+### Changed
+
+- **One copyright holder.** The license said VILIHA PTE. LTD. while `package.json` and
+  the README credited a person. Both now say VILIHA PTE. LTD., which is the entity that
+  actually holds the copyright. The license itself is unchanged: still MIT, still free
+  for personal and commercial use.
+
 ### Fixed
 
 - **`init` no longer installs a table library nothing imports.** `@tanstack/react-table`

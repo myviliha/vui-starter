@@ -475,7 +475,7 @@ Inspired by and a big thank-you to [**shadcn/ui**](https://ui.shadcn.com) and
 
 ## License
 
-MIT © Suman Bonakurthi
+MIT © VILIHA PTE. LTD.
 
 ---
 

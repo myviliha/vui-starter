@@ -390,7 +390,7 @@ pnpm check-types    # type-check
 
 ## License
 
-[MIT](./LICENSE) © Suman Bonakurthi. Free for personal and commercial use.
+[MIT](./LICENSE) © VILIHA PTE. LTD. Free for personal and commercial use.
 
 ---
 
