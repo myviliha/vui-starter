@@ -1,0 +1,24 @@
+{
+  "name": "e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:website": "playwright test --project=website",
+    "test:backoffice": "playwright test --project=backoffice",
+    "test:mobile": "playwright test --project=mobile",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen http://localhost:3002",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "eslint": "^9.39.1",
+    "typescript": "5.9.2"
+  }
+}
