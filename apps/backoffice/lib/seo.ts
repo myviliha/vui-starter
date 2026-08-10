@@ -169,6 +169,7 @@ const DOCS_ROUTES: string[] = [
   "/docs/frameworks",
   "/docs/configuration",
   "/docs/theming",
+  "/docs/swapping",
   "/docs/layout",
   "/docs/navigation",
   "/docs/data-table",

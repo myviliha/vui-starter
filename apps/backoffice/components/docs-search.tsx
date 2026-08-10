@@ -24,6 +24,7 @@ const PAGES: { title: string; href: string }[] = [
   { title: "Any framework (Vue, Svelte, Angular, HTMX)", href: "/docs/frameworks" },
   { title: "Configuration", href: "/docs/configuration" },
   { title: "Theming", href: "/docs/theming" },
+  { title: "Swapping defaults (icons, CSS, fonts, charts, motion)", href: "/docs/swapping" },
   { title: "Layouts", href: "/docs/layout" },
   { title: "Navigation", href: "/docs/navigation" },
   { title: "Typeset", href: "/docs/typeset" },

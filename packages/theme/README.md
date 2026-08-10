@@ -46,11 +46,14 @@ the docs renders correctly without installing anything.
 | z-scale | 60 slide-over, 70 dialog, 80 confirm, 100 palette, 200 pickers, 210 hover card, 220 tooltip, 250 toast |
 | Motion | `.vui-fade-in`, `.vui-pop-in`, `.vui-panel-in`, `.vui-toast-in`, `.vui-shimmer` |
 | Scrollbars | `.vui-scroll` keeps both bars visible whenever there is somewhere to scroll |
+| Motion | `--vui-duration-fast/base/slow`, `--vui-ease`, `--vui-ease-panel`. Set a duration to `0ms` to switch animation off |
+| Icon chip | `--vui-icon-chip-border`, `--vui-icon-chip-padding`, or `.vui-icon-plain` for one icon |
 
 Two opt-ins for non-React icon sets and accordions:
 
 - add `.vui-icon` to an icon to get the bordered chip treatment (Radix icons get it
-  automatically, since they render `width="15"`);
+  automatically, since they render `width="15"`), and remove it again with
+  `--vui-icon-chip-border: none`;
 - set `--vui-accordion-height` on your accordion content to drive the open and
   close animation, mapping whatever your headless library measures.
 

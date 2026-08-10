@@ -248,6 +248,8 @@ The config work (1.50 to 1.52) is additive: `vuiPreset` is the shipped behaviour
 > icons get it automatically), and set `--vui-accordion-height` on accordion
 > content to drive the open/close animation from your own headless library.
 
+**Swapping a default is expected, and documented at `/docs/swapping`.** Icons: any set works, add `.vui-icon` (Radix icons get it automatically), and `--vui-icon-chip-border: none` removes the chip. Fonts: `--font-sans` plus `--font-scale`, or `applyTheme` from `@viliha/vui-core` when people choose their own. Charts: Recharts by default in React, TanStack Charts across frameworks, or any library that reads the chart tokens. Motion: `--vui-duration-fast/base/slow` and `--vui-ease*`, set a duration to `0ms` to switch animation off. What is **not** swappable: the components are Tailwind class strings, so another CSS framework is not a drop-in, and the tokens stay the only source of colour.
+
 VUI is entirely token-driven. Never hardcode colors, spacing, radius, typography, shadows, or borders; reach for the semantic design token instead. For example: `--button-primary`, `--button-primary-hover`, `--background`, `--foreground`, `--border`, `--ring`, `--chart-1`, `--sidebar-primary`.
 
 Avoid arbitrary values unless there's truly no token for the job.

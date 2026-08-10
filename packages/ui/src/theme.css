@@ -273,9 +273,20 @@
   svg[width="15"],
   .vui-icon {
     box-sizing: content-box;
-    padding: 2px;
-    border: 1px solid var(--border);
+    padding: var(--vui-icon-chip-padding, 2px);
+    border: var(--vui-icon-chip-border, 1px solid var(--border));
     border-radius: calc(var(--radius) - 4px);
+  }
+  /* Opting out: another icon set, or simply a plainer look. Scope it to a
+     subtree or set it on :root for the whole app.
+
+       .plain-icons { --vui-icon-chip-border: none; --vui-icon-chip-padding: 0; }
+
+     `.vui-icon-plain` is that pair, ready made, for a single icon. */
+  .vui-icon-plain,
+  .vui-icon-plain svg {
+    padding: 0;
+    border: none;
   }
   /* Radix icons are thin filled glyphs; add a matching stroke so they read
      bolder/heavier throughout the app. */
@@ -337,17 +348,35 @@
   }
 }
 
+/* Motion, as tokens.
+ *
+ * The defaults below are what the design system ships. They are variables so a
+ * host can retune the feel without forking a keyframe, and so motion can be
+ * turned off wholesale:
+ *
+ *   :root { --vui-duration-base: 0ms; }   -- no animation anywhere
+ *
+ * (`prefers-reduced-motion` is already honoured by the clamp in the base layer;
+ * these tokens are for a deliberate product choice, not an accessibility one.) */
+:root {
+  --vui-duration-fast: 0.14s;
+  --vui-duration-base: 0.2s;
+  --vui-duration-slow: 0.3s;
+  --vui-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --vui-ease-panel: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 .vui-fade-in {
-  animation: vui-fade-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: vui-fade-in var(--vui-duration-slow) var(--vui-ease) both;
 }
 .vui-overlay-in {
-  animation: vui-overlay-in 0.2s ease-out both;
+  animation: vui-overlay-in var(--vui-duration-base) ease-out both;
 }
 .vui-panel-in {
-  animation: vui-slide-in-right 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+  animation: vui-slide-in-right var(--vui-duration-slow) var(--vui-ease-panel) both;
 }
 .vui-pop-in {
-  animation: vui-pop-in 0.14s ease-out both;
+  animation: vui-pop-in var(--vui-duration-fast) ease-out both;
   transform-origin: var(--vui-pop-origin, top);
 }
 
@@ -374,7 +403,7 @@
   }
 }
 .vui-toast-in {
-  animation: vui-toast-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: vui-toast-in var(--vui-duration-base) var(--vui-ease) both;
 }
 
 .vui-shimmer {
@@ -407,10 +436,10 @@
   }
 }
 .vui-panel-out {
-  animation: vui-slide-out-right 0.24s cubic-bezier(0.32, 0.72, 0, 1) both;
+  animation: vui-slide-out-right var(--vui-duration-base) var(--vui-ease-panel) both;
 }
 .vui-overlay-out {
-  animation: vui-overlay-out 0.2s ease-out both;
+  animation: vui-overlay-out var(--vui-duration-base) ease-out both;
 }
 
 /* Charts: hand the theme's palette to TanStack Charts.

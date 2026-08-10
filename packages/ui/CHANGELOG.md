@@ -108,6 +108,18 @@ No component was renamed, no export was removed, and no prop was made required.
 
 ## 1.64.0 — 2026-08-10
 
+### Added
+
+- **Every default is documented as swappable, at `/docs/swapping`.** Which icon
+  set, which CSS engine, which font, which chart library, how much motion. The
+  page says what each swap costs and, more usefully, what is *not* swappable: the
+  components are Tailwind class strings, so a Bootstrap component set is not a
+  drop-in and we do not pretend otherwise. Tokens are plain CSS variables, so
+  those do bridge to any framework.
+
+- **Motion and the icon chip became tokens**, so both can be retuned or turned
+  off without forking the stylesheet. See the theme package changelog.
+
 ### Changed
 
 - **The stacking-order test follows the class strings.** `z-layers.test.ts`

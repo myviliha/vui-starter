@@ -4,6 +4,22 @@ All notable changes to `@viliha/vui-theme` are documented here. The format follo
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 1.2.0 — 2026-08-10
+
+### Added
+
+- **Motion is tokens now.** `--vui-duration-fast`, `--vui-duration-base`,
+  `--vui-duration-slow`, `--vui-ease` and `--vui-ease-panel` drive every shipped
+  animation, so the feel can be retuned without forking a keyframe and motion can
+  be switched off in one line: `:root { --vui-duration-base: 0ms }`. That is a
+  product choice and separate from accessibility; `prefers-reduced-motion` is
+  still honoured whatever these say.
+
+- **The icon chip is opt-out.** `--vui-icon-chip-border` and
+  `--vui-icon-chip-padding` remove the border and padding app-wide, and
+  `.vui-icon-plain` does it for one icon. Useful when you bring an icon set that
+  already has its own weight.
+
 ## 1.1.0 — 2026-08-10
 
 ### Added

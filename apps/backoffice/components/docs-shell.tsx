@@ -45,6 +45,7 @@ const SECTIONS: NavGroup[] = [
     title: "Customization",
     items: [
       { label: "Theming", href: "/docs/theming" },
+      { label: "Swapping defaults", href: "/docs/swapping" },
       { label: "Layouts", href: "/docs/layout" },
       { label: "Form layout", href: "/docs/form-layout" },
       { label: "Navigation", href: "/docs/navigation" },
