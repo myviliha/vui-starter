@@ -128,8 +128,8 @@ No component was renamed, no export was removed, and no prop was made required.
   passing anyway. It now expands those constants first, which means it keeps
   asking what a component renders rather than how it is written.
 
-- **Popover, switch, checkbox, tabs and accordion read their classes from the
-  shared source.** No visual change and no API change: the strings moved to
+- **Popover, dropdown menu, select, switch, checkbox, tabs and accordion read
+  their classes from the shared source.** No visual change and no API change: the strings moved to
   `class-variants.ts` so the Vue components render exactly the same markup
   instead of a copy that drifts. The popover keeps its Radix transform origin;
   only that one utility differs per framework. `tabsListVariants` is now a plain function

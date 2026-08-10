@@ -62,7 +62,9 @@ import Button from "@viliha/vui-vue/Button";
 `TabsList`, `TabsTrigger`, `TabsContent`) · `Accordion` (+ `AccordionItem`,
 `AccordionTrigger`, `AccordionContent`) · `Collapsible` (+ `CollapsibleTrigger`,
 `CollapsibleContent`) · `Dialog` (+ `DialogHeader`, `DialogTitle`, `DialogBody`,
-`DialogFooter`) · `Popover` (+ `PopoverTrigger`, `PopoverContent`) · `Tooltip`
+`DialogFooter`) · `Popover` (+ `PopoverTrigger`, `PopoverContent`) · `Tooltip` · `DropdownMenu` (+ `DropdownMenuTrigger`,
+`DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`) · `Select` (+
+`SelectContent`, `SelectItem`)
 
 `Chart` wraps [TanStack Charts](https://tanstack.com/charts), which is
 framework-neutral, so a chart definition written for the React app renders here
@@ -74,8 +76,7 @@ takes `class` and merges it, so a caller's `h-20` beats the variant's `h-9`.
 
 ## What's not here yet
 
-Sheets, dropdown menus, selects, comboboxes, toasts, the command palette, and
-the datatable. The calendar and the auth screens are
+Sheets, comboboxes, toasts, the command palette, and the datatable. The calendar and the auth screens are
 React-only for now. The
 [frameworks page](https://vui.viliha.com/docs/frameworks/) is kept honest about
 what exists.

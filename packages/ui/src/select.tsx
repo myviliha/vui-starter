@@ -9,6 +9,13 @@ import {
 } from "@radix-ui/react-icons";
 
 import { Skeleton } from "./skeleton";
+import {
+  SELECT_CONTENT,
+  SELECT_ITEM,
+  SELECT_ITEM_ACTIVE,
+  SELECT_PLACEHOLDER,
+  SELECT_TRIGGER,
+} from "./class-variants";
 import { cn } from "./utils";
 import { useAsyncOptions, type AsyncOptionSource } from "./use-async-options";
 
@@ -141,15 +148,12 @@ export function Select({
         aria-expanded={open}
         aria-label={ariaLabel}
         onClick={() => setOpen((v) => !v)}
-        className={cn(
-          "flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-2.5 transition-colors",
-          "hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
-        )}
+        className={cn(SELECT_TRIGGER)}
       >
         {resolvingLabel ? (
           <Skeleton className="h-4 w-24" />
         ) : (
-          <span className={cn("truncate", !selected && "text-muted-foreground")}>
+          <span className={cn("truncate", !selected && SELECT_PLACEHOLDER)}>
             {selected ? selected.label : placeholder}
           </span>
         )}
@@ -182,7 +186,7 @@ export function Select({
               bottom: pos.bottom,
               maxHeight: pos.maxHeight,
             }}
-            className="vui-pop-in z-[200] overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md"
+            className={SELECT_CONTENT}
           >
             {showLoading ? (
               <div className="px-3 py-6 text-center text-sm text-muted-foreground">
@@ -213,10 +217,7 @@ export function Select({
                       onValueChange(o.value);
                       setOpen(false);
                     }}
-                    className={cn(
-                      "flex w-full items-center justify-between gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground",
-                      active && "bg-accent/60",
-                    )}
+                    className={cn(SELECT_ITEM, active && SELECT_ITEM_ACTIVE)}
                   >
                     <span className="truncate">{o.label}</span>
                     {active && (

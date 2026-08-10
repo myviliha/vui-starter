@@ -147,3 +147,42 @@ export const POPOVER_DESCRIPTION = "text-muted-foreground";
 
 export const TOOLTIP_CONTENT =
   "vui-fade-in relative w-fit max-w-xs text-balance rounded-md border border-border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md";
+
+export const DROPDOWN_TRIGGER =
+  "inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 font-medium transition-colors";
+
+export const DROPDOWN_TRIGGER_ACTIVE = "bg-accent text-accent-foreground";
+
+export const DROPDOWN_TRIGGER_IDLE =
+  "text-muted-foreground hover:bg-accent hover:text-accent-foreground";
+
+export const DROPDOWN_CONTENT =
+  "vui-pop-in z-[200] min-w-52 overflow-hidden rounded-md border border-border bg-popover text-left text-sm font-normal text-popover-foreground shadow-md";
+
+/** Bordered rows, the list standard shared with `Menu`. */
+export const DROPDOWN_ITEM =
+  "flex w-full cursor-pointer items-center gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground";
+
+export const DROPDOWN_LABEL =
+  "border-b border-border px-3 py-2 text-left font-medium text-muted-foreground";
+
+export const SELECT_TRIGGER =
+  "flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-2.5 transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background";
+
+export const SELECT_CONTENT =
+  "vui-pop-in z-[200] overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md";
+
+export const SELECT_ITEM =
+  "flex w-full items-center justify-between gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground";
+
+export const SELECT_ITEM_ACTIVE = "bg-accent/60";
+
+/**
+ * The same highlight, applied declaratively. React computes `active` in JS and
+ * adds SELECT_ITEM_ACTIVE; a headless library that exposes the selected state as
+ * a data attribute uses this instead. Two forms of one decision, kept together
+ * so changing the colour changes both.
+ */
+export const SELECT_ITEM_CHECKED = "data-[state=checked]:bg-accent/60";
+
+export const SELECT_PLACEHOLDER = "text-muted-foreground";

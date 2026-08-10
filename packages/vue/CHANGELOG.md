@@ -4,6 +4,21 @@ All notable changes to `@viliha/vui-vue` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 0.4.0 — 2026-08-10
+
+### Added
+
+- **`DropdownMenu` and `Select`**, the two most-used floating components, with
+  the bordered-row list treatment the rest of the design system uses. Each
+  surface portals itself rather than relying on a parent to do it, so using
+  `SelectContent` directly is as safe as using it through `Select`. The stacking
+  guard caught that inconsistency before it shipped.
+
+- Reka reports selection and empty state as data attributes where React computes
+  them in JS, so the shared source carries both forms of the same decision:
+  `SELECT_ITEM_ACTIVE` for the computed one, `SELECT_ITEM_CHECKED` for the
+  variant. Changing the highlight colour still changes one line.
+
 ## 0.3.0 — 2026-08-10
 
 ### Added

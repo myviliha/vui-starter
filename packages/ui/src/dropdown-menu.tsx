@@ -3,6 +3,14 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+import {
+  DROPDOWN_CONTENT,
+  DROPDOWN_ITEM,
+  DROPDOWN_LABEL,
+  DROPDOWN_TRIGGER,
+  DROPDOWN_TRIGGER_ACTIVE,
+  DROPDOWN_TRIGGER_IDLE,
+} from "./class-variants";
 import { cn } from "./utils";
 import { Checkbox } from "./checkbox";
 
@@ -99,10 +107,8 @@ export function Dropdown({
         aria-expanded={open}
         aria-label={ariaLabel ?? label}
         className={cn(
-          "inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 font-medium transition-colors",
-          active
-            ? "bg-accent text-accent-foreground"
-            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+          DROPDOWN_TRIGGER,
+          active ? DROPDOWN_TRIGGER_ACTIVE : DROPDOWN_TRIGGER_IDLE,
         )}
       >
         {icon}
@@ -115,9 +121,7 @@ export function Dropdown({
           <div
             ref={menuRef}
             style={{ top: pos.top, left: pos.left, right: pos.right }}
-            className={cn(
-              "vui-pop-in fixed z-[200] min-w-52 overflow-hidden rounded-md border border-border bg-popover text-left text-sm font-normal text-popover-foreground shadow-md",
-            )}
+            className={cn("fixed", DROPDOWN_CONTENT)}
           >
             {children}
           </div>,
@@ -146,7 +150,7 @@ export function DropdownItem({
       role="menuitemcheckbox"
       aria-checked={checked}
       onClick={onSelect}
-      className="flex w-full cursor-pointer items-center gap-2 border-b border-border px-3 py-2 text-left last:border-b-0 hover:bg-accent hover:text-accent-foreground"
+      className={DROPDOWN_ITEM}
     >
       <span className="flex-1 truncate">{children}</span>
       {icon}
@@ -165,7 +169,7 @@ export function DropdownItem({
 
 export function DropdownLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="border-b border-border px-3 py-2 text-left font-medium text-muted-foreground">
+    <p className={DROPDOWN_LABEL}>
       {children}
     </p>
   );
