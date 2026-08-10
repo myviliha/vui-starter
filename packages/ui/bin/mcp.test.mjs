@@ -19,9 +19,12 @@ describe("vui mcp server", () => {
 
     const tools = handle({ jsonrpc: "2.0", id: 2, method: "tools/list" }).result.tools;
     expect(tools.map((t) => t.name).sort()).toEqual([
+      "compose_page",
+      "get_block",
       "get_component",
       "get_guide",
       "get_page",
+      "list_blocks",
       "list_components",
       "list_guides",
       "list_pages",
@@ -117,5 +120,76 @@ describe("vui mcp server", () => {
   it("errors on an unknown tool and an unknown method", () => {
     expect(call("nope").error.code).toBe(-32602);
     expect(handle({ jsonrpc: "2.0", id: 3, method: "nope" }).error.code).toBe(-32601);
+  });
+
+  /* The block tools. Every one of these guards the same failure: the server
+     describing a library that has moved on without it. */
+
+  const WEB_SRC = join(ROOT, "../web/src");
+  const hasWeb = existsSync(WEB_SRC);
+  const web = hasWeb ? describe : describe.skip;
+
+  web("website blocks", () => {
+    it("lists every exported block, with a summary for each", () => {
+      const lines = text(call("list_blocks")).split("\n");
+      const exported = readdirSync(WEB_SRC)
+        .filter((f) => /\.tsx$/.test(f) && !/\.test\./.test(f))
+        .flatMap((f) =>
+          [...readFileSync(join(WEB_SRC, f), "utf8").matchAll(/^export function ([A-Z][A-Za-z0-9]*)/gm)].map(
+            (m) => m[1],
+          ),
+        );
+
+      // Every block the package exports, not a hand-kept subset.
+      const listed = lines.map((l) => l.split("\t")[0]);
+      expect(listed.sort()).toEqual(exported.sort());
+
+      // A block with no summary is a block an agent cannot choose between.
+      const undocumented = lines.filter((l) => l.split("\t").length < 3).map((l) => l.split("\t")[0]);
+      expect(undocumented).toEqual([]);
+    });
+
+    it("returns props and source for one block", () => {
+      const out = text(call("get_block", { name: "Hero" }));
+      expect(out).toContain('import { Hero } from "@viliha/vui-web"');
+      expect(out).toContain("interface HeroProps");
+      expect(out).toContain("variant?: HeroVariant");
+    });
+
+    it("finds a block whatever case it is asked for", () => {
+      expect(text(call("get_block", { name: "hero" }))).toContain("interface HeroProps");
+      expect(text(call("get_block", { name: "Nonexistent" }))).toContain("Unknown block");
+    });
+
+    it("composes a page for a description, in reading order", () => {
+      const out = text(call("compose_page", { description: "SaaS landing page for a dev tool" }));
+      expect(out).toContain("# landing page");
+      expect(out).toContain("1. AnnouncementBar");
+      expect(out.indexOf("Hero")).toBeLessThan(out.indexOf("Pricing"));
+      expect(out.indexOf("Pricing")).toBeLessThan(out.indexOf("SiteFooter"));
+    });
+
+    it("picks the recipe the description asks for, not the first keyword in it", () => {
+      // "pricing page for a blog platform" is a pricing page.
+      expect(text(call("compose_page", { description: "pricing page for a blog platform" }))).toContain(
+        "# pricing page",
+      );
+      expect(text(call("compose_page", { description: "our careers page" }))).toContain("# careers page");
+      expect(text(call("compose_page", { description: "single blog post layout" }))).toContain(
+        "# article page",
+      );
+      // Nothing recognisable still returns something usable.
+      expect(text(call("compose_page", { description: "" }))).toContain("# landing page");
+    });
+
+    it("only recommends blocks that exist", () => {
+      const listed = new Set(text(call("list_blocks")).split("\n").map((l) => l.split("\t")[0]));
+      for (const kind of ["landing", "pricing", "about", "contact", "blog", "article", "feature", "careers", "docs"]) {
+        const out = text(call("compose_page", { kind }));
+        const named = [...out.matchAll(/^\d+\. ([A-Za-z]+) /gm)].map((m) => m[1]);
+        expect(named.length).toBeGreaterThan(2);
+        for (const block of named) expect(listed.has(block)).toBe(true);
+      }
+    });
   });
 });

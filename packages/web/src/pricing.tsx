@@ -40,6 +40,13 @@ export interface PricingProps {
   className?: string;
 }
 
+/**
+ * Pricing cards, with an optional monthly and yearly toggle.
+ *
+ * The recommended plan is raised rather than recoloured, so the emphasis
+ * survives dark mode and a tenant's brand. Prices are strings, not numbers: a
+ * plan that costs "Let's talk" is as real as one that costs 29.
+ */
 export function Pricing({
   plans,
   title,

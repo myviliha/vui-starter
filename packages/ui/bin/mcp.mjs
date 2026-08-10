@@ -219,6 +219,212 @@ function searchDocs(query, limit) {
     .join("\n\n---\n\n");
 }
 
+
+// ── website blocks (@viliha/vui-web) ──────────────────────────────────────
+
+// The block library is a separate package, so it may sit beside this one in a
+// monorepo or under node_modules in a consumer's project. Both are checked, and
+// if neither is there the tools say so rather than returning an empty list that
+// reads like "there are no blocks".
+const WEB_CANDIDATES = [
+  join(ROOT, "../web/src"),
+  join(ROOT, "node_modules/@viliha/vui-web/src"),
+  join(ROOT, "../../node_modules/@viliha/vui-web/src"),
+  join(process.cwd(), "node_modules/@viliha/vui-web/src"),
+];
+
+function webSrc() {
+  return WEB_CANDIDATES.find((p) => exists(p)) ?? null;
+}
+
+const NOT_INSTALLED =
+  "@viliha/vui-web is not installed. Add it with `pnpm add @viliha/vui-web` for the " +
+  "marketing blocks (hero, pricing, testimonials, FAQ, site header and footer).";
+
+/** Every exported block, grouped by the file it lives in. No manifest: the file
+ *  list is the index, so a new block appears here because it exists. */
+function blockFiles() {
+  const src = webSrc();
+  if (!src) return null;
+  return readdirSync(src)
+    .filter((f) => /\.tsx$/.test(f) && !/\.test\./.test(f))
+    .sort()
+    .map((f) => {
+      const code = read(join(src, f));
+      // Components only: a block is a capitalised export, not a type or a const.
+      const names = [...code.matchAll(/^export function ([A-Z][A-Za-z0-9]*)/gm)].map((m) => m[1]);
+      return { file: f.replace(/\.tsx$/, ""), path: join(src, f), code, names };
+    })
+    .filter((f) => f.names.length);
+}
+
+/** The sentence above a block's export, which is where its purpose is written. */
+function blockSummary(code, name) {
+  const at = code.indexOf(`export function ${name}`);
+  if (at < 0) return "";
+  // The nearest comment above the export, allowing the props type to sit in
+  // between: this codebase writes the doc comment, then `export interface
+  // HeroProps`, then `export function Hero`. What is not allowed is another
+  // component in the gap. Without that check a block with no comment of its own
+  // inherits its neighbour's, and the list describes three blocks the same way.
+  //
+  // Only unindented comments count, or the last comment found is whichever prop
+  // inside the props interface happens to be documented last.
+  const before = code.slice(0, at);
+  const docs = [...before.matchAll(/^\/\*\*([\s\S]*?)\*\//gm)];
+  const doc = docs[docs.length - 1];
+  if (!doc) return "";
+  const between = before.slice(doc.index + doc[0].length);
+  if (/\bexport function [A-Z]/.test(between)) return "";
+  const text = doc[1]
+    .split("\n")
+    .map((l) => l.replace(/^\s*\*\s?/, "").trim())
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+  // The first sentence is the summary; the rest is the reasoning.
+  return text.split(/(?<=\.)\s/)[0] ?? text;
+}
+
+/** Prop names and their types, read from the component's own signature. */
+function blockProps(code, name) {
+  const at = code.indexOf(`export function ${name}`);
+  if (at < 0) return "";
+  const tail = code.slice(at);
+  // Either `}: { … }) {` for an inline type, or `}: SomeProps) {` for a named one.
+  const named = tail.match(/^export function [A-Za-z0-9]+\([\s\S]*?\}:\s*([A-Za-z0-9]+)\)/);
+  if (named) {
+    const iface = code.match(new RegExp(`export interface ${named[1]} \\{([\\s\\S]*?)\\n\\}`));
+    return iface ? `interface ${named[1]} {${iface[1]}\n}` : named[1];
+  }
+  const inline = tail.match(/\}:\s*(\{[\s\S]*?\n\}\))/);
+  return inline ? inline[1].replace(/\)$/, "") : "";
+}
+
+/**
+ * Page recipes, in the order section 26 of the requirements recommends.
+ *
+ * This is a hand-written list, unlike everything else the server returns, and
+ * it should stay short for that reason: it encodes taste about ordering, which
+ * no file can be read to discover. Every entry is filtered against the blocks
+ * that actually exist before it is served, so a recipe can never name a block
+ * that was renamed or removed.
+ */
+const RECIPES = {
+  landing: {
+    what: "A SaaS or product landing page. The default when someone says home page.",
+    blocks: [
+      ["AnnouncementBar", "Optional. A launch, a release, or a deadline."],
+      ["SiteHeader", "Navigation and the primary call to action."],
+      ["Hero", 'variant="product" with a screenshot, or "gradient" when there is nothing to show yet.'],
+      ["LogoCloud", "Proof, immediately under the fold."],
+      ["FeatureGrid", "Three to six things it does."],
+      ["Stats", "Numbers, if you have real ones."],
+      ["ProcessSteps", "How it works, in three or four steps."],
+      ["FeatureSplit", "The one feature worth a section of its own."],
+      ["Testimonials", "Quotes from people who shipped with it."],
+      ["CaseStudyGrid", "Longer proof, linking to the detail pages."],
+      ["Pricing", "Plans, with the toggle if billing is annual."],
+      ["Faq", "The objections that come up on sales calls."],
+      ["Cta", "One clear action."],
+      ["SiteFooter", "Navigation, legal, newsletter."],
+    ],
+  },
+  pricing: {
+    what: "A pricing page that has to survive being read sceptically.",
+    blocks: [
+      ["Hero", 'variant="minimal". State the pricing model in the lead.'],
+      ["Pricing", "Cards, with the popular plan marked."],
+      ["ComparisonTable", "Row by row, because the cards cannot hold it all."],
+      ["PricingCalculator", "Only for usage-based pricing."],
+      ["TrustBadges", "Licence, security, no-lock-in claims."],
+      ["Testimonials", "Ideally quotes about value, not features."],
+      ["Faq", "Billing, refunds, seat counting, what happens on cancellation."],
+      ["Cta", "The action, repeated at the bottom."],
+    ],
+  },
+  about: {
+    what: "A company or about page.",
+    blocks: [
+      ["Hero", 'variant="minimal", with the story in one sentence.'],
+      ["QuoteBlock", "The founding line, if there is a real one."],
+      ["Benefits", "What the company stands for."],
+      ["Stats", "Size, age, reach."],
+      ["Timeline", "How it got here."],
+      ["TeamGrid", "Who builds it."],
+      ["Cta", "Careers or contact."],
+    ],
+  },
+  contact: {
+    what: "A contact page.",
+    blocks: [
+      ["Hero", 'variant="minimal".'],
+      ["ContactForm", "Name, email, message. Wire `action` to your endpoint."],
+      ["CardGrid", "The other ways to reach you: sales, support, press."],
+      ["MapBlock", "Only if there is an office worth visiting."],
+      ["Faq", "The questions the form would otherwise receive."],
+    ],
+  },
+  blog: {
+    what: "A blog or news listing.",
+    blocks: [
+      ["Hero", 'variant="minimal".'],
+      ["SearchBlock", "Only once there are more than about twenty posts."],
+      ["FilterBar", "Categories."],
+      ["CardGrid", "The posts."],
+      ["Pagination", "Or LoadMore."],
+      ["Newsletter", "The point of the listing page."],
+    ],
+  },
+  article: {
+    what: "A blog post or article.",
+    blocks: [
+      ["ReadingProgress", "Fixed to the top of the viewport."],
+      ["ArticleHeader", "Title, category, author, date, cover."],
+      ["TableOfContents", "Sticky beside the body on wide screens."],
+      ["Prose", "The body. Rendered MDX or HTML goes straight in."],
+      ["ArticleTags", "Categorisation."],
+      ["ShareBlock", "Sharing, with copy-link."],
+      ["AuthorCard", "Who wrote it."],
+      ["ArticlePager", "Previous and next."],
+      ["CardGrid", "Related posts."],
+    ],
+  },
+  feature: {
+    what: "A single feature, solution or service detail page.",
+    blocks: [
+      ["Hero", 'variant="minimal" with breadcrumbs.'],
+      ["FeatureSplit", "What it does, beside a visual."],
+      ["FeatureList", "The details, as rows."],
+      ["CodeBlock", "For a developer product."],
+      ["Testimonials", 'variant="single".'],
+      ["Faq", "Scoped to this feature."],
+      ["Cta", "Back to the demo or to contact."],
+    ],
+  },
+  careers: {
+    what: "A careers page with open roles.",
+    blocks: [
+      ["Hero", 'variant="minimal".'],
+      ["Benefits", "What you get beyond the salary."],
+      ["TeamGrid", "Who they would work with."],
+      ["ProcessSteps", "The hiring process, honestly."],
+      ["CardGrid", "Open roles, linking to detail pages."],
+      ["EmptyState", "When there are none. Say so rather than hiding the page."],
+      ["Cta", "Speculative applications."],
+    ],
+  },
+  docs: {
+    what: "A documentation landing page.",
+    blocks: [
+      ["Hero", 'variant="minimal" with a `search` slot.'],
+      ["CardGrid", "The sections."],
+      ["CodeBlock", "The shortest path to a running install."],
+      ["Faq", "The first questions after installing."],
+    ],
+  },
+};
+
 // ── tools ─────────────────────────────────────────────────────────────────
 
 const TOOLS = [
@@ -329,6 +535,124 @@ const TOOLS = [
     },
   },
   {
+    name: "list_blocks",
+    description:
+      "List every marketing block @viliha/vui-web exports — heroes, features, pricing, testimonials, FAQ, site header and footer, article pieces — with its import specifier and what it is for. Use these to build a website; use list_components for the admin app.",
+    inputSchema: { type: "object", properties: {} },
+    run: () => {
+      const files = blockFiles();
+      if (!files) return NOT_INSTALLED;
+      return files
+        .map((f) =>
+          f.names
+            .map((n) => {
+              const summary = blockSummary(f.code, n);
+              return `${n}\t@viliha/vui-web${summary ? `\t${summary}` : ""}`;
+            })
+            .join("\n"),
+        )
+        .join("\n");
+    },
+  },
+  {
+    name: "get_block",
+    description:
+      "Props, source and a worked example for one marketing block (e.g. Hero, Pricing, SiteHeader). Copy the example rather than inventing markup.",
+    inputSchema: {
+      type: "object",
+      properties: { name: { type: "string", description: 'Block name from list_blocks, e.g. "Hero"' } },
+      required: ["name"],
+    },
+    run: ({ name }) => {
+      const files = blockFiles();
+      if (!files) return NOT_INSTALLED;
+      const wanted = String(name).replace(/^.*\//, "");
+      const file = files.find((f) => f.names.some((n) => n.toLowerCase() === wanted.toLowerCase()));
+      if (!file) return `Unknown block "${name}". Call list_blocks for the list.`;
+      const exact = file.names.find((n) => n.toLowerCase() === wanted.toLowerCase());
+      const lines = file.code.split("\n").length;
+      const body =
+        lines > API_LINE_LIMIT
+          ? `// Public API only (${lines} lines in ${file.file}.tsx).\n\n${publicApi(file.code)}`
+          : file.code;
+      const props = blockProps(file.code, exact);
+      return [
+        `import { ${exact} } from "@viliha/vui-web";`,
+        "",
+        blockSummary(file.code, exact),
+        "",
+        props ? `// Props\n${props}` : "",
+        "",
+        `// Source: ${file.file}.tsx`,
+        body,
+      ]
+        .filter(Boolean)
+        .join("\n");
+    },
+  },
+  {
+    name: "compose_page",
+    description:
+      "Turn a page description into an ordered list of blocks with notes on what each one is for. Kinds: landing, pricing, about, contact, blog, article, feature, careers, docs. Call this before writing a marketing page.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        description: {
+          type: "string",
+          description: 'What the page is, e.g. "SaaS landing page for a developer tool"',
+        },
+        kind: {
+          type: "string",
+          description: "Force a recipe instead of inferring one from the description.",
+        },
+      },
+    },
+    run: ({ description, kind }) => {
+      const files = blockFiles();
+      const available = files ? new Set(files.flatMap((f) => f.names)) : null;
+      const text = String(kind ?? description ?? "").toLowerCase();
+
+      // Order matters: "pricing page for a blog platform" is a pricing page.
+      const MATCH = [
+        ["pricing", /pric|plan|tier|billing|cost/],
+        ["article", /article|post detail|blog post|single post/],
+        ["blog", /blog|news|articles|listing|magazine/],
+        ["careers", /career|job|hiring|recruit|role/],
+        ["contact", /contact|support|get in touch|enquir/],
+        ["about", /about|company|team|story|mission/],
+        ["docs", /doc|guide|reference|api reference|help cent/],
+        ["feature", /feature|solution|service|product page|use case|integration/],
+        ["landing", /.*/],
+      ];
+      const picked = RECIPES[text] ? text : MATCH.find(([, re]) => re.test(text))[0];
+      const recipe = RECIPES[picked];
+
+      const rows = recipe.blocks
+        // A recipe can never name a block that no longer exists.
+        .filter(([block]) => !available || available.has(block))
+        .map(([block, note], i) => `${i + 1}. ${block} — ${note}`);
+      const missing = available
+        ? recipe.blocks.filter(([b]) => !available.has(b)).map(([b]) => b)
+        : [];
+
+      return [
+        `# ${picked} page`,
+        "",
+        recipe.what,
+        "",
+        ...rows,
+        "",
+        'Every block takes its content as props and its colours from tokens. Do not pass a className that sets a colour, a font size or a margin: use `tone`, `width` and the block\'s own props instead.',
+        missing.length ? `\nNot available in the installed version: ${missing.join(", ")}.` : "",
+        files ? "" : `\n${NOT_INSTALLED}`,
+        "",
+        "Then: get_block for each one, and search_docs for anything the props do not explain.",
+      ]
+        .filter((l) => l !== "")
+        .join("\n");
+    },
+  },
+  {
     name: "search_docs",
     description:
       "Search everything written about VUI — the agent rules (AGENT.md), the README, and every docs-site guide — and get back the matching sections. Call with no query for the full outline.",
@@ -346,11 +670,13 @@ const TOOLS = [
 // ── JSON-RPC over stdio ───────────────────────────────────────────────────
 
 const INSTRUCTIONS =
-  "VUI UI component library. Learning the package: list_guides / get_guide serve the " +
-  "full docs site (installation through per-component reference). Building a screen: " +
-  "search_docs for the rule, list_components / get_component for the API, list_pages / " +
-  "get_page for a working example to copy. Never hand-roll a table, form, or floating " +
-  "panel VUI already ships.";
+  "VUI component library, for admin apps and marketing sites. Learning the package: " +
+  "list_guides / get_guide serve the full docs site (installation through per-component " +
+  "reference). Building an admin screen: search_docs for the rule, list_components / " +
+  "get_component for the API, list_pages / get_page for a working example to copy. " +
+  "Building a website page: compose_page for the block order, then list_blocks / " +
+  "get_block for each one. Never hand-roll a table, a form, a floating panel or a hero " +
+  "VUI already ships.";
 
 export function handle(req) {
   const { id, method, params = {} } = req;

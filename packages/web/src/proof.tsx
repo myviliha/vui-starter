@@ -26,6 +26,12 @@ export interface StatsProps {
   className?: string;
 }
 
+/**
+ * A row of numbers: users, uptime, time saved.
+ *
+ * The value is the heading and the label sits under it, because the number is
+ * what someone scanning the page is looking for.
+ */
 export function Stats({ items, title, eyebrow, lead, tone, boxed, className }: StatsProps) {
   return (
     <Section tone={tone} className={className}>
@@ -186,6 +192,13 @@ export interface TestimonialsProps {
   className?: string;
 }
 
+/**
+ * Customer quotes, as one large pull-quote, a grid, or newspaper columns.
+ *
+ * A quote with a name and a role is worth three without. Ratings render as
+ * stars with the score in the accessible name, so the number is never
+ * available only as a picture.
+ */
 export function Testimonials({
   items,
   title,

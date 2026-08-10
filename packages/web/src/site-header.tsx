@@ -38,6 +38,13 @@ export interface SiteHeaderProps {
   className?: string;
 }
 
+/**
+ * The site header: brand, navigation, and the primary action.
+ *
+ * A nav item with `children` opens a mega menu on wide screens and an
+ * expandable group in the mobile drawer, from the same data. Sticky by
+ * default; `transparent` overlays it on a hero until the page scrolls.
+ */
 export function SiteHeader({
   brand,
   items = [],

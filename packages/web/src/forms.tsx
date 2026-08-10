@@ -213,6 +213,13 @@ export interface NewsletterProps {
   className?: string;
 }
 
+/**
+ * Email capture, as a section or as the one-line version a footer wants.
+ *
+ * It posts nowhere by default, because a static export has no server to post
+ * to. Give it an `action` for a form endpoint, or an `onSubmit` to call your
+ * own API. The success and error states are already written either way.
+ */
 export function Newsletter({
   title = "Subscribe to the newsletter",
   lead,
@@ -312,6 +319,14 @@ const DEFAULT_FIELDS: FieldProps[] = [
   { label: "How can we help?", name: "message", type: "textarea", required: true },
 ];
 
+/**
+ * A contact form with the four fields nearly every one of them has, and all
+ * eight field states already styled.
+ *
+ * Pass `fields` to change them. Like `Newsletter`, it submits nowhere until
+ * you give it an `action` or an `onSubmit`: the alternative is a form that
+ * looks like it worked and quietly drops what someone wrote.
+ */
 export function ContactForm({
   title = "Talk to us",
   lead,
