@@ -1,0 +1,41 @@
+# What the knowledge graph should not index.
+#
+# Everything below is GENERATED from somewhere else in this repo. Indexing it
+# doubles the graph with copies of files that already have nodes, and makes
+# "what calls X?" answer with a build artefact instead of the source.
+#
+# graphify falls back to .gitignore when this file is absent, but these are
+# declared in nested per-package .gitignore files, so they are spelled out here.
+
+# @viliha/vui-core: a literal copy of packages/ui/src, compiled.
+packages/core/src/
+packages/core/dist/
+
+# @viliha/vui-theme: generated from packages/ui/src/theme.css.
+packages/theme/theme.css
+packages/theme/dist/
+
+# @viliha/vui-vue: compiled SFCs.
+packages/vue/dist/
+
+# The scaffold `vui init` copies: a snapshot of apps/backoffice, so every file
+# in it is a duplicate of one that is already indexed.
+packages/ui/template/
+
+# The docs-site snapshot the MCP server serves: generated from apps/backoffice/out.
+packages/ui/docs/
+
+# Build output and lockfiles.
+apps/*/out/
+apps/*/.next/
+pnpm-lock.yaml
+
+# Brand assets and screenshots. Each image costs its own vision agent to extract,
+# and "this is the logo" is not a fact the graph needs to answer a question about
+# how the code works. Add a diagram here only if it explains architecture.
+*.png
+*.svg
+*.jpg
+*.jpeg
+*.webp
+*.ico

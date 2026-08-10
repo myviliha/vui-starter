@@ -259,8 +259,33 @@ Plus (not optional): the **CHANGELOG + docs update** from the "Changelog & docs"
 This repo ships a prebuilt knowledge graph so an agent can answer "how does X work?" or "what calls Y?" without re-reading the tree. The graph lives at `graphify-out/graph.json` (portable, relative paths, committed) with a human-readable `graphify-out/GRAPH_REPORT.md` next to it.
 
 - **Query it before searching.** For a codebase question, run `graphify query "<question>"` against `graphify-out/graph.json` instead of grepping blind. The graph maps god nodes (`cn`, `RecordView`), communities, and cross-file edges.
-- **Update it with every change.** After a fix or feature lands, refresh the graph incrementally (`graphify --update`, or the `detect_incremental` → AST + semantic re-extract → `build_merge` → write flow). If the merge's fuzzy dedup shrinks the node count and the guard refuses to overwrite `graph.json`, force the write so `graph.json` and `GRAPH_REPORT.md` stay consistent. This sits alongside the CHANGELOG/docs rule, it does not replace it.
-- **What's tracked vs ignored.** Commit `graph.json` and `GRAPH_REPORT.md`. The `cache/`, `manifest.json`, `cost.json`, regenerable `graph.html`, and `.graphify_*` scratch files are machine-specific and git-ignored, so regenerate those locally.
+- **Refresh it after committing, before pushing. Not optional.** The graph is a
+  committed artifact, so a push that leaves it stale ships a map of a codebase
+  that no longer exists. The order is: commit → refresh the graph → amend or add
+  a `chore(graph)` commit → push.
+
+  A `post-commit` hook (`graphify hook install`) does this automatically for
+  **code** changes: it re-runs AST extraction on what the commit touched and
+  rewrites `graph.json` and `GRAPH_REPORT.md`, free and with no LLM. Check `git
+  status` after committing and include the result.
+
+  **Doc changes need a manual pass**, because the hook skips them: run the
+  `detect_incremental` → AST + semantic re-extract → `build_merge` → write flow.
+  If the merge's fuzzy dedup shrinks the node count and the guard refuses to
+  overwrite `graph.json`, force the write so the graph and the report stay
+  consistent. If the merge keeps nodes whose source files no longer exist, prefer
+  a clean rebuild over a merge.
+
+  This sits alongside the CHANGELOG/docs rule; it does not replace it.
+- **What's tracked vs ignored.** Commit `graph.json`, `GRAPH_REPORT.md` and
+  `.graphifyignore`. The `cache/`, `manifest.json`, `cost.json`, regenerable
+  `graph.html`, and `.graphify_*` scratch files are machine-specific and
+  git-ignored, so regenerate those locally.
+- **`.graphifyignore` keeps generated output out of the graph.** `packages/core/src`
+  is a literal copy of `packages/ui/src`, `packages/ui/template/` mirrors the whole
+  app, and images cost a vision agent each to learn "this is a logo". Indexing them
+  doubles the graph with duplicates and makes "what calls X?" answer with a build
+  artefact. Add a new generated directory there the moment you create it.
 
 ## MCP server (`bin/mcp.mjs`)
 
@@ -311,6 +336,14 @@ secret.
   product only with an explicit `--create`. Everything else is a dry run.
 
 ## Working style: build the least that works
+
+**Mark deliberate shortcuts with a `ponytail:` comment**, so a simplification reads
+as intent rather than ignorance, and so it can be found later. Name the ceiling and
+the upgrade path, not just the fact: `// ponytail: naive contains-match, fine for
+demo data; a real app pushes the query to the backend`. Sixteen of these exist today
+(mock APIs with simulated latency, the demo's mock auth, the hand-rolled JSON-RPC in
+`bin/mcp.mjs`, the object-URL preview in chat). `grep -rn "ponytail:" packages apps`
+is the ledger; read it before assuming something is a bug.
 
 Prefer the smallest change that solves the problem. Reach for the standard library or an already-installed dependency before adding a new one, a native platform feature before hand-rolled code, and one line before fifty. Skip speculative abstractions (no interface with one implementation, no config for a value that never changes) and say so in a line rather than building for a future that may not arrive. Non-trivial logic still leaves one runnable check behind. This is the default for both humans and agents here.
 
