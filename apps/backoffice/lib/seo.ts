@@ -13,7 +13,7 @@ export const SITE = {
     process.env.NEXT_PUBLIC_APP_TAGLINE ?? "React Admin & CRM Design System",
   // Deploy origin: drives metadataBase, canonical URLs, and OG image URLs.
   // Set NEXT_PUBLIC_APP_URL to your domain (no trailing slash) per deployment.
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://vui.viliha.com",
+  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://internal.viliha.com",
   description:
     process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
     "Vui Starter is a free, open-source React admin dashboard template and CRM design system for Next.js and Tailwind CSS v4. It pairs the token-driven @viliha/vui-ui component library with a full backoffice demo: datatables, forms, charts, and auth.",

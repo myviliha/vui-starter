@@ -123,7 +123,10 @@ export function CodeBlock({
       <div className="vui-scroll overflow-x-auto">
         <pre className="p-4 text-sm leading-relaxed">
           {file.html ? (
-            // Built at build time by the host, never from user input.
+            // Built at build time by the host, never from user input. Shiki
+            // output is markup by definition, so sanitizing it here would strip
+            // the highlighting it exists to carry.
+            // nosemgrep: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
             <code dangerouslySetInnerHTML={{ __html: file.html }} />
           ) : showLineNumbers ? (
             <code className="grid">

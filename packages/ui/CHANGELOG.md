@@ -106,6 +106,14 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.66.1 — 2026-08-13
+
+### Changed
+
+- **The docs and demo moved to `internal.viliha.com`.** Every link in the
+  README, the agent guide and the package metadata points there now. The old
+  `vui.viliha.com` host is gone, so a link that still used it would 404.
+
 ## 1.66.0 — 2026-08-11
 
 ### Added
@@ -273,7 +281,7 @@ No component was renamed, no export was removed, and no prop was made required.
 ### Changed
 
 - **The README says where the paid tier lives.** One line, pointing at
-  [vui.viliha.com/pricing](https://vui.viliha.com/pricing/). The package itself
+  [internal.viliha.com/pricing](https://internal.viliha.com/pricing/). The package itself
   does not change: it is MIT, it stays MIT, and every version already published is
   MIT permanently. Pro is separate, optional and additive, so nothing that is free
   today can move behind it.

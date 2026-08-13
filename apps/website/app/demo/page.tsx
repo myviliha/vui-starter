@@ -11,7 +11,7 @@ export const metadata = pageMeta({
   path: "/demo/",
 });
 
-const DEMO = "https://vui.viliha.com";
+const DEMO = "https://internal.viliha.com";
 
 /** The screens worth opening first, in the order they answer the obvious
  *  questions: does the list work, does the form work, does it look like ours. */

@@ -83,7 +83,7 @@ export default function FeaturesPage() {
       <Cta
         title="See it running"
         lead="A full admin demo with real datatables, forms and charts. No signup."
-        actions={<LinkButton href="https://vui.viliha.com/dashboard/">Open the demo</LinkButton>}
+        actions={<LinkButton href="https://internal.viliha.com/dashboard/">Open the demo</LinkButton>}
       />
     </>
   );

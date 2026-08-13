@@ -22,7 +22,7 @@ export default function ChangelogPage() {
     <>
       <Hero variant="minimal" eyebrow="Changelog" title="What shipped" lead="The short version. The full log lives with the packages, one entry per release." />
       <Timeline items={RELEASES} />
-      <Cta variant="card" title="Read the full changelog" lead="Every release, with the reasoning, in the package itself." actions={<LinkButton href="https://vui.viliha.com/docs/changelog/" variant="secondary">Open the docs changelog</LinkButton>} />
+      <Cta variant="card" title="Read the full changelog" lead="Every release, with the reasoning, in the package itself." actions={<LinkButton href="https://internal.viliha.com/docs/changelog/" variant="secondary">Open the docs changelog</LinkButton>} />
     </>
   );
 }

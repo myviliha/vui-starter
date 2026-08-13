@@ -1,6 +1,6 @@
 # @viliha/vui-core
 
-The framework-free half of [VUI](https://vui.viliha.com). Plain TypeScript, no UI
+The framework-free half of [VUI](https://internal.viliha.com). Plain TypeScript, no UI
 framework, so it runs in Vue, Svelte, Angular, Solid, React or plain Node.
 
 ```bash

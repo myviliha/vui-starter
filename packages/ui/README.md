@@ -33,10 +33,10 @@ bundler compiles only the components you import.
 It's part of [**Vui Starter**](https://github.com/myviliha/vui-starter), a free
 and open-source admin design system.
 
-- 🌐 **Live docs & demo:** [vui.viliha.com](https://vui.viliha.com), a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
+- 🌐 **Live docs & demo:** [internal.viliha.com](https://internal.viliha.com), a full, clickable backoffice app (datatables, forms, charts, auth) so you can see every component working before you install
 - 📦 **Repository:** [github.com/myviliha/vui-starter](https://github.com/myviliha/vui-starter)
 - ❤️ **Sponsor:** [github.com/sponsors/myviliha](https://github.com/sponsors/myviliha)
-- 💼 **For teams:** [vui.viliha.com/pricing](https://vui.viliha.com/pricing/). The library is MIT and stays MIT; Pro is an optional add-on of net-new blocks and support
+- 💼 **For teams:** [internal.viliha.com/pricing](https://internal.viliha.com/pricing/). The library is MIT and stays MIT; Pro is an optional add-on of net-new blocks and support
 
 ## What is free
 
@@ -46,7 +46,7 @@ published version stays MIT permanently, so nothing here moves behind a paywall
 later. VUI Pro is a separate, optional add-on of net-new work that does not exist
 yet: premium blocks, the datatable for Vue and Svelte, and priority support. The
 full breakdown is at
-[vui.viliha.com/docs/free-and-pro](https://vui.viliha.com/docs/free-and-pro/).
+[internal.viliha.com/docs/free-and-pro](https://internal.viliha.com/docs/free-and-pro/).
 
 ## Install
 
@@ -264,7 +264,7 @@ const fields: RecordField<Customer>[] = [
 
 That same `fields` array also drives `RecordForm`, the Add/Edit/View screen, along
 with its Info panel (built from `formDescription` and each field's `description`).
-See the [Data table docs](https://vui.viliha.com/docs/data-table) for the details.
+See the [Data table docs](https://internal.viliha.com/docs/data-table) for the details.
 
 A few field options worth knowing early: `displayValue: (row) => row.country` renders a label
 your payload already carries instead of resolving it, and `filterable` puts the
@@ -372,7 +372,7 @@ input that ends up as a CSS variable.
 ## Patterns
 
 The reference app composes these primitives into the conventions documented at
-[vui.viliha.com/docs/layout](https://vui.viliha.com/docs/layout):
+[internal.viliha.com/docs/layout](https://internal.viliha.com/docs/layout):
 
 - **Five page types**: data table, record form (Add / Edit / View), dashboard,
   settings, and kanban board.

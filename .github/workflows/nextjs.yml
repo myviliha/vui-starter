@@ -5,7 +5,7 @@ name: Deploy Next.js site to Pages
 #
 # Adapted from GitHub's Next.js template for this repo:
 #  - pnpm monorepo (app lives in apps/backoffice), not a root npm/yarn app
-#  - custom domain (vui.viliha.com via apps/backoffice/public/CNAME), so we do
+#  - custom domain (internal.viliha.com via apps/backoffice/public/CNAME), so we do
 #    NOT use configure-pages' `static_site_generator: next` — it injects a
 #    basePath that would break every /_next asset on a root custom domain.
 on:

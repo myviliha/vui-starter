@@ -4,7 +4,7 @@
   "description": "The framework-free half of the VUI design system: the runtime theming engine (tokens as data, contrast, CSS-variable output), CSV/JSON/Excel/PDF table import and export, and the class-merging helper. Plain TypeScript with no UI framework, so it works in React, Vue, Svelte, Angular, Solid or Node.",
   "license": "MIT",
   "author": "VILIHA PTE. LTD.",
-  "homepage": "https://vui.viliha.com",
+  "homepage": "https://internal.viliha.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/myviliha/vui-starter.git",

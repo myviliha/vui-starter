@@ -1,6 +1,6 @@
 # Vui Starter
 
-[![live](https://img.shields.io/badge/live-vui.viliha.com-266df0)](https://vui.viliha.com)
+[![live](https://img.shields.io/badge/live-internal.viliha.com-266df0)](https://internal.viliha.com)
 [![npm](https://img.shields.io/npm/v/@viliha/vui-ui?color=266df0&label=%40viliha%2Fvui-ui)](https://www.npmjs.com/package/@viliha/vui-ui)
 [![license](https://img.shields.io/npm/l/@viliha/vui-ui)](./LICENSE)
 [![Sponsor @myviliha](https://img.shields.io/badge/Sponsor-%40myviliha-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/myviliha)
@@ -46,7 +46,7 @@ pricing, testimonials, FAQ, site header and footer) and `apps/website` is a
 and the dashboard it sells look like one product. An agent can compose a page
 from those blocks through the MCP server: `compose_page "SaaS landing page"`
 returns the block order, `get_block` returns the props. See
-[the website guide](https://vui.viliha.com/docs/website/).
+[the website guide](https://internal.viliha.com/docs/website/).
 
 ![Vui Starter admin dashboard template: the organizations datatable with sorting, filtering, and row actions](./.github/screenshots/organizations.png)
 
@@ -70,8 +70,8 @@ permanently, so nothing listed as free can move behind a paywall later.
 | **Support** | Issues and discussions, in the open | Priority support and a commercial licence |
 
 Pro is optional and additive: net-new work that does not exist yet. The full
-breakdown is at [vui.viliha.com/docs/free-and-pro](https://vui.viliha.com/docs/free-and-pro/),
-and the tiers are at [/pricing](https://vui.viliha.com/pricing/).
+breakdown is at [internal.viliha.com/docs/free-and-pro](https://internal.viliha.com/docs/free-and-pro/),
+and the tiers are at [/pricing](https://internal.viliha.com/pricing/).
 
 ## Contents
 
@@ -433,7 +433,7 @@ The core stays MIT: the component library, the CLI, the demo app, the templates
 and the docs. Every version already published is MIT permanently, so nothing that
 is free today moves behind a paywall later. Teams who want more than that (premium
 blocks, components for other frameworks, an invoice and someone to ask) can read
-about [Pro](https://vui.viliha.com/pricing/), which is optional and additive.
+about [Pro](https://internal.viliha.com/pricing/), which is optional and additive.
 
 ---
 

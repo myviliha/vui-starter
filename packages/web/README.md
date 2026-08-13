@@ -1,6 +1,6 @@
 # @viliha/vui-web
 
-Marketing blocks for [VUI](https://vui.viliha.com): heroes, features, testimonials,
+Marketing blocks for [VUI](https://internal.viliha.com): heroes, features, testimonials,
 pricing, FAQ, headers and footers.
 
 They are not a separate design system. Blocks read the same tokens and the same

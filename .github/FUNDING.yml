@@ -1,4 +1,4 @@
 # Shows the Sponsor button on the repository. VUI is MIT and stays MIT;
 # sponsorship pays for maintenance, not for access.
 github: [myviliha]
-custom: ["https://vui.viliha.com/pricing/"]
+custom: ["https://internal.viliha.com/pricing/"]

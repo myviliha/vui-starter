@@ -1,6 +1,6 @@
 # @viliha/vui-vue
 
-[VUI](https://vui.viliha.com) components for Vue 3 and Nuxt, built on
+[VUI](https://internal.viliha.com) components for Vue 3 and Nuxt, built on
 [Reka UI](https://reka-ui.com).
 
 They look identical to the React components because they are not a lookalike:
@@ -9,7 +9,7 @@ button's hover state once and both follow.
 
 > **Status: early.** This is v0. The mechanical components are here; dialogs,
 > menus, selects and the datatable are not yet. See
-> [what ships where](https://vui.viliha.com/docs/frameworks/).
+> [what ships where](https://internal.viliha.com/docs/frameworks/).
 
 ## Install
 
@@ -78,7 +78,7 @@ takes `class` and merges it, so a caller's `h-20` beats the variant's `h-9`.
 
 Sheets, comboboxes, toasts, the command palette, and the datatable. The calendar and the auth screens are
 React-only for now. The
-[frameworks page](https://vui.viliha.com/docs/frameworks/) is kept honest about
+[frameworks page](https://internal.viliha.com/docs/frameworks/) is kept honest about
 what exists.
 
 Need one of them? [Say which](https://github.com/myviliha/vui-starter/issues).

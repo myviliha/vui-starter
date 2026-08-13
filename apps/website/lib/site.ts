@@ -11,7 +11,7 @@ export const SITE = {
   description:
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION ??
     "Northwind is the demo marketing site built from VUI's website blocks: hero, features, pricing, testimonials and a blog, composed rather than hand-written.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://vui.viliha.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://internal.viliha.com",
   company: process.env.NEXT_PUBLIC_COMPANY_NAME ?? "VILIHA PTE. LTD.",
   email: "hello@viliha.com",
 } as const;
@@ -108,7 +108,7 @@ export const FOOTER_COLUMNS = [
       { label: "Press", href: "/press/" },
       { label: "Services", href: "/services/" },
       { label: "Testimonials", href: "/testimonials/" },
-      { label: "Documentation", href: "https://vui.viliha.com/docs/", external: true },
+      { label: "Documentation", href: "https://internal.viliha.com/docs/", external: true },
       { label: "GitHub", href: "https://github.com/myviliha/vui-starter", external: true },
     ],
   },

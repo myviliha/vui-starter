@@ -4,7 +4,7 @@
   "description": "The VUI design system as plain CSS: 129 design tokens, dark mode, the z-scale, motion utilities and always-visible scrollbars. No JavaScript and no dependencies, so it works in React, Vue, Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine, HTMX or hand-written HTML.",
   "license": "MIT",
   "author": "VILIHA PTE. LTD.",
-  "homepage": "https://vui.viliha.com",
+  "homepage": "https://internal.viliha.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/myviliha/vui-starter.git",

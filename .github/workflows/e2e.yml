@@ -55,11 +55,18 @@ jobs:
       - name: Build both apps
         run: pnpm turbo build --filter=website... --filter=backoffice...
 
+      # The two inputs go through `env:` and stay quoted. Interpolating
+      # `${{ inputs.* }}` straight into `run:` would let a dispatch value run as
+      # shell on the runner.
       - name: Run the suite
-        run: >-
-          pnpm --filter e2e exec playwright test
-          ${{ inputs.project != 'all' && format('--project={0}', inputs.project) || '' }}
-          ${{ inputs.grep != '' && format('--grep={0}', inputs.grep) || '' }}
+        env:
+          PROJECT: ${{ inputs.project }}
+          GREP: ${{ inputs.grep }}
+        run: |
+          args=()
+          if [ "$PROJECT" != "all" ]; then args+=("--project=$PROJECT"); fi
+          if [ -n "$GREP" ]; then args+=("--grep=$GREP"); fi
+          pnpm --filter e2e exec playwright test "${args[@]}"
 
       - name: Upload the report
         if: ${{ !cancelled() }}

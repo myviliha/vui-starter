@@ -4,7 +4,7 @@ The VUI design system as plain CSS. No JavaScript, no dependencies, no framework
 
 One stylesheet carries 129 design tokens in `oklch`, class-based dark mode, the
 documented z-scale, motion utilities, and `.vui-scroll` for always-visible
-scrollbars. It is the same file that styles [VUI](https://vui.viliha.com) itself,
+scrollbars. It is the same file that styles [VUI](https://internal.viliha.com) itself,
 generated from the source rather than copied, so the two can never drift.
 
 Use it in React, Vue, Svelte, Angular, Solid, Astro, Qwik, Lit, Alpine or HTMX,
@@ -63,6 +63,6 @@ Two opt-ins for non-React icon sets and accordions:
 This package is the theme only. For React components (datatable, forms, charts,
 command palette, auth screens) install
 [`@viliha/vui-ui`](https://www.npmjs.com/package/@viliha/vui-ui). Other frameworks
-are covered at [vui.viliha.com/docs](https://vui.viliha.com/docs).
+are covered at [internal.viliha.com/docs](https://internal.viliha.com/docs).
 
 MIT © VILIHA PTE. LTD.

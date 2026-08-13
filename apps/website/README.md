@@ -44,7 +44,7 @@ rendering `<EntryPage />`. Detail URLs add themselves to the sitemap through
 It is a static export (`output: "export"`, `trailingSlash: true`), so `out/` goes
 to any static host: Cloudflare Pages, Netlify, S3, nginx. There is no deploy
 workflow in this repo because GitHub Pages serves one site per repository and
-that slot belongs to the admin demo at vui.viliha.com. Point your host at
+that slot belongs to the admin demo at internal.viliha.com. Point your host at
 `pnpm turbo build --filter=website...` and publish `apps/website/out`.
 
 Set `NEXT_PUBLIC_SITE_URL` before building, or the canonical URLs and the sitemap

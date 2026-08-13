@@ -132,7 +132,7 @@ function appFiles() {
 
 // ── docs ──────────────────────────────────────────────────────────────────
 
-// docs/ is a snapshot of the docs site (vui.viliha.com/docs), written by
+// docs/ is a snapshot of the docs site (internal.viliha.com/docs), written by
 // scripts/snapshot-docs.mjs and shipped with the package.
 const GUIDES = join(ROOT, "docs");
 
