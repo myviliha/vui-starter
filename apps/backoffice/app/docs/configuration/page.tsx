@@ -374,7 +374,28 @@ useEffect(() => {
         <a href="/docs/auth/">Auth screens</a>.
       </P>
       <CodeBlock title=".env.local">{`NEXT_PUBLIC_DOCS_EMAIL="team@example.com"
-NEXT_PUBLIC_DOCS_PASSWORD_HASH="$argon2id$v=19$m=19456,t=2,p=1$…"`}</CodeBlock>
+NEXT_PUBLIC_DOCS_PASSWORD_HASH="\\$argon2id\\$v=19\\$m=19456,t=2,p=1\\$…"`}</CodeBlock>
+      <P>
+        Escape every <code>$</code> as <code>\$</code> in a{" "}
+        <code>.env</code> file. Next reads those files through dotenv, which
+        treats an unescaped <code>$argon2id</code> as a variable reference and
+        expands it to nothing, leaving a hash that matches no password at all.
+        The generator prints the line already escaped, and the app fails the
+        build with instructions if a mangled hash reaches it.
+      </P>
+      <P>
+        <strong>Deploying matters as much as configuring.</strong>{" "}
+        <code>.env.local</code> is git-ignored, so CI cannot see it: a build that
+        does not pass these two values produces a docs site with no login and
+        says nothing about it. Store them as repository secrets and hand them to
+        the build step. A secret goes to the process directly rather than through
+        a file, so <strong>the hash is stored unescaped there</strong>.
+      </P>
+      <CodeBlock title=".github/workflows/nextjs.yml">{`- name: Build with Next.js
+  run: pnpm turbo build --filter=backoffice...
+  env:
+    NEXT_PUBLIC_DOCS_EMAIL: \${{ secrets.DOCS_EMAIL }}
+    NEXT_PUBLIC_DOCS_PASSWORD_HASH: \${{ secrets.DOCS_PASSWORD_HASH }}`}</CodeBlock>
 
       <Note title="Build-time values">
         <code>NEXT_PUBLIC_</code> vars are inlined at <strong>build time</strong>{" "}

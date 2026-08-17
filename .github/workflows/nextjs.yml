@@ -47,13 +47,32 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      # The docs login is off unless both values are present at build time, and
+      # they live in .env.local, which is git-ignored. Without this check a
+      # missing secret ships the docs wide open and nothing says so.
+      - name: Check the docs login is configured
+        env:
+          DOCS_EMAIL: ${{ secrets.DOCS_EMAIL }}
+          DOCS_PASSWORD_HASH: ${{ secrets.DOCS_PASSWORD_HASH }}
+        run: |
+          if [ -z "$DOCS_EMAIL" ] || [ -z "$DOCS_PASSWORD_HASH" ]; then
+            echo "::error::DOCS_EMAIL and DOCS_PASSWORD_HASH must be set as repository secrets, or the deployed docs have no login. Generate the hash with 'pnpm --filter backoffice docs-password' and store it UNESCAPED (a secret is not parsed by dotenv)."
+            exit 1
+          fi
       # `...` builds the app's workspace dependencies first. @viliha/vui-core
       # and @viliha/vui-theme ship only generated output, which is git-ignored
       # because it comes from packages/ui/src, so a fresh checkout has nothing
       # to import until turbo builds them. `dependsOn: ["^build"]` in turbo.json
       # is what makes the ordering declarative rather than a hand-kept list.
+      #
+      # The docs credentials are passed here rather than committed: a secret is
+      # handed to the process directly, so unlike a .env file it is not parsed by
+      # dotenv and the hash goes in unescaped.
       - name: Build with Next.js
         run: pnpm turbo build --filter=backoffice...
+        env:
+          NEXT_PUBLIC_DOCS_EMAIL: ${{ secrets.DOCS_EMAIL }}
+          NEXT_PUBLIC_DOCS_PASSWORD_HASH: ${{ secrets.DOCS_PASSWORD_HASH }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
