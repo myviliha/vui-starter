@@ -761,6 +761,20 @@ import { AuthProvider, useAuth } from "@viliha/vui-ui/auth-context";
 const { user, status, signIn, signOut } = useAuth();        // read anywhere
 ```
 
+**How do I implement "remember me"?** `Credentials` carries an optional
+`remember`, so the screen sends the checkbox state and the adapter decides how
+long the session lasts. Better Auth calls it `rememberMe`; an adapter with no
+server picks the storage instead, `localStorage` when it is ticked and
+`sessionStorage` when it isn't, so the session ends with the tab. `remember` is
+optional, so an adapter that ignores it behaves exactly as before.
+
+```tsx
+async signIn({ email, password, remember = true }) {
+  const { error } = await authClient.signIn.email({ email, password, rememberMe: remember });
+  if (error) throw new Error(error.message ?? "Sign in failed.");
+}
+```
+
 The auth **screens** (`AuthCard`, `AuthCardHeader`, `AuthCardBody`,
 `AuthCardFooter`, `AuthCardAside`, `FieldGrid`, `Field`) remain a **demo pattern
 in the reference app** (`apps/backoffice/app/_components/auth.tsx`) — copy and

@@ -106,6 +106,27 @@ data contract that drives the table, the filter panel, import/export and the
 form together, which is why slots are a separate prop rather than entries in it.
 No component was renamed, no export was removed, and no prop was made required.
 
+## 1.67.0 — 2026-08-17
+
+### Added
+
+- **"Remember me" is part of the auth contract.** `Credentials` takes an
+  optional `remember`, so a sign-in screen can tell your adapter whether the
+  session should survive a browser restart. It is optional and defaults to
+  nothing, so an existing adapter that ignores it keeps working unchanged.
+
+  The reference adapter in the demo passes it straight through to Better Auth as
+  `rememberMe`. An adapter with no server behind it can do the simpler version:
+  `localStorage` when the box is ticked, `sessionStorage` when it isn't, so the
+  session ends with the tab.
+
+  ```ts
+  async signIn({ email, password, remember = true }) {
+    const { error } = await authClient.signIn.email({ email, password, rememberMe: remember });
+    if (error) throw new Error(error.message ?? "Sign in failed.");
+  }
+  ```
+
 ## 1.66.1 — 2026-08-13
 
 ### Changed

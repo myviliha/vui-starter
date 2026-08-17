@@ -49,8 +49,14 @@ function BetterAuthBridge({ children }: { children: React.ReactNode }) {
         : u
           ? "authenticated"
           : "unauthenticated",
-      async signIn({ email, password }) {
-        const { error } = await authClient.signIn.email({ email, password });
+      async signIn({ email, password, remember = true }) {
+        // Better Auth's own "remember me": a persistent session cookie when set,
+        // a browser-session one when not.
+        const { error } = await authClient.signIn.email({
+          email,
+          password,
+          rememberMe: remember,
+        });
         if (error) throw new Error(error.message ?? "Sign in failed.");
       },
       async signUp({ email, password, name }) {
@@ -93,8 +99,8 @@ function MockAuthBridge({ children }: { children: React.ReactNode }) {
       user,
       // ponytail: the mock has no async fetch, so no real "loading" phase.
       status: user ? "authenticated" : "unauthenticated",
-      async signIn({ email }) {
-        setSignedIn(true);
+      async signIn({ email, remember = true }) {
+        setSignedIn(true, remember);
         setUser({ ...DEMO_USER, email });
       },
       async signUp({ email, name }) {

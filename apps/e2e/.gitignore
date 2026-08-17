@@ -1,0 +1,5 @@
+# Run output: regenerated on every `playwright test`, never worth committing.
+playwright-report/
+test-results/
+blob-report/
+.playwright/

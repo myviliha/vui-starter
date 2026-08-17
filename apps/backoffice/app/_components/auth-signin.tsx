@@ -14,6 +14,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import { Button } from "@viliha/vui-ui/button";
+import { Checkbox } from "@viliha/vui-ui/checkbox";
 import { Input } from "@viliha/vui-ui/input";
 import { PasswordInput } from "@viliha/vui-ui/password-input";
 import { useAuth } from "@viliha/vui-ui/auth-context";
@@ -35,10 +36,28 @@ type View = "main" | "sso" | "2fa";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function SignInScreen() {
+export interface SignInScreenProps {
+  /**
+   * Take over the terminal step. Given, the screen calls this instead of the
+   * app's `useAuth().signIn` + redirect, and a thrown error shows on the
+   * password field like any other failure. The docs gate uses it to check its
+   * own credentials.
+   */
+  onSignIn?: (creds: {
+    email: string;
+    password: string;
+    remember: boolean;
+  }) => Promise<void> | void;
+  /** Show Google / passkey / SSO and the "create an account" footer. Turn it off
+   *  where those routes don't apply. */
+  providers?: boolean;
+}
+
+export function SignInScreen({ onSignIn, providers = true }: SignInScreenProps = {}) {
   const router = useRouter();
   const auth = useAuth();
   const [view, setView] = React.useState<View>("main");
+  const [remember, setRemember] = React.useState(true);
   // One validation channel: inline field errors, checked on blur and on submit.
   const f = useFormFields({
     email: (v) =>
@@ -63,10 +82,14 @@ export function SignInScreen() {
   async function finish() {
     setBusy(true);
     try {
-      await auth.signIn({
-        email: f.values.email.trim() || "admin@viliha.example",
-        password: f.values.password || "demo-password",
-      });
+      const email = f.values.email.trim() || "admin@viliha.example";
+      const password = f.values.password || "demo-password";
+      if (onSignIn) {
+        await onSignIn({ email, password, remember });
+        setBusy(false);
+        return; // the caller decides what happens next — no redirect
+      }
+      await auth.signIn({ email, password, remember });
       router.push("/dashboard");
     } catch (err) {
       setBusy(false);
@@ -193,8 +216,21 @@ export function SignInScreen() {
               />
             </Field>
           </FieldGrid>
-          {/* Forgot password — primary color, aligned under the input. */}
-          <div className="text-right">
+          {/* Remember me on the left, forgot password on the right — one row
+              under the inputs. Checked keeps the session across a browser
+              restart; unchecked ends it with the tab. */}
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="remember"
+              className="flex items-center gap-2 text-muted-foreground select-none"
+            >
+              <Checkbox
+                id="remember"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+              />
+              Remember me
+            </label>
             <Link
               href="/auth/forgot-password"
               className="font-medium text-primary hover:underline"
@@ -207,6 +243,8 @@ export function SignInScreen() {
           </Button>
 
           {/* Alternative sign-in methods — below the email/password form. */}
+          {providers && (
+            <>
           <OrDivider />
 
           <div className="space-y-4">
@@ -233,13 +271,17 @@ export function SignInScreen() {
               Single Sign On (SSO)
             </Button>
           </div>
+            </>
+          )}
         </AuthCardBody>
-        <AuthCardFooter className="text-center">
-          New To <BrandName />?{" "}
-          <Link href="/auth/signup" className="font-medium text-primary hover:underline">
-            Create An Account
-          </Link>
-        </AuthCardFooter>
+        {providers && (
+          <AuthCardFooter className="text-center">
+            New To <BrandName />?{" "}
+            <Link href="/auth/signup" className="font-medium text-primary hover:underline">
+              Create An Account
+            </Link>
+          </AuthCardFooter>
+        )}
       </form>
     </AuthCard>
   );

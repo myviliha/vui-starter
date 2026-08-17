@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/auth/" },
   title: "Auth screens",
   description:
-    "Ready-made authentication screens (sign in, sign up, forgot/reset password, verify code) built on a reusable sectioned AuthCard so every screen stays consistent.",
+    "Ready-made authentication screens (sign in, sign up, forgot/reset password, verify code) on a reusable sectioned AuthCard, plus how to wire Better Auth, add remember me, and put the docs behind an argon2id login.",
 };
 
 export default function AuthDocPage() {
@@ -65,7 +65,7 @@ export default function AuthDocPage() {
       <CodeBlock title="@viliha/vui-ui/auth-context">{`export interface AuthContract {
   user: AuthUser | null;
   status: "loading" | "authenticated" | "unauthenticated";
-  signIn(creds: { email: string; password: string }): Promise<void>;
+  signIn(creds: { email: string; password: string; remember?: boolean }): Promise<void>;
   signUp?(input: { email: string; password: string; name?: string }): Promise<void>;
   signInSocial?(provider: string): Promise<void>; // omit → hide the buttons
   signOut(): Promise<void>;
@@ -130,6 +130,71 @@ export const auth = betterAuth({
 import { toNextJsHandler } from "better-auth/next-js";
 import { auth } from "@/auth";
 export const { GET, POST } = toNextJsHandler(auth);`}</CodeBlock>
+
+      <H2>How do I implement &quot;remember me&quot;?</H2>
+      <P>
+        Send the checkbox state as <code>remember</code> on the sign-in
+        credentials and let the adapter decide how long the session lasts. The
+        sign-in screen ships with the checkbox already, sitting on one row with
+        the &quot;Forgot password?&quot; link, ticked by default.
+      </P>
+      <P>
+        Better Auth calls it <code>rememberMe</code>: ticked gives a persistent
+        session cookie, unticked gives one that dies with the browser. An adapter
+        with no server picks the storage instead, <code>localStorage</code> when
+        it is ticked and <code>sessionStorage</code> when it is not, so the
+        session ends with the tab. <code>remember</code> is optional, so an
+        adapter written before this existed keeps working untouched.
+      </P>
+      <CodeBlock title="app/_components/auth-provider.tsx">{`async signIn({ email, password, remember = true }) {
+  const { error } = await authClient.signIn.email({ email, password, rememberMe: remember });
+  if (error) throw new Error(error.message ?? "Sign in failed.");
+}`}</CodeBlock>
+
+      <H2>How do I put the docs behind a login?</H2>
+      <P>
+        Set <code>NEXT_PUBLIC_DOCS_EMAIL</code> and{" "}
+        <code>NEXT_PUBLIC_DOCS_PASSWORD_HASH</code>, and{" "}
+        <code>/docs</code> asks for them before it renders anything. One shared
+        account: whoever has the credentials gets in, everyone else gets the form
+        back. Leave either value unset and the docs stay open, which is how the
+        public demo runs.
+      </P>
+      <P>
+        The password is stored as an <strong>argon2id</strong> hash, never in
+        plain text. Generate one and paste the line it prints into{" "}
+        <code>.env.local</code>:
+      </P>
+      <CodeBlock title="terminal">{`pnpm --filter backoffice docs-password
+# Docs password: ••••••••
+# NEXT_PUBLIC_DOCS_PASSWORD_HASH="$argon2id$v=19$m=19456,t=2,p=1$…"`}</CodeBlock>
+      <P>
+        Salt and cost parameters travel inside that encoded hash, so there is
+        nothing else to configure. The parameters are OWASP&apos;s argon2id
+        baseline: 19 MiB of memory, two passes, one lane.
+      </P>
+      <P>
+        <code>DocsGate</code> (<code>app/docs/_components/docs-gate.tsx</code>)
+        wraps the docs shell rather than the page, so a reader who has not signed
+        in sees the sign-in card and not the navigation. It reuses{" "}
+        <code>SignInScreen</code> with <code>providers=&#123;false&#125;</code>,
+        since Google, passkeys and SSO make no sense for a single shared login,
+        and takes over the terminal step through <code>onSignIn</code>. Remember
+        me works the same way it does everywhere else: ticked survives a browser
+        restart, unticked ends with the tab.
+      </P>
+      <Note title="What this gate does and does not protect">
+        The app is a static export, so there is no server to check a password on
+        and the comparison runs in the browser. Argon2id means anyone reading the
+        bundle finds a hash they would have to crack rather than a password they
+        can type, but the page itself has already been delivered by the time the
+        check runs, and the docs content sits in the prerendered payload. Treat
+        this as a way to keep the docs out of search results and away from casual
+        visitors. Docs that must be genuinely private need a server that refuses
+        to send the page at all: point{" "}
+        <code>NEXT_PUBLIC_AUTH_BASE_URL</code> at a Better Auth instance, or put
+        the site behind an authenticating proxy.
+      </Note>
 
       <H2>The building blocks</H2>
       <P>

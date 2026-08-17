@@ -42,6 +42,9 @@ export interface AuthUser {
 export interface Credentials {
   email: string;
   password: string;
+  /** "Remember me": keep the session across a browser restart. Adapters that
+   *  can't express it (or don't care) ignore it. */
+  remember?: boolean;
 }
 
 export interface SignUpInput {
